@@ -1,4 +1,4 @@
-package com.app.offerwall
+package com.app.abeeofferwal
 
 import io.flutter.embedding.android.FlutterActivity
 
