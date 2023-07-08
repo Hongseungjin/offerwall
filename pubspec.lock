@@ -154,7 +154,7 @@ packages:
     source: hosted
     version: "0.7.8"
   device_apps:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: device_apps
       sha256: e84dc74d55749993fd671148cc0bd53096e1be0c268fc364285511b1d8a4c19b
@@ -186,7 +186,7 @@ packages:
     source: hosted
     version: "5.2.1+1"
   equatable:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: equatable
       sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
@@ -250,7 +250,7 @@ packages:
     source: hosted
     version: "0.9.3"
   firebase_core:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core
       sha256: dcf54c170c5371ad0e79229d0fb372c58262ae0968b7de222bf28e51dd236be0
@@ -258,7 +258,7 @@ packages:
     source: hosted
     version: "2.11.0"
   firebase_core_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core_platform_interface
       sha256: ae79f335f6c7f2dadb00c98c429da2ca905d265e0225fb5e7dfa62ac3accad48
@@ -274,7 +274,7 @@ packages:
     source: hosted
     version: "2.4.0"
   firebase_messaging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_messaging
       sha256: "88a4bf569899344d863db26a73092681b590274f570f0a431051b92c4dd9bee3"
@@ -335,7 +335,7 @@ packages:
     source: hosted
     version: "3.0.0"
   flutter_bloc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_bloc
       sha256: e74efb89ee6945bcbce74a5b3a5a3376b088e5f21f55c263fc38cbdc6237faae
@@ -375,7 +375,7 @@ packages:
     source: hosted
     version: "2.0.2"
   flutter_local_notifications:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_local_notifications
       sha256: "57d0012730780fe137260dd180e072c18a73fbeeb924cdc029c18aaa0f338d64"
@@ -869,7 +869,7 @@ packages:
     description:
       path: sdk_eums
       ref: HEAD
-      resolved-ref: "70998da992202f6ef89b8386e787a7c7411b5c5b"
+      resolved-ref: "9d9e012f2d6f33516cbf5dff6d4b7b7c795b128b"
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -878,7 +878,7 @@ packages:
     description:
       path: sdk_eums_c
       ref: HEAD
-      resolved-ref: "70998da992202f6ef89b8386e787a7c7411b5c5b"
+      resolved-ref: "9d9e012f2d6f33516cbf5dff6d4b7b7c795b128b"
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -902,10 +902,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_foundation
-      sha256: "0dc5c49ad8a05ed358b991b60c7b0ba1a14e16dae58af9b420d6b9e82dc024ab"
+      sha256: b046999bf0ff58f04c364491bb803dcfa8f42e47b19c75478f53d323684a8cc1
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.3.1"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -1043,10 +1043,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher
-      sha256: eb1e00ab44303d50dd487aab67ebc575456c146c6af44422f9c13889984c00f3
+      sha256: "781bd58a1eb16069412365c98597726cd8810ae27435f04b3b4d3a470bacd61e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.11"
+    version: "6.1.12"
   url_launcher_android:
     dependency: transitive
     description:
@@ -1099,10 +1099,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_windows
-      sha256: "254708f17f7c20a9c8c471f67d86d76d4a3f9c1591aad1e15292008aceb82771"
+      sha256: "7967065dd2b5fccc18c653b97958fdf839c5478c28e767c61ee879f4e7882422"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.6"
+    version: "3.0.7"
   uuid:
     dependency: transitive
     description:
@@ -1257,4 +1257,4 @@ packages:
     version: "6.3.0"
 sdks:
   dart: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.10.0"
