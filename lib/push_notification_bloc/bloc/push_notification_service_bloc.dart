@@ -18,17 +18,16 @@ part 'push_notification_service_state.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('message remote 123123 ${message.data}');
-  // await Firebase.initializeApp();
-  // IsolateNameServer.lookupPortByName('overlay_window')?.send(message.data);
-  final isActive = await FlutterOverlayWindow.isActive();
   LocalStore localStore = LocalStoreService();
+  print('message remote 123123 ${message.data}');
+  localStore.setDataShare(dataShare: message.data);
+  final isActive = await FlutterOverlayWindow.isActive();
+
   if (isActive == true) {
-    // await FlutterOverlayWindow.closeOverlay();
     await FlutterOverlayWindow.closeOverlay();
   }
 
-  localStore.setDataShare(dataShare: message.data);
+
 
   Future.delayed(const Duration(milliseconds: 750), () async {
     await FlutterOverlayWindow.showOverlay(

@@ -97,11 +97,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+  LocalStore localStore = LocalStoreService();
   @override
   void initState() {
     checkOpenApp();
     checkPermission();
-
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
@@ -119,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+    localStore.setDataShare(dataShare: null);
   }
 
   @override
@@ -131,10 +132,10 @@ class _MyHomePageState extends State<MyHomePage>
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.paused:
+        localStore.setDataShare(dataShare: null);
         break;
       case AppLifecycleState.detached:
         localStore.setDataShare(dataShare: null);
-
         break;
     }
   }
@@ -142,9 +143,10 @@ class _MyHomePageState extends State<MyHomePage>
   checkOpenApp() async {
     LocalStore localStore = LocalStoreService();
     dynamic data = await localStore.getDataShare();
-    if (data != null && data != '') {
+    print("vao day chuw $data");
+    if (data != "null") {
       EumsAppOfferWallService.instance.openSdk(context,
-          memId: "abee997",
+          memId: "abeetest",
           memGen: "w",
           memBirth: "2000-01-01",
           memRegion: "인천_서");
@@ -153,6 +155,10 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    // >>>>>> device height : 2094 <<<<<<
+    print("height : ${MediaQuery.of(context).size.height}");
+    print("ratio : ${MediaQuery.of(context).devicePixelRatio}");
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<LocalStore>(
@@ -162,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage>
           providers: [
             BlocProvider<AuthenticationBloc>(
               create: (context) =>
-              AuthenticationBloc()..add(CheckSaveAccountLogged()),
+                  AuthenticationBloc()..add(CheckSaveAccountLogged()),
             ),
             BlocProvider<PushNotificationServiceBloc>(
               create: (context) => PushNotificationServiceBloc(),
@@ -172,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage>
             listeners: [
               BlocListener<AuthenticationBloc, AuthenticationState>(
                 listenWhen: (previous, current) =>
-                previous.logoutStatus != current.logoutStatus,
+                    previous.logoutStatus != current.logoutStatus,
                 listener: (context, state) {
                   if (state.logoutStatus == LogoutStatus.loading) {
                     return;
@@ -212,21 +218,20 @@ class _AppMainScreenState extends State<AppMainScreen> {
     // TODO: implement initState
     _pushNotificationServiceBloc = context.read<PushNotificationServiceBloc>();
     _pushNotificationServiceBloc.add(PushNotificationSetup());
-    checkDataNotifi();
+    // checkDataNotifi();
     super.initState();
   }
 
   checkDataNotifi() async {
     dynamic data = await localStore?.getDataShare();
-    if (data != null && data != '') {
+
+    if (data != null) {
       EumsAppOfferWallService.instance.openSdk(context,
-          memId: "abee997",
+          memId: "abeetest",
           memGen: "w",
           memBirth: "2000-01-01",
           memRegion: "인천_서");
-    }else{
-
-    }
+    } else {}
   }
 
   void _listenerAppPushNotification(
@@ -248,7 +253,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                     _pushNotificationServiceBloc.channel.id,
                     _pushNotificationServiceBloc.channel.name,
                     channelDescription:
-                    _pushNotificationServiceBloc.channel.description,
+                        _pushNotificationServiceBloc.channel.description,
                     playSound: true,
                     importance: Importance.max,
                     icon: '@mipmap/ic_launcher',
@@ -272,14 +277,16 @@ class _AppMainScreenState extends State<AppMainScreen> {
           listener: _listenerAppPushNotification,
         ),
       ],
+      /// code old
       child: Scaffold(
         appBar: AppBar(),
         body: Column(
           children: [
             GestureDetector(
-              onTap: () {
+              onTap: () async{
+                await localStore?.setDataShare(dataShare: null);
                 EumsAppOfferWallService.instance.openSdk(context,
-                    memId: "abee997",
+                    memId: "abeetest",
                     memGen: "w",
                     memBirth: "2000-01-01",
                     memRegion: "인천_서");

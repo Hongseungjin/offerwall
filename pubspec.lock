@@ -869,7 +869,7 @@ packages:
     description:
       path: sdk_eums
       ref: HEAD
-      resolved-ref: "9d9e012f2d6f33516cbf5dff6d4b7b7c795b128b"
+      resolved-ref: c5e575501e3a3064b50259b98059595698b925e4
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -878,7 +878,7 @@ packages:
     description:
       path: sdk_eums_c
       ref: HEAD
-      resolved-ref: "9d9e012f2d6f33516cbf5dff6d4b7b7c795b128b"
+      resolved-ref: c5e575501e3a3064b50259b98059595698b925e4
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
