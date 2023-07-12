@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
 import 'package:offerwall/widget/true_call_overlay.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -32,19 +33,20 @@ void onStart(ServiceInstance service) {
   if (IsolateNameServer.lookupPortByName('overlay_window') != null) {
     IsolateNameServer.removePortNameMapping('overlay_window');
   }
-  receivePort.listen((message) async {
-    print("receivePort.asBroadcastStream()$message");
-    if (message == 'openApp') {}
+
+  receivePort.asBroadcastStream().listen((message) async {
+    if(message == "regToken"){
+      print("vap day khong");
+
+    }
     if (message is Map) {
       try {
         try {
           final isActive = await FlutterOverlayWindow.isActive();
           if (isActive == true) {
-            // await FlutterOverlayWindow.closeOverlay();
             await FlutterOverlayWindow.closeOverlay();
           }
         } catch (e) {
-          print("$e");
         }
         await FlutterOverlayWindow.showOverlay(
             enableDrag: true,
@@ -67,6 +69,8 @@ void main() {
           onStart: onStart,
           autoStart: true,
           isForegroundMode: true,
+          initialNotificationTitle: "인천e음", initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"
+
         ));
     runApp(MaterialApp(home: MyHomePage()));
   });
@@ -125,11 +129,19 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     LocalStore localStore = LocalStoreService();
+    print("statestatestate$state");
     switch (state) {
       case AppLifecycleState.resumed:
+        // try{
+        //  Restart.restartApp();
+        // }
+        // catch(ex){
+        //   print("khongo the resetapp");
+        // }
         checkOpenApp();
         break;
       case AppLifecycleState.inactive:
+        checkOpenApp();
         break;
       case AppLifecycleState.paused:
         localStore.setDataShare(dataShare: null);
@@ -141,12 +153,23 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   checkOpenApp() async {
+    // print("vao day khong");
+    //
+    // LocalStore localStore = LocalStoreService();
+    // dynamic data = await localStore.getDataShare();
+    // print("vao day khong$data");
+    //   EumsAppOfferWallService.instance.openSdk(context,
+    //       memId: "abee997",
+    //       memGen: "w",
+    //       memBirth: "2000-01-01",
+    //       memRegion: "인천_서");
+
     LocalStore localStore = LocalStoreService();
     dynamic data = await localStore.getDataShare();
     print("vao day chuw $data");
     if (data != "null") {
       EumsAppOfferWallService.instance.openSdk(context,
-          memId: "abeetest",
+          memId: "abee997",
           memGen: "w",
           memBirth: "2000-01-01",
           memRegion: "인천_서");
@@ -155,10 +178,6 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    // >>>>>> device height : 2094 <<<<<<
-    print("height : ${MediaQuery.of(context).size.height}");
-    print("ratio : ${MediaQuery.of(context).devicePixelRatio}");
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<LocalStore>(
@@ -224,14 +243,13 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
   checkDataNotifi() async {
     dynamic data = await localStore?.getDataShare();
-
-    if (data != null) {
+    if (data != "null") {
       EumsAppOfferWallService.instance.openSdk(context,
           memId: "abeetest",
           memGen: "w",
           memBirth: "2000-01-01",
           memRegion: "인천_서");
-    } else {}
+    }
   }
 
   void _listenerAppPushNotification(
@@ -286,7 +304,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
               onTap: () async{
                 await localStore?.setDataShare(dataShare: null);
                 EumsAppOfferWallService.instance.openSdk(context,
-                    memId: "abeetest",
+                    memId: "abee997",
                     memGen: "w",
                     memBirth: "2000-01-01",
                     memRegion: "인천_서");

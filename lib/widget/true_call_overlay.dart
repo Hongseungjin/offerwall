@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:device_apps/device_apps.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
@@ -31,24 +30,6 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
   late double offsetX;
   late double offsetY;
   LocalStore localStore = LocalStoreService();
-  AnimationController? _controller;
-
-  Alignment _dragAlignment = Alignment.center;
-  Animation<Alignment>? _animation;
-
-  void _runAnimation(Offset pixelsPerSecond, Size size) {
-    _animation = _controller?.drive(
-      AlignmentTween(
-        begin: _dragAlignment,
-        end: Alignment.center,
-      ),
-    );
-    final unitsPerSecondX = pixelsPerSecond.dx / size.width;
-    final unitsPerSecondY = pixelsPerSecond.dy / size.height;
-    final unitsPerSecond = Offset(unitsPerSecondX, unitsPerSecondY);
-    final unitVelocity = unitsPerSecond.distance;
-  }
-
   Timer? _timer;
   int _start = 550;
   int indexStart = 0;
@@ -57,54 +38,14 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
   bool showWatch = false;
   bool isDragging = false;
   int _upCounter = 0;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start--;
-          });
-          if (_start == 0) {
-            removeToken();
-          }
-        }
-      },
-    );
-  }
-
-  removeToken() async {
-    await Firebase.initializeApp();
-    await FirebaseMessaging.instance.deleteToken();
-  }
-
   bool checkApp = false;
 
   @override
   void initState() {
-    offsetX = 0;
-    offsetY = 0;
-
-    color = Colors.black;
     localStore = LocalStoreService();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _controller = AnimationController(vsync: this);
-
-    _controller?.addListener(() {
-      setState(() {
-        _dragAlignment = _animation!.value;
-      });
-    });
-    startTimer();
     FlutterOverlayWindow.overlayListener.listen((event) {
-      print("overlayListener$event");
       localStore.setDataShare(dataShare: event);
       setState(() {
         dataEvent = event;
@@ -112,10 +53,38 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     });
   }
 
+  checkTimeNoifi() async {
+    _start = 550;
+    bool isActive = await FlutterOverlayWindow.isActive();
+    print("isActive${isActive}");
+    if (isActive) {
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (Timer timer) {
+          if (_start == 0) {
+            setState(() {
+              timer.cancel();
+            });
+          } else {
+            setState(() {
+              _start--;
+            });
+            print("_start_start$_start");
+            if (_start == 0) {
+              globalKey.currentContext!.read<PushNotificationServiceBloc>().add(RemoveToken());
+            }
+          }
+        },
+      );
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("state$state");
     switch (state) {
       case AppLifecycleState.resumed:
+        checkTimeNoifi();
         setState(() {
           checkApp = true;
         });
@@ -131,8 +100,6 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
 
   @override
   void dispose() {
-    _controller?.dispose();
-    // TODO: implement dispose
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     FlutterOverlayWindow.closeOverlay();
@@ -151,6 +118,10 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
         ],
         child: MultiBlocProvider(
             providers: [
+              BlocProvider<PushNotificationServiceBloc>(
+                create: (context) =>
+                PushNotificationServiceBloc(),
+              ),
               BlocProvider<AuthenticationBloc>(
                 create: (context) =>
                     AuthenticationBloc()..add(CheckSaveAccountLogged()),
@@ -204,17 +175,22 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     }
   }
 
-
   void _incrementUp(PointerEvent details) async {
-
     /// it runs this code over and over again
     _upCounter = 0;
     setState(() {
       _upCounter++;
     });
-    if (0 < details.position.dy && details.position.dy < 30) {
+
+    double heightScreen = MediaQuery.of(context).size.height;
+    double deviceRatio = MediaQuery.of(context).devicePixelRatio;
+
+    double count = heightScreen * deviceRatio;
+
+    if (0 < details.position.dy && details.position.dy < 35) {
       if (_upCounter != 0) {
         _upCounter = 0;
+        _timer!.cancel();
         bool isActive = await FlutterOverlayWindow.isActive();
         if (isActive == true) {
           await FlutterOverlayWindow.closeOverlay();
@@ -228,24 +204,35 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
       }
     }
 
-    if (40 < details.position.dy.abs().floorToDouble()) {
+    if (40 < details.position.dy) {
       if (_upCounter != 0) {
         _upCounter = 0;
-        localStore.setDataShare(dataShare: null);
-        globalKey.currentContext?.read<AccumulateMoneyBloc>().add(
-            SaveKeepAdver(advertise_idx: jsonDecode(dataEvent['data'])['idx']));
-        print("concac${await localStore.getDataShare()}");
-        await FlutterOverlayWindow.closeOverlay();
-      } else {}
+        _timer!.cancel();
+        dynamic data = await localStore.getDataShare();
+        print("datadatadatadatadata$data");
+        if (data != 'null') {
+          globalKey.currentContext?.read<AccumulateMoneyBloc>().add(
+              SaveKeepAdver(
+                  advertise_idx:
+                      jsonDecode((jsonDecode(data)['data']))['idx']));
+          Future.delayed(Duration(milliseconds: 350), () {
+            localStore.setDataShare(dataShare: null);
+            FlutterOverlayWindow.closeOverlay();
+          });
+        } else {
+          localStore.setDataShare(dataShare: null);
+          FlutterOverlayWindow.closeOverlay();
+        }
+      }
     }
   }
 
   bool checkH = false;
 
+
   _buildContent(BuildContext context) {
     final showDraggable = color == Colors.black;
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       key: globalKey,
@@ -262,6 +249,8 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
           ),
         ),
       ),
+
+
     );
   }
 }

@@ -15,6 +15,7 @@ class MainActivity: FlutterActivity(), AppAllOfferwallSDK.AppAllOfferwallSDKList
         checkPermission()
     }
 
+
     private fun checkPermission(){
         AndPermission.with(this).requestCode(300).permission(
             android.Manifest.permission.READ_PHONE_STATE,

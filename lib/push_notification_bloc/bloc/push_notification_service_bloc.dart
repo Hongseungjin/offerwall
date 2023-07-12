@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:intl/intl.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
@@ -19,25 +20,19 @@ part 'push_notification_service_state.dart';
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   LocalStore localStore = LocalStoreService();
-  print('message remote 123123 ${message.data}');
   localStore.setDataShare(dataShare: message.data);
   final isActive = await FlutterOverlayWindow.isActive();
-
   if (isActive == true) {
     await FlutterOverlayWindow.closeOverlay();
   }
-
-
-
-  Future.delayed(const Duration(milliseconds: 750), () async {
-    await FlutterOverlayWindow.showOverlay(
+  Future.delayed(const Duration(milliseconds: 750), ()  {
+     FlutterOverlayWindow.showOverlay(
         enableDrag: true,
         height: 300,
         width: 300,
         alignment: OverlayAlignment.center);
-    await FlutterOverlayWindow.shareData(message.data);
+     FlutterOverlayWindow.shareData(message.data);
   });
-  await FlutterOverlayWindow.shareData(message.data);
   print('message remote ${message.notification?.body}');
   print('message remote ${message.notification?.title}');
 }
@@ -109,12 +104,9 @@ class PushNotificationServiceBloc
 
   // Android initial setup
   _androidRegisterNotifications() async {
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
-            apiKey: 'AIzaSyBkj46lMsOL6WABO5FzeTXTlppVognezoM',
-            appId: '1:739452302790:android:9fe699ead424427640aec7',
-            messagingSenderId: '739452302790',
-            projectId: 'e-ums-24291'));
+    DateTime date = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date.toLocal());
+    await Firebase.initializeApp();
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()
@@ -144,11 +136,21 @@ class PushNotificationServiceBloc
 
     String? token = await FirebaseMessaging.instance.getToken();
     print("tokentokentokennotifile ${token}");
-
-    if (token != null) {
-      await _eumsOfferWallService.createTokenNotifi(token: token);
+    String dateLocalStore = await localStore.getToken();
+    if (dateLocalStore == '') {
+      if (token != null) {
+        await _eumsOfferWallService.createTokenNotifi(token: token);
+        await localStore.setToken(dataToken: formattedDate);
+      }
+    } else {
+      if (dateLocalStore != formattedDate) {
+        if (token != null) {
+          await _eumsOfferWallService.createTokenNotifi(token: token);
+          await localStore.setToken(dataToken: formattedDate);
+        }
+      } else {
+      }
     }
-
     //onLaunch
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -169,15 +171,9 @@ class PushNotificationServiceBloc
   }
 
   Future<void> _androidOnMessageForeground(RemoteMessage message) async {
-    final isActive = await FlutterOverlayWindow.isActive();
-
-    if (isActive == true) {
-      await FlutterOverlayWindow.closeOverlay();
-    }
+    await FlutterOverlayWindow.closeOverlay();
     print('Got a message whilst in the foreground!');
-    print('message.datamessage.data${message.data}');
     localStore.setDataShare(dataShare: message.data);
-
     Future.delayed(Duration(milliseconds: 750), ()async{
       await FlutterOverlayWindow.showOverlay(
           enableDrag: true,
@@ -194,6 +190,7 @@ class PushNotificationServiceBloc
   }
 
   Future<void> _androidOnMessage(RemoteMessage message) async {
+    print("onMessahsjdgjhas");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     _flutterLocalNotificationsPlugin.cancelAll();
