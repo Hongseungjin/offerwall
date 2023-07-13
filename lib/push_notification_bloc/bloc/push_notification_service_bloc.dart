@@ -19,24 +19,8 @@ part 'push_notification_service_state.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  LocalStore localStore = LocalStoreService();
-  localStore.setDataShare(dataShare: message.data);
   print('message.data ${message.data}');
-  final isActive = await FlutterOverlayWindow.isActive();
-  if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-  }
-  Future.delayed(const Duration(milliseconds: 200), () {
-    // FlutterOverlayWindow.showOverlay(
-    //     enableDrag: true,
-    //     height: 300,
-    //     width: 300,
-    //     alignment: OverlayAlignment.center);
-    // FlutterOverlayWindow.shareData(message.data);
-    FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-  });
-  print('message 1 remote ${message.notification?.body}');
-  print('message remote ${message.notification?.title}');
+  FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 }
 
 final receivePort = ReceivePort();
@@ -175,23 +159,7 @@ class PushNotificationServiceBloc
 
   Future<void> _androidOnMessageForeground(RemoteMessage message) async {
     print('message $message');
-    final isActive = await FlutterOverlayWindow.isActive();
-    if (isActive == true) {
-      await FlutterOverlayWindow.closeOverlay();
-    }
-    print('Got a message whilst in the foreground!');
-    localStore.setDataShare(dataShare: message.data);
-    Future.delayed(Duration(milliseconds: 200), () async {
-      // print('deviceWidth ${deviceWidth(context)}');
-      // await FlutterOverlayWindow.showOverlay(
-      //     enableDrag: true,
-      //     height: 300,
-      //     width: 300,
-      //     alignment: OverlayAlignment.center);
-      // await FlutterOverlayWindow.shareData(message.data);
-      FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-    });
-
+    FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
     flutterLocalNotificationsPlugin.cancelAll();
     add(PushNotificationHandleRemoteMessage(
         message: message, isForeground: true));

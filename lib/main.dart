@@ -20,19 +20,40 @@ import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authenticat
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adver_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
+import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 final receivePort = ReceivePort();
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) {
-  service.on('showOverlay').listen((event) {
-    FlutterOverlayWindow.showOverlay(
-        enableDrag: true,
-        height: 300,
-        width: 300,
-        alignment: OverlayAlignment.center);
-    FlutterOverlayWindow.shareData(event?['data']);
-  });
+  try {
+    service.on('showOverlay').listen((event) async {
+      bool isActive = await FlutterOverlayWindow.isActive();
+      if (isActive == true) {
+        await FlutterOverlayWindow.closeOverlay();
+        await Future.delayed(const Duration(milliseconds: 200));
+      }
+      if (event?['data'] != null && event?['data']['isWebView'] != null) {
+        print('showWebView');
+        await FlutterOverlayWindow.showOverlay();
+        await FlutterOverlayWindow.shareData(event?['data']);
+      } else {
+        print('showOverlay');
+        await FlutterOverlayWindow.showOverlay(
+            enableDrag: true,
+            height: 300,
+            width: 300,
+            alignment: OverlayAlignment.center);
+        await FlutterOverlayWindow.shareData(event?['data']);
+      }
+    });
+    service.on('setAppTokenBg').listen((event) {
+      print('setAppTokenBg $event');
+      LocalStoreService().setAccessToken(event?['token']);
+    });
+  } catch (e) {
+    print(e);
+  }
 }
 
 void main() {
@@ -107,31 +128,31 @@ class _MyHomePageState extends State<MyHomePage>
     localStore.setDataShare(dataShare: null);
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   LocalStore localStore = LocalStoreService();
-  //   print("statestatestate$state");
-  //   switch (state) {
-  //     case AppLifecycleState.resumed:
-  //       // try{
-  //       //  Restart.restartApp();
-  //       // }
-  //       // catch(ex){
-  //       //   print("khongo the resetapp");
-  //       // }
-  //       checkOpenApp('resumed');
-  //       break;
-  //     case AppLifecycleState.inactive:
-  //       checkOpenApp('inactive');
-  //       break;
-  //     case AppLifecycleState.paused:
-  //       localStore.setDataShare(dataShare: null);
-  //       break;
-  //     case AppLifecycleState.detached:
-  //       localStore.setDataShare(dataShare: null);
-  //       break;
-  //   }
-  // }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    LocalStore localStore = LocalStoreService();
+    print("statestatestate$state");
+    switch (state) {
+      case AppLifecycleState.resumed:
+        // try{
+        //  Restart.restartApp();
+        // }
+        // catch(ex){
+        //   print("khongo the resetapp");
+        // }
+        // checkOpenApp('resumed');
+        break;
+      case AppLifecycleState.inactive:
+        // checkOpenApp('inactive');
+        break;
+      case AppLifecycleState.paused:
+        localStore.setDataShare(dataShare: null);
+        break;
+      case AppLifecycleState.detached:
+        localStore.setDataShare(dataShare: null);
+        break;
+    }
+  }
 
   // checkOpenApp(type) async {
   //   // print("vao day khong");

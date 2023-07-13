@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
@@ -56,7 +57,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
       // localStore.setDataShare(dataShare: event);
       setState(() {
         dataEvent = event;
-        isWebView = false;
+        isWebView = event['isWebView'] != null ? true : false;
       });
     });
   }
@@ -96,6 +97,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
         // setState(() {
         //   checkApp = true;
         // });
+        getActive();
         break;
       case AppLifecycleState.inactive:
         break;
@@ -111,6 +113,11 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
     FlutterOverlayWindow.closeOverlay();
+  }
+
+  getActive() async {
+    bool isActive = await FlutterOverlayWindow.isActive();
+    print('isActiveisActive $isActive');
   }
 
   @override
@@ -258,19 +265,24 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     if (dy != null && dyStart != null && dy! < dyStart!) {
       print('uppp');
       // _timer!.cancel(); // dùng ? nha ko dùng !
-      bool isActive = await FlutterOverlayWindow.isActive();
-      if (isActive == true) {
-        await FlutterOverlayWindow.closeOverlay();
-        await Future.delayed(const Duration(milliseconds: 200));
-        if (dataEvent != null) {
-          await FlutterOverlayWindow.showOverlay();
-          // // await FlutterOverlayWindow.updateFlag(OverlayFlag.clickThrough);
-          setState(() {
-            isWebView = true;
-          });
-          // await FlutterOverlayWindow.resizeOverlay(411, 853);
-        }
-      }
+      dataEvent['isWebView'] = true;
+      FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+
+      // bool isActive = await FlutterOverlayWindow.isActive();
+      // if (isActive == true) {
+      //   await FlutterOverlayWindow.closeOverlay();
+      //   await Future.delayed(const Duration(milliseconds: 500));
+      //   if (dataEvent != null) {
+      //     await FlutterOverlayWindow.showOverlay();
+      //     await Future.delayed(const Duration(milliseconds: 2000));
+
+      //     setState(() {
+      //       isWebView = true;
+      //     });
+      //     // // await FlutterOverlayWindow.updateFlag(OverlayFlag.clickThrough);
+      //     // await FlutterOverlayWindow.resizeOverlay(411, 853);
+      //   }
+      // }
     }
 
     if (dy != null && dyStart != null && dy! > dyStart!) {

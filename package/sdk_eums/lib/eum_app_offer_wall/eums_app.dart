@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
@@ -21,6 +22,8 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     // await Future.delayed(const Duration(milliseconds: 350));
 
     await localStore.setAccessToken(data['token']);
+    FlutterBackgroundService()
+        .invoke("setAppTokenBg", {'token': data['token']});
 
     if (await localStore.getAccessToken() != null) {
       openAppSkd(context);
