@@ -261,28 +261,17 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
   double? dy;
   double? dyStart;
 
+  openWebView() {
+    dataEvent['isWebView'] = true;
+    FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+  }
+
   void onVerticalDragEnd(DragEndDetails details) async {
     if (dy != null && dyStart != null && dy! < dyStart!) {
       print('uppp');
       // _timer!.cancel(); // dùng ? nha ko dùng !
       dataEvent['isWebView'] = true;
       FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-
-      // bool isActive = await FlutterOverlayWindow.isActive();
-      // if (isActive == true) {
-      //   await FlutterOverlayWindow.closeOverlay();
-      //   await Future.delayed(const Duration(milliseconds: 500));
-      //   if (dataEvent != null) {
-      //     await FlutterOverlayWindow.showOverlay();
-      //     await Future.delayed(const Duration(milliseconds: 2000));
-
-      //     setState(() {
-      //       isWebView = true;
-      //     });
-      //     // // await FlutterOverlayWindow.updateFlag(OverlayFlag.clickThrough);
-      //     // await FlutterOverlayWindow.resizeOverlay(411, 853);
-      //   }
-      // }
     }
 
     if (dy != null && dyStart != null && dy! > dyStart!) {
@@ -314,6 +303,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
       body: Container(
         constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
         child: GestureDetector(
+          onTap: openWebView,
           onVerticalDragStart: (details) => dyStart = details.localPosition.dy,
           onVerticalDragEnd: onVerticalDragEnd,
           onVerticalDragUpdate: (details) => dy = details.localPosition.dy,
