@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -13,7 +14,6 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-
 part 'push_notification_service_event.dart';
 part 'push_notification_service_state.dart';
 
@@ -21,19 +21,21 @@ part 'push_notification_service_state.dart';
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   LocalStore localStore = LocalStoreService();
   localStore.setDataShare(dataShare: message.data);
+  print('message.data ${message.data}');
   final isActive = await FlutterOverlayWindow.isActive();
   if (isActive == true) {
     await FlutterOverlayWindow.closeOverlay();
   }
-  Future.delayed(const Duration(milliseconds: 750), ()  {
-     FlutterOverlayWindow.showOverlay(
-        enableDrag: true,
-        height: 300,
-        width: 300,
-        alignment: OverlayAlignment.center);
-     FlutterOverlayWindow.shareData(message.data);
+  Future.delayed(const Duration(milliseconds: 200), () {
+    // FlutterOverlayWindow.showOverlay(
+    //     enableDrag: true,
+    //     height: 300,
+    //     width: 300,
+    //     alignment: OverlayAlignment.center);
+    // FlutterOverlayWindow.shareData(message.data);
+    FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
   });
-  print('message remote ${message.notification?.body}');
+  print('message 1 remote ${message.notification?.body}');
   print('message remote ${message.notification?.title}');
 }
 
@@ -54,13 +56,13 @@ class PushNotificationServiceBloc
       'high_importance_channel', // id
       'High Importance Notifications', // title
       description:
-      'This channel is used for important notifications.', // description
+          'This channel is used for important notifications.', // description
       importance: Importance.high,
       // sound: RawResourceAndroidNotificationSound('alarm'),
       playSound: true);
 
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   AndroidNotificationChannel get channel => _channel;
 
@@ -87,7 +89,7 @@ class PushNotificationServiceBloc
 
   _mapRemoveTokenToState(RemoveToken event, emit) async {
     await Firebase.initializeApp();
-    await FirebaseMessaging.instance.deleteToken();
+    // await FirebaseMessaging.instance.deleteToken();
   }
 
   _mapPushNotificationSetupToState(PushNotificationSetup event, emit) async {
@@ -109,7 +111,7 @@ class PushNotificationServiceBloc
     await Firebase.initializeApp();
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(_channel);
     await FirebaseMessaging.instance.requestPermission(
         alert: true,
@@ -126,7 +128,7 @@ class PushNotificationServiceBloc
       sound: true,
     );
     var initializationSettingsAndroid =
-    const AndroidInitializationSettings('mipmap/ic_launcher');
+        const AndroidInitializationSettings('mipmap/ic_launcher');
     var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
@@ -134,23 +136,24 @@ class PushNotificationServiceBloc
       initializationSettings,
     );
 
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("tokentokentokennotifile ${token}");
-    String dateLocalStore = await localStore.getToken();
-    if (dateLocalStore == '') {
-      if (token != null) {
-        await _eumsOfferWallService.createTokenNotifi(token: token);
-        await localStore.setToken(dataToken: formattedDate);
-      }
-    } else {
-      if (dateLocalStore != formattedDate) {
-        if (token != null) {
-          await _eumsOfferWallService.createTokenNotifi(token: token);
-          await localStore.setToken(dataToken: formattedDate);
-        }
-      } else {
-      }
-    }
+    // String? token = await FirebaseMessaging.instance.getToken();
+    // print("tokentokentokennotifile ${token}");
+    // await _eumsOfferWallService.createTokenNotifi(token: token);
+
+    // String dateLocalStore = await localStore.getToken();
+    // if (dateLocalStore == '') {
+    //   if (token != null) {
+    //     await _eumsOfferWallService.createTokenNotifi(token: token);
+    //     await localStore.setToken(dataToken: formattedDate);
+    //   }
+    // } else {
+    //   if (dateLocalStore != formattedDate) {
+    //     if (token != null) {
+    //       await _eumsOfferWallService.createTokenNotifi(token: token);
+    //       await localStore.setToken(dataToken: formattedDate);
+    //     }
+    //   } else {}
+    // }
     //onLaunch
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -171,18 +174,23 @@ class PushNotificationServiceBloc
   }
 
   Future<void> _androidOnMessageForeground(RemoteMessage message) async {
-    await FlutterOverlayWindow.closeOverlay();
+    print('message $message');
+    final isActive = await FlutterOverlayWindow.isActive();
+    if (isActive == true) {
+      await FlutterOverlayWindow.closeOverlay();
+    }
     print('Got a message whilst in the foreground!');
     localStore.setDataShare(dataShare: message.data);
-    Future.delayed(Duration(milliseconds: 750), ()async{
-      await FlutterOverlayWindow.showOverlay(
-          enableDrag: true,
-          height: 300,
-          width: 300,
-          alignment: OverlayAlignment.center);
-      await FlutterOverlayWindow.shareData(message.data);
+    Future.delayed(Duration(milliseconds: 200), () async {
+      // print('deviceWidth ${deviceWidth(context)}');
+      // await FlutterOverlayWindow.showOverlay(
+      //     enableDrag: true,
+      //     height: 300,
+      //     width: 300,
+      //     alignment: OverlayAlignment.center);
+      // await FlutterOverlayWindow.shareData(message.data);
+      FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
     });
-
 
     flutterLocalNotificationsPlugin.cancelAll();
     add(PushNotificationHandleRemoteMessage(
@@ -223,14 +231,14 @@ class PushNotificationServiceBloc
       requestAlertPermission: true,
     );
     var initializationSettings =
-    InitializationSettings(iOS: initializationSettingsIOS);
+        InitializationSettings(iOS: initializationSettingsIOS);
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String? payload) async {
-          if (state.remoteMessage != null) {
-            _iosOnMessage(state.remoteMessage!);
-          }
-        });
+      if (state.remoteMessage != null) {
+        _iosOnMessage(state.remoteMessage!);
+      }
+    });
 
     // onLaunch
     FirebaseMessaging.instance

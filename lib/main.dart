@@ -13,7 +13,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
 import 'package:offerwall/widget/true_call_overlay.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -26,38 +25,13 @@ final receivePort = ReceivePort();
 
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) {
-  DartPluginRegistrant.ensureInitialized();
-  print("=========> call flutterBackgroundService start");
-  IsolateNameServer.registerPortWithName(
-      receivePort.sendPort, 'overlay_window');
-  if (IsolateNameServer.lookupPortByName('overlay_window') != null) {
-    IsolateNameServer.removePortNameMapping('overlay_window');
-  }
-
-  receivePort.asBroadcastStream().listen((message) async {
-    if(message == "regToken"){
-      print("vap day khong");
-
-    }
-    if (message is Map) {
-      try {
-        try {
-          final isActive = await FlutterOverlayWindow.isActive();
-          if (isActive == true) {
-            await FlutterOverlayWindow.closeOverlay();
-          }
-        } catch (e) {
-        }
-        await FlutterOverlayWindow.showOverlay(
-            enableDrag: true,
-            height: 300,
-            width: 300,
-            alignment: OverlayAlignment.center);
-        await FlutterOverlayWindow.shareData(message);
-      } catch (e) {
-        rethrow;
-      }
-    }
+  service.on('showOverlay').listen((event) {
+    FlutterOverlayWindow.showOverlay(
+        enableDrag: true,
+        height: 300,
+        width: 300,
+        alignment: OverlayAlignment.center);
+    FlutterOverlayWindow.shareData(event?['data']);
   });
 }
 
@@ -66,12 +40,11 @@ void main() {
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
-          onStart: onStart,
-          autoStart: true,
-          isForegroundMode: true,
-          initialNotificationTitle: "인천e음", initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"
-
-        ));
+            onStart: onStart,
+            autoStart: true,
+            isForegroundMode: true,
+            initialNotificationTitle: "인천e음",
+            initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
     runApp(MaterialApp(home: MyHomePage()));
   });
 }
@@ -82,6 +55,7 @@ void overlayMain() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
     statusBarColor: Colors.transparent,
   ));
+
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -102,13 +76,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   LocalStore localStore = LocalStoreService();
+  double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
+  double deviceHeight(BuildContext context) =>
+      MediaQuery.of(context).size.height;
   @override
   void initState() {
-    checkOpenApp();
+    // checkOpenApp('initState');
     checkPermission();
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  setDeviceWidth() {
+    print('deviceWidth(context) ${deviceWidth(context)}');
+    localStore.setDeviceWidth(deviceWidth(context));
   }
 
   checkPermission() async {
@@ -126,58 +107,59 @@ class _MyHomePageState extends State<MyHomePage>
     localStore.setDataShare(dataShare: null);
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    LocalStore localStore = LocalStoreService();
-    print("statestatestate$state");
-    switch (state) {
-      case AppLifecycleState.resumed:
-        // try{
-        //  Restart.restartApp();
-        // }
-        // catch(ex){
-        //   print("khongo the resetapp");
-        // }
-        checkOpenApp();
-        break;
-      case AppLifecycleState.inactive:
-        checkOpenApp();
-        break;
-      case AppLifecycleState.paused:
-        localStore.setDataShare(dataShare: null);
-        break;
-      case AppLifecycleState.detached:
-        localStore.setDataShare(dataShare: null);
-        break;
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   LocalStore localStore = LocalStoreService();
+  //   print("statestatestate$state");
+  //   switch (state) {
+  //     case AppLifecycleState.resumed:
+  //       // try{
+  //       //  Restart.restartApp();
+  //       // }
+  //       // catch(ex){
+  //       //   print("khongo the resetapp");
+  //       // }
+  //       checkOpenApp('resumed');
+  //       break;
+  //     case AppLifecycleState.inactive:
+  //       checkOpenApp('inactive');
+  //       break;
+  //     case AppLifecycleState.paused:
+  //       localStore.setDataShare(dataShare: null);
+  //       break;
+  //     case AppLifecycleState.detached:
+  //       localStore.setDataShare(dataShare: null);
+  //       break;
+  //   }
+  // }
 
-  checkOpenApp() async {
-    // print("vao day khong");
-    //
-    // LocalStore localStore = LocalStoreService();
-    // dynamic data = await localStore.getDataShare();
-    // print("vao day khong$data");
-    //   EumsAppOfferWallService.instance.openSdk(context,
-    //       memId: "abee997",
-    //       memGen: "w",
-    //       memBirth: "2000-01-01",
-    //       memRegion: "인천_서");
-
-    LocalStore localStore = LocalStoreService();
-    dynamic data = await localStore.getDataShare();
-    print("vao day chuw $data");
-    if (data != "null") {
-      EumsAppOfferWallService.instance.openSdk(context,
-          memId: "abee997",
-          memGen: "w",
-          memBirth: "2000-01-01",
-          memRegion: "인천_서");
-    }
-  }
+  // checkOpenApp(type) async {
+  //   // print("vao day khong");
+  //   //
+  //   // LocalStore localStore = LocalStoreService();
+  //   // dynamic data = await localStore.getDataShare();
+  //   // print("vao day khong$data");
+  //   //   EumsAppOfferWallService.instance.openSdk(context,
+  //   //       memId: "abee997",
+  //   //       memGen: "w",
+  //   //       memBirth: "2000-01-01",
+  //   //       memRegion: "인천_서");
+  //   await Future.delayed(Duration(seconds: 1));
+  //   LocalStore localStore = LocalStoreService();
+  //   dynamic data = await localStore.getDataShare();
+  //   print("vao day chuw $type $data");
+  //   if (data != "null") {
+  //     EumsAppOfferWallService.instance.openSdk(context,
+  //         memId: "abee997",
+  //         memGen: "w",
+  //         memBirth: "2000-01-01",
+  //         memRegion: "인천_서");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    setDeviceWidth();
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<LocalStore>(
@@ -295,13 +277,14 @@ class _AppMainScreenState extends State<AppMainScreen> {
           listener: _listenerAppPushNotification,
         ),
       ],
+
       /// code old
       child: Scaffold(
         appBar: AppBar(),
         body: Column(
           children: [
             GestureDetector(
-              onTap: () async{
+              onTap: () async {
                 await localStore?.setDataShare(dataShare: null);
                 EumsAppOfferWallService.instance.openSdk(context,
                     memId: "abee997",

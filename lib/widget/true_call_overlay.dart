@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,10 @@ import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview2.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -26,6 +31,8 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final GlobalKey<State<StatefulWidget>> globalKey =
       GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> webViewKey =
+      GlobalKey<State<StatefulWidget>>();
   dynamic dataEvent;
   late double offsetX;
   late double offsetY;
@@ -34,21 +41,22 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
   int _start = 550;
   int indexStart = 0;
   Color color = Colors.black;
-
+  bool isWebView = false;
   bool showWatch = false;
   bool isDragging = false;
   int _upCounter = 0;
   bool checkApp = false;
-
   @override
   void initState() {
     localStore = LocalStoreService();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    FlutterOverlayWindow.overlayListener.listen((event) {
-      localStore.setDataShare(dataShare: event);
+    FlutterOverlayWindow.overlayListener.listen((event) async {
+      print("Current Event: $event");
+      // localStore.setDataShare(dataShare: event);
       setState(() {
         dataEvent = event;
+        isWebView = false;
       });
     });
   }
@@ -56,11 +64,10 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
   checkTimeNoifi() async {
     _start = 550;
     bool isActive = await FlutterOverlayWindow.isActive();
-    print("isActive${isActive}");
     if (isActive) {
       _timer = Timer.periodic(
         const Duration(seconds: 1),
-            (Timer timer) {
+        (Timer timer) {
           if (_start == 0) {
             setState(() {
               timer.cancel();
@@ -69,9 +76,10 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
             setState(() {
               _start--;
             });
-            print("_start_start$_start");
             if (_start == 0) {
-              globalKey.currentContext!.read<PushNotificationServiceBloc>().add(RemoveToken());
+              globalKey.currentContext!
+                  .read<PushNotificationServiceBloc>()
+                  .add(RemoveToken());
             }
           }
         },
@@ -84,10 +92,10 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     print("state$state");
     switch (state) {
       case AppLifecycleState.resumed:
-        checkTimeNoifi();
-        setState(() {
-          checkApp = true;
-        });
+        // checkTimeNoifi();
+        // setState(() {
+        //   checkApp = true;
+        // });
         break;
       case AppLifecycleState.inactive:
         break;
@@ -107,6 +115,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
 
   @override
   Widget build(BuildContext context) {
+    print('isWebView $isWebView');
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(
@@ -119,8 +128,7 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
         child: MultiBlocProvider(
             providers: [
               BlocProvider<PushNotificationServiceBloc>(
-                create: (context) =>
-                PushNotificationServiceBloc(),
+                create: (context) => PushNotificationServiceBloc(),
               ),
               BlocProvider<AuthenticationBloc>(
                 create: (context) =>
@@ -142,10 +150,78 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
                   },
                 ),
               ],
-              child: _buildWidget(context),
+              child: !!isWebView ? _buildWebView() : _buildWidget(context),
             )),
       ),
     );
+  }
+
+  bool checkSave = false;
+
+  Widget _buildWebView() {
+    String url = '';
+    try {
+      url = (jsonDecode(dataEvent['data']))['url_link'];
+    } catch (e) {
+      print(e);
+    }
+    return BlocProvider<WatchAdverBloc>(
+        create: (context) => WatchAdverBloc(),
+        child: CustomWebView2(
+            key: webViewKey,
+            showImage: true,
+            showMission: true,
+            onClose: () async {
+              await FlutterOverlayWindow.closeOverlay();
+            },
+            onSave: () async {
+              try {
+                print('checkSave $checkSave');
+                setState(() {
+                  checkSave = !checkSave;
+                });
+                print(checkSave);
+                if (checkSave) {
+                  webViewKey.currentContext?.read<WatchAdverBloc>().add(
+                      SaveAdver(
+                          advertise_idx:
+                              (jsonDecode(dataEvent['data']))['idx']));
+                  // await FlutterOverlayWindow.closeOverlay();
+                } else {
+                  webViewKey.currentContext?.read<WatchAdverBloc>().add(
+                      DeleteScrap(id: (jsonDecode(dataEvent['data']))['idx']));
+                  // await FlutterOverlayWindow.closeOverlay();
+                }
+              } catch (e) {
+                print(e);
+              }
+            },
+            mission: () async {
+              if (dataEvent != null && dataEvent['data'] != null) {
+                DialogUtils.showDialogSucessPoint(context,
+                    // checkImage: true,
+                    //       point: jsonDecode(widget.data['data'])['typePoint'],
+                    data: jsonDecode(dataEvent['data']),
+                    voidCallback: () async {
+                  try {
+                    webViewKey.currentContext?.read<WatchAdverBloc>().add(
+                        EarnPoin(
+                            advertise_idx:
+                                (jsonDecode(dataEvent['data']))['idx'],
+                            pointType:
+                                (jsonDecode(dataEvent['data']))['typePoint']));
+                    await Future.delayed(Duration(milliseconds: 500));
+                    await FlutterOverlayWindow.closeOverlay();
+                    setState(() {
+                      isWebView = false;
+                    });
+                  } catch (e) {
+                    print(e);
+                  }
+                });
+              }
+            },
+            urlLink: url));
   }
 
   _buildWidget(BuildContext context) {
@@ -175,60 +251,47 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
     }
   }
 
-  void _incrementUp(PointerEvent details) async {
-    /// it runs this code over and over again
-    _upCounter = 0;
-    setState(() {
-      _upCounter++;
-    });
+  double? dy;
+  double? dyStart;
 
-    double heightScreen = MediaQuery.of(context).size.height;
-    double deviceRatio = MediaQuery.of(context).devicePixelRatio;
-
-    double count = heightScreen * deviceRatio;
-
-    if (0 < details.position.dy && details.position.dy < 35) {
-      if (_upCounter != 0) {
-        _upCounter = 0;
-        _timer!.cancel();
-        bool isActive = await FlutterOverlayWindow.isActive();
-        if (isActive == true) {
-          await FlutterOverlayWindow.closeOverlay();
-          Future.delayed(const Duration(milliseconds: 500), () async {
-            dynamic data = await localStore.getDataShare();
-            if (data != null || data != '') {
-              DeviceApps.openApp('com.app.abeeofferwal');
-            }
+  void onVerticalDragEnd(DragEndDetails details) async {
+    if (dy != null && dyStart != null && dy! < dyStart!) {
+      print('uppp');
+      // _timer!.cancel(); // dùng ? nha ko dùng !
+      bool isActive = await FlutterOverlayWindow.isActive();
+      if (isActive == true) {
+        await FlutterOverlayWindow.closeOverlay();
+        await Future.delayed(const Duration(milliseconds: 200));
+        if (dataEvent != null) {
+          await FlutterOverlayWindow.showOverlay();
+          // // await FlutterOverlayWindow.updateFlag(OverlayFlag.clickThrough);
+          setState(() {
+            isWebView = true;
           });
+          // await FlutterOverlayWindow.resizeOverlay(411, 853);
         }
       }
     }
 
-    if (40 < details.position.dy) {
-      if (_upCounter != 0) {
-        _upCounter = 0;
-        _timer!.cancel();
-        dynamic data = await localStore.getDataShare();
-        print("datadatadatadatadata$data");
-        if (data != 'null') {
-          globalKey.currentContext?.read<AccumulateMoneyBloc>().add(
-              SaveKeepAdver(
-                  advertise_idx:
-                      jsonDecode((jsonDecode(data)['data']))['idx']));
-          Future.delayed(Duration(milliseconds: 350), () {
-            localStore.setDataShare(dataShare: null);
-            FlutterOverlayWindow.closeOverlay();
-          });
-        } else {
-          localStore.setDataShare(dataShare: null);
-          FlutterOverlayWindow.closeOverlay();
+    if (dy != null && dyStart != null && dy! > dyStart!) {
+      print('downnnn');
+      // _timer!.cancel(); // dùng ? nha ko dùng !
+      bool isActive = await FlutterOverlayWindow.isActive();
+      if (isActive == true) {
+        await FlutterOverlayWindow.closeOverlay();
+        // await Future.delayed(const Duration(milliseconds: 500));
+        if (dataEvent != null) {
+          try {
+            globalKey.currentContext?.read<AccumulateMoneyBloc>().add(
+                SaveKeepAdver(
+                    advertise_idx: (jsonDecode(dataEvent['data']))['idx']));
+          } catch (e) {}
         }
       }
     }
   }
 
   bool checkH = false;
-
 
   _buildContent(BuildContext context) {
     final showDraggable = color == Colors.black;
@@ -238,9 +301,10 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
       key: globalKey,
       body: Container(
         constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
-        child: Listener(
-          onPointerUp: _incrementUp,
-          onPointerMove: (event) async {},
+        child: GestureDetector(
+          onVerticalDragStart: (details) => dyStart = details.localPosition.dy,
+          onVerticalDragEnd: onVerticalDragEnd,
+          onVerticalDragUpdate: (details) => dy = details.localPosition.dy,
           child: Image.asset(
             Assets.icon_logo.path,
             package: "sdk_eums",
@@ -249,8 +313,6 @@ class _TrueCallerOverlayState extends State<TrueCallerOverlay>
           ),
         ),
       ),
-
-
     );
   }
 }

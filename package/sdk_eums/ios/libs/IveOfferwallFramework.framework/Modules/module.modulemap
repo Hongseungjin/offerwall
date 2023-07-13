@@ -1,0 +1,11 @@
+framework module IveOfferwallFramework {
+  umbrella header "IveOfferwallFramework.h"
+
+  export *
+  module * { export * }
+}
+
+module IveOfferwallFramework.Swift {
+  header "IveOfferwallFramework-Swift.h"
+  requires objc
+}
