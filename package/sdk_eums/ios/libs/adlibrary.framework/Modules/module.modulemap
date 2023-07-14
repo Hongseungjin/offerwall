@@ -1,6 +1,0 @@
-framework module adlibrary {
-  umbrella header "adlibrary.h"
-
-  export *
-  module * { export * }
-}

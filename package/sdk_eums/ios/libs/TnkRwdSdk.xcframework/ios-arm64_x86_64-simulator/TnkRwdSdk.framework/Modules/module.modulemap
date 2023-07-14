@@ -1,6 +1,0 @@
-framework module TnkRwdSdk {
-  umbrella header "TnkRwdSdk.h"
-
-  export *
-  module * { export * }
-}

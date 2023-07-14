@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+
 import 'package:equatable/equatable.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,12 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:intl/intl.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
+
 part 'push_notification_service_event.dart';
 part 'push_notification_service_state.dart';
 
@@ -119,10 +120,11 @@ class PushNotificationServiceBloc
     _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
+    
 
-    // String? token = await FirebaseMessaging.instance.getToken();
-    // print("tokentokentokennotifile ${token}");
-    // await _eumsOfferWallService.createTokenNotifi(token: token);
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("tokentokentokennotifile ${token}");
+    await _eumsOfferWallService.createTokenNotifi(token: token);
 
     // String dateLocalStore = await localStore.getToken();
     // if (dateLocalStore == '') {

@@ -2,17 +2,12 @@
 
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:ui';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
-import 'package:offerwall/widget/true_call_overlay.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -20,7 +15,6 @@ import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authenticat
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adver_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 final receivePort = ReceivePort();
 
@@ -36,6 +30,7 @@ void onStart(ServiceInstance service) {
       if (event?['data'] != null && event?['data']['isWebView'] != null) {
         print('showWebView');
         await FlutterOverlayWindow.showOverlay();
+        event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
         await FlutterOverlayWindow.shareData(event?['data']);
       } else {
         print('showOverlay');
@@ -44,9 +39,11 @@ void onStart(ServiceInstance service) {
             height: 300,
             width: 300,
             alignment: OverlayAlignment.center);
+        event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
         await FlutterOverlayWindow.shareData(event?['data']);
       }
     });
+
     service.on('setAppTokenBg').listen((event) {
       print('setAppTokenBg $event');
       LocalStoreService().setAccessToken(event?['token']);
@@ -80,7 +77,7 @@ void overlayMain() {
   runApp(
     const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TrueCallerOverlay(),
+      home: TrueCallOverlay(),
     ),
   );
 }
@@ -103,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     // checkOpenApp('initState');
-    checkPermission();
+
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -111,14 +108,6 @@ class _MyHomePageState extends State<MyHomePage>
   setDeviceWidth() {
     print('deviceWidth(context) ${deviceWidth(context)}');
     localStore.setDeviceWidth(deviceWidth(context));
-  }
-
-  checkPermission() async {
-    final bool status = await FlutterOverlayWindow.isPermissionGranted();
-
-    if (!status) {
-      await FlutterOverlayWindow.requestPermission();
-    } else {}
   }
 
   @override
@@ -240,19 +229,12 @@ class _AppMainScreenState extends State<AppMainScreen> {
     // TODO: implement initState
     _pushNotificationServiceBloc = context.read<PushNotificationServiceBloc>();
     _pushNotificationServiceBloc.add(PushNotificationSetup());
-    // checkDataNotifi();
+    checkToken();
     super.initState();
   }
 
-  checkDataNotifi() async {
-    dynamic data = await localStore?.getDataShare();
-    if (data != "null") {
-      EumsAppOfferWallService.instance.openSdk(context,
-          memId: "abeetest",
-          memGen: "w",
-          memBirth: "2000-01-01",
-          memRegion: "인천_서");
-    }
+  checkToken() async {
+    print("localStore?.getAccessToken()${localStore?.getAccessToken()}");
   }
 
   void _listenerAppPushNotification(
