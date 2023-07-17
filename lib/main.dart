@@ -25,7 +25,7 @@ void onStart(ServiceInstance service) {
       bool isActive = await FlutterOverlayWindow.isActive();
       if (isActive == true) {
         await FlutterOverlayWindow.closeOverlay();
-        await Future.delayed(const Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
       if (event?['data'] != null && event?['data']['isWebView'] != null) {
         print('showWebView');

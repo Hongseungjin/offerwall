@@ -45,10 +45,10 @@ dependencies:
   equatable: ^2.0.5
   device_apps: ^2.2.0
   intl: ^0.18.1
-  # sdk_eums:
-  #   git:
-  #     url: https://github.com/Greenapp02/eums_sdk_app.git
-  #     path: sdk_eums
+  sdk_eums:
+    git:
+      url: https://github.com/Greenapp02/eums_sdk_app.git
+      path: sdk_eums
     # path: package/sdk_eums
 
 
