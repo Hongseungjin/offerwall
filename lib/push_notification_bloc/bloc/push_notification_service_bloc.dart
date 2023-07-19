@@ -21,6 +21,7 @@ part 'push_notification_service_state.dart';
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('message.data ${message.data}');
+  PushNotificationServiceBloc()._flutterLocalNotificationsPlugin.cancelAll();
   FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 }
 
@@ -120,11 +121,8 @@ class PushNotificationServiceBloc
     _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
-    
 
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("tokentokentokennotifile ${token}");
-    await _eumsOfferWallService.createTokenNotifi(token: token);
+   
 
     // String dateLocalStore = await localStore.getToken();
     // if (dateLocalStore == '') {
@@ -144,7 +142,7 @@ class PushNotificationServiceBloc
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
-      flutterLocalNotificationsPlugin.cancelAll();
+      _flutterLocalNotificationsPlugin.cancelAll();
       if (message != null) {
         _androidOnMessage(message);
       }
@@ -161,8 +159,9 @@ class PushNotificationServiceBloc
 
   Future<void> _androidOnMessageForeground(RemoteMessage message) async {
     print('message $message');
+  
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-    flutterLocalNotificationsPlugin.cancelAll();
+
     add(PushNotificationHandleRemoteMessage(
         message: message, isForeground: true));
   }
@@ -171,7 +170,6 @@ class PushNotificationServiceBloc
     print("onMessahsjdgjhas");
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
-    _flutterLocalNotificationsPlugin.cancelAll();
     if (notification != null && android != null) {
       flutterLocalNotificationsPlugin.cancelAll();
       add(PushNotificationHandleRemoteMessage(

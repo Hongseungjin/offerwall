@@ -3,11 +3,13 @@
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
+import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -22,6 +24,7 @@ final receivePort = ReceivePort();
 void onStart(ServiceInstance service) {
   try {
     service.on('showOverlay').listen((event) async {
+      PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
       bool isActive = await FlutterOverlayWindow.isActive();
       if (isActive == true) {
         await FlutterOverlayWindow.closeOverlay();
@@ -33,20 +36,38 @@ void onStart(ServiceInstance service) {
         event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
         await FlutterOverlayWindow.shareData(event?['data']);
       } else {
-        print('showOverlay');
-        await FlutterOverlayWindow.showOverlay(
-            enableDrag: true,
-            height: 300,
-            width: 300,
-            alignment: OverlayAlignment.center);
+        if (event?['data']['isToast'] != null) {
+          await FlutterOverlayWindow.showOverlay(
+              // enableDrag: true,
+              height: 50,
+              width: 700,
+              alignment: OverlayAlignment.bottomCenter);
+        } else {
+          await FlutterOverlayWindow.showOverlay(
+              enableDrag: true,
+              height: 300,
+              width: 300,
+              alignment: OverlayAlignment.center);
+        }
         event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
         await FlutterOverlayWindow.shareData(event?['data']);
+        print('showOverlay');
       }
     });
 
     service.on('setAppTokenBg').listen((event) {
       print('setAppTokenBg $event');
       LocalStoreService().setAccessToken(event?['token']);
+    });
+
+    service.on('onOffNotifi').listen((event) async {
+      if (event?['data']) {
+        await Firebase.initializeApp();
+        FirebaseMessaging.instance.deleteToken();
+      } else {
+        PushNotificationServiceBloc().add(PushNotificationSetup());
+      }
+      print("onOffNotifi$event");
     });
   } catch (e) {
     print(e);
@@ -55,6 +76,7 @@ void onStart(ServiceInstance service) {
 
 void main() {
   SdkEums.instant.init(onRun: () async {
+    await Firebase.initializeApp();
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
@@ -64,6 +86,12 @@ void main() {
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
     runApp(MaterialApp(home: MyHomePage()));
+    String? token = await FirebaseMessaging.instance.getToken();
+    dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
+    if (!checkShowOnOff) {
+      print("tokentokentokennotifile ${token}");
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    }
   });
 }
 
@@ -123,16 +151,8 @@ class _MyHomePageState extends State<MyHomePage>
     print("statestatestate$state");
     switch (state) {
       case AppLifecycleState.resumed:
-        // try{
-        //  Restart.restartApp();
-        // }
-        // catch(ex){
-        //   print("khongo the resetapp");
-        // }
-        // checkOpenApp('resumed');
         break;
       case AppLifecycleState.inactive:
-        // checkOpenApp('inactive');
         break;
       case AppLifecycleState.paused:
         localStore.setDataShare(dataShare: null);
@@ -142,30 +162,6 @@ class _MyHomePageState extends State<MyHomePage>
         break;
     }
   }
-
-  // checkOpenApp(type) async {
-  //   // print("vao day khong");
-  //   //
-  //   // LocalStore localStore = LocalStoreService();
-  //   // dynamic data = await localStore.getDataShare();
-  //   // print("vao day khong$data");
-  //   //   EumsAppOfferWallService.instance.openSdk(context,
-  //   //       memId: "abee997",
-  //   //       memGen: "w",
-  //   //       memBirth: "2000-01-01",
-  //   //       memRegion: "인천_서");
-  //   await Future.delayed(Duration(seconds: 1));
-  //   LocalStore localStore = LocalStoreService();
-  //   dynamic data = await localStore.getDataShare();
-  //   print("vao day chuw $type $data");
-  //   if (data != "null") {
-  //     EumsAppOfferWallService.instance.openSdk(context,
-  //         memId: "abee997",
-  //         memGen: "w",
-  //         memBirth: "2000-01-01",
-  //         memRegion: "인천_서");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +236,9 @@ class _AppMainScreenState extends State<AppMainScreen> {
   void _listenerAppPushNotification(
       BuildContext context, PushNotificationServiceState state) async {
     if (state.remoteMessage != null) {
+      print("vafo day12312");
       if (state.isForeground) {
+        print("vafo day");
         // show custom dialog notification and sound
         if (Platform.operatingSystem == 'android') {
           String? titleMessage = state.remoteMessage?.notification?.title;
@@ -262,11 +260,16 @@ class _AppMainScreenState extends State<AppMainScreen> {
                     icon: '@mipmap/ic_launcher',
                     onlyAlertOnce: true),
               ));
+          _pushNotificationServiceBloc.flutterLocalNotificationsPlugin
+              .cancelAll();
         } else {}
       } else {
         if (Platform.isIOS) {
           Routing().navigate(context,
               WatchAdverScreen(data: state.remoteMessage!.data['data']));
+        } else {
+          _pushNotificationServiceBloc.flutterLocalNotificationsPlugin
+              .cancelAll();
         }
       }
     }
@@ -280,8 +283,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
           listener: _listenerAppPushNotification,
         ),
       ],
-
-      /// code old
       child: Scaffold(
         appBar: AppBar(),
         body: Column(
