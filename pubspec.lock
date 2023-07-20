@@ -547,7 +547,7 @@ packages:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.0"
+    version: "2.9.0"
   image_picker_windows:
     dependency: transitive
     description:
@@ -777,7 +777,7 @@ packages:
     description:
       path: sdk_eums
       ref: HEAD
-      resolved-ref: "1bc13ec160b0c1117f1cbbf29c4f42e91cb6ca58"
+      resolved-ref: fa165bff2aa730a6f692cd5387d949ee0a992fc3
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -786,7 +786,7 @@ packages:
     description:
       path: sdk_eums_c
       ref: HEAD
-      resolved-ref: "1bc13ec160b0c1117f1cbbf29c4f42e91cb6ca58"
+      resolved-ref: fa165bff2aa730a6f692cd5387d949ee0a992fc3
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"

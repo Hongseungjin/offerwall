@@ -38,9 +38,8 @@ void onStart(ServiceInstance service) {
       } else {
         if (event?['data']['isToast'] != null) {
           await FlutterOverlayWindow.showOverlay(
-              // enableDrag: true,
-              height: 50,
-              width: 700,
+              height: 170,
+              width: WindowSize.matchParent,
               alignment: OverlayAlignment.bottomCenter);
         } else {
           await FlutterOverlayWindow.showOverlay(
@@ -65,7 +64,12 @@ void onStart(ServiceInstance service) {
         await Firebase.initializeApp();
         FirebaseMessaging.instance.deleteToken();
       } else {
-        PushNotificationServiceBloc().add(PushNotificationSetup());
+        String? token = await FirebaseMessaging.instance.getToken();
+        dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
+        if (!checkShowOnOff) {
+          print("tokentokentokennotifile ${token}");
+          await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+        }
       }
       print("onOffNotifi$event");
     });
