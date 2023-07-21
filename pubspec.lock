@@ -775,11 +775,9 @@ packages:
   sdk_eums:
     dependency: "direct main"
     description:
-      path: sdk_eums
-      ref: HEAD
-      resolved-ref: "82b02a5c7c0729fc459a4a25920d80119405ab62"
-      url: "https://github.com/Greenapp02/eums_sdk_app.git"
-    source: git
+      path: "package/sdk_eums"
+      relative: true
+    source: path
     version: "0.0.3"
   sdk_eums_c:
     dependency: transitive

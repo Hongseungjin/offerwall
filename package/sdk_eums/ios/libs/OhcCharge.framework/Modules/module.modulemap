@@ -1,0 +1,11 @@
+framework module OhcCharge {
+  umbrella header "OhcCharge.h"
+
+  export *
+  module * { export * }
+}
+
+module OhcCharge.Swift {
+  header "OhcCharge-Swift.h"
+  requires objc
+}
