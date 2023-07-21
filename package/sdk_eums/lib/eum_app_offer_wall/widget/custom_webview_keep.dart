@@ -29,8 +29,10 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
   int _startTime = 15;
   Timer? timer5s;
   bool showButton = false;
+  bool isRunning = true;
 
   void startTimeDown() {
+    _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_startTime == 0) {
         _timer?.cancel();
@@ -53,10 +55,38 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
     // TODO: implement initState
     super.initState();
     startTimeDown();
+    start5s();
     _scrollController.addListener(_scrollListener);
   }
 
-  _scrollListener() {}
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    timer5s?.cancel();
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  start5s() {
+    timer5s?.cancel();
+    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+      _timer?.cancel();
+      isRunning = false;
+    });
+  }
+
+  _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse ||
+        _scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+      if (!isRunning) {
+        isRunning = true;
+        startTimeDown();
+      }
+      start5s();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,29 +106,29 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
       body: Stack(
         children: [
           NotificationListener(
-            onNotification: (notification) {
-              if (notification is UserScrollNotification) {
-                if (notification.direction == ScrollDirection.forward ||
-                    notification.direction == ScrollDirection.reverse) {
-                  timer5s?.cancel();
+            // onNotification: (notification) {
+            //   // if (notification is UserScrollNotification) {
+            //   //   if (notification.direction == ScrollDirection.forward ||
+            //   //       notification.direction == ScrollDirection.reverse) {
+            //   //     timer5s?.cancel();
 
-                  final isRuning = _timer == null ? false : _timer?.isActive;
-                  print("isRuning$isRuning");
-                  if (isRuning!) {
-                    startTimeDown();
-                  }
-                }
-                if (notification.direction == ScrollDirection.idle) {
-                  print("idle");
-                  timer5s?.cancel();
-                  timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-                    _timer?.cancel();
-                    timer5s?.cancel();
-                  });
-                }
-              }
-              return false;
-            },
+            //   //     final isRuning = _timer == null ? false : _timer?.isActive;
+            //   //     print("isRuning$isRuning");
+            //   //     if (isRuning!) {
+            //   //       startTimeDown();
+            //   //     }
+            //   //   }
+            //   //   if (notification.direction == ScrollDirection.idle) {
+            //   //     print("idle");
+            //   //     timer5s?.cancel();
+            //   //     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+            //   //       _timer?.cancel();
+            //   //       timer5s?.cancel();
+            //   //     });
+            //   //   }
+            //   // }
+            //   // return false;
+            // },
             child: SingleChildScrollView(
               controller: _scrollController,
               scrollDirection: Axis.vertical,

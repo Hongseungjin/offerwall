@@ -7,7 +7,7 @@ class Constants {
   static const int connectTimeout = 10000; // 10 seconds
   static const int receiveTimeout = 10000; // 10 seconds
   static const bool loggingInterceptorEnabled = true;
- static const int LIMIT_DATA = 10;
+  static const int LIMIT_DATA = 10;
 
   static const String showDataAdver = 'showDataAdver';
 

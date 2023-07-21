@@ -61,3 +61,12 @@ class SaveScrap extends KeepAdverboxEvent {
   @override
   List<Object?> get props => [advertise_idx];
 }
+
+class DeleteScrap extends KeepAdverboxEvent {
+  DeleteScrap({this.advertise_idx});
+
+  final dynamic advertise_idx;
+
+  @override
+  List<Object?> get props => [advertise_idx];
+}

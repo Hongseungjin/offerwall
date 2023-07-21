@@ -57,7 +57,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         isWebView = event['isWebView'] != null ? true : false;
         isToast = event['isToast'] != null ? true : false;
       });
-      print("tokenEvent$tokenSdk");
+      print("tokenEvent $tokenSdk");
     });
   }
 
@@ -71,7 +71,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   @override
   Widget build(BuildContext context) {
-    print("tokenEvent$tokenSdk");
+    print("tokenEvent $tokenSdk");
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(

@@ -141,7 +141,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                           index]['url_link'],
                                                       adIdx: state
                                                               .dataScrapAdverbox[
-                                                          index]['idx'],
+                                                          index]['advertiseIdx'],
                                                     ));
                                               }
                                             },
@@ -336,9 +336,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
           child: Scaffold(
             key: globalKey,
             body: CustomWebView(
-              onClose: (){
-                
-              },
+              onClose: () {},
               urlLink: widget.url,
               title: '광고 스크랩',
               color: AppColor.red,

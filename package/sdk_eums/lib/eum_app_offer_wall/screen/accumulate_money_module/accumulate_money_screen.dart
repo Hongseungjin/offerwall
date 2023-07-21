@@ -47,7 +47,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   late TabController _tabController;
   int tabIndex = 0;
   int tabPreviousIndex = 0;
-  String allMedia = '캐시높은 순';
+  String allMedia = '최신순';
   String? selectedStation;
   // late PushNotificationServiceBloc _pushNotificationServiceBloc;
   dynamic dataAdver;

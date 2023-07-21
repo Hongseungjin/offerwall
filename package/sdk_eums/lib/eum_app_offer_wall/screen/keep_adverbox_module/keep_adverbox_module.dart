@@ -449,7 +449,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
 
   double? dyStart;
   double? dy;
-  bool checkSave = false;
+  bool checkSave = true;
 
   onVerticalDrapEnd(DragEndDetails details) {}
 
@@ -468,11 +468,11 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                   if (!checkSave) {
                     globalKey.currentContext
                         ?.read<KeepAdverboxBloc>()
-                        .add(SaveKeep(id: widget.id));
+                        .add(SaveScrap(advertise_idx: widget.id));
                   } else {
                     globalKey.currentContext
                         ?.read<KeepAdverboxBloc>()
-                        .add(DeleteKeep(id: widget.idx));
+                        .add(DeleteScrap(advertise_idx: widget.id));
                   }
                 },
                 child: Image.asset(
@@ -488,7 +488,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                     data: (state.dataAdvertiseSponsor), voidCallback: () {
                   context
                       .read<KeepAdverboxBloc>()
-                      .add(DeleteKeep(id: widget.idx));
+                      .add(DeleteKeep(id: widget.id));
                   globalKey.currentContext?.read<KeepAdverboxBloc>().add(
                       EarnPoin(
                           advertise_idx: widget.id,

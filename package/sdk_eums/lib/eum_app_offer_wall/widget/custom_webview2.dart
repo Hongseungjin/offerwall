@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
@@ -45,12 +46,13 @@ class CustomWebView2 extends StatefulWidget {
 class _CustomWebView2State extends State<CustomWebView2> {
   late final WebViewController _controller;
   bool isLoading = true;
+  ScrollController _scrollController = ScrollController();
 
-  Timer? _timerUp;
   Timer? _timeDown;
   int _startTime = 15;
-  int _startTimeUp = 5;
+  Timer? timer5s;
   bool showButton = false;
+  bool isRunning = true;
 
   String getProperHtml(String content) {
     String start1 = 'https:';
@@ -78,31 +80,31 @@ class _CustomWebView2State extends State<CustomWebView2> {
     });
   }
 
-  void startTimeUp() {
-    if (_startTime > 5) {
-      _timerUp = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (_startTimeUp == 0) {
-          _timerUp?.cancel();
-        } else {
-          setState(() {
-            _startTimeUp--;
-          });
-          if (_startTimeUp == 0) {
-            setState(() {
-              _timeDown?.cancel();
-              _timerUp?.cancel();
-              _startTime = 15;
-            });
-          }
-        }
-      });
-    }
-  }
-
   double deviceWith = 0;
   getDeviceWidth() async {
     deviceWith = double.parse(await LocalStoreService().getDeviceWidth());
     print('deviceWithdeviceWith $deviceWith');
+  }
+
+  start5s() {
+    timer5s?.cancel();
+    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+      _timeDown?.cancel();
+      isRunning = false;
+    });
+  }
+
+  _scrollListener() {
+    if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse ||
+        _scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+      if (!isRunning) {
+        isRunning = true;
+        startTimeDown();
+      }
+      start5s();
+    }
   }
 
   @override
@@ -110,8 +112,10 @@ class _CustomWebView2State extends State<CustomWebView2> {
     // TODO: implement initState
     if (widget.showMission) {
       startTimeDown();
+      start5s();
     }
     super.initState();
+    _scrollController.addListener(_scrollListener);
 
     getDeviceWidth();
     late final PlatformWebViewControllerCreationParams params;
@@ -166,43 +170,13 @@ class _CustomWebView2State extends State<CustomWebView2> {
     _controller = controller;
   }
 
-  int _upCounter = 0;
-  int _downCounter = 0;
-  double x = 0.0;
-  double y = 0.0;
-
-  void _incrementUp(PointerEvent details) {
-    _upCounter = 0;
-    setState(() {
-      _upCounter++;
-    });
-    if (_upCounter == 1) {
-      startTimeUp();
-    }
-    print("_incrementUp$_upCounter");
-  }
-
-  void _incrementDown(PointerEvent details) {
-    _timerUp?.cancel();
-    setState(() {
-      _downCounter++;
-    });
-    if (_downCounter != 0) {
-      if (_startTime == 15) {
-        print("_incrementDown$_downCounter");
-        _startTimeUp = 5;
-        startTimeDown();
-      }
-    }
-    print("_incrementDown$_downCounter");
-  }
-
   void _updateLocation(PointerEvent details) {}
 
   @override
   void dispose() {
     _timeDown?.cancel();
-    _timerUp?.cancel();
+    timer5s?.cancel();
+    _scrollController.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -230,28 +204,24 @@ class _CustomWebView2State extends State<CustomWebView2> {
         ),
         body: Stack(
           children: [
-            Listener(
-              onPointerDown: _incrementDown,
-              onPointerUp: _incrementUp,
-              onPointerMove: _updateLocation,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    CachedNetworkImage(
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                        imageUrl: widget.urlLink,
-                        placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) {
-                          return Image.asset(Assets.logo.path,
-                              package: "sdk_eums", height: 16);
-                        }),
-                    SizedBox(
-                      height: MediaQuery.of(context).padding.bottom + 70,
-                    )
-                  ],
-                ),
+            SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                children: [
+                  CachedNetworkImage(
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      imageUrl: widget.urlLink,
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) {
+                        return Image.asset(Assets.logo.path,
+                            package: "sdk_eums", height: 16);
+                      }),
+                  SizedBox(
+                    height: MediaQuery.of(context).padding.bottom + 70,
+                  )
+                ],
               ),
             ),
             !widget.showMission

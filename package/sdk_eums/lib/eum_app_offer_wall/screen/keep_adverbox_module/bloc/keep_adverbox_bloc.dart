@@ -34,6 +34,8 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
       await _mapSaveKeepAdverboxToState(event, emit);
     } else if (event is SaveKeep) {
       await _mapSaveKeepAdverToState(event, emit);
+    } else if (event is DeleteScrap) {
+      await _mapDeleteScrapAdverboxToState(event, emit);
     }
   }
 
@@ -110,6 +112,13 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
     } catch (e) {
       emit(state.copyWith(saveScrapStatus: SaveScrapStatus.failure));
     }
+  }
+
+  _mapDeleteScrapAdverboxToState(DeleteScrap event, emit) async {
+    try {
+      await _eumsOfferWallService.deleteScrap(
+          advertiseIdx: event.advertise_idx);
+    } catch (e) {}
   }
 
   _mapEarnPoinKeepAdverboxToState(EarnPoin event, emit) async {

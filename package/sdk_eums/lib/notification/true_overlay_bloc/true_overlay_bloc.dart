@@ -13,6 +13,8 @@ class TrueOverlauService {
       "advertise_idx": advertiseIdx,
       "pointType": pointType
     };
+    print('advertiseIdx $advertiseIdx');
+
     await dio.post('${Constants.baseUrl}point/advertises/mission-complete',
         data: data,
         options: Options(headers: {"authorization": 'Bearer $token'}));
@@ -21,14 +23,16 @@ class TrueOverlauService {
 
   Future saveKeep({advertiseIdx, token}) async {
     dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
-    await dio.post('${Constants.baseUrl}advertises/save-keep-advertise',
+    print('advertiseIdx $advertiseIdx');
+    return await dio.post('${Constants.baseUrl}advertises/save-keep-advertise',
         data: data,
         options: Options(headers: {"authorization": 'Bearer $token'}));
-    return;
   }
 
   Future saveScrap({advertiseIdx, token}) async {
     print("tokentokentoken$token");
+    print('advertiseIdx $advertiseIdx');
+
     dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
     await dio.post('${Constants.baseUrl}advertises/save-scrap-advertise',
         data: data,
@@ -37,6 +41,7 @@ class TrueOverlauService {
   }
 
   Future deleteScrap({advertiseIdx, token}) async {
+    print('advertiseIdx $advertiseIdx');
     await dio.delete('${Constants.baseUrl}advertises/delete-crap/$advertiseIdx',
         options: Options(headers: {"authorization": 'Bearer $token'}));
   }

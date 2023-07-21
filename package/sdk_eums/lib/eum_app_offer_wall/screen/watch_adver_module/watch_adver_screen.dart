@@ -165,6 +165,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                               ? jsonDecode(widget.data)['idx']
                               : jsonDecode(widget.data['data'])['idx']));
                 } else {
+                  print('widget.data ${widget.data}');
                   globalKey.currentContext?.read<WatchAdverBloc>().add(
                       DeleteScrap(
                           id: Platform.isIOS
@@ -172,10 +173,11 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                               : jsonDecode(widget.data['data'])['idx']));
                 }
               },
-              child: Image.asset( checkSave ? Assets.bookmarkWhite.path : Assets.bookmark.path,
+              child: Image.asset(
+                  checkSave ? Assets.bookmarkWhite.path : Assets.bookmark.path,
                   package: "sdk_eums",
                   height: 27,
-                  color:  AppColor.black),
+                  color: AppColor.black),
             ),
             onSave: () {
               print(checkSave);
