@@ -777,7 +777,7 @@ packages:
     description:
       path: sdk_eums
       ref: HEAD
-      resolved-ref: fa165bff2aa730a6f692cd5387d949ee0a992fc3
+      resolved-ref: "82b02a5c7c0729fc459a4a25920d80119405ab62"
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -786,7 +786,7 @@ packages:
     description:
       path: sdk_eums_c
       ref: HEAD
-      resolved-ref: fa165bff2aa730a6f692cd5387d949ee0a992fc3
+      resolved-ref: "82b02a5c7c0729fc459a4a25920d80119405ab62"
       url: "https://github.com/Greenapp02/eums_sdk_app.git"
     source: git
     version: "0.0.3"
@@ -941,7 +941,7 @@ packages:
       name: url_launcher_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.36"
+    version: "6.0.37"
   url_launcher_ios:
     dependency: transitive
     description:

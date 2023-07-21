@@ -41,6 +41,10 @@ void onStart(ServiceInstance service) {
               height: 170,
               width: WindowSize.matchParent,
               alignment: OverlayAlignment.bottomCenter);
+          Future.delayed(Duration(seconds: 2), () async {
+            print("co vao day khong$isActive");
+            await FlutterOverlayWindow.closeOverlay();
+          });
         } else {
           await FlutterOverlayWindow.showOverlay(
               enableDrag: true,
@@ -63,15 +67,23 @@ void onStart(ServiceInstance service) {
       if (event?['data']) {
         await Firebase.initializeApp();
         FirebaseMessaging.instance.deleteToken();
+        // FlutterBackgroundService().invoke("stopService");
       } else {
+        await Firebase.initializeApp();
+
         String? token = await FirebaseMessaging.instance.getToken();
         dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
+        print("tokentokentokennotifile ${token}");
         if (!checkShowOnOff) {
           print("tokentokentokennotifile ${token}");
           await EumsOfferWallServiceApi().createTokenNotifi(token: token);
         }
       }
       print("onOffNotifi$event");
+    });
+    service.on('stopService').listen((event) {
+      print("eventStop");
+      service.stopSelf();
     });
   } catch (e) {
     print(e);
