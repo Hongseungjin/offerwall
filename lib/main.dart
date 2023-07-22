@@ -21,6 +21,7 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 final receivePort = ReceivePort();
 
 showOverlay(event) async {
+  print('event overlay $event');
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
@@ -56,6 +57,7 @@ void onStart(ServiceInstance service) {
         await Future.delayed(const Duration(milliseconds: 500));
         showOverlay(event);
       } else {
+        await Future.delayed(const Duration(milliseconds: 500));
         showOverlay(event);
       }
       PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
