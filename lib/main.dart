@@ -56,7 +56,6 @@ void onStart(ServiceInstance service) {
         await Future.delayed(const Duration(milliseconds: 500));
         showOverlay(event);
       } else {
-        await Future.delayed(const Duration(milliseconds: 500));
         showOverlay(event);
       }
       PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
