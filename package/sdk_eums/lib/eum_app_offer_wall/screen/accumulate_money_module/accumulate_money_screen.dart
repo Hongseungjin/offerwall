@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -22,6 +23,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adve
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
+import '../../../api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import '../../../common/constants.dart';
 import '../../../common/routing.dart';
 import '../../../common/rx_bus.dart';
@@ -316,27 +318,25 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                         ),
                                         const SizedBox(width: 5),
                                         GestureDetector(
-                                          onTap: () {
+                                          onTap: () async {
                                             setState(() {
                                               showOnOff = !showOnOff;
-                                              FlutterBackgroundService().invoke(
-                                                  "onOffNotifi",
-                                                  {'data': showOnOff});
-                                              localStore
-                                                  ?.setSaveAdver(showOnOff);
-
-                                              if (showOnOff) {
-                                                Future.delayed(
-                                                    const Duration(seconds: 5),
-                                                    () {
-                                                  FlutterBackgroundService()
-                                                      .invoke("stopService");
-                                                });
-                                              } else {
-                                                FlutterBackgroundService()
-                                                    .startService();
-                                              }
                                             });
+                                            localStore?.setSaveAdver(showOnOff);
+                                            if (showOnOff) {
+                                              FlutterBackgroundService()
+                                                  .invoke("stopService");
+                                            } else {
+                                              String? token =
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .getToken();
+                                              await EumsOfferWallServiceApi()
+                                                  .createTokenNotifi(
+                                                      token: token);
+                                              FlutterBackgroundService()
+                                                  .startService();
+                                            }
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(

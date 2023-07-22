@@ -56,6 +56,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         tokenSdk = event['tokenSdk'] ?? '';
         isWebView = event['isWebView'] != null ? true : false;
         isToast = event['isToast'] != null ? true : false;
+        checkSave = false;
       });
       print("tokenEvent $tokenSdk");
     });
@@ -221,19 +222,20 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   }
 
   void onVerticalDragEnd(DragEndDetails details) async {
-    print("dydy$dy");
-    print("dyStartdyStart$dyStart");
-
     if (dy != null && dyStart != null && dy! < dyStart!) {
       print('uppp');
-      // _timer?.cancel(); // dùng ? nha ko dùng !
-      dataEvent['isWebView'] = true;
-      FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+      bool isActive = await FlutterOverlayWindow.isActive();
+      if (isActive == true) {
+        await FlutterOverlayWindow.closeOverlay();
+        if (dataEvent != null) {
+          dataEvent['isWebView'] = true;
+          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+        }
+      }
     }
 
     if (dy != null && dyStart != null && dy! > dyStart!) {
       print('downnnn');
-      // _timer?.cancel(); // dùng ? nha ko dùng !
       bool isActive = await FlutterOverlayWindow.isActive();
       if (isActive == true) {
         await FlutterOverlayWindow.closeOverlay();

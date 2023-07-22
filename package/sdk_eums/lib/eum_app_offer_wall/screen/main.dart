@@ -103,9 +103,9 @@ class _MyhomePageState extends State<MyhomePage> {
                 create: (context) =>
                     AuthenticationBloc()..add(CheckSaveAccountLogged()),
               ),
-              BlocProvider<PushNotificationServiceBloc>(
-                create: (context) => PushNotificationServiceBloc(),
-              ),
+              // BlocProvider<PushNotificationServiceBloc>(
+              //   create: (context) => PushNotificationServiceBloc(),
+              // ),
             ],
             child: MultiBlocListener(
               listeners: [

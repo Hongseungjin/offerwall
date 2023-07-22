@@ -19,7 +19,6 @@ import 'package:sdk_eums/notification/notification_config.dart';
 part 'push_notification_service_event.dart';
 part 'push_notification_service_state.dart';
 
-
 final receivePort = ReceivePort();
 
 class PushNotificationServiceBloc
@@ -117,9 +116,9 @@ class PushNotificationServiceBloc
       initializationSettings,
     );
 
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("tokentokentokennotifile ${token}");
-    await _eumsOfferWallService.createTokenNotifi(token: token);
+    // String? token = await FirebaseMessaging.instance.getToken();
+    // print("tokentokentokennotifile ${token}");
+    // await _eumsOfferWallService.createTokenNotifi(token: token);
     //onLaunch
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -168,12 +167,12 @@ class PushNotificationServiceBloc
       badge: true,
       sound: true,
     );
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("tokendevice$token");
+    // String? token = await FirebaseMessaging.instance.getToken();
+    // print("tokendevice$token");
 
-    if (token != null) {
-      await _eumsOfferWallService.createTokenNotifi(token: token);
-    }
+    // if (token != null) {
+    //   await _eumsOfferWallService.createTokenNotifi(token: token);
+    // }
 
     var initializationSettingsIOS = const IOSInitializationSettings(
       requestSoundPermission: true,
@@ -208,7 +207,6 @@ class PushNotificationServiceBloc
   }
 
   Future<void> _iosOnMessage(RemoteMessage message) async {
-
     RemoteNotification? notification = message.notification;
     AppleNotification? ios = message.notification?.apple;
     if (notification != null && ios != null) {

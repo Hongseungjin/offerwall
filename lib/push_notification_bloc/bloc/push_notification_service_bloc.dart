@@ -122,22 +122,6 @@ class PushNotificationServiceBloc
       initializationSettings,
     );
 
-   
-
-    // String dateLocalStore = await localStore.getToken();
-    // if (dateLocalStore == '') {
-    //   if (token != null) {
-    //     await _eumsOfferWallService.createTokenNotifi(token: token);
-    //     await localStore.setToken(dataToken: formattedDate);
-    //   }
-    // } else {
-    //   if (dateLocalStore != formattedDate) {
-    //     if (token != null) {
-    //       await _eumsOfferWallService.createTokenNotifi(token: token);
-    //       await localStore.setToken(dataToken: formattedDate);
-    //     }
-    //   } else {}
-    // }
     //onLaunch
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -159,7 +143,7 @@ class PushNotificationServiceBloc
 
   Future<void> _androidOnMessageForeground(RemoteMessage message) async {
     print('message $message');
-  
+
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 
     add(PushNotificationHandleRemoteMessage(

@@ -20,69 +20,75 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 
 final receivePort = ReceivePort();
 
+showOverlay(event) async {
+  if (event?['data'] != null && event?['data']['isWebView'] != null) {
+    await FlutterOverlayWindow.showOverlay();
+    event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
+    await FlutterOverlayWindow.shareData(event?['data']);
+  } else {
+    if (event?['data']['isToast'] != null) {
+      await FlutterOverlayWindow.showOverlay(
+          height: 300,
+          width: WindowSize.matchParent,
+          alignment: OverlayAlignment.bottomCenter);
+      Future.delayed(const Duration(seconds: 2), () async {
+        await FlutterOverlayWindow.closeOverlay();
+      });
+    } else {
+      await FlutterOverlayWindow.showOverlay(
+          enableDrag: true,
+          height: 300,
+          width: 300,
+          alignment: OverlayAlignment.center);
+    }
+    event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
+    await FlutterOverlayWindow.shareData(event?['data']);
+  }
+}
+
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) {
   try {
     service.on('showOverlay').listen((event) async {
-      PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
       bool isActive = await FlutterOverlayWindow.isActive();
       if (isActive == true) {
         await FlutterOverlayWindow.closeOverlay();
         await Future.delayed(const Duration(milliseconds: 500));
-      }
-      if (event?['data'] != null && event?['data']['isWebView'] != null) {
-        print('showWebView');
-        await FlutterOverlayWindow.showOverlay();
-        event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-        await FlutterOverlayWindow.shareData(event?['data']);
+        showOverlay(event);
       } else {
-        if (event?['data']['isToast'] != null) {
-          await FlutterOverlayWindow.showOverlay(
-              height: 170,
-              width: WindowSize.matchParent,
-              alignment: OverlayAlignment.bottomCenter);
-          Future.delayed(Duration(seconds: 2), () async {
-            print("co vao day khong$isActive");
-            await FlutterOverlayWindow.closeOverlay();
-          });
-        } else {
-          await FlutterOverlayWindow.showOverlay(
-              enableDrag: true,
-              height: 300,
-              width: 300,
-              alignment: OverlayAlignment.center);
-        }
-        event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-        await FlutterOverlayWindow.shareData(event?['data']);
-        print('showOverlay');
+        await Future.delayed(const Duration(milliseconds: 500));
+        showOverlay(event);
       }
+      PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
     });
 
     service.on('setAppTokenBg').listen((event) {
-      print('setAppTokenBg $event');
       LocalStoreService().setAccessToken(event?['token']);
     });
 
-    service.on('onOffNotifi').listen((event) async {
-      if (event?['data']) {
-        await Firebase.initializeApp();
-        FirebaseMessaging.instance.deleteToken();
-        // FlutterBackgroundService().invoke("stopService");
-      } else {
-        await Firebase.initializeApp();
+    // service.on('onOffNotifi').listen((event) async {
+    //   print('anhduy ${event}');
+    //   if (event?['data']) {
+    //     await Firebase.initializeApp();
+    //     FirebaseMessaging.instance.deleteToken();
+    //     // FlutterBackgroundService().invoke("stopService");
+    //   } else {
+    //     await Firebase.initializeApp();
 
-        String? token = await FirebaseMessaging.instance.getToken();
-        dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
-        print("tokentokentokennotifile ${token}");
-        if (!checkShowOnOff) {
-          print("tokentokentokennotifile ${token}");
-          await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-        }
-      }
-      print("onOffNotifi$event");
-    });
-    service.on('stopService').listen((event) {
+    //     String? token = await FirebaseMessaging.instance.getToken();
+    //     dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
+    //     print("tokenNoti ${token}");
+    //     if (!checkShowOnOff) {
+    //       print("tokenNoti ${token}");
+    //       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    //     }
+    //   }
+    //   print("onOffNotifi$event");
+    // });
+    service.on('stopService').listen((event) async {
       print("eventStop");
+      await Firebase.initializeApp();
+      FirebaseMessaging.instance.deleteToken();
       service.stopSelf();
     });
   } catch (e) {
@@ -102,11 +108,11 @@ void main() {
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
     runApp(MaterialApp(home: MyHomePage()));
-    String? token = await FirebaseMessaging.instance.getToken();
     dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
-    if (!checkShowOnOff) {
-      print("tokentokentokennotifile ${token}");
-      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    print('checkShowOnOff $checkShowOnOff');
+    if (checkShowOnOff) {
+      print('stop service');
+      FlutterBackgroundService().invoke("stopService");
     }
   });
 }
@@ -252,9 +258,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   void _listenerAppPushNotification(
       BuildContext context, PushNotificationServiceState state) async {
     if (state.remoteMessage != null) {
-      print("vafo day12312");
       if (state.isForeground) {
-        print("vafo day");
         // show custom dialog notification and sound
         if (Platform.operatingSystem == 'android') {
           String? titleMessage = state.remoteMessage?.notification?.title;
