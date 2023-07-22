@@ -557,7 +557,6 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
 
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        key: GlobalKey<FormFieldState>(),
         isExpanded: true,
         dropdownColor: AppColor.white,
         value: allMedia,
@@ -572,9 +571,9 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
         ),
         items: items,
         onChanged: (value) {
-          setState(() {
-            allMedia = value!;
-          });
+          // setState(() {
+          allMedia = value!;
+          // });
           _filterMedia(value);
           // _filterMedia(value);
         },

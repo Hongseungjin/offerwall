@@ -63,6 +63,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
   }
 
   void startTimeDown() {
+    _timeDown?.cancel();
     _timeDown = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_startTime == 0) {
         _timeDown?.cancel();

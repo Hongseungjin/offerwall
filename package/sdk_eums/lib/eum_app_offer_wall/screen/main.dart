@@ -51,10 +51,7 @@ import '../bloc/authentication_bloc/authentication_bloc.dart';
 //   }
 // }
 
-
-
 void mainSdk() {
-
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: MyhomePage(),
