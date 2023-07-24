@@ -2,13 +2,9 @@ import 'dart:convert';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/bloc/push_notification_service/bloc/push_notification_service_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -19,6 +15,7 @@ import 'package:sdk_eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store.dart';
+import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
@@ -82,9 +79,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           ],
           child: MultiBlocProvider(
               providers: [
-                BlocProvider<PushNotificationServiceBloc>(
-                  create: (context) => PushNotificationServiceBloc(),
-                ),
+                // BlocProvider<PushNotificationServiceBloc>(
+                //   create: (context) => PushNotificationServiceBloc(),
+                // ),
                 BlocProvider<AuthenticationBloc>(
                   create: (context) =>
                       AuthenticationBloc()..add(CheckSaveAccountLogged()),

@@ -4,16 +4,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
 import 'package:queue/queue.dart';
+import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adver_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
+
+import 'notification_handler.dart';
 
 final receivePort = ReceivePort();
 
@@ -42,9 +41,6 @@ showOverlay(event) async {
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
-  await PushNotificationServiceBloc()
-      .flutterLocalNotificationsPlugin
-      .cancelAll();
 }
 
 jobQueue(event) async {
@@ -60,41 +56,33 @@ jobQueue(event) async {
 }
 
 @pragma('vm:entry-point')
-void onStart(ServiceInstance service) {
+Future<void> onStart(ServiceInstance service) async {
   Queue queue = Queue();
+  Queue queueDeviceToken = Queue(delay: const Duration(milliseconds: 100));
+  await Firebase.initializeApp();
 
   try {
     service.on('showOverlay').listen((event) async {
-      queue.add(() => jobQueue(event));
+      queue.add(() async => await jobQueue(event));
     });
 
     service.on('setAppTokenBg').listen((event) {
       LocalStoreService().setAccessToken(event?['token']);
     });
-
-    // service.on('onOffNotifi').listen((event) async {
-    //   print('anhduy ${event}');
-    //   if (event?['data']) {
-    //     await Firebase.initializeApp();
-    //     FirebaseMessaging.instance.deleteToken();
-    //     // FlutterBackgroundService().invoke("stopService");
-    //   } else {
-    //     await Firebase.initializeApp();
-
-    //     String? token = await FirebaseMessaging.instance.getToken();
-    //     dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
-    //     print("tokenNoti ${token}");
-    //     if (!checkShowOnOff) {
-    //       print("tokenNoti ${token}");
-    //       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-    //     }
-    //   }
-    //   print("onOffNotifi$event");
-    // });
+    service.on('registerDeviceToken').listen((event) async {
+      queueDeviceToken.add(() async {
+        String? token = await FirebaseMessaging.instance.getToken();
+        print('deviceToken $token');
+        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      });
+    });
+    service.on('deleteDeviceToken').listen((event) async {
+      queueDeviceToken.add(() async {
+        await FirebaseMessaging.instance.deleteToken();
+      });
+    });
     service.on('stopService').listen((event) async {
       print("eventStop");
-      await Firebase.initializeApp();
-      FirebaseMessaging.instance.deleteToken();
       service.stopSelf();
     });
   } catch (e) {
@@ -103,24 +91,37 @@ void onStart(ServiceInstance service) {
 }
 
 void main() {
-  SdkEums.instant.init(onRun: () async {
-    await Firebase.initializeApp();
-    await FlutterBackgroundService().configure(
-        iosConfiguration: IosConfiguration(),
-        androidConfiguration: AndroidConfiguration(
-            onStart: onStart,
-            autoStart: true,
-            isForegroundMode: true,
-            initialNotificationTitle: "인천e음",
-            initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-    runApp(MaterialApp(home: MyHomePage()));
-    dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
-    print('checkShowOnOff $checkShowOnOff');
-    if (checkShowOnOff) {
-      print('stop service');
-      FlutterBackgroundService().invoke("stopService");
-    }
-  });
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MaterialApp(home: MyHomePage()));
+  initApp();
+}
+
+initApp() async {
+  await FlutterBackgroundService().configure(
+      iosConfiguration: IosConfiguration(),
+      androidConfiguration: AndroidConfiguration(
+          onStart: onStart,
+          autoStart: true,
+          isForegroundMode: true,
+          initialNotificationTitle: "인천e음",
+          initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+  // SdkEums.instant.init(onRun: () async {
+  if (Platform.isAndroid) {
+    final bool status = await FlutterOverlayWindow.isPermissionGranted();
+    if (!status) {
+      await FlutterOverlayWindow.requestPermission();
+    } else {}
+  }
+  await Firebase.initializeApp();
+  NotificationHandler().initializeFcmNotification();
+
+  // dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
+  // print('checkShowOnOff $checkShowOnOff');
+  // if (checkShowOnOff) {
+  //   print('stop service');
+  //   FlutterBackgroundService().invoke("stopService");
+  // }
+  // });
 }
 
 @pragma("vm:entry-point")
@@ -205,9 +206,9 @@ class _MyHomePageState extends State<MyHomePage>
               create: (context) =>
                   AuthenticationBloc()..add(CheckSaveAccountLogged()),
             ),
-            BlocProvider<PushNotificationServiceBloc>(
-              create: (context) => PushNotificationServiceBloc(),
-            ),
+            // BlocProvider<PushNotificationServiceBloc>(
+            //   create: (context) => PushNotificationServiceBloc(),
+            // ),
           ],
           child: MultiBlocListener(
             listeners: [
@@ -245,14 +246,10 @@ class AppMainScreen extends StatefulWidget {
 }
 
 class _AppMainScreenState extends State<AppMainScreen> {
-  late PushNotificationServiceBloc _pushNotificationServiceBloc;
   LocalStore? localStore;
   @override
   void initState() {
     localStore = LocalStoreService();
-    // TODO: implement initState
-    _pushNotificationServiceBloc = context.read<PushNotificationServiceBloc>();
-    _pushNotificationServiceBloc.add(PushNotificationSetup());
     checkToken();
     super.initState();
   }
@@ -261,74 +258,27 @@ class _AppMainScreenState extends State<AppMainScreen> {
     print("localStore?.getAccessToken()${localStore?.getAccessToken()}");
   }
 
-  void _listenerAppPushNotification(
-      BuildContext context, PushNotificationServiceState state) async {
-    if (state.remoteMessage != null) {
-      if (state.isForeground) {
-        // show custom dialog notification and sound
-        if (Platform.operatingSystem == 'android') {
-          String? titleMessage = state.remoteMessage?.notification?.title;
-          String? bodyMessage = state.remoteMessage?.notification?.body;
-          RemoteNotification? notification = state.remoteMessage?.notification;
-
-          _pushNotificationServiceBloc.flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              titleMessage,
-              bodyMessage,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                    _pushNotificationServiceBloc.channel.id,
-                    _pushNotificationServiceBloc.channel.name,
-                    channelDescription:
-                        _pushNotificationServiceBloc.channel.description,
-                    playSound: true,
-                    importance: Importance.max,
-                    icon: '@mipmap/ic_launcher',
-                    onlyAlertOnce: true),
-              ));
-          _pushNotificationServiceBloc.flutterLocalNotificationsPlugin
-              .cancelAll();
-        } else {}
-      } else {
-        if (Platform.isIOS) {
-          Routing().navigate(context,
-              WatchAdverScreen(data: state.remoteMessage!.data['data']));
-        } else {
-          _pushNotificationServiceBloc.flutterLocalNotificationsPlugin
-              .cancelAll();
-        }
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<PushNotificationServiceBloc, PushNotificationServiceState>(
-          listener: _listenerAppPushNotification,
-        ),
-      ],
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Column(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                await localStore?.setDataShare(dataShare: null);
-                EumsAppOfferWallService.instance.openSdk(context,
-                    memId: "abee997",
-                    memGen: "w",
-                    memBirth: "2000-01-01",
-                    memRegion: "인천_서");
-              },
-              child: Container(
-                  color: AppColor.blue1,
-                  padding: EdgeInsets.all(20),
-                  child: const Text('go to sdk')),
-            )
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              await localStore?.setDataShare(dataShare: null);
+              EumsAppOfferWallService.instance.openSdk(context,
+                  memId: "abee997",
+                  memGen: "w",
+                  memBirth: "2000-01-01",
+                  memRegion: "인천_서");
+            },
+            child: Container(
+                color: AppColor.blue1,
+                padding: EdgeInsets.all(20),
+                child: const Text('go to sdk')),
+          )
+        ],
       ),
     );
   }

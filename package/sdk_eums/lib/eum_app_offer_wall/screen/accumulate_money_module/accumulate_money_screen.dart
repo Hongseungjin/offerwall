@@ -167,14 +167,14 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   }
 
   checkOnOfAdver() async {
-    await Firebase.initializeApp();
     showOnOff = await localStore!.getSaveAdver();
     setState(() {});
-
-    print("showOnOff$showOnOff");
+    print("showOnOff $showOnOff");
     if (!showOnOff) {
-      String? token = await FirebaseMessaging.instance.getToken();
-      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      // String? token = await FirebaseMessaging.instance.getToken();
+      //   print('deviceToken $token');
+      //   await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      FlutterBackgroundService().invoke("registerDeviceToken");
     }
   }
 
@@ -332,18 +332,12 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                             localStore?.setSaveAdver(showOnOff);
                                             if (showOnOff) {
                                               FlutterBackgroundService()
-                                                  .invoke("stopService");
+                                                  .invoke("deleteDeviceToken");
                                             } else {
-                                              await Firebase.initializeApp();
-                                              String? token =
-                                                  await FirebaseMessaging
-                                                      .instance
-                                                      .getToken();
-                                              await EumsOfferWallServiceApi()
-                                                  .createTokenNotifi(
-                                                      token: token);
                                               FlutterBackgroundService()
-                                                  .startService();
+                                                  .invoke("registerDeviceToken");
+                                              // FlutterBackgroundService()
+                                              //     .startService();
                                             }
                                           },
                                           child: Container(
