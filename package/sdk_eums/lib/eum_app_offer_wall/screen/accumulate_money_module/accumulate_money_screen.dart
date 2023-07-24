@@ -62,7 +62,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   void initState() {
     _registerEventBus();
     localStore = LocalStoreService();
-    filter = DATA_MEDIA[0]['media'];
+    filter = DATA_MEDIA[2]['media'];
     categary = null;
     // _pushNotificationServiceBloc = context.read<PushNotificationServiceBloc>();
     // _pushNotificationServiceBloc.add(PushNotificationSetup());
@@ -631,14 +631,14 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   // }
 
   _filterMedia(String? value) {
-    if (value != '캐시높은 순') {
+    if (value != '최신순') {
       dynamic media = (DATA_MEDIA
           .where((element) => element['name'] == value)
           .toList())[0]['media'];
 
       filter = media;
     } else {
-      filter = DATA_MEDIA[0]['media'];
+      filter = DATA_MEDIA[2]['media'];
     }
     _fetchData();
   }

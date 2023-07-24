@@ -1,15 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:io';
 import 'dart:isolate';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:offerwall/push_notification_bloc/bloc/push_notification_service_bloc.dart';
-import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:queue/queue.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -47,20 +44,28 @@ showOverlay(event) async {
   }
 }
 
+jobQueue(event) async {
+  bool isActive = await FlutterOverlayWindow.isActive();
+  if (isActive == true) {
+    await FlutterOverlayWindow.closeOverlay();
+    await Future.delayed(const Duration(milliseconds: 500));
+    await showOverlay(event);
+  } else {
+    await Future.delayed(const Duration(milliseconds: 500));
+    await showOverlay(event);
+  }
+  await PushNotificationServiceBloc()
+      .flutterLocalNotificationsPlugin
+      .cancelAll();
+}
+
 @pragma('vm:entry-point')
 void onStart(ServiceInstance service) {
+  Queue queue = Queue();
+
   try {
     service.on('showOverlay').listen((event) async {
-      bool isActive = await FlutterOverlayWindow.isActive();
-      if (isActive == true) {
-        await FlutterOverlayWindow.closeOverlay();
-        await Future.delayed(const Duration(milliseconds: 500));
-        showOverlay(event);
-      } else {
-        await Future.delayed(const Duration(milliseconds: 500));
-        showOverlay(event);
-      }
-      PushNotificationServiceBloc().flutterLocalNotificationsPlugin.cancelAll();
+      queue.add(() => jobQueue(event));
     });
 
     service.on('setAppTokenBg').listen((event) {
