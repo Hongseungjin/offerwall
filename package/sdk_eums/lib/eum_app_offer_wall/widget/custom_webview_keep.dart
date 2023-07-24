@@ -163,7 +163,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
                   children: [
                     widget.bookmark ?? SizedBox(),
                     GestureDetector(
-                      onTap: widget.mission,
+                      onTap: !showButton ? null : widget.mission,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 10),
