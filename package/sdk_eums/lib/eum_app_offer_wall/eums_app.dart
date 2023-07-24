@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -22,12 +23,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
         .invoke("setAppTokenBg", {'token': data['token']});
     if (await localStore.getAccessToken() != null) {
       openAppSkd(context);
-      bool? showOnOff = await localStore.getSaveAdver();
-      print("showOnOff$showOnOff");
-      if (!showOnOff) {
-        String? token = await FirebaseMessaging.instance.getToken();
-        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-      }
     }
   }
 

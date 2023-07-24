@@ -42,6 +42,9 @@ showOverlay(event) async {
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
+  await PushNotificationServiceBloc()
+      .flutterLocalNotificationsPlugin
+      .cancelAll();
 }
 
 jobQueue(event) async {
@@ -54,9 +57,6 @@ jobQueue(event) async {
     await Future.delayed(const Duration(milliseconds: 500));
     await showOverlay(event);
   }
-  await PushNotificationServiceBloc()
-      .flutterLocalNotificationsPlugin
-      .cancelAll();
 }
 
 @pragma('vm:entry-point')

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -166,9 +167,15 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   }
 
   checkOnOfAdver() async {
+    await Firebase.initializeApp();
     showOnOff = await localStore!.getSaveAdver();
-
     setState(() {});
+
+    print("showOnOff$showOnOff");
+    if (!showOnOff) {
+      String? token = await FirebaseMessaging.instance.getToken();
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    }
   }
 
   Timer? _timer;
@@ -327,6 +334,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               FlutterBackgroundService()
                                                   .invoke("stopService");
                                             } else {
+                                              await Firebase.initializeApp();
                                               String? token =
                                                   await FirebaseMessaging
                                                       .instance
