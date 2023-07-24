@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -92,7 +93,18 @@ class _PurchaseOfferwallInternalScreenState
   Widget _buildContent(BuildContext context) {
     return Scaffold(
       key: globalKey,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: (){
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: AppColor.black,
+          ),
+        ),
+        backgroundColor: AppColor.white,
+      ),
       body: Column(children: [
         Expanded(
             child: InAppWebView(

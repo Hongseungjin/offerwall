@@ -162,7 +162,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context,
           data: dataOfferWallVisit['reward'], voidCallback: () {
-        Navigator.pop(context);
+        // Navigator.pop(context);
       });
     }
   }

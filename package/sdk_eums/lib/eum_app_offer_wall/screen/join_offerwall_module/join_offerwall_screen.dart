@@ -3,9 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:sdk_eums/common/events/events.dart';
+import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'bloc/join_offerwall_bloc.dart';
 
 class JoinOfferWallScreen extends StatefulWidget {
   JoinOfferWallScreen({Key? key, this.data}) : super(key: key);
@@ -17,11 +23,22 @@ class JoinOfferWallScreen extends StatefulWidget {
 
 class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   InAppWebViewController? webView;
+  final GlobalKey<State<StatefulWidget>> globalKey =
+      GlobalKey<State<StatefulWidget>>();
 
-  String myUrl =
-      'https://abee997.co.kr/stat/index.php/Login/get__post_register_test';
+  String myUrl = '';
+  //     'https://abee997.co.kr/stat/index.php/Login/get__post_register_test';
 
   List? _languages = [];
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+      crossPlatform: InAppWebViewOptions(
+          useShouldOverrideUrlLoading: true,
+          mediaPlaybackRequiresUserGesture: false),
+      android: AndroidInAppWebViewOptions(
+          useHybridComposition: true, useShouldInterceptRequest: true),
+      ios: IOSInAppWebViewOptions(
+        allowsInlineMediaPlayback: true,
+      ));
 
   ContextMenu? contextMenu;
   Future<void> _getPreferredLanguages() async {
@@ -41,6 +58,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   void initState() {
     _getPreferredLanguages();
     // myUrl = widget.data['api'] ?? '';
+    print("concacacacac$myUrl");
     super.initState();
   }
 
@@ -49,9 +67,41 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
     super.dispose();
   }
 
+  void _listenFetchData(BuildContext context, JoinOffWallState state) {
+    if (state.joinOfferWallStatus == JoinOfferWallStatus.loading) {
+      return;
+    }
+    if (state.joinOfferWallStatus == JoinOfferWallStatus.failure) {
+      return;
+    }
+    if (state.joinOfferWallStatus == JoinOfferWallStatus.success) {
+      RxBus.post(UpdateUser());
+      DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'],
+          voidCallback: () {
+        Navigator.pop(context);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BlocProvider<JoinOfferwallInternalBloc>(
+      create: (context) => JoinOfferwallInternalBloc(),
+      child: MultiBlocListener(listeners: [
+        BlocListener<JoinOfferwallInternalBloc, JoinOffWallState>(
+          listenWhen: (previous, current) =>
+              previous.joinOfferWallStatus != current.joinOfferWallStatus,
+          listener: _listenFetchData,
+        ),
+      ], child: _buildContent(context)),
+    );
+    ;
+  }
+
+  _buildContent(BuildContext context) {
+
     return Scaffold(
+      key: globalKey,
       appBar: AppBar(
         backgroundColor: AppColor.white,
         leading: GestureDetector(
@@ -68,13 +118,34 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
         children: [
           Expanded(
               child: InAppWebView(
+            initialOptions: options,
             onWebViewCreated: (controller) {
               webView = controller;
               webView?.loadUrl(urlRequest: URLRequest(url: Uri.parse(myUrl)));
-              print("change");
+
+              print("chang12312312e");
             },
             onLoadStart: (controller, url) {},
-            // initialUrlRequest: URLRequest(url: Uri.parse(myurl)),
+            androidShouldInterceptRequest: (controller, request) async {
+              print("requestrequestrequest$request");
+
+              ////stat/index.php/Login/post__register
+              /// _test
+              if (request.url.toString() ==
+                  'https://abee997.co.kr/stat/index.php/Login/post__register') {
+                String lang = '';
+                if (_languages?[0] == 'ko-KR') {
+                  lang = 'kor';
+                } else {
+                  lang = 'eng';
+                }
+                globalKey.currentContext
+                    ?.read<JoinOfferwallInternalBloc>()
+                    .add(JoinOffWall(xId: widget.data['idx'], lang: lang));
+              } else {
+                print("ahihi");
+              }
+            },
             shouldOverrideUrlLoading: (controller, navigationAction) async {
               var uri = navigationAction.request.url!;
 
@@ -97,29 +168,26 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
                 }
               }
 
-             
-
               return NavigationActionPolicy.ALLOW;
+            },
+            shouldInterceptAjaxRequest: (controller, ajaxRequest) async {
+              printWrapped("ajaxRequest${ajaxRequest}");
+              return ajaxRequest;
             },
 
             onLoadStop: (controller, url) async {
-              print("loadStop${url}");
               var html = await webView?.evaluateJavascript(
                   source:
                       "window.document.getElementsByTagName('html')[0].outerHTML;");
-              printWrapped("loadStopurl$html");
 
-              controller.addJavaScriptHandler(
-                  handlerName: "Toaster",
-                  callback: (args) {
-                    // Here you receive all the arguments from the JavaScript side
-                    // that is a List<dynamic>
-                    print("From the JavaScript side:");
-                    print(args);
-                    return args.reduce((curr, next) => curr + next);
-                  });
-              try {} catch (ex) {
-                print("exex$ex");
+              printWrapped("loadStopurl$html");
+              if (html.contains('승인은 영업일 기준 3일 이내에 완료되며, 문자 메시지로 통보애 드립니다.')) {
+                webView?.canGoBack().then((value) {
+                  print("valuevalue123 $value");
+                  if (value) {}
+                });
+              } else {
+                print("err");
               }
             },
 
@@ -132,7 +200,6 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
 
             onUpdateVisitedHistory: (controller, url, androidIsReload) async {},
             onConsoleMessage: (controller, consoleMessage) {
-              controller.evaluateJavascript(source: '');
               printWrapped("consoleMessage$consoleMessage");
             },
           ))
@@ -142,7 +209,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   }
 
   void printWrapped(String text) {
-    final pattern = RegExp('.{1,800}');
+    final pattern = RegExp('.{4,800}');
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 }

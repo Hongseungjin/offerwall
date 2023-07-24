@@ -233,7 +233,7 @@ class _CustomWebViewState extends State<CustomWebView> {
                 // onPointerUp: _incrementUp,
                 onPointerMove: _updateLocation,
                 child: Container(
-                    color: AppColor.red,
+                    color: AppColor.white,
                     child: WebViewWidget(controller: _controller))),
             Visibility(
               visible: isLoading,
