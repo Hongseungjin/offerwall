@@ -37,10 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   # flutter_background_service: ^3.0.1
   # flutter_overlay_window: ^0.4.3
-  firebase_core: 2.11.0
-  firebase_core_platform_interface: 4.7.0
-  firebase_messaging: 14.5.0
-  flutter_local_notifications: 9.9.1
+  firebase_messaging: ^14.6.3
+  flutter_local_notifications: ^14.1.1
+  firebase_core: ^2.14.0
+  
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   device_apps: ^2.2.0

@@ -3,11 +3,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -24,7 +21,6 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adve
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
-import '../../../api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import '../../../common/constants.dart';
 import '../../../common/routing.dart';
 import '../../../common/rx_bus.dart';
@@ -106,12 +102,11 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    checkOnOfAdver();
+    initFirebase();
     startTimer();
   }
 
   checkPermission() async {
-    print("locastore${await localStore?.getAccessToken()}");
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
     if (!status) {
@@ -155,7 +150,6 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     });
 
     RxBus.register<ShareData>().listen((event) {
-      print("concacok$event");
       setState(() {});
     });
 
@@ -166,15 +160,14 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     RxBus.destroy();
   }
 
-  checkOnOfAdver() async {
+  initFirebase() async {
     showOnOff = await localStore!.getSaveAdver();
     setState(() {});
     print("showOnOff $showOnOff");
     if (!showOnOff) {
-      // String? token = await FirebaseMessaging.instance.getToken();
-      //   print('deviceToken $token');
-      //   await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-      FlutterBackgroundService().invoke("registerDeviceToken");
+      FlutterBackgroundService().startService();
+    } else {
+      FlutterBackgroundService().invoke("stopService");
     }
   }
 
@@ -332,12 +325,10 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                             localStore?.setSaveAdver(showOnOff);
                                             if (showOnOff) {
                                               FlutterBackgroundService()
-                                                  .invoke("deleteDeviceToken");
+                                                  .invoke("stopService");
                                             } else {
                                               FlutterBackgroundService()
-                                                  .invoke("registerDeviceToken");
-                                              // FlutterBackgroundService()
-                                              //     .startService();
+                                                  .startService();
                                             }
                                           },
                                           child: Container(

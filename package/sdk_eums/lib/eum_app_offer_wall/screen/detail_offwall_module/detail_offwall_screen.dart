@@ -207,7 +207,6 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   }
 
   _fetchData() async {
-    print("vao daay khong$dataOfferWallVisit");
     String lang = '';
     if (_languages?[0] == 'ko-KR') {
       lang = 'kor';

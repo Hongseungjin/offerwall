@@ -19,8 +19,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     dynamic data = await EumsOfferWallService.instance.authConnect(
         memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     localStore.setAccessToken(data['token']);
-    FlutterBackgroundService()
-        .invoke("setAppTokenBg", {'token': data['token']});
     if (await localStore.getAccessToken() != null) {
       openAppSkd(context);
     }

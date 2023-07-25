@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,6 @@ import 'notification_handler.dart';
 final receivePort = ReceivePort();
 
 showOverlay(event) async {
-  print('event overlay $event');
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
@@ -47,43 +47,56 @@ jobQueue(event) async {
   bool isActive = await FlutterOverlayWindow.isActive();
   if (isActive == true) {
     await FlutterOverlayWindow.closeOverlay();
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     await showOverlay(event);
   } else {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     await showOverlay(event);
   }
 }
 
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
+  print('onStart');
+  DartPluginRegistrant.ensureInitialized();
+  await Firebase.initializeApp();
+
   Queue queue = Queue();
   Queue queueDeviceToken = Queue(delay: const Duration(milliseconds: 100));
-  await Firebase.initializeApp();
+  queueDeviceToken.add(() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    print('deviceToken $token');
+    await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+  });
 
   try {
     service.on('showOverlay').listen((event) async {
       queue.add(() async => await jobQueue(event));
+      NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
     });
 
-    service.on('setAppTokenBg').listen((event) {
-      LocalStoreService().setAccessToken(event?['token']);
+    service.on('closeOverlay').listen((event) async {
+      queue.add(() async => await FlutterOverlayWindow.closeOverlay);
     });
-    service.on('registerDeviceToken').listen((event) async {
-      queueDeviceToken.add(() async {
-        String? token = await FirebaseMessaging.instance.getToken();
-        print('deviceToken $token');
-        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-      });
-    });
-    service.on('deleteDeviceToken').listen((event) async {
-      queueDeviceToken.add(() async {
-        await FirebaseMessaging.instance.deleteToken();
-      });
-    });
+
+    // service.on('registerDeviceToken').listen((event) async {
+    //   queueDeviceToken.add(() async {
+    //     String? token = await FirebaseMessaging.instance.getToken();
+    //     print('deviceToken $token');
+    //     await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    //   });
+    // });
+    // service.on('deleteDeviceToken').listen((event) async {
+    //   queueDeviceToken.add(() async {
+    //     await FirebaseMessaging.instance.deleteToken();
+    //   });
+    // });
     service.on('stopService').listen((event) async {
       print("eventStop");
-      service.stopSelf();
+      queueDeviceToken.add(() async {
+        await FirebaseMessaging.instance.deleteToken();
+        service.stopSelf();
+      });
     });
   } catch (e) {
     print(e);
@@ -97,30 +110,17 @@ void main() {
 }
 
 initApp() async {
+  // SdkEums.instant.init(onRun: () async {
   await FlutterBackgroundService().configure(
       iosConfiguration: IosConfiguration(),
       androidConfiguration: AndroidConfiguration(
           onStart: onStart,
-          autoStart: true,
+          autoStart: false,
           isForegroundMode: true,
           initialNotificationTitle: "인천e음",
           initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-  // SdkEums.instant.init(onRun: () async {
-  if (Platform.isAndroid) {
-    final bool status = await FlutterOverlayWindow.isPermissionGranted();
-    if (!status) {
-      await FlutterOverlayWindow.requestPermission();
-    } else {}
-  }
   await Firebase.initializeApp();
   NotificationHandler().initializeFcmNotification();
-
-  // dynamic checkShowOnOff = await LocalStoreService().getSaveAdver();
-  // print('checkShowOnOff $checkShowOnOff');
-  // if (checkShowOnOff) {
-  //   print('stop service');
-  //   FlutterBackgroundService().invoke("stopService");
-  // }
   // });
 }
 
@@ -172,24 +172,6 @@ class _MyHomePageState extends State<MyHomePage>
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     localStore.setDataShare(dataShare: null);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    LocalStore localStore = LocalStoreService();
-    print("statestatestate$state");
-    switch (state) {
-      case AppLifecycleState.resumed:
-        break;
-      case AppLifecycleState.inactive:
-        break;
-      case AppLifecycleState.paused:
-        localStore.setDataShare(dataShare: null);
-        break;
-      case AppLifecycleState.detached:
-        localStore.setDataShare(dataShare: null);
-        break;
-    }
   }
 
   @override
@@ -250,12 +232,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   @override
   void initState() {
     localStore = LocalStoreService();
-    checkToken();
     super.initState();
-  }
-
-  checkToken() async {
-    print("localStore?.getAccessToken()${localStore?.getAccessToken()}");
   }
 
   @override

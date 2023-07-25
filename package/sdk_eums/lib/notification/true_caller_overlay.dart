@@ -46,16 +46,15 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
-      print("Current Event: $event");
-      print("Current Event: ${event['tokenSdk']}");
-      setState(() {
-        dataEvent = event;
-        tokenSdk = event['tokenSdk'] ?? '';
-        isWebView = event['isWebView'] != null ? true : false;
-        isToast = event['isToast'] != null ? true : false;
-        checkSave = false;
-      });
-      print("tokenEvent $tokenSdk");
+      try {
+        setState(() {
+          dataEvent = event;
+          tokenSdk = event['tokenSdk'] ?? '';
+          isWebView = event['isWebView'] != null ? true : false;
+          isToast = event['isToast'] != null ? true : false;
+          checkSave = false;
+        });
+      } catch (e) {}
     });
   }
 
@@ -64,12 +63,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     // TODO: implement dispose
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
-    FlutterOverlayWindow.closeOverlay();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("tokenEvent $tokenSdk");
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(
@@ -126,11 +123,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         showImage: true,
         showMission: true,
         onClose: () async {
-          await FlutterOverlayWindow.closeOverlay();
+          FlutterBackgroundService().invoke("closeOverlay");
         },
         bookmark: GestureDetector(
           onTap: () {
-            print("envenSdk$tokenSdk");
             setState(() {
               checkSave = !checkSave;
             });
@@ -159,12 +155,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                     advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
                     pointType: (jsonDecode(dataEvent['data']))['typePoint'],
                     token: tokenSdk);
-                await Future.delayed(Duration(milliseconds: 500));
-                await FlutterOverlayWindow.closeOverlay();
                 setState(() {
                   isWebView = false;
                   checkSave = false;
                 });
+                FlutterBackgroundService().invoke("closeOverlay");
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 print(e);
@@ -177,42 +172,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     );
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    LocalStore localStore = LocalStoreService();
-    print("statestatestate$state");
-    switch (state) {
-      case AppLifecycleState.resumed:
-        checkShowToast();
-        break;
-      case AppLifecycleState.inactive:
-        checkShowToast();
-        break;
-      case AppLifecycleState.paused:
-        checkShowToast();
-        localStore.setDataShare(dataShare: null);
-        break;
-      case AppLifecycleState.detached:
-        checkShowToast();
-        localStore.setDataShare(dataShare: null);
-        break;
-    }
-  }
-
-  checkShowToast() {
-    print("isToast$isToast");
-    if (isToast) {
-      print("isToast123123 $isToast");
-      Future.delayed(Duration(seconds: 3), () async {
-        print("the end $isToast");
-        await FlutterOverlayWindow.closeOverlay();
-        setState(() {
-          isToast = false;
-        });
-      });
-    }
-  }
-
   openWebView() {
     dataEvent['isWebView'] = true;
     FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
@@ -220,33 +179,23 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   void onVerticalDragEnd(DragEndDetails details) async {
     if (dy != null && dyStart != null && dy! < dyStart!) {
-      print('uppp');
-      bool isActive = await FlutterOverlayWindow.isActive();
-      if (isActive == true) {
-        await FlutterOverlayWindow.closeOverlay();
-        if (dataEvent != null) {
-          dataEvent['isWebView'] = true;
-          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-        }
+      if (dataEvent != null) {
+        dataEvent['isWebView'] = true;
+        FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
       }
     }
 
     if (dy != null && dyStart != null && dy! > dyStart!) {
       print('downnnn');
-      bool isActive = await FlutterOverlayWindow.isActive();
-      if (isActive == true) {
-        await FlutterOverlayWindow.closeOverlay();
-        if (dataEvent != null) {
-          try {
-            TrueOverlauService().saveKeep(
-                advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                token: tokenSdk);
-            dataEvent['isToast'] = true;
-            FlutterBackgroundService()
-                .invoke("showOverlay", {'data': dataEvent});
-          } catch (e) {
-            print("errrrr$e");
-          }
+      if (dataEvent != null) {
+        try {
+          TrueOverlauService().saveKeep(
+              advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
+              token: tokenSdk);
+          dataEvent['isToast'] = true;
+          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+        } catch (e) {
+          print("errrrr$e");
         }
       }
     }

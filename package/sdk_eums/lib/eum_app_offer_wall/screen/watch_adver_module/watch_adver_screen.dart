@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -89,7 +90,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
         Routing().popToRoot(context);
       }
       if (Platform.isAndroid) {
-        FlutterOverlayWindow.closeOverlay();
+        FlutterBackgroundService().invoke("closeOverlay");
         RxBus.post(UpdateUser());
         // await Restart.restartApp();
       }
@@ -235,10 +236,12 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
     // Routing().popToRoot(context);
 
     Future.delayed(const Duration(milliseconds: 450), () async {
-      await FlutterOverlayWindow.closeOverlay();
-      await FlutterOverlayWindow.closeOverlay();
-      print("vafo day khong em");
-      // FlutterOverlayWindow.closeOverlay();
+      FlutterBackgroundService().invoke("closeOverlay");
+
+      // await FlutterOverlayWindow.closeOverlay();
+      // await FlutterOverlayWindow.closeOverlay();
+      // print("vafo day khong em");
+      // // FlutterOverlayWindow.closeOverlay();
     });
   }
 }

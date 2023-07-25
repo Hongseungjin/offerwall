@@ -58,7 +58,6 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   void initState() {
     _getPreferredLanguages();
     // myUrl = widget.data['api'] ?? '';
-    print("concacacacac$myUrl");
     super.initState();
   }
 

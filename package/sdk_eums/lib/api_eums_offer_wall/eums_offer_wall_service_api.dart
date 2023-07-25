@@ -201,9 +201,6 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   @override
   Future missionOfferWallInternal({offerWallIdx, urlImage, lang}) async {
     // nội bộ
-    print("urlImage${urlImage?.path}");
-    print("123123 ${offerWallIdx}");
-    print("123123lang ${lang}");
     FormData formData = FormData.fromMap({
       'image': urlImage != null
           ? await MultipartFile.fromFile(

@@ -17,6 +17,7 @@ class SdkEums {
             appId: '1:739452302790:android:9fe699ead424427640aec7',
             messagingSenderId: '739452302790',
             projectId: 'e-ums-24291'));
+
     onRun.call();
   }
 }

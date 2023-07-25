@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -8,6 +9,8 @@ class NotificationHandler {
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>
+      _flutterLocalNotificationsPlugin;
   final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Notifications',
@@ -18,21 +21,19 @@ class NotificationHandler {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('mipmap/ic_launcher');
 
-    var initializationSettingsIOS = const IOSInitializationSettings(
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-      requestAlertPermission: true,
-    );
+    var initializationSettingsIOS = const DarwinInitializationSettings();
+
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
+        onDidReceiveNotificationResponse:
+            (NotificationResponse response) async {
       // if (state.remoteMessage != null) {
       //   _iosOnMessage(state.remoteMessage!);
       // }
     });
     await _fcm.requestPermission();
-    // getToken();
+    // await getToken();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage: $message");
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
@@ -50,12 +51,12 @@ class NotificationHandler {
     } else {
       token = await _fcm.getToken();
     }
+    print('deviceToken $token');
     return token;
   }
 }
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('message.data ${message.data}');
   FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 }
