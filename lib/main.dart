@@ -55,6 +55,15 @@ jobQueue(event) async {
   }
 }
 
+closeOverlay() async {
+  bool isActive = await FlutterOverlayWindow.isActive();
+  print('closeOverlaycloseOverlay $isActive');
+
+  if (isActive == true) {
+    await FlutterOverlayWindow.closeOverlay();
+  }
+}
+
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
   print('onStart');
@@ -62,12 +71,9 @@ Future<void> onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
 
   Queue queue = Queue();
-  Queue queueDeviceToken = Queue(delay: const Duration(milliseconds: 100));
-  queueDeviceToken.add(() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print('deviceToken $token');
-    await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-  });
+  String? token = await FirebaseMessaging.instance.getToken();
+  print('deviceToken $token');
+  await EumsOfferWallServiceApi().createTokenNotifi(token: token);
 
   try {
     service.on('showOverlay').listen((event) async {
@@ -76,7 +82,7 @@ Future<void> onStart(ServiceInstance service) async {
     });
 
     service.on('closeOverlay').listen((event) async {
-      queue.add(() async => await FlutterOverlayWindow.closeOverlay);
+      queue.add(() async => await closeOverlay());
     });
 
     // service.on('registerDeviceToken').listen((event) async {
@@ -93,10 +99,9 @@ Future<void> onStart(ServiceInstance service) async {
     // });
     service.on('stopService').listen((event) async {
       print("eventStop");
-      queueDeviceToken.add(() async {
-        await FirebaseMessaging.instance.deleteToken();
-        service.stopSelf();
-      });
+      queue.add(() async => await closeOverlay());
+      await FirebaseMessaging.instance.deleteToken();
+      service.stopSelf();
     });
   } catch (e) {
     print(e);

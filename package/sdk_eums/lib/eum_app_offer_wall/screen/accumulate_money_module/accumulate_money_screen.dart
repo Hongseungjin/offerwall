@@ -165,7 +165,8 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     setState(() {});
     print("showOnOff $showOnOff");
     if (!showOnOff) {
-      FlutterBackgroundService().startService();
+      bool isRunning = await FlutterBackgroundService().isRunning();
+      if (!isRunning) FlutterBackgroundService().startService();
     } else {
       FlutterBackgroundService().invoke("stopService");
     }
@@ -327,8 +328,13 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               FlutterBackgroundService()
                                                   .invoke("stopService");
                                             } else {
-                                              FlutterBackgroundService()
-                                                  .startService();
+                                              bool isRunning =
+                                                  await FlutterBackgroundService()
+                                                      .isRunning();
+                                              if (!isRunning) {
+                                                FlutterBackgroundService()
+                                                    .startService();
+                                              }
                                             }
                                           },
                                           child: Container(

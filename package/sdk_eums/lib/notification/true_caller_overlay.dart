@@ -42,10 +42,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   @override
   void initState() {
     // TODO: implement initState
-
+    print('initOverlay $isWebView $isToast');
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
+      print('overlayListener $event');
       try {
         setState(() {
           dataEvent = event;
@@ -54,7 +55,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           isToast = event['isToast'] != null ? true : false;
           checkSave = false;
         });
-      } catch (e) {}
+      } catch (e) {
+        print('e $e');
+      }
     });
   }
 
@@ -114,6 +117,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       url = (jsonDecode(dataEvent['data']))['url_link'];
     } catch (e) {
       print(e);
+      FlutterBackgroundService().invoke("closeOverlay");
     }
     return BlocProvider<WatchAdverBloc>(
       create: (context) => WatchAdverBloc(),
@@ -130,14 +134,19 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
             setState(() {
               checkSave = !checkSave;
             });
-            if (checkSave) {
-              TrueOverlauService().saveScrap(
-                  advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                  token: tokenSdk);
-            } else {
-              TrueOverlauService().deleteScrap(
-                  advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                  token: tokenSdk);
+            try {
+              if (checkSave) {
+                TrueOverlauService().saveScrap(
+                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
+                    token: tokenSdk);
+              } else {
+                TrueOverlauService().deleteScrap(
+                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
+                    token: tokenSdk);
+              }
+            } catch (e) {
+              print('e $e');
+              FlutterBackgroundService().invoke("closeOverlay");
             }
           },
           child: checkSave
@@ -163,6 +172,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 print(e);
+                FlutterBackgroundService().invoke("closeOverlay");
               }
             });
           }
@@ -196,6 +206,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
         } catch (e) {
           print("errrrr$e");
+          FlutterBackgroundService().invoke("closeOverlay");
         }
       }
     }
@@ -210,7 +221,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
               child: Image.asset(
                 Assets.alertOverlay.path,
                 package: "sdk_eums",
-                width: MediaQuery.of(context).size.width - 100,
+                width: MediaQuery.of(context).size.width - 150,
                 // height: 10,
               ),
             ),
