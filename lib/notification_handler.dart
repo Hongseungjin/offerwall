@@ -62,5 +62,7 @@ class NotificationHandler {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
+  String tokenBG = await LocalStoreService().getAccessToken();
+  print('tokenBG $tokenBG');
   FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 }
