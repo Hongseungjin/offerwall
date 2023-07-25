@@ -24,6 +24,7 @@ class CustomWebView2 extends StatefulWidget {
   final Widget? actions;
   final Widget? bookmark;
   final showImage;
+  final double deviceWidth;
   const CustomWebView2(
       {Key? key,
       this.urlLink,
@@ -36,6 +37,7 @@ class CustomWebView2 extends StatefulWidget {
       this.color = AppColor.white,
       this.actions,
       this.bookmark,
+      this.deviceWidth = 0,
       this.showImage = false})
       : super(key: key);
 
@@ -81,12 +83,6 @@ class _CustomWebView2State extends State<CustomWebView2> {
     });
   }
 
-  double deviceWith = 0;
-  getDeviceWidth() async {
-    deviceWith = double.parse(await LocalStoreService().getDeviceWidth());
-    print('deviceWithdeviceWith $deviceWith');
-  }
-
   start5s() {
     timer5s?.cancel();
     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
@@ -118,7 +114,6 @@ class _CustomWebView2State extends State<CustomWebView2> {
     super.initState();
     _scrollController.addListener(_scrollListener);
 
-    getDeviceWidth();
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
@@ -233,8 +228,8 @@ class _CustomWebView2State extends State<CustomWebView2> {
                       padding: EdgeInsets.only(
                           top: 5,
                           bottom: MediaQuery.of(context).padding.bottom + 20),
-                      width: deviceWith > 0
-                          ? deviceWith
+                      width: widget.deviceWidth > 0
+                          ? widget.deviceWidth
                           : MediaQuery.of(context).size.width,
                       color: Colors.white,
                       child: Row(

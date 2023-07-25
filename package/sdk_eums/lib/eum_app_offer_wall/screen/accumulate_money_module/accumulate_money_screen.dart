@@ -42,7 +42,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final GlobalKey<State<StatefulWidget>> globalKey =
       GlobalKey<State<StatefulWidget>>();
-  bool showOnOff = false;
+  bool isdisable = false;
   late TabController _tabController;
   int tabIndex = 0;
   int tabPreviousIndex = 0;
@@ -161,10 +161,10 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   }
 
   initFirebase() async {
-    showOnOff = await localStore!.getSaveAdver();
+    isdisable = await localStore!.getSaveAdver();
     setState(() {});
-    print("showOnOff $showOnOff");
-    if (!showOnOff) {
+    print("isdisable $isdisable");
+    if (!isdisable) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) FlutterBackgroundService().startService();
     } else {
@@ -301,7 +301,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                     child: Row(
                                       children: [
                                         Text(
-                                          !showOnOff
+                                          !isdisable
                                               ? "물개 광고 활성화 중입니다."
                                               : "물개 광고 비활성화 중입니다.",
                                           style: AppStyle.bold.copyWith(
@@ -310,9 +310,9 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                         ),
                                         const Spacer(),
                                         Text(
-                                          showOnOff ? 'OFF' : 'ON',
+                                          isdisable ? 'OFF' : 'ON',
                                           style: AppStyle.bold.copyWith(
-                                              color: showOnOff
+                                              color: isdisable
                                                   ? Colors.black
                                                   : AppColor.orange2,
                                               fontSize: 14),
@@ -320,11 +320,12 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                         const SizedBox(width: 5),
                                         GestureDetector(
                                           onTap: () async {
+                                            print('isdisable $isdisable');
                                             setState(() {
-                                              showOnOff = !showOnOff;
+                                              isdisable = !isdisable;
                                             });
-                                            localStore?.setSaveAdver(showOnOff);
-                                            if (showOnOff) {
+                                            localStore?.setSaveAdver(isdisable);
+                                            if (isdisable) {
                                               FlutterBackgroundService()
                                                   .invoke("stopService");
                                             } else {
@@ -342,18 +343,18 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                 horizontal: 1, vertical: 1),
                                             width: 40,
                                             decoration: BoxDecoration(
-                                                color: !showOnOff
+                                                color: !isdisable
                                                     ? AppColor.orange2
                                                     : AppColor.white,
                                                 borderRadius:
                                                     BorderRadius.circular(12),
                                                 border: Border.all(
-                                                    color: !showOnOff
+                                                    color: !isdisable
                                                         ? Colors.transparent
                                                         : AppColor.color70)),
                                             child: Row(
                                               children: [
-                                                showOnOff
+                                                isdisable
                                                     ? Container(
                                                         decoration:
                                                             const BoxDecoration(
@@ -368,7 +369,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                       )
                                                     : const SizedBox(),
                                                 const Spacer(),
-                                                showOnOff
+                                                isdisable
                                                     ? const SizedBox()
                                                     : Container(
                                                         decoration:
@@ -532,7 +533,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   }
 
   // checkOnOf() async {
-  //   if (!showOnOff) {
+  //   if (!isdisable) {
   //     _pushNotificationServiceBloc.add(PushNotificationSetup());
   //   } else {
   //     _pushNotificationServiceBloc.add(RemoveToken());

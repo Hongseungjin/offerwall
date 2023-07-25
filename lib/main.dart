@@ -12,7 +12,6 @@ import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
-
 import 'notification_handler.dart';
 
 final receivePort = ReceivePort();
@@ -21,6 +20,8 @@ showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
+    event?['data']['deviceWith'] =
+        double.parse(await LocalStoreService().getDeviceWidth());
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {
     if (event?['data']['isToast'] != null) {
@@ -64,17 +65,28 @@ closeOverlay() async {
   }
 }
 
+int d = 0;
+registerDeviceToken() async {
+  d++;
+  if (d < 10) {
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      print('deviceToken $d $token');
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    } catch (e) {
+      print('e $e');
+      registerDeviceToken();
+    }
+  }
+}
+
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
   print('onStart');
   DartPluginRegistrant.ensureInitialized();
   await Firebase.initializeApp();
-
   Queue queue = Queue();
-  String? token = await FirebaseMessaging.instance.getToken();
-  print('deviceToken $token');
-  await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-
+  registerDeviceToken();
   try {
     service.on('showOverlay').listen((event) async {
       queue.add(() async => await jobQueue(event));
@@ -162,13 +174,11 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void initState() {
     // checkOpenApp('initState');
-
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
 
   setDeviceWidth() {
-    print('deviceWidth(context) ${deviceWidth(context)}');
     localStore.setDeviceWidth(deviceWidth(context));
   }
 

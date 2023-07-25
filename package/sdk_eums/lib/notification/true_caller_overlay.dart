@@ -38,15 +38,15 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   double? dy;
   double? dyStart;
   String? tokenSdk;
+  double deviceWidth = 0;
 
   @override
   void initState() {
     // TODO: implement initState
-    print('initOverlay $isWebView $isToast');
+    FlutterBackgroundService().invoke("closeOverlay");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
-      print('overlayListener $event');
       try {
         setState(() {
           dataEvent = event;
@@ -54,7 +54,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
           checkSave = false;
+          deviceWidth = event['deviceWith'] ?? 0;
         });
+        print('overlayListener $event');
       } catch (e) {
         print('e $e');
       }
@@ -126,6 +128,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         key: webViewKey,
         showImage: true,
         showMission: true,
+        deviceWidth : deviceWidth,
         onClose: () async {
           FlutterBackgroundService().invoke("closeOverlay");
         },
@@ -189,14 +192,17 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   void onVerticalDragEnd(DragEndDetails details) async {
     if (dy != null && dyStart != null && dy! < dyStart!) {
+      print('up$dataEvent');
       if (dataEvent != null) {
         dataEvent['isWebView'] = true;
         FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+      } else {
+        FlutterBackgroundService().invoke("closeOverlay");
       }
     }
 
     if (dy != null && dyStart != null && dy! > dyStart!) {
-      print('downnnn');
+      print('downnnn$dataEvent');
       if (dataEvent != null) {
         try {
           TrueOverlauService().saveKeep(
@@ -208,6 +214,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           print("errrrr$e");
           FlutterBackgroundService().invoke("closeOverlay");
         }
+      } else {
+        FlutterBackgroundService().invoke("closeOverlay");
       }
     }
   }
