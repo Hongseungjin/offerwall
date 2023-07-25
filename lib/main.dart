@@ -20,7 +20,7 @@ showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-    event?['data']['deviceWith'] =
+    event?['data']['deviceWidth'] =
         double.parse(await LocalStoreService().getDeviceWidth());
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {

@@ -54,11 +54,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
           checkSave = false;
-          deviceWidth = event['deviceWith'] ?? 0;
+          deviceWidth = event['deviceWidth'] ?? 0;
         });
         print('overlayListener $event');
       } catch (e) {
-        print('e $e');
+        print('errorrrrrr $e');
       }
     });
   }
