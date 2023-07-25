@@ -43,6 +43,13 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
+  Future unRegisterTokenNotifi({token}) async {
+    dynamic data = <String, dynamic>{"deviceToken": token};
+    await api.delete('device-token', data: data);
+    return;
+  }
+
+  @override
   Future createInquire(
       {type,
       content,

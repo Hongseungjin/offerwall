@@ -33,12 +33,11 @@ abstract class LocalStore {
 
   Future setDataShare({dynamic dataShare});
 
-  Future setToken({dynamic dataToken});
+  Future setDeviceToken(dynamic token);
 
-  Future<dynamic> getToken();
+  Future<dynamic> getDeviceToken();
 
   Future setDeviceWidth(double width);
 
   Future<dynamic> getDeviceWidth();
-  
 }

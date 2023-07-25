@@ -37,6 +37,8 @@ abstract class EumsOfferWallService extends PlatformInterface {
   /// on/off 광고 알림 받기
   Future<dynamic> createTokenNotifi({String? token});
 
+  Future<dynamic> unRegisterTokenNotifi({String? token});
+
   /// 이용약관
   Future<dynamic> getUsingTerm();
 

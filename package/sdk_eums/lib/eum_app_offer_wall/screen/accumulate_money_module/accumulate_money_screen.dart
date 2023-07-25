@@ -166,7 +166,16 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     print("isdisable $isdisable");
     if (!isdisable) {
       bool isRunning = await FlutterBackgroundService().isRunning();
-      if (!isRunning) FlutterBackgroundService().startService();
+      if (!isRunning) {
+        FlutterBackgroundService().startService();
+      } else {
+        String? token = await LocalStoreService().getDeviceToken();
+        FlutterBackgroundService()
+            .invoke("registerDeviceToken", {'data': token});
+        // FlutterBackgroundService().invoke("stopService");
+        // await Future.delayed(Duration(seconds: 1));
+        // FlutterBackgroundService().startService();
+      }
     } else {
       FlutterBackgroundService().invoke("stopService");
     }

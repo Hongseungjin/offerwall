@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 class NotificationHandler {
@@ -33,9 +34,10 @@ class NotificationHandler {
       // }
     });
     await _fcm.requestPermission();
-    // await getToken();
+    await getToken();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage: $message");
+      // flutterLocalNotificationsPlugin.cancelAll();
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
     });
 
@@ -51,12 +53,14 @@ class NotificationHandler {
     } else {
       token = await _fcm.getToken();
     }
-    print('deviceToken $token');
+    LocalStoreService().setDeviceToken(token);
+    print('deviceTokenInit $token');
     return token;
   }
 }
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
   FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 }

@@ -10,7 +10,7 @@ class LocalStoreService extends LocalStore {
   static const SAVE_OR_NOT_CREDENTIALS = 'SAVE_OR_NOT_CREDENTIALS';
   static const SAVE_OR_NOT_ADVER = 'SAVE_OR_NOT_ADVER';
   static const SAVE_DATA_SHARE = 'SAVE_DATA_SHARE';
-  static const SAVE_DATA_TOKEN = 'SAVE_DATA_TOKEN';
+  static const SAVE_DEVICE_TOKEN = 'SAVE_DEVICE_TOKEN';
   static const DEVICE_WIDTH = 'DEVICE_WIDTH';
 
   @override
@@ -120,15 +120,14 @@ class LocalStoreService extends LocalStore {
   }
 
   @override
-  Future getToken() async {
-    return (await SharedPreferences.getInstance()).getString(SAVE_DATA_TOKEN) ??
-        '';
+  Future getDeviceToken() async {
+    return (await SharedPreferences.getInstance()).getString(SAVE_DEVICE_TOKEN);
   }
 
   @override
-  Future setToken({dataToken}) async {
+  Future setDeviceToken(token) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setString(SAVE_DATA_TOKEN, dataToken);
+    await preferences.setString(SAVE_DEVICE_TOKEN, token);
   }
 
   @override

@@ -65,45 +65,48 @@ closeOverlay() async {
   }
 }
 
-int d = 0;
-registerDeviceToken() async {
-  d++;
-  if (d < 10) {
-    try {
-      String? token = await FirebaseMessaging.instance.getToken();
-      print('deviceToken $d $token');
+registerDeviceToken(String? token) async {
+  try {
+    if (token != null && token.isNotEmpty) {
       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-    } catch (e) {
-      print('e $e');
-      registerDeviceToken();
+    } else {
+      String? _token = await LocalStoreService().getDeviceToken();
+      print('deviceToken $_token');
+      if (_token != null && _token.isNotEmpty) {
+        await EumsOfferWallServiceApi().createTokenNotifi(token: _token);
+      }
     }
+  } catch (e) {
+    print('e $e');
   }
 }
 
 @pragma('vm:entry-point')
-Future<void> onStart(ServiceInstance service) async {
+void onStart(ServiceInstance service) {
   print('onStart');
   DartPluginRegistrant.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   Queue queue = Queue();
-  registerDeviceToken();
+  registerDeviceToken(null);
   try {
     service.on('showOverlay').listen((event) async {
       queue.add(() async => await jobQueue(event));
-      NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
+      // NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
     });
 
     service.on('closeOverlay').listen((event) async {
       queue.add(() async => await closeOverlay());
     });
 
-    // service.on('registerDeviceToken').listen((event) async {
-    //   queueDeviceToken.add(() async {
-    //     String? token = await FirebaseMessaging.instance.getToken();
-    //     print('deviceToken $token');
-    //     await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-    //   });
-    // });
+    service.on('registerDeviceToken').listen((event) async {
+      print('registerDeviceToken $event');
+      registerDeviceToken(event?['data']);
+      // queueDeviceToken.add(() async {
+      //   String? token = await FirebaseMessaging.instance.getToken();
+      //   print('deviceToken $token');
+      //   await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      // });
+    });
     // service.on('deleteDeviceToken').listen((event) async {
     //   queueDeviceToken.add(() async {
     //     await FirebaseMessaging.instance.deleteToken();
@@ -112,7 +115,11 @@ Future<void> onStart(ServiceInstance service) async {
     service.on('stopService').listen((event) async {
       print("eventStop");
       queue.add(() async => await closeOverlay());
-      await FirebaseMessaging.instance.deleteToken();
+      String? token = await LocalStoreService().getDeviceToken();
+      print('deviceToken $token');
+      if (token != null && token.isNotEmpty) {
+        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+      }
       service.stopSelf();
     });
   } catch (e) {
@@ -132,7 +139,7 @@ initApp() async {
       iosConfiguration: IosConfiguration(),
       androidConfiguration: AndroidConfiguration(
           onStart: onStart,
-          autoStart: false,
+          autoStart: true,
           isForegroundMode: true,
           initialNotificationTitle: "인천e음",
           initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
