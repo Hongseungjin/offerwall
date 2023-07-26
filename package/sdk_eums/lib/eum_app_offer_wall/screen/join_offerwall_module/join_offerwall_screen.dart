@@ -57,7 +57,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   @override
   void initState() {
     _getPreferredLanguages();
-    // myUrl = widget.data['api'] ?? '';
+    myUrl = widget.data['api'] ?? '';
     super.initState();
   }
 
@@ -129,9 +129,8 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               print("requestrequestrequest$request");
 
               ////stat/index.php/Login/post__register
-              /// _test
               if (request.url.toString() ==
-                  'https://abee997.co.kr/stat/index.php/Login/post__register') {
+                  'https://abee997.co.kr/stat/index.php/Login/post__register_test') {
                 String lang = '';
                 if (_languages?[0] == 'ko-KR') {
                   lang = 'kor';
