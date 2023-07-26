@@ -47,6 +47,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   @override
   void initState() {
     // TODO: implement initState
+    print('inittt overlay');
     FlutterBackgroundService().invoke("closeOverlay");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
@@ -197,7 +198,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   void onVerticalDragEnd(DragEndDetails details) async {
     dynamic dataLocal = await LocalStoreService().getDataShare();
-    print('getDataShare ${(jsonDecode(dataLocal)['data'])}');
+    // print('getDataShare ${(jsonDecode(dataLocal)['data'])}');
     // if (dataEvent == null) {
     //   dataEvent ??= jsonDecode(dataLocal)['data'];
     //   setState(() {
