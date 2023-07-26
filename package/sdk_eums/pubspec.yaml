@@ -50,7 +50,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   wakelock: ^0.6.2
-  flutter_background_service: ^3.0.1
+  # flutter_background_service: ^3.0.1
   devicelocale: ^0.6.0
   disable_battery_optimization: ^1.1.0+1
   # restart_app: any
@@ -60,11 +60,11 @@ dependencies:
   #     path: flutter_overlay_window
     # path: ../flutter_overlay_window
   
-  sdk_eums_c:
-    # path: ../sdk_eums_c
-    git:
-      url: https://github.com/Greenapp02/eums_sdk_app.git
-      path: sdk_eums_c
+  # sdk_eums_c:
+  #   # path: ../sdk_eums_c
+  #   git:
+  #     url: https://github.com/Greenapp02/eums_sdk_app.git
+  #     path: sdk_eums_c
 
 dev_dependencies:
   flutter_test:

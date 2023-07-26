@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:sdk_eums_c/sdk_eums_c_platform_interface.dart';
+// import 'package:sdk_eums_c/sdk_eums_c_platform_interface.dart';
 
 import 'sdk_eums_platform_interface.dart';
 
@@ -16,14 +16,10 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
   Future methodAdpopcorn({data}) async {
     if (Platform.isAndroid) {
       await methodChannel.invokeMethod<String>('Adpopcorn', data);
- 
     } else {
       try {
-       
-        await SdkEums_cPlatform.instance.methodAdpopcorn(data: data);
-      } catch (ex) {
-    
-      }
+        // await SdkEums_cPlatform.instance.methodAdpopcorn(data: data);
+      } catch (ex) {}
     }
   }
 
@@ -32,8 +28,7 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
     if (Platform.isAndroid) {
       await methodChannel.invokeMethod<String>('adsync', data);
     } else {
-
-      await SdkEums_cPlatform.instance.methodAdsync(data: data);
+      // await SdkEums_cPlatform.instance.methodAdsync(data: data);
     }
   }
 
@@ -47,7 +42,7 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
     if (Platform.isAndroid) {
       await methodChannel.invokeMethod<String>('mafin', data);
     } else {
-      await SdkEums_cPlatform.instance.methodMafin(data: data);
+      // await SdkEums_cPlatform.instance.methodMafin(data: data);
     }
   }
 

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   @override
   void initState() {
     // TODO: implement initState
-    FlutterBackgroundService().invoke("closeOverlay");
+    // FlutterBackgroundService().invoke("closeOverlay");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
@@ -119,7 +121,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       url = (jsonDecode(dataEvent['data']))['url_link'];
     } catch (e) {
       print(e);
-      FlutterBackgroundService().invoke("closeOverlay");
+      // FlutterBackgroundService().invoke("closeOverlay");
     }
     return BlocProvider<WatchAdverBloc>(
       create: (context) => WatchAdverBloc(),
@@ -128,9 +130,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         key: webViewKey,
         showImage: true,
         showMission: true,
-        deviceWidth : deviceWidth,
+        deviceWidth: deviceWidth,
         onClose: () async {
-          FlutterBackgroundService().invoke("closeOverlay");
+          // FlutterBackgroundService().invoke("closeOverlay");
         },
         bookmark: GestureDetector(
           onTap: () {
@@ -149,7 +151,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
               }
             } catch (e) {
               print('e $e');
-              FlutterBackgroundService().invoke("closeOverlay");
+              // FlutterBackgroundService().invoke("closeOverlay");
             }
           },
           child: checkSave
@@ -171,11 +173,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                   isWebView = false;
                   checkSave = false;
                 });
-                FlutterBackgroundService().invoke("closeOverlay");
+                // FlutterBackgroundService().invoke("closeOverlay");
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 print(e);
-                FlutterBackgroundService().invoke("closeOverlay");
+                // FlutterBackgroundService().invoke("closeOverlay");
               }
             });
           }
@@ -187,17 +189,20 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   openWebView() {
     dataEvent['isWebView'] = true;
-    FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+    // FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
   }
 
   void onVerticalDragEnd(DragEndDetails details) async {
+    SendPort? send = IsolateNameServer.lookupPortByName('isolateName');
+
     if (dy != null && dyStart != null && dy! < dyStart!) {
       print('up$dataEvent');
       if (dataEvent != null) {
         dataEvent['isWebView'] = true;
-        FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+        send?.send(dataEvent);
+        // FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
       } else {
-        FlutterBackgroundService().invoke("closeOverlay");
+        // FlutterBackgroundService().invoke("closeOverlay");
       }
     }
 
@@ -209,13 +214,13 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
               advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
               token: tokenSdk);
           dataEvent['isToast'] = true;
-          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+          // FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
         } catch (e) {
           print("errrrr$e");
-          FlutterBackgroundService().invoke("closeOverlay");
+          // FlutterBackgroundService().invoke("closeOverlay");
         }
       } else {
-        FlutterBackgroundService().invoke("closeOverlay");
+        // FlutterBackgroundService().invoke("closeOverlay");
       }
     }
   }

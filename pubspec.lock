@@ -279,34 +279,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_background_service:
-    dependency: transitive
-    description:
-      name: flutter_background_service
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
-  flutter_background_service_android:
-    dependency: transitive
-    description:
-      name: flutter_background_service_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.1"
-  flutter_background_service_ios:
-    dependency: transitive
-    description:
-      name: flutter_background_service_ios
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
-  flutter_background_service_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_background_service_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -778,15 +750,6 @@ packages:
       path: "package/sdk_eums"
       relative: true
     source: path
-    version: "0.0.3"
-  sdk_eums_c:
-    dependency: transitive
-    description:
-      path: sdk_eums_c
-      ref: HEAD
-      resolved-ref: "82b02a5c7c0729fc459a4a25920d80119405ab62"
-      url: "https://github.com/Greenapp02/eums_sdk_app.git"
-    source: git
     version: "0.0.3"
   shared_preferences:
     dependency: transitive

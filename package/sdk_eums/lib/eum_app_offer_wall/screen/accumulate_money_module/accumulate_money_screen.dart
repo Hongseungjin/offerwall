@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
+// import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -164,21 +164,21 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     isdisable = await localStore!.getSaveAdver();
     setState(() {});
     print("isdisable $isdisable");
-    if (!isdisable) {
-      bool isRunning = await FlutterBackgroundService().isRunning();
-      if (!isRunning) {
-        FlutterBackgroundService().startService();
-      } else {
-        String? token = await LocalStoreService().getDeviceToken();
-        FlutterBackgroundService()
-            .invoke("registerDeviceToken", {'data': token});
-        // FlutterBackgroundService().invoke("stopService");
-        // await Future.delayed(Duration(seconds: 1));
-        // FlutterBackgroundService().startService();
-      }
-    } else {
-      FlutterBackgroundService().invoke("stopService");
-    }
+    // if (!isdisable) {
+    //   bool isRunning = await FlutterBackgroundService().isRunning();
+    //   if (!isRunning) {
+    //     FlutterBackgroundService().startService();
+    //   } else {
+    //     String? token = await LocalStoreService().getDeviceToken();
+    //     FlutterBackgroundService()
+    //         .invoke("registerDeviceToken", {'data': token});
+    //     // FlutterBackgroundService().invoke("stopService");
+    //     // await Future.delayed(Duration(seconds: 1));
+    //     // FlutterBackgroundService().startService();
+    //   }
+    // } else {
+    //   FlutterBackgroundService().invoke("stopService");
+    // }
   }
 
   Timer? _timer;
@@ -334,18 +334,18 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               isdisable = !isdisable;
                                             });
                                             localStore?.setSaveAdver(isdisable);
-                                            if (isdisable) {
-                                              FlutterBackgroundService()
-                                                  .invoke("stopService");
-                                            } else {
-                                              bool isRunning =
-                                                  await FlutterBackgroundService()
-                                                      .isRunning();
-                                              if (!isRunning) {
-                                                FlutterBackgroundService()
-                                                    .startService();
-                                              }
-                                            }
+                                            // if (isdisable) {
+                                            //   FlutterBackgroundService()
+                                            //       .invoke("stopService");
+                                            // } else {
+                                            //   bool isRunning =
+                                            //       await FlutterBackgroundService()
+                                            //           .isRunning();
+                                            //   if (!isRunning) {
+                                            //     FlutterBackgroundService()
+                                            //         .startService();
+                                            //   }
+                                            // }
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
