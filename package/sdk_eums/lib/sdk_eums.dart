@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sdk_eums/sdk_eums_permission.dart';
 
+import 'eum_app_offer_wall/notification_handler.dart';
+
 class SdkEums {
   SdkEums._();
 
@@ -11,13 +13,13 @@ class SdkEums {
 
   void init({required Function() onRun}) async {
     WidgetsFlutterBinding.ensureInitialized();
-     await Firebase.initializeApp(
-        options: const FirebaseOptions(
-            apiKey: 'AIzaSyBkj46lMsOL6WABO5FzeTXTlppVognezoM',
-            appId: '1:739452302790:android:9fe699ead424427640aec7',
-            messagingSenderId: '739452302790',
-            projectId: 'e-ums-24291'));
-
+    // await Firebase.initializeApp(
+    //     options: const FirebaseOptions(
+    //         apiKey: 'AIzaSyBkj46lMsOL6WABO5FzeTXTlppVognezoM',
+    //         appId: '1:739452302790:android:9fe699ead424427640aec7',
+    //         messagingSenderId: '739452302790',
+    //         projectId: 'e-ums-24291'));
+    // NotificationHandler().initializeFcmNotification();
     onRun.call();
   }
 }

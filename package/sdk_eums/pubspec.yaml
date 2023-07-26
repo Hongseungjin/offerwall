@@ -23,13 +23,14 @@ dependencies:
   flutter_local_notifications: ^14.1.1
   firebase_core: ^2.14.0
   
-  flutter_overlay_window: ^0.4.3
+  flutter_overlay_window:
+    path: package/flutter_overlay_window-0.4.3
+
   package_info_plus: ^3.1.2
   device_info_plus: 8.0.0
   flutter_inappwebview: ^5.7.2+3
   url_launcher: ^6.1.10
   queue: ^3.1.0+2
-
   # endregion
 
   dio: ^5.0.3
@@ -50,7 +51,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   wakelock: ^0.6.2
-  # flutter_background_service: ^3.0.1
+  flutter_background_service: ^3.0.1
   devicelocale: ^0.6.0
   disable_battery_optimization: ^1.1.0+1
   # restart_app: any

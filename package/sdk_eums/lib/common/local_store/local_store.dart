@@ -29,7 +29,7 @@ abstract class LocalStore {
 
   Future setSaveAdver(bool status);
 
-  Future<String> getDataShare();
+  Future<String?> getDataShare();
 
   Future setDataShare({dynamic dataShare});
 

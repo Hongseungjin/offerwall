@@ -53,14 +53,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   void initState() {
     _registerEventBus();
-    initFirebase();
     super.initState();
     settingBattery();
-  }
-
-  initFirebase() async {
-    // await Firebase.initializeApp();
-    NotificationHandler().initializeFcmNotification();
   }
 
   getBatteryOptimization() async {

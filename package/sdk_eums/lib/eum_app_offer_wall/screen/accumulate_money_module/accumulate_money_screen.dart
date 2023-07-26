@@ -5,8 +5,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 // import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -21,6 +24,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adve
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
+import '../../../api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import '../../../common/constants.dart';
 import '../../../common/routing.dart';
 import '../../../common/rx_bus.dart';
@@ -164,21 +168,17 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     isdisable = await localStore!.getSaveAdver();
     setState(() {});
     print("isdisable $isdisable");
-    // if (!isdisable) {
-    //   bool isRunning = await FlutterBackgroundService().isRunning();
-    //   if (!isRunning) {
-    //     FlutterBackgroundService().startService();
-    //   } else {
-    //     String? token = await LocalStoreService().getDeviceToken();
-    //     FlutterBackgroundService()
-    //         .invoke("registerDeviceToken", {'data': token});
-    //     // FlutterBackgroundService().invoke("stopService");
-    //     // await Future.delayed(Duration(seconds: 1));
-    //     // FlutterBackgroundService().startService();
-    //   }
-    // } else {
-    //   FlutterBackgroundService().invoke("stopService");
-    // }
+    if (!isdisable) {
+      bool isRunning = await FlutterBackgroundService().isRunning();
+      if (!isRunning) {
+        FlutterBackgroundService().startService();
+      }
+      String? token = await FirebaseMessaging.instance.getToken();
+      print('deviceToken $token');
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    } else {
+      FlutterBackgroundService().invoke("stopService");
+    }
   }
 
   Timer? _timer;
@@ -334,18 +334,34 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               isdisable = !isdisable;
                                             });
                                             localStore?.setSaveAdver(isdisable);
-                                            // if (isdisable) {
-                                            //   FlutterBackgroundService()
-                                            //       .invoke("stopService");
-                                            // } else {
-                                            //   bool isRunning =
-                                            //       await FlutterBackgroundService()
-                                            //           .isRunning();
-                                            //   if (!isRunning) {
-                                            //     FlutterBackgroundService()
-                                            //         .startService();
-                                            //   }
-                                            // }
+                                            if (isdisable) {
+                                              String? token =
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .getToken();
+                                              print('deviceToken $token');
+                                              await EumsOfferWallServiceApi()
+                                                  .unRegisterTokenNotifi(
+                                                      token: token);
+                                              FlutterBackgroundService()
+                                                  .invoke("stopService");
+                                            } else {
+                                              String? token =
+                                                  await FirebaseMessaging
+                                                      .instance
+                                                      .getToken();
+                                              print('deviceToken $token');
+                                              await EumsOfferWallServiceApi()
+                                                  .createTokenNotifi(
+                                                      token: token);
+                                              bool isRunning =
+                                                  await FlutterBackgroundService()
+                                                      .isRunning();
+                                              if (!isRunning) {
+                                                FlutterBackgroundService()
+                                                    .startService();
+                                              }
+                                            }
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(

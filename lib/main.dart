@@ -10,11 +10,11 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 // import '../package/sdk_eums/lib/notification/notification_handler.dart';
 
-final receivePort = ReceivePort();
 
 // showOverlay(event) async {
 //   if (event?['data'] != null && event?['data']['isWebView'] != null) {
@@ -143,8 +143,8 @@ initApp() async {
     //         isForegroundMode: true,
     //         initialNotificationTitle: "인천e음",
     //         initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-    // await Firebase.initializeApp();
-    // NotificationHandler().initializeFcmNotification();
+    await Firebase.initializeApp();
+    NotificationHandler().initializeFcmNotification();
   });
 }
 

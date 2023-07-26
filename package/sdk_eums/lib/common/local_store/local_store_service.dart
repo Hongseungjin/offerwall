@@ -107,9 +107,8 @@ class LocalStoreService extends LocalStore {
   }
 
   @override
-  Future<String> getDataShare() async {
-    return (await SharedPreferences.getInstance()).getString(SAVE_DATA_SHARE) ??
-        '';
+  Future<String?> getDataShare() async {
+    return (await SharedPreferences.getInstance()).getString(SAVE_DATA_SHARE);
     // return preferences.getString(SAVE_DATA_SHARE) == 'true' ? true : false;
   }
 

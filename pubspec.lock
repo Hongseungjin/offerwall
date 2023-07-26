@@ -279,6 +279,34 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_background_service:
+    dependency: transitive
+    description:
+      name: flutter_background_service
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
+  flutter_background_service_android:
+    dependency: transitive
+    description:
+      name: flutter_background_service_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
+  flutter_background_service_ios:
+    dependency: transitive
+    description:
+      name: flutter_background_service_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  flutter_background_service_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_background_service_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -345,9 +373,9 @@ packages:
   flutter_overlay_window:
     dependency: transitive
     description:
-      name: flutter_overlay_window
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "package/sdk_eums/package/flutter_overlay_window-0.4.3"
+      relative: true
+    source: path
     version: "0.4.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
