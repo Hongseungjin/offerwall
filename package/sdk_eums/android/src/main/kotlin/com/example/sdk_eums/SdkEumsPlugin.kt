@@ -26,7 +26,7 @@ import kr.ive.offerwall_sdk.IveOfferwall
 
 
 /** SdkEumsPlugin */
-class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware{
+class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOfferwallSDK.AppAllOfferwallSDKListener{
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -43,31 +43,29 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware{
     channel.setMethodCallHandler(this)
     context = flutterPluginBinding.applicationContext
 
-    //   AndPermission.with(context)
-    //       .requestCode(300)
-    //       .permission(
-    //           Manifest.permission.READ_PHONE_STATE,
-    //           Manifest.permission.GET_ACCOUNTS
-    //       )
-    //       .callback(permissionListener)
-    //       .start()
-
   }
 
-    // private val permissionListener: PermissionListener = object : PermissionListener {
-    //     override fun onSucceed(requestCode: Int, @NonNull grantPermissions: List<String>) {
-    //         if (requestCode == 300) {
-    //             AppAllOfferwallSDK.getInstance().initOfferWall(activity, "1251d48b4dded2649324974594a27e7bd84cac68", "abeeTest")
-    //         }
-    //     }
+    private fun checkPermission(){
+        AndPermission.with(activity).requestCode(300).permission(
+            android.Manifest.permission.READ_PHONE_STATE,
+            android.Manifest.permission.GET_ACCOUNTS,
+        ).callback(permissionListener).start()
+    }
 
-    //     override fun onFailed(requestCode: Int, @NonNull deniedPermissions: List<String>) {
-    //         // Failure.
-    //         if (requestCode == 300) {
-    //             //finish();
-    //         }
-    //     }
-    // }
+
+    private val permissionListener: PermissionListener = object : PermissionListener {
+        override fun onSucceed(requestCode: Int, @NonNull grantPermissions: List<String>) {
+            if (requestCode == 300) {
+
+            }
+        }
+
+        override fun onFailed(requestCode: Int, @NonNull deniedPermissions: List<String>) {
+            if (requestCode == 300) {
+            }
+        }
+    }
+
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     
@@ -87,7 +85,16 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware{
             Adpopcorn.openOfferWall(context)
      }
         if(call.method == "appall"){
-            AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
+            println("vao day khong")
+            try{
+                AppAllOfferwallSDK.getInstance().initOfferWall(context, "1251d48b4dded2649324974594a27e7bd84cac68", call.arguments.toString())
+                AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
+                println("vao day khon123213g")
+            }
+            catch (ex : Exception){
+                println(ex)
+            }
+
         }
         if(call.method == "ohc"){
             val intent = Intent(
@@ -122,9 +129,8 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware{
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.activity = binding.activity
+        checkPermission()
         NASWall.init(this.activity, false)
-
-
         TnkSession.applicationStarted(this.activity)
         TnkSession.setCOPPA(this.activity, false)
        
@@ -147,34 +153,33 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware{
     override fun onDetachedFromActivity() {
         // TODO("Not yet implemented")
     }
+    override fun AppAllOfferwallSDKCallback(p0: Int) {
+        when (p0) {
+            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
+                context,
+                "성공",
+                Toast.LENGTH_SHORT
+            ).show()
 
-    // override fun AppAllOfferwallSDKCallback(p0: Int) {
-    //     when (p0) {
-    //         AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
-    //             context,
-    //             "성공",
-    //             Toast.LENGTH_SHORT
-    //         ).show()
+            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
+                context,
+                "잘못 된 유저아이디입니다.",
+                Toast.LENGTH_SHORT
+            ).show()
 
-    //         AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
-    //             context,
-    //             "잘못 된 유저아이디입니다.",
-    //             Toast.LENGTH_SHORT
-    //         ).show()
+            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
+                context,
+                "오퍼월 KEY를 확인해주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
 
-    //         AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
-    //             context,
-    //             "오퍼월 KEY를 확인해주세요.",
-    //             Toast.LENGTH_SHORT
-    //         ).show()
-
-    //         AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
-    //             context,
-    //             "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
-    //             Toast.LENGTH_SHORT
-    //         ).show()
-    //     }
-    // }
+            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
+                context,
+                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
 
 }

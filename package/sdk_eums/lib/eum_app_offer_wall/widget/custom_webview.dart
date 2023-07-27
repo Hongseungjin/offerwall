@@ -90,9 +90,12 @@ class _CustomWebViewState extends State<CustomWebView> {
             });
           },
           onUrlChange: (change) {},
-          onWebResourceError: (WebResourceError error) {},
+          onWebResourceError: (WebResourceError error) {
+            print("errorerror$error");
+          },
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith((widget.urlLink))) {
+
+            if (request.url.startsWith(getProperHtml(widget.urlLink))) {
               return NavigationDecision.prevent;
             }
 

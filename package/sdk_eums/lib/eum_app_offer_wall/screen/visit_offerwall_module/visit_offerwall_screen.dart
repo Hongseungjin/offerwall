@@ -1,12 +1,7 @@
-import 'dart:async';
-
-import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/visit_offerwall_module/bloc/visit_offerwall_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview.dart';
 
@@ -24,64 +19,15 @@ class VisitOfferWallScren extends StatefulWidget {
 class _VisitOfferWallScrenState extends State<VisitOfferWallScren> {
   final GlobalKey<State<StatefulWidget>> globalKey =
       GlobalKey<State<StatefulWidget>>();
-  Timer? _timer;
-  int _start = 15;
-
-  List? _languages = [];
-
-  Future<void> _getPreferredLanguages() async {
-    try {
-      final languages = await Devicelocale.preferredLanguages;
-      print((languages != null)
-          ? languages
-          : "unable to get preferred languages");
-      setState(() => _languages = languages);
-      print("_languages$_languages");
-    } on PlatformException {
-      print("Error obtaining preferred languages");
-    }
-  }
 
   @override
   void initState() {
-    _getPreferredLanguages();
     // TODO: implement initState
-    // startTimer();
     super.initState();
-  }
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start--;
-          });
-          if (_start == 0) {
-            String lang = '';
-            if (_languages?[0] == 'ko-KR') {
-              lang = 'kor';
-            } else {
-              lang = 'eng';
-            }
-            globalKey.currentContext
-                ?.read<VisitOfferwallInternalBloc>()
-                .add(VisitOffWall(xId: widget.data['idx'], lang: lang));
-          }
-        }
-      },
-    );
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -127,17 +73,13 @@ class _VisitOfferWallScrenState extends State<VisitOfferWallScren> {
         Navigator.pop(context);
         return false;
       },
-      child: Scaffold(
-        key: globalKey,
-        backgroundColor: AppColor.white,
-        body: CustomWebView(
+      child: CustomWebView(
             title: '',
             urlLink: widget.data['api'],
             onClose: () {
               widget.voidCallBack!();
               Navigator.pop(context);
             }),
-      ),
     );
   }
 }
