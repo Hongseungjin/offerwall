@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -65,11 +62,6 @@ class _CustomWebViewState extends State<CustomWebView> {
   @override
   void initState() {
     // TODO: implement initState
-
-    if (widget.showMission) {
-      startTimeDown();
-    }
-    timeDown();
     super.initState();
     getDeviceWidth();
 
@@ -127,62 +119,8 @@ class _CustomWebViewState extends State<CustomWebView> {
 
   @override
   void dispose() {
-    _timeDown?.cancel();
-    _timerUp?.cancel();
     // TODO: implement dispose
     super.dispose();
-  }
-
-  static const maxSeconds = 15;
-  static const maxSecondsUp = 5;
-  double x = 0.0;
-  double y = 0.0;
-  Timer? _timerUp;
-  Timer? _timeDown;
-  int _startTime = maxSeconds;
-  int _startTimeUp = maxSecondsUp;
-
-  void resetTimer() => setState(() => _startTime = maxSeconds);
-  void resetTimerUp() => setState(() => _startTimeUp = maxSecondsUp);
-
-  void stopTimer({bool reset = false}) => setState(() {
-        if (reset) {
-          resetTimer();
-        }
-        _timeDown?.cancel();
-      });
-
-  void stopTimerUp({bool reset = false}) => setState(() {
-        if (reset) {
-          resetTimerUp();
-        }
-        _timerUp?.cancel();
-      });
-
-  void startTimeDown() {
-    _timeDown = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_startTime == 0) {
-        stopTimer();
-      } else {
-        setState(() {
-          _startTime--;
-        });
-      }
-    });
-  }
-
-  Timer? timer5s;
-
-  void timeDown() {
-    timer5s?.cancel();
-    timer5s = Timer.periodic(const Duration(seconds: 5), (timer) {
-      _timeDown?.cancel();
-      // startTimeDown();
-    });
-  }
-
-  void _updateLocation(PointerEvent details) {
-    timeDown();
   }
 
   @override
@@ -228,13 +166,9 @@ class _CustomWebViewState extends State<CustomWebView> {
               ),
             )
           ] else ...[
-            Listener(
-                // onPointerDown: _incrementDown,
-                // onPointerUp: _incrementUp,
-                onPointerMove: _updateLocation,
-                child: Container(
-                    color: AppColor.white,
-                    child: WebViewWidget(controller: _controller))),
+            Container(
+                color: AppColor.white,
+                child: WebViewWidget(controller: _controller)),
             Visibility(
               visible: isLoading,
               child: const Center(
@@ -242,58 +176,6 @@ class _CustomWebViewState extends State<CustomWebView> {
               ),
             ),
           ],
-          !widget.showMission
-              ? const SizedBox()
-              : Positioned(
-                  bottom: 0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).padding.bottom + 20),
-                    width: deviceWith > 0
-                        ? deviceWith
-                        : MediaQuery.of(context).size.width,
-                    color: AppColor.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        widget.bookmark ??
-                            GestureDetector(
-                                onTap: widget.onSave,
-                                child: Image.asset(Assets.deleteKeep.path,
-                                    package: "sdk_eums",
-                                    height: 27,
-                                    color: AppColor.black)),
-                        GestureDetector(
-                          onTap: !showButton ? null : widget.mission,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: !showButton
-                                    ? AppColor.grey.withOpacity(0.5)
-                                    : AppColor.red),
-                            child: Text(
-                              '포인트 적립하기',
-                              style: AppStyle.medium.copyWith(
-                                  color: !showButton
-                                      ? AppColor.grey
-                                      : AppColor.white),
-                            ),
-                          ),
-                        ),
-                        Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: AppColor.grey.withOpacity(0.5),
-                                shape: BoxShape.circle),
-                            child: Text(
-                              _startTime.toString(),
-                              style: AppStyle.medium.copyWith(fontSize: 16),
-                            ))
-                      ],
-                    ),
-                  ))
         ],
       ),
     );

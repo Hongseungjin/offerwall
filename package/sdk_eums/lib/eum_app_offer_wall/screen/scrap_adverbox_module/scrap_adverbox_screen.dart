@@ -338,6 +338,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
             body: CustomWebView(
               onClose: () {},
               urlLink: widget.url,
+              showImage: true,
               title: '광고 스크랩',
               color: AppColor.red,
               colorIconBack: AppColor.white,

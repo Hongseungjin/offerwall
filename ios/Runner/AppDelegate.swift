@@ -33,7 +33,7 @@ import adlibrary
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    //FirebaseApp.configure()
+    FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
       AppAllOfferwallSDK.initialize()
       AppAllOfferwallSDK.getInstance().initOfferWall(self, offerkey: "f3603a2a4d1a6f72fefba18e09a80698ec2a004e", userid: "abeeTest")
