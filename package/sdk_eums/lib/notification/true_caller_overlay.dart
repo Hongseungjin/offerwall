@@ -48,7 +48,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   void initState() {
     // TODO: implement initState
     print('inittt overlay');
-    FlutterBackgroundService().invoke("closeOverlay");
+    // FlutterBackgroundService().invoke("closeOverlay");
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
