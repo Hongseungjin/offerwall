@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -180,14 +179,11 @@ class _CustomWebView2State extends State<CustomWebView2> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 70),
+      padding: EdgeInsets.only(top: 80),
       child: Scaffold(
         backgroundColor: AppColor.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          // title:
-          //     Text(widget.title, style: AppStyle.bold.copyWith(fontSize: 16)),
-          // centerTitle: true,
           leading: GestureDetector(
             onTap: () {
               widget.onClose();

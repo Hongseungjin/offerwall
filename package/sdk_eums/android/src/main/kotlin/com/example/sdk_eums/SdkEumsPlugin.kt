@@ -46,7 +46,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
   }
 
     private fun checkPermission(){
-        AndPermission.with(activity).requestCode(300).permission(
+        AndPermission.with(context).requestCode(300).permission(
             android.Manifest.permission.READ_PHONE_STATE,
             android.Manifest.permission.GET_ACCOUNTS,
         ).callback(permissionListener).start()
@@ -85,10 +85,10 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
             Adpopcorn.openOfferWall(context)
      }
         if(call.method == "appall"){
-            println("vao day khong")
+            println("vao day khong + ${call.arguments}" )
             try{
                 AppAllOfferwallSDK.getInstance().initOfferWall(context, "1251d48b4dded2649324974594a27e7bd84cac68", call.arguments.toString())
-                AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
+//                AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
                 println("vao day khon123213g")
             }
             catch (ex : Exception){
@@ -129,7 +129,6 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.activity = binding.activity
-        checkPermission()
         NASWall.init(this.activity, false)
         TnkSession.applicationStarted(this.activity)
         TnkSession.setCOPPA(this.activity, false)
@@ -142,6 +141,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
 
     override fun onDetachedFromActivityForConfigChanges() {
         TODO("Not yet implemented")
+        checkPermission()
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {

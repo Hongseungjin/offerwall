@@ -205,9 +205,11 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                         children: List.generate(data.length, (index) {
                           return GestureDetector(
                             onTap: () {
+                        
                               Routing().navigate(
                                   context,
                                   DetailKeepScreen(
+                                    urlImage: data[index][''],
                                     url: data[index]['url_link'],
                                     id: data[index]['advertiseIdx'],
                                     idx: data[index]['idx'],
@@ -321,10 +323,11 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
 
 class DetailKeepScreen extends StatefulWidget {
   const DetailKeepScreen(
-      {Key? key, this.url, this.idx, this.id, this.typePoint})
+      {Key? key, this.url, this.idx, this.id, this.typePoint, this.urlImage})
       : super(key: key);
 
   final String? url;
+  final String? urlImage;
   final dynamic id;
   final dynamic typePoint;
   final dynamic idx;
@@ -460,6 +463,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
           builder: (context, state) {
             return CustomWebViewKeep(
               urlLink: widget.url,
+              uriImage: widget.urlImage,
               bookmark: GestureDetector(
                 onTap: () {
                   setState(() {
@@ -496,58 +500,6 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                 });
               },
             );
-            // return CustomWebView(
-            //   onClose: () {},
-            //   urlLink: widget.url,
-            //   title: AppString.saveAdvertisement,
-            //   color: AppColor.red,
-            //   colorIconBack: AppColor.white,
-            //   showMission: true,
-            //   bookmark: GestureDetector(
-            //     onTap: () {
-            //       setState(() {
-            //         checkSave = !checkSave;
-            //       });
-            //       if (!checkSave) {
-            //         print("vafo day");
-            //         globalKey.currentContext
-            //             ?.read<KeepAdverboxBloc>()
-            //             .add(SaveKeep(id: widget.id));
-            //       } else {
-            //         print("vafo day hay day");
-            //         globalKey.currentContext
-            //             ?.read<KeepAdverboxBloc>()
-            //             .add(DeleteKeep(id: widget.idx));
-            //       }
-            //     },
-            //     child: Image.asset(
-            //         checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
-            //         package: "sdk_eums",
-            //         height: 27,
-            //         color: AppColor.black),
-            //   ),
-            //   onSave: () {
-            //     print(widget.id);
-
-            //     globalKey.currentContext
-            //         ?.read<KeepAdverboxBloc>()
-            //         .add(SaveScrap(advertise_idx: widget.id));
-            //   },
-            //   mission: () {
-            //     DialogUtils.showDialogSucessPoint(context,
-            //         checkImage: true,
-            //         point: widget.typePoint,
-            //         data: (state.dataAdvertiseSponsor), voidCallback: () {
-            //       globalKey.currentContext?.read<KeepAdverboxBloc>().add(
-            //           EarnPoin(
-            //               advertise_idx: widget.id,
-            //               pointType: widget.typePoint));
-            //       context
-            //           .read<KeepAdverboxBloc>()
-            //           .add(DeleteKeep(id: widget.idx));
-            //     });
-            //   },
-            // );
           },
         ));
   }

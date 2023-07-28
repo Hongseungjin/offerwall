@@ -9,14 +9,12 @@ import 'package:sdk_eums/gen/assets.gen.dart';
 
 class CustomWebViewKeep extends StatefulWidget {
   final dynamic urlLink;
+  final dynamic uriImage;
   final Widget? bookmark;
   final Function()? mission;
-  const CustomWebViewKeep({
-    Key? key,
-    this.urlLink,
-    this.bookmark,
-    this.mission,
-  }) : super(key: key);
+  const CustomWebViewKeep(
+      {Key? key, this.urlLink, this.bookmark, this.mission, this.uriImage})
+      : super(key: key);
 
   @override
   State<CustomWebViewKeep> createState() => _CustomWebViewKeepState();
@@ -102,33 +100,22 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
             color: AppColor.black,
           ),
         ),
+        actions: [
+          // CachedNetworkImage(
+          //     width: MediaQuery.of(context).size.width - 64,
+          //     fit: BoxFit.cover,
+          //     imageUrl: widget.uriImage,
+          //     placeholder: (context, url) =>
+          //         const Center(child: CircularProgressIndicator()),
+          //     errorWidget: (context, url, error) {
+          //       return Image.asset(Assets.logo.path,
+          //           package: "sdk_eums", height: 16);
+          //     }),
+        ],
       ),
       body: Stack(
         children: [
           NotificationListener(
-            // onNotification: (notification) {
-            //   // if (notification is UserScrollNotification) {
-            //   //   if (notification.direction == ScrollDirection.forward ||
-            //   //       notification.direction == ScrollDirection.reverse) {
-            //   //     timer5s?.cancel();
-
-            //   //     final isRuning = _timer == null ? false : _timer?.isActive;
-            //   //     print("isRuning$isRuning");
-            //   //     if (isRuning!) {
-            //   //       startTimeDown();
-            //   //     }
-            //   //   }
-            //   //   if (notification.direction == ScrollDirection.idle) {
-            //   //     print("idle");
-            //   //     timer5s?.cancel();
-            //   //     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-            //   //       _timer?.cancel();
-            //   //       timer5s?.cancel();
-            //   //     });
-            //   //   }
-            //   // }
-            //   // return false;
-            // },
             child: SingleChildScrollView(
               controller: _scrollController,
               scrollDirection: Axis.vertical,

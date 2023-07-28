@@ -23,7 +23,7 @@ class Constants {
   }
 
   static String formatTimeDay(time) {
-    DateTime parseDt = DateTime.parse(time);
+    DateTime parseDt = DateTime.parse(time).toLocal();
     String dataFormat = DateFormat('yyyy.MM.dd HH:mm').format(parseDt);
     return dataFormat.toString();
   }

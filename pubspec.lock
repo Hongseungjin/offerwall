@@ -135,7 +135,7 @@ packages:
     source: hosted
     version: "0.7.8"
   device_apps:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: device_apps
       url: "https://pub.dartlang.org"
@@ -177,7 +177,7 @@ packages:
     source: hosted
     version: "1.1.0+1"
   equatable:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: equatable
       url: "https://pub.dartlang.org"
@@ -233,7 +233,7 @@ packages:
     source: hosted
     version: "0.9.3"
   firebase_core:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
@@ -254,7 +254,7 @@ packages:
     source: hosted
     version: "2.6.0"
   firebase_messaging:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
@@ -308,7 +308,7 @@ packages:
     source: hosted
     version: "3.0.0"
   flutter_bloc:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
@@ -350,7 +350,7 @@ packages:
     source: hosted
     version: "2.0.2"
   flutter_local_notifications:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
@@ -556,7 +556,7 @@ packages:
     source: hosted
     version: "0.2.1"
   intl:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: intl
       url: "https://pub.dartlang.org"
@@ -759,7 +759,7 @@ packages:
     source: hosted
     version: "2.0.0"
   queue:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: queue
       url: "https://pub.dartlang.org"

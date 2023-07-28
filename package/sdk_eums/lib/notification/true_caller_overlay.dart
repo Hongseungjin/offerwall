@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
@@ -135,6 +136,31 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         showImage: true,
         showMission: true,
         deviceWidth: deviceWidth,
+        actions: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24)
+              ),
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                    width: MediaQuery.of(context).size.width - 64,
+                    fit: BoxFit.cover,
+                    imageUrl: Constants.baseUrlImage +
+                        (jsonDecode(dataEvent['data']))['advertiseSponsor']['image'],
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) {
+                      return Image.asset(Assets.logo.path,
+                          package: "sdk_eums", height: 16);
+                    }),
+              ),
+            ),
+                const SizedBox(width: 16,)
+          ],
+        ),
         onClose: () async {
           FlutterBackgroundService().invoke("closeOverlay");
         },
