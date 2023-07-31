@@ -6,8 +6,10 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomInappWebView extends StatefulWidget {
-  const CustomInappWebView({Key? key, this.urlLink}) : super(key: key);
+  const CustomInappWebView({Key? key, this.urlLink, this.onClose})
+      : super(key: key);
   final dynamic urlLink;
+  final Function? onClose;
 
   @override
   State<CustomInappWebView> createState() => _CustomInappWebViewState();
@@ -62,6 +64,7 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
+              widget.onClose!();
           },
           child: const Icon(
             Icons.arrow_back,
@@ -71,7 +74,6 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
       ),
       body: Column(
         children: [
-       
           Expanded(
               child: InAppWebView(
             initialOptions: options,

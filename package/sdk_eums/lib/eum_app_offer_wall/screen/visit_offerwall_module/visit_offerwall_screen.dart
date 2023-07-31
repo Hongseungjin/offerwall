@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/visit_offerwall_module/bloc/visit_offerwall_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
-import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_inappweb.dart';
 
 import '../../../common/events/rx_events.dart';
 
@@ -68,18 +68,16 @@ class _VisitOfferWallScrenState extends State<VisitOfferWallScren> {
 
   _buildContent(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        widget.voidCallBack!();
-        Navigator.pop(context);
-        return false;
-      },
-      child: CustomWebView(
-            title: '',
-            urlLink: widget.data['api'],
-            onClose: () {
-              widget.voidCallBack!();
-              Navigator.pop(context);
-            }),
-    );
+        onWillPop: () async {
+          widget.voidCallBack!();
+          Navigator.pop(context);
+          return false;
+        },
+        child: CustomInappWebView(
+          onClose: () {
+            widget.voidCallBack!();
+          },
+          urlLink: widget.data['api'],
+        ));
   }
 }

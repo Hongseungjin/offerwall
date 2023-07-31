@@ -44,7 +44,8 @@ dependencies:
   cached_network_image: ^3.2.0
   webview_flutter: ^4.0.7
   webview_flutter_android: ^3.7.1
-  webview_flutter_wkwebview: ^3.4.4
+  webview_flutter_wkwebview: ^3.7.2
+  # webview_flutter_wkwebview: ^3.4.4
   flutter_widget_from_html: ^0.9.0
   fluttertoast: 8.1.1
   pull_to_refresh: ^2.0.0
