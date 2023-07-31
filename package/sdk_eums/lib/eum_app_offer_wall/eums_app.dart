@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:ui';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/queue.dart';
@@ -6,6 +8,7 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
+
 import '../common/local_store/local_store_service.dart';
 import 'notification_handler.dart';
 
@@ -78,8 +81,11 @@ Future<void> onStart(ServiceInstance service) async {
   registerDeviceToken();
   try {
     service.on('showOverlay').listen((event) async {
-      queue.add(() async => await jobQueue(event));
-      NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
+      print('co vao day khong');
+      if (Platform.isAndroid) {
+        queue.add(() async => await jobQueue(event));
+        NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
+      } else {}
     });
 
     service.on('closeOverlay').listen((event) async {
@@ -99,6 +105,14 @@ Future<void> onStart(ServiceInstance service) async {
   } catch (e) {
     print(e);
   }
+}
+
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+
+  return true;
 }
 
 class EumsAppOfferWall extends EumsAppOfferWallService {
@@ -124,7 +138,10 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memRegion,
       String? memBirth}) async {
     await FlutterBackgroundService().configure(
-        iosConfiguration: IosConfiguration(),
+        iosConfiguration: IosConfiguration(
+            onForeground: onStart,
+            onBackground: onIosBackground,
+            autoStart: true),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
             autoStart: false,

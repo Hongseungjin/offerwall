@@ -7,19 +7,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 // import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview2.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/events/rx_events.dart';
 import '../../utils/appColor.dart';
 import '../../widget/custom_dialog.dart';
-import '../../widget/custom_webview.dart';
 import 'bloc/watch_adver_bloc.dart';
 
 class WatchAdverScreen extends StatefulWidget {
@@ -136,6 +135,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
   }
 
   bool checkSave = false;
+  double deviceWidth = 0;
 
   _buidlContent(BuildContext context) {
     try {
@@ -148,12 +148,11 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
         },
         child: Scaffold(
           key: globalKey,
-          body: CustomWebView(
+          body: CustomWebView2(
             showImage: true,
-            title: '',
-            onClose: () {},
-            colorIconBack: AppColor.white,
             showMission: true,
+            paddingTop: 0,
+            deviceWidth: deviceWidth,
             bookmark: GestureDetector(
               onTap: () {
                 setState(() {
@@ -186,8 +185,6 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             mission: () async {
               localStorel!.setDataShare(dataShare: null);
               DialogUtils.showDialogSucessPoint(context,
-                  // checkImage: true,
-                  //       point: jsonDecode(widget.data['data'])['typePoint'],
                   data: Platform.isIOS
                       ? jsonDecode(widget.data)
                       : jsonDecode(widget.data['data']),
@@ -195,7 +192,6 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                 print("vao day");
                 Routing().popToRoot(context);
                 Routing().popToRoot(context);
-
                 globalKey.currentContext?.read<WatchAdverBloc>().add(EarnPoin(
                     advertise_idx: Platform.isIOS
                         ? jsonDecode(widget.data)['idx']
@@ -208,6 +204,9 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             urlLink: Platform.isIOS
                 ? jsonDecode(widget.data)['url_link']
                 : jsonDecode(widget.data['data'])['url_link'],
+            onClose: () {
+              Routing().popToRoot(context);
+            },
           ),
         ),
       );

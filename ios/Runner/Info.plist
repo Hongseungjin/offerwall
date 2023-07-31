@@ -47,6 +47,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+    	<string>dev.flutter.background.refresh</string>
+	</array>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

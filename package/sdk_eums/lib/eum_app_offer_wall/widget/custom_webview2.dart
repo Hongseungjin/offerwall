@@ -24,6 +24,7 @@ class CustomWebView2 extends StatefulWidget {
   final Widget? bookmark;
   final showImage;
   final double deviceWidth;
+  final double paddingTop;
   const CustomWebView2(
       {Key? key,
       this.urlLink,
@@ -37,6 +38,7 @@ class CustomWebView2 extends StatefulWidget {
       this.actions,
       this.bookmark,
       this.deviceWidth = 0,
+      this.paddingTop = 80,
       this.showImage = false})
       : super(key: key);
 
@@ -179,7 +181,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 80),
+      padding: EdgeInsets.only(top: widget.paddingTop),
       child: Scaffold(
         backgroundColor: AppColor.white,
         appBar: AppBar(

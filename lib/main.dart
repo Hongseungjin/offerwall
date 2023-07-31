@@ -1,12 +1,8 @@
-import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:queue/queue.dart';
-import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:sdk_eums/common/const/values.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
@@ -134,6 +130,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKeyMain,
       appBar: AppBar(),
       body: Column(
         children: [

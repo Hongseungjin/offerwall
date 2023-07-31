@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service.dart';
@@ -23,7 +22,6 @@ import 'package:sdk_eums/gen/assets.gen.dart';
 import '../common/local_store/local_store.dart';
 import '../common/routing.dart';
 import 'bloc/authentication_bloc/authentication_bloc.dart';
-import 'notification_handler.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -138,6 +136,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             ),
           ],
           child: Scaffold(
+        
             appBar: AppBar(
               backgroundColor: AppColor.white,
               leading: GestureDetector(
