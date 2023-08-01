@@ -68,7 +68,7 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
-           
+           widget.onClose!();
           },
           child: const Icon(
             Icons.arrow_back,

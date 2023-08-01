@@ -127,6 +127,24 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               print("chang12312312e");
             },
             onLoadStart: (controller, url) {},
+            iosOnDidReceiveServerRedirectForProvisionalNavigation:
+                (controller) {},
+            iosOnNavigationResponse: (controller, navigationResponse) async {
+              print("iosOnNavigationResponse$navigationResponse");
+              return;
+            },
+            iosOnWebContentProcessDidTerminate: (controller) {},
+
+            iosShouldAllowDeprecatedTLS: (controller, challenge) async {
+              print("iosShouldAllowDeprecatedTLS$challenge");
+              return;
+            },
+            shouldInterceptFetchRequest: (controller, fetchRequest) async {
+              print("shouldInterceptFetchRequest$fetchRequest");
+              return;
+            },
+            
+
             androidShouldInterceptRequest: (controller, request) async {
               print("requestrequestrequest$request");
 
@@ -136,6 +154,8 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
                 setState(() {
                   checkJoin = true;
                 });
+
+                print("ahihi123123");
 
                 // globalKey.currentContext
                 //     ?.read<JoinOfferwallInternalBloc>()
@@ -178,7 +198,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
                   source:
                       "window.document.getElementsByTagName('html')[0].outerHTML;");
 
-              printWrapped("loadStopurl$html");
+              // printWrapped("loadStopurl $html");
               if (html.contains('승인은 영업일 기준 3일 이내에 완료되며, 문자 메시지로 통보애 드립니다.')) {
                 webView?.canGoBack().then((value) {
                   print("valuevalue123 $value");

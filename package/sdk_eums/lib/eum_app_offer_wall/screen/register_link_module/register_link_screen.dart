@@ -259,6 +259,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                           context,
                           CustomInappWebView(
                             urlLink: widget.data['api'],
+                            onClose: (){},
                           ));
                     },
                     child: Container(

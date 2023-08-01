@@ -237,6 +237,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   }
 
   _fetchData() async {
+    print("concac");
     globalKey.currentContext
         ?.read<DetailOffWallBloc>()
         .add(VisitOffWall(xId: dataOfferWallVisit['idx'], lang: lang));
@@ -340,6 +341,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                             if (widget.type == 'install') {
                               checkInstallApp();
                             } else if (widget.type == 'visit') {
+                              print("visit?");
                               Routing().navigate(
                                   context,
                                   VisitOfferWallScren(
