@@ -36,7 +36,7 @@ import adlibrary
     FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
       AppAllOfferwallSDK.initialize()
-      AppAllOfferwallSDK.getInstance().initOfferWall(self, offerkey: "f3603a2a4d1a6f72fefba18e09a80698ec2a004e", userid: "abeeTest")
+//      AppAllOfferwallSDK.getInstance().initOfferWall(self, offerkey: "f3603a2a4d1a6f72fefba18e09a80698ec2a004e", userid: "abeeTest")
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

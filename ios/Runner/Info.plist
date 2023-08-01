@@ -60,6 +60,10 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

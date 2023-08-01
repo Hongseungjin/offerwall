@@ -111,7 +111,7 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
                           SdkEumsPlatform.instance
                               .methodTnk(data: widget.dataAccount['memId']);
                         },
-                        title: 'THK',
+                        title: 'TNK',
                         urlImage: Assets.tnk.path),
                     // _buildItem(
                     //     voidCallBack: () {

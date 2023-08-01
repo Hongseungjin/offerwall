@@ -1,0 +1,35 @@
+PODS:
+  - AdPopcornOfferwall (4.3.4)
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+  - sdk_eums_c (0.0.1):
+    - AdPopcornOfferwall (~> 4.3.4)
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+  - sdk_eums_c (from `.symlinks/plugins/sdk_eums_c/ios`)
+
+SPEC REPOS:
+  trunk:
+    - AdPopcornOfferwall
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+  sdk_eums_c:
+    :path: ".symlinks/plugins/sdk_eums_c/ios"
+
+SPEC CHECKSUMS:
+  AdPopcornOfferwall: 3d6da2d68dc90fe20a958061827a5742a72f753a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  sdk_eums_c: 734fbbe932671687357c34ca08cfb4a5863fe1d5
+
+PODFILE CHECKSUM: 663715e941f9adb426e33bf9376914006f9ea95b
+
+COCOAPODS: 1.12.0
