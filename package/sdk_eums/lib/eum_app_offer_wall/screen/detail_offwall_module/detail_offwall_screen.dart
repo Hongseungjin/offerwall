@@ -46,6 +46,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   dynamic dataOfferWallVisit;
 
   List? _languages = [];
+  String lang = '';
 
   Future<void> _getPreferredLanguages() async {
     try {
@@ -57,6 +58,12 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
       print("_languages$_languages");
     } on PlatformException {
       print("Error obtaining preferred languages");
+    }
+
+    if (_languages?[0] == 'ko-KR') {
+      lang = 'kor';
+    } else {
+      lang = 'eng';
     }
   }
 
@@ -141,6 +148,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
           ),
           BlocListener<DetailOffWallBloc, DetailOffWallState>(
             listener: _listenFetchData,
+          ),
+          BlocListener<DetailOffWallBloc, DetailOffWallState>(
+            listener: _listenJoinOfferWall,
           )
         ],
         child: _buildContent(context),
@@ -159,6 +169,26 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
     }
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.success) {
+      RxBus.post(UpdateUser());
+      DialogUtils.showDialogMissingPoint(context,
+          data: dataOfferWallVisit['reward'], voidCallback: () {
+        // Navigator.pop(context);
+      });
+    }
+  }
+
+
+    void _listenJoinOfferWall(BuildContext context, DetailOffWallState state) {
+    if (state.joinOfferWallInternalStatus ==
+        JoinOfferWallInternalStatus.loading) {
+      return;
+    }
+    if (state.joinOfferWallInternalStatus ==
+        JoinOfferWallInternalStatus.failure) {
+      return;
+    }
+    if (state.joinOfferWallInternalStatus ==
+        JoinOfferWallInternalStatus.success) {
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context,
           data: dataOfferWallVisit['reward'], voidCallback: () {
@@ -207,15 +237,19 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   }
 
   _fetchData() async {
-    String lang = '';
-    if (_languages?[0] == 'ko-KR') {
-      lang = 'kor';
-    } else {
-      lang = 'eng';
-    }
     globalKey.currentContext
         ?.read<DetailOffWallBloc>()
         .add(VisitOffWall(xId: dataOfferWallVisit['idx'], lang: lang));
+  }
+
+  _joinOfferWall(bool checkJoin) async {
+    print("checkJoin$checkJoin");
+    if (checkJoin) {
+      print("checkJoin$checkJoin");
+      globalKey.currentContext
+          ?.read<DetailOffWallBloc>()
+          .add(JoinOffWall(xId: dataOfferWallVisit['idx'], lang: lang));
+    }
   }
 
   Widget _buildContent(BuildContext context) {
@@ -317,6 +351,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                   context,
                                   JoinOfferWallScreen(
                                     data: state.dataDetailOffWall,
+                                    onCallBack: _joinOfferWall,
                                   ));
                             } else if (widget.type == 'shopping') {
                               Routing().navigate(

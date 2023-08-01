@@ -131,7 +131,7 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
                           SdkEumsPlatform.instance
                               .methodAppall(data: widget.dataAccount['memId']);
                         },
-                        title: '앱을',
+                        title: '앱올',
                         urlImage: Assets.appall.path),
                     // _buildItem(
                     //     voidCallBack: () {},

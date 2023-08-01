@@ -29,3 +29,15 @@ class VisitOffWall extends DetailOffWallEvent {
   @override
   List<Object?> get props => [xId, lang];
 }
+
+class JoinOffWall extends DetailOffWallEvent {
+  JoinOffWall({
+    this.lang,
+    this.xId,
+  });
+
+  final String? lang;
+  final dynamic xId;
+  @override
+  List<Object?> get props => [xId, lang];
+}

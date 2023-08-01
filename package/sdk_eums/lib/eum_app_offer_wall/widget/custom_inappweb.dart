@@ -45,8 +45,11 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
     }
   }
 
+
+
   @override
   void initState() {
+
     _getPreferredLanguages();
     super.initState();
     // webView?.loadUrl(urlRequest: URLRequest(url: Uri.parse(myurl)));
@@ -65,7 +68,7 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
-            widget.onClose!(html);
+           
           },
           child: const Icon(
             Icons.arrow_back,
@@ -112,16 +115,16 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
               return NavigationActionPolicy.ALLOW;
             },
             onLoadStop: (controller, url) async {
-              html = await webView?.evaluateJavascript(
-                  source:
-                      "window.document.getElementsByTagName('html')[0].outerHTML;");
-              setState(() {});
-              printWrapped("loadStopurl  ${html}");
+              // html = await webView?.evaluateJavascript(
+              //     source:
+              //         "window.document.getElementsByTagName('html')[0].outerHTML;");
+              // setState(() {});
+              // printWrapped("loadStopurl  ${html}");
             },
             onUpdateVisitedHistory: (controller, url, androidIsReload) async {},
             onConsoleMessage: (controller, consoleMessage) {
               controller.evaluateJavascript(source: '');
-              printWrapped("consoleMessage$consoleMessage");
+              // printWrapped("consoleMessage$consoleMessage");
             },
           )),
         ],

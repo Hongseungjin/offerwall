@@ -14,8 +14,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'bloc/join_offerwall_bloc.dart';
 
 class JoinOfferWallScreen extends StatefulWidget {
-  JoinOfferWallScreen({Key? key, this.data}) : super(key: key);
+  JoinOfferWallScreen({Key? key, this.data, this.onCallBack}) : super(key: key);
   dynamic data;
+  final Function? onCallBack;
 
   @override
   State<JoinOfferWallScreen> createState() => _JoinOfferWallScreenState();
@@ -29,6 +30,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   String myUrl = '';
   //     'https://abee997.co.kr/stat/index.php/Login/get__post_register_test';
 
+  bool checkJoin = false;
   List? _languages = [];
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
@@ -98,13 +100,13 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
   }
 
   _buildContent(BuildContext context) {
-
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
         backgroundColor: AppColor.white,
         leading: GestureDetector(
           onTap: () {
+            widget.onCallBack!(checkJoin);
             Navigator.of(context).pop();
           },
           child: const Icon(
@@ -131,15 +133,13 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               ////stat/index.php/Login/post__register
               if (request.url.toString() ==
                   'https://abee997.co.kr/stat/index.php/Login/post__register_test') {
-                String lang = '';
-                if (_languages?[0] == 'ko-KR') {
-                  lang = 'kor';
-                } else {
-                  lang = 'eng';
-                }
-                globalKey.currentContext
-                    ?.read<JoinOfferwallInternalBloc>()
-                    .add(JoinOffWall(xId: widget.data['idx'], lang: lang));
+                setState(() {
+                  checkJoin = true;
+                });
+
+                // globalKey.currentContext
+                //     ?.read<JoinOfferwallInternalBloc>()
+                //     .add(JoinOffWall(xId: widget.data['idx'], lang: lang));
               } else {
                 print("ahihi");
               }

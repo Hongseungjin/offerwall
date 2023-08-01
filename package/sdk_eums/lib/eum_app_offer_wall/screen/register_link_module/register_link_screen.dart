@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devicelocale/devicelocale.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,9 +43,21 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
   @override
   void initState() {
     fToast.init(context);
+    getHtml();
     // TODO: implement initState
     super.initState();
     _getPreferredLanguages();
+  }
+
+  getHtml() async {
+    dynamic data = await Dio()
+        .get(
+      widget.data['api'],
+    )
+        .then((value) {
+      htmlWeb = value.data;
+    });
+    return data;
   }
 
   @override
@@ -245,9 +258,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                       Routing().navigate(
                           context,
                           CustomInappWebView(
-                            urlLink: 'https://www.facebook.com/trollbongda',
-                            //  widget.data['api'],
-                            onClose: _onClose,
+                            urlLink: widget.data['api'],
                           ));
                     },
                     child: Container(
@@ -391,13 +402,6 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
     );
   }
 
-  _onClose(dynamic html) {
-    setState(() {
-      htmlWeb = html;
-    });
-    printWrapped("htmlhtml$html");
-  }
-
   _addImages() async {
     SelectImgPickerDialog.show(context, chooseImgTap: () {
       _onPickPhoto(ImageSource.gallery);
@@ -436,7 +440,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
           )
         ]));
   }
-    void printWrapped(String text) {
+
+  void printWrapped(String text) {
     final pattern = RegExp('.{3,800}');
     pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }

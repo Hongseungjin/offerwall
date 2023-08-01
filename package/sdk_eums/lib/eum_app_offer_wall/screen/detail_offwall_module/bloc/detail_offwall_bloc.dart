@@ -26,6 +26,24 @@ class DetailOffWallBloc extends Bloc<DetailOffWallEvent, DetailOffWallState> {
       await _mapMissionOfferWallState(event, emit);
     } else if (event is VisitOffWall) {
       await _mapVisitOffWallState(event, emit);
+    } else if (event is JoinOffWall) {
+      await _mapJoinOffWallState(event, emit);
+    }
+  }
+
+    _mapJoinOffWallState(JoinOffWall event, emit) async {
+    emit(state.copyWith(
+        joinOfferWallInternalStatus: JoinOfferWallInternalStatus.loading));
+    try {
+      await _eumsOfferWallService.missionOfferWallInternal(
+          offerWallIdx: event.xId, lang: event.lang);
+      emit(state.copyWith(
+        joinOfferWallInternalStatus: JoinOfferWallInternalStatus.success,
+      ));
+    } catch (e) {
+      print("eeeeeee$e");
+      emit(state.copyWith(
+         joinOfferWallInternalStatus: JoinOfferWallInternalStatus.failure));
     }
   }
 
