@@ -103,7 +103,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
   ///  [offerWallIdx] 광고 아이디
   ///  [urlImage] api에서 가져오기 [uploadImageOfferWallInternal]
   Future<dynamic> missionOfferWallInternal(
-      {int? offerWallIdx, File? urlImage, String? lang});
+      {int? offerWallIdx, File? urlImage, String? lang, String? html});
 
   /// 미션완료후에 사진 업로드
   /// api를 호출후에 [missionOfferWallInternal]

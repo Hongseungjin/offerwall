@@ -191,7 +191,6 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                   voidCallback: () async {
                 print("vao day");
                 Routing().popToRoot(context);
-                Routing().popToRoot(context);
                 globalKey.currentContext?.read<WatchAdverBloc>().add(EarnPoin(
                     advertise_idx: Platform.isIOS
                         ? jsonDecode(widget.data)['idx']

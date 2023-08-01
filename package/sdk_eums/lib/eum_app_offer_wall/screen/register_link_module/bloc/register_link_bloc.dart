@@ -28,8 +28,8 @@ class RegisterLinkBloc extends Bloc<RegisterLinkEvent, RegisterLinkState> {
       MissionOfferWallRegisterLink event, emit) async {
     emit(state.copyWith(registerLinkStatus: RegisterLinkStatus.loading));
     try {
-    await  _eumsOfferWallService.missionOfferWallInternal(
-          offerWallIdx: event.xId, urlImage: event.files);
+      await _eumsOfferWallService.missionOfferWallInternal(
+          offerWallIdx: event.xId, urlImage: event.files, html: event.html);
 
       emit(state.copyWith(registerLinkStatus: RegisterLinkStatus.success));
     } catch (ex) {

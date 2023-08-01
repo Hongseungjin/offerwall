@@ -30,6 +30,7 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
       ));
 
   List? _languages = [];
+  var html;
 
   Future<void> _getPreferredLanguages() async {
     try {
@@ -64,7 +65,7 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
-              widget.onClose!();
+            widget.onClose!(html);
           },
           child: const Icon(
             Icons.arrow_back,
@@ -110,7 +111,13 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
 
               return NavigationActionPolicy.ALLOW;
             },
-            onLoadStop: (controller, url) async {},
+            onLoadStop: (controller, url) async {
+              html = await webView?.evaluateJavascript(
+                  source:
+                      "window.document.getElementsByTagName('html')[0].outerHTML;");
+              setState(() {});
+              printWrapped("loadStopurl  ${html}");
+            },
             onUpdateVisitedHistory: (controller, url, androidIsReload) async {},
             onConsoleMessage: (controller, consoleMessage) {
               controller.evaluateJavascript(source: '');

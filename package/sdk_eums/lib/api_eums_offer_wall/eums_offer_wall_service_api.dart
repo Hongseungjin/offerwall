@@ -206,7 +206,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future missionOfferWallInternal({offerWallIdx, urlImage, lang}) async {
+  Future missionOfferWallInternal({offerWallIdx, urlImage, lang, html}) async {
     // nội bộ
     FormData formData = FormData.fromMap({
       'image': urlImage != null
@@ -215,7 +215,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
             )
           : null,
       'offerwall_idx': offerWallIdx,
-      'lang': lang
+      'lang': lang,
+      'html': html
     });
     await api.post('point/offerwall/mission-complete', data: formData);
     return;

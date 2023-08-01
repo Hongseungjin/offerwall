@@ -37,6 +37,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
   FToast fToast = FToast();
 
   String urlImage = '';
+  String htmlWeb = '';
 
   @override
   void initState() {
@@ -244,7 +245,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                       Routing().navigate(
                           context,
                           CustomInappWebView(
-                            urlLink: widget.data['api'],
+                            urlLink: 'https://www.facebook.com/trollbongda',
+                            //  widget.data['api'],
+                            onClose: _onClose,
                           ));
                     },
                     child: Container(
@@ -357,11 +360,13 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   lang = 'eng';
                 }
                 if (urlImage != '') {
+                  print("htmlWeb${htmlWeb}");
                   globalKey.currentContext?.read<RegisterLinkBloc>().add(
                       MissionOfferWallRegisterLink(
                           files: fileImage,
                           xId: widget.data['idx'],
-                          lang: lang));
+                          lang: lang,
+                          html: htmlWeb));
                 }
               },
               child: Container(
@@ -384,6 +389,13 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         ),
       ),
     );
+  }
+
+  _onClose(dynamic html) {
+    setState(() {
+      htmlWeb = html;
+    });
+    printWrapped("htmlhtml$html");
   }
 
   _addImages() async {
@@ -423,6 +435,10 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
             style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
           )
         ]));
+  }
+    void printWrapped(String text) {
+    final pattern = RegExp('.{3,800}');
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
   }
 }
 

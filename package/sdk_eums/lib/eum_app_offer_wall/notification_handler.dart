@@ -124,6 +124,11 @@ class NotificationHandler {
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
     // await getToken();
+    _fcm.getInitialMessage().then((value) {
+      if (value != null) {
+        onNavigateToMyEvent(data: value.data);
+      }
+    });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage: $message");
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
@@ -145,9 +150,6 @@ class NotificationHandler {
         WatchAdverScreen(
           data: data['data'],
         ));
-    //   await Navigator.of(context).push(MaterialPageRoute<void>(
-    //   builder: (BuildContext context) => WatchAdverScreen(),
-    // ));
   }
 
   getToken() async {
