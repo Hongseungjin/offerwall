@@ -10,7 +10,6 @@ import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
-import 'notification_handler.dart';
 
 showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {

@@ -14,6 +14,8 @@ const String navigationActionId = 'id_3';
 const String darwinNotificationCategoryPlain = 'plainCategory';
 
 class NotificationHandler {
+ 
+
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -25,6 +27,7 @@ class NotificationHandler {
     'high_importance_channel',
     'High Importance Notifications',
     description: 'This channel is used for important notifications.',
+
   );
 
   final List<DarwinNotificationCategory> darwinNotificationCategories =
@@ -66,7 +69,9 @@ class NotificationHandler {
         const AndroidInitializationSettings('mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-            onDidReceiveLocalNotification: (id, title, body, payload) {},
+            onDidReceiveLocalNotification: (id, title, body, payload) {
+              print("object");
+            },
             notificationCategories: darwinNotificationCategories);
 
     var initializationSettings = InitializationSettings(
@@ -76,12 +81,9 @@ class NotificationHandler {
         onDidReceiveNotificationResponse: (details) {
       switch (details.notificationResponseType) {
         case NotificationResponseType.selectedNotification:
-          
           break;
         case NotificationResponseType.selectedNotificationAction:
-          if (details.actionId == navigationActionId) {
-          
-          }
+          if (details.actionId == navigationActionId) {}
           break;
       }
     }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
@@ -147,4 +149,5 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+ 
 }

@@ -143,8 +143,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               print("shouldInterceptFetchRequest$fetchRequest");
               return;
             },
-            
-
+          
             androidShouldInterceptRequest: (controller, request) async {
               print("requestrequestrequest$request");
 
