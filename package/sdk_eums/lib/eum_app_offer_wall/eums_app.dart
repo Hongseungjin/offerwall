@@ -139,9 +139,10 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memBirth}) async {
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(
-            onForeground: onStart,
-            onBackground: onIosBackground,
-            autoStart: true),
+            // onForeground: onStart,
+            // onBackground: onIosBackground,
+            // autoStart: true
+            ),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
             autoStart: false,

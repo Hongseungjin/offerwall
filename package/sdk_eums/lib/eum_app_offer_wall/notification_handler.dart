@@ -9,26 +9,6 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 import '../common/const/values.dart';
 import 'screen/watch_adver_module/watch_adver_screen.dart';
 
-final StreamController<ReceivedNotification> didReceiveLocalNotificationStream =
-    StreamController<ReceivedNotification>.broadcast();
-
-final StreamController<String?> selectNotificationStream =
-    StreamController<String?>.broadcast();
-
-class ReceivedNotification {
-  ReceivedNotification({
-    required this.id,
-    required this.title,
-    required this.body,
-    required this.payload,
-  });
-
-  final int id;
-  final String? title;
-  final String? body;
-  final String? payload;
-}
-
 const String navigationActionId = 'id_3';
 
 const String darwinNotificationCategoryPlain = 'plainCategory';
@@ -84,19 +64,9 @@ class NotificationHandler {
   initializeFcmNotification() async {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('mipmap/ic_launcher');
-
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-            onDidReceiveLocalNotification: (id, title, body, payload) {
-              didReceiveLocalNotificationStream.add(
-                ReceivedNotification(
-                  id: id,
-                  title: title,
-                  body: body,
-                  payload: payload,
-                ),
-              );
-            },
+            onDidReceiveLocalNotification: (id, title, body, payload) {},
             notificationCategories: darwinNotificationCategories);
 
     var initializationSettings = InitializationSettings(
@@ -104,14 +74,13 @@ class NotificationHandler {
         iOS: initializationSettingsDarwin);
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (details) {
-      print("co vao day khongssss$details");
       switch (details.notificationResponseType) {
         case NotificationResponseType.selectedNotification:
-          selectNotificationStream.add(details.payload);
+          
           break;
         case NotificationResponseType.selectedNotificationAction:
           if (details.actionId == navigationActionId) {
-            selectNotificationStream.add(details.payload);
+          
           }
           break;
       }
@@ -123,7 +92,6 @@ class NotificationHandler {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
-    // await getToken();
     _fcm.getInitialMessage().then((value) {
       if (value != null) {
         onNavigateToMyEvent(data: value.data);
@@ -143,8 +111,6 @@ class NotificationHandler {
   }
 
   onNavigateToMyEvent({dynamic data}) async {
-    print("navigatorKeyMain.currentContext${globalKeyMain.currentContext}");
-    print("navigatorKeyMain.currentContext${data}");
     Routing().navigate(
         globalKeyMain.currentContext!,
         WatchAdverScreen(

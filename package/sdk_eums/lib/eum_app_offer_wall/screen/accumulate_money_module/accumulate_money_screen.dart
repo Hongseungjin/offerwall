@@ -16,7 +16,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/earn_cash_module/earn_cash_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
@@ -59,28 +58,9 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   String? categary;
   dynamic dataAccount;
 
-   void _configureSelectNotificationSubject() {
-    selectNotificationStream.stream.listen((String? payload) async {
-      print("vao day nhe");
-      
-      await Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (BuildContext context) => WatchAdverScreen(),
-      ));
-    });
-  }
-
-  void _configureDidReceiveLocalNotificationSubject() {
-    didReceiveLocalNotificationStream.stream
-        .listen((ReceivedNotification receivedNotification) async {
-   print("cos vafo day khong");
-    });
-  }
-
   @override
   void initState() {
     _registerEventBus();
-    _configureDidReceiveLocalNotificationSubject();
-    _configureSelectNotificationSubject();
     localStore = LocalStoreService();
     filter = DATA_MEDIA[2]['media'];
     categary = null;
@@ -193,7 +173,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
         FlutterBackgroundService().startService();
       }
       String? token = await FirebaseMessaging.instance.getToken();
-      print('deviceToken $token');
+      print('deviceToken ???? $token');
       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
     } else {
       FlutterBackgroundService().invoke("stopService");
