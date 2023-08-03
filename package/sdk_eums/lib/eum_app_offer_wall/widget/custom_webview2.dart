@@ -38,7 +38,7 @@ class CustomWebView2 extends StatefulWidget {
       this.actions,
       this.bookmark,
       this.deviceWidth = 0,
-      this.paddingTop = 80,
+      this.paddingTop = 100,
       this.showImage = false})
       : super(key: key);
 
@@ -181,6 +181,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: AppColor.white,
       padding: EdgeInsets.only(top: widget.paddingTop),
       child: Scaffold(
         backgroundColor: AppColor.white,
@@ -213,7 +214,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
                             package: "sdk_eums", height: 16);
                       }),
                   SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 70,
+                    height: MediaQuery.of(context).padding.bottom + 50,
                   )
                 ],
               ),
@@ -221,11 +222,12 @@ class _CustomWebView2State extends State<CustomWebView2> {
             !widget.showMission
                 ? const SizedBox()
                 : Positioned(
-                    bottom: 0,
+                    bottom: -10,
                     child: Container(
                       padding: EdgeInsets.only(
                           top: 5,
-                          bottom: MediaQuery.of(context).padding.bottom + 20),
+                          bottom: MediaQuery.of(context).padding.bottom + 10
+                          ),
                       width: widget.deviceWidth > 0
                           ? widget.deviceWidth
                           : MediaQuery.of(context).size.width,

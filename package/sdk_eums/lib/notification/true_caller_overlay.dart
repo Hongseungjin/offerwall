@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
@@ -158,7 +155,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                     }),
               ),
             ),
-                const SizedBox(width: 16,)
+                const SizedBox(width: 20,)
           ],
         ),
         onClose: () async {

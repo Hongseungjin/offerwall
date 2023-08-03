@@ -23,7 +23,8 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
   FToast fToast = FToast();
   @override
   void initState() {
-    
+    SdkEumsPlatform.instance.methodUser(data: widget.dataAccount['memId']);
+
     fToast.init(context);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {});
@@ -93,7 +94,6 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
                         urlImage: Assets.adSync.path),
                     _buildItem(
                         voidCallBack: () {
-                     
                           SdkEumsPlatform.instance.methodAdpopcorn(
                               data: widget.dataAccount['memId']);
                         },

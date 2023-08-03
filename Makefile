@@ -27,7 +27,7 @@ pod-install:
 	cd ios && rm -rf Pods && rm -rf build && rm -rf Podfile.lock && pod install && cd ..
 
 run:
-	fvm flutter run -d '00008101-00097DEE1A38001E'
+	fvm flutter run -d 'R5CT90QNQBM'
 	 #00008101-00097DEE1A38001E
 	 #R5CT90QNQBM
 
@@ -37,7 +37,7 @@ run-web:
 build: build-android-apk build-android-bundle finder
 
 apk:
-	fvm flutter build apk --no-sound-null-safety --no-tree-shake-icons
+	fvm flutter build apk
 
 aab:
 	fvm flutter build appbundle --release --no-sound-null-safety --no-tree-shake-icons

@@ -23,6 +23,9 @@ abstract class SdkEumsPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+
+    Future methodUser({dynamic data});
+
   /// document adsynk
   /// 파트너 앱(Publisher App) (AndroidMainfest.xml) 설정
   /// 1. <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>

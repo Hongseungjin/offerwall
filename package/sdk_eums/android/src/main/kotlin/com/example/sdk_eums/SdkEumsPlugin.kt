@@ -2,12 +2,14 @@ package com.example.sdk_eums
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.NonNull
 import com.fpang.lib.FpangSession
 import com.igaworks.adpopcorn.Adpopcorn
+import com.kyad.adlibrary.AppAllOfferwallActivity
 import com.kyad.adlibrary.AppAllOfferwallSDK
 import com.nextapps.naswall.NASWall
 import com.ohc.ohccharge.OhcChargeActivity
@@ -26,7 +28,9 @@ import kr.ive.offerwall_sdk.IveOfferwall
 
 
 /** SdkEumsPlugin */
-class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOfferwallSDK.AppAllOfferwallSDKListener{
+class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
+//    AppAllOfferwallSDK.AppAllOfferwallSDKListener
+{
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -34,6 +38,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
   private lateinit var channel : MethodChannel
   private lateinit var context: Context
   private lateinit var activity:Activity
+    private lateinit var myIdUser: String
 
 
 
@@ -42,26 +47,69 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sdk_eums")
     channel.setMethodCallHandler(this)
     context = flutterPluginBinding.applicationContext
-
   }
 
+//    override fun AppAllOfferwallSDKCallback(p0: Int) {
+//        when (p0) {
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
+//                this.activity,
+//                "성공",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
+//                this.activity,
+//                "잘못 된 유저아이디입니다.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
+//                this.activity,
+//                "오퍼월 KEY를 확인해주세요.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
+//                this.activity,
+//                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+//    }
+
     private fun checkPermission(){
-        AndPermission.with(context).requestCode(300).permission(
-            android.Manifest.permission.READ_PHONE_STATE,
-            android.Manifest.permission.GET_ACCOUNTS,
+        AndPermission.with(activity).requestCode(300).permission(
+            Manifest.permission.READ_PHONE_STATE,
+            // Manifest.permission.GET_ACCOUNTS,
         ).callback(permissionListener).start()
     }
 
 
     private val permissionListener: PermissionListener = object : PermissionListener {
+
         override fun onSucceed(requestCode: Int, @NonNull grantPermissions: List<String>) {
             if (requestCode == 300) {
+
+                println("myIdUser+ $myIdUser" )
+                if(myIdUser != null){
+                    try{
+
+//                        AppAllOfferwallSDK().initOfferWall(activity , "1251d48b4dded2649324974594a27e7bd84cac68" , myIdUser)
+                        AppAllOfferwallSDK.getInstance().initOfferWall(activity, "1251d48b4dded2649324974594a27e7bd84cac68", "$myIdUser")
+                           println(" 1231231231231")
+                    }
+                    catch (ex : Exception){
+                        println("vao day$ex")
+                    }
+
+                }
 
             }
         }
 
         override fun onFailed(requestCode: Int, @NonNull deniedPermissions: List<String>) {
             if (requestCode == 300) {
+                println("myIdUser faaaa+ ${myIdUser}" )
             }
         }
     }
@@ -71,7 +119,16 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
     
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
+    }
+
+    else {
+        if (call.method == "dataUser") {
+            myIdUser = call.arguments.toString()
+            if(myIdUser != null){
+                checkPermission()
+            }
+
+        }
      if(call.method == "adsync"){
          FpangSession.init(activity)
          FpangSession.setUserId(call.arguments.toString()) // 사용자 ID 설정
@@ -87,8 +144,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
         if(call.method == "appall"){
             println("vao day khong + ${call.arguments}" )
             try{
-                AppAllOfferwallSDK.getInstance().initOfferWall(context, "1251d48b4dded2649324974594a27e7bd84cac68", call.arguments.toString())
-//                AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
+            AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
                 println("vao day khon123213g")
             }
             catch (ex : Exception){
@@ -132,54 +188,25 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppAllOffe
         NASWall.init(this.activity, false)
         TnkSession.applicationStarted(this.activity)
         TnkSession.setCOPPA(this.activity, false)
-       
-
-
-
-
     }
 
+
+
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
-        checkPermission()
+
+    
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         onAttachedToActivity(binding)
+
+
     }
 
 
 
     override fun onDetachedFromActivity() {
         // TODO("Not yet implemented")
+
     }
-    override fun AppAllOfferwallSDKCallback(p0: Int) {
-        when (p0) {
-            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
-                context,
-                "성공",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
-                context,
-                "잘못 된 유저아이디입니다.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
-                context,
-                "오퍼월 KEY를 확인해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
-                context,
-                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-
 }

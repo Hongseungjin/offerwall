@@ -62,4 +62,9 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
   Future methodOHC({data}) async {
     await methodChannel.invokeMethod<String>('ohc', data);
   }
+  
+  @override
+  Future methodUser({data}) async{
+     await methodChannel.invokeMethod<String>('dataUser', data);
+  }
 }
