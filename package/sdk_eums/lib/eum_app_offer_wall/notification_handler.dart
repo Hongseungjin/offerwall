@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -14,8 +16,6 @@ const String navigationActionId = 'id_3';
 const String darwinNotificationCategoryPlain = 'plainCategory';
 
 class NotificationHandler {
- 
-
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -27,7 +27,6 @@ class NotificationHandler {
     'high_importance_channel',
     'High Importance Notifications',
     description: 'This channel is used for important notifications.',
-
   );
 
   final List<DarwinNotificationCategory> darwinNotificationCategories =
@@ -102,6 +101,29 @@ class NotificationHandler {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("onMessage: $message");
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+      String? title = message.notification?.title ?? '';
+      String? body = message.notification?.body ?? '';
+
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 123,
+            channelKey: 'alerts',
+            title: title,
+            body: body,
+            wakeUpScreen: true,
+            autoDismissible: true,
+            fullScreenIntent: true,
+            color: Colors.white,
+            category: NotificationCategory.Call,
+            // notificationLayout: NotificationLayout,
+            // bigPicture: 'assets/icons/adpopcorn.png'
+          ),
+          actionButtons: [
+            NotificationActionButton(
+                key: 'REPLY', label: 'Reply Message', autoDismissible: true),
+            NotificationActionButton(
+                key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
+          ]);
     });
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -148,6 +170,29 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
- 
+  print("vao nhe ennnnn ");
+  if (Platform.isAndroid) {
+    FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+  } else {
+    print("vao day khong");
+    String? title = message.notification?.title ?? '';
+    String? body = message.notification?.body ?? '';
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: 123,
+            channelKey: 'alerts',
+            color: Colors.white,
+            category: NotificationCategory.Call,
+            title: title,
+            body: body,
+            wakeUpScreen: true,
+            autoDismissible: true,
+            fullScreenIntent: true),
+        actionButtons: [
+          NotificationActionButton(
+              key: 'REPLY', label: 'Reply Message', autoDismissible: true),
+          NotificationActionButton(
+              key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
+        ]);
+  }
 }

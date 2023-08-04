@@ -2,6 +2,9 @@ PODS:
   - AdPopcornOfferwall (4.3.6)
   - audio_session (0.0.1):
     - Flutter
+  - awesome_notifications (0.0.5):
+    - Flutter
+    - IosAwnCore (= 0.7.3)
   - device_info_plus (0.0.1):
     - Flutter
   - devicelocale (0.0.1):
@@ -79,6 +82,7 @@ PODS:
     - GoogleUtilities/Logger
   - image_picker_ios (0.0.1):
     - Flutter
+  - IosAwnCore (0.7.3)
   - just_audio (0.0.1):
     - Flutter
   - nanopb (2.30909.0):
@@ -92,6 +96,8 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - permission_handler_apple (9.1.1):
+    - Flutter
   - PromisesObjC (2.3.1)
   - sdk_eums (0.0.3):
     - Flutter
@@ -116,6 +122,7 @@ PODS:
 
 DEPENDENCIES:
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - devicelocale (from `.symlinks/plugins/devicelocale/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -129,6 +136,7 @@ DEPENDENCIES:
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - sdk_eums (from `.symlinks/plugins/sdk_eums/ios`)
   - sdk_eums_c (from `.symlinks/plugins/sdk_eums_c/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -149,6 +157,7 @@ SPEC REPOS:
     - FMDB
     - GoogleDataTransport
     - GoogleUtilities
+    - IosAwnCore
     - nanopb
     - OrderedSet
     - PromisesObjC
@@ -157,6 +166,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   audio_session:
     :path: ".symlinks/plugins/audio_session/ios"
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   devicelocale:
@@ -183,6 +194,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   sdk_eums:
     :path: ".symlinks/plugins/sdk_eums/ios"
   sdk_eums_c:
@@ -203,6 +216,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AdPopcornOfferwall: 3624ceaf880c22402651123af26dca453083b6c8
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+  awesome_notifications: d63d9a25f126860f9a600850d99772237895b3ba
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   devicelocale: b22617f40038496deffba44747101255cee005b0
   Firebase: 07150e75d142fb9399f6777fa56a187b17f833a0
@@ -221,11 +235,13 @@ SPEC CHECKSUMS:
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUtilities: c63691989bf362ba0505507da00eeb326192e83e
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  IosAwnCore: 6494e0e174d49f04f513e8a002187be226889a37
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   sdk_eums: 10b020a941d90ec1a6369c5c80c30abeaeaa66ee
   sdk_eums_c: 1ccd65e9986795a83f3df28dfd7dde6020f37454

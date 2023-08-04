@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
+import 'package:sdk_eums/eum_app_offer_wall/awesome_notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/accumulate_money_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/asked_question_module/asked_question_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/link_addvertising_module/link_addvertising_screen.dart';
@@ -53,6 +55,15 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     _registerEventBus();
     super.initState();
     settingBattery();
+
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+        onNotificationCreatedMethod:
+            NotificationController.onNotificationCreatedMethod,
+        onNotificationDisplayedMethod:
+            NotificationController.onNotificationDisplayedMethod,
+        onDismissActionReceivedMethod:
+            NotificationController.onDismissActionReceivedMethod);
   }
 
   getBatteryOptimization() async {
@@ -136,7 +147,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             ),
           ],
           child: Scaffold(
-        
             appBar: AppBar(
               backgroundColor: AppColor.white,
               leading: GestureDetector(
