@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
@@ -41,12 +42,13 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   double? dyStart;
   String? tokenSdk;
   double deviceWidth = 0;
+  MethodChannel _backgroundChannel = MethodChannel("x-slayer/overlay");
 
   @override
   void initState() {
     // TODO: implement initState
     print('inittt overlay');
-    // FlutterBackgroundService().invoke("closeOverlay");
+    initCallbackDrag();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     FlutterOverlayWindow.overlayListener.listen((event) async {
@@ -62,6 +64,19 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         print('overlayListener $event');
       } catch (e) {
         print('errorrrrrr $e');
+      }
+    });
+  }
+
+  initCallbackDrag() {
+    _backgroundChannel.setMethodCallHandler((MethodCall call) async {
+      if ('START_DRAG' == call.method) {
+        print('start ${call.method} ${call.arguments}');
+        dyStart = call.arguments;
+      } else if ('END_DRAG' == call.method) {
+        print('end ${call.method} ${call.arguments}');
+        dy = call.arguments;
+        onVerticalDragEnd();
       }
     });
   }
@@ -219,16 +234,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
   }
 
-  void onVerticalDragEnd(DragEndDetails details) async {
-    dynamic dataLocal = await LocalStoreService().getDataShare();
-    // print('getDataShare ${(jsonDecode(dataLocal)['data'])}');
-    // if (dataEvent == null) {
-    //   dataEvent ??= jsonDecode(dataLocal)['data'];
-    //   setState(() {
-    //     isWebView = true;
-    //   });
-    // }
-    print('dataEvent $dataEvent');
+  void onVerticalDragEnd() async {
     if (dy != null && dyStart != null && dy! < dyStart!) {
       print('up$dataEvent');
       if (dataEvent != null) {
@@ -280,27 +286,32 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   Widget _buildWidget(BuildContext context) {
     return BlocProvider<AccumulateMoneyBloc>(
-      create: (context) => AccumulateMoneyBloc(),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        key: globalKey,
-        body: Container(
-          constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
-          child: GestureDetector(
-            onTap: openWebView,
-            onVerticalDragStart: (details) =>
-                dyStart = details.localPosition.dy,
-            onVerticalDragEnd: onVerticalDragEnd,
-            onVerticalDragUpdate: (details) => dy = details.localPosition.dy,
+        create: (context) => AccumulateMoneyBloc(),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          key: globalKey,
+          body: Container(
+            constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
+            // child: GestureDetector(
+            //   onTap: openWebView,
+            //   onVerticalDragStart: (details) {
+            //     print('start ${details.localPosition.dy}');
+            //     dyStart = details.localPosition.dy;
+            //   },
+            //   onVerticalDragEnd: onVerticalDragEnd,
+            //   onVerticalDragUpdate: (details) {
+            //     print('update ${details.localPosition.dy}');
+            //     dy = details.localPosition.dy;
+            //   },
             child: Image.asset(
               Assets.icon_logo.path,
               package: "sdk_eums",
               width: 100,
               height: 100,
             ),
+            // ),
+            // ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

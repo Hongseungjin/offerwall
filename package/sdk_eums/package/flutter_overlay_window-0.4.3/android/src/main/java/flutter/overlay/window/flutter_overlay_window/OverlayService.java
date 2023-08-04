@@ -288,6 +288,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
                     dragging = false;
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+                    flutterChannel.invokeMethod("START_DRAG", lastY);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     float dx = event.getRawX() - lastX;
@@ -305,6 +306,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
                     dragging = true;
                     break;
                 case MotionEvent.ACTION_UP:
+                    flutterChannel.invokeMethod("END_DRAG", lastY);
+                    break;
                 case MotionEvent.ACTION_CANCEL:
                     lastYPosition = params.y;
                     if (WindowSetup.positionGravity != "none") {
