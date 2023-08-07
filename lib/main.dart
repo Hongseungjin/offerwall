@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +9,7 @@ import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/awesome_notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -15,7 +18,9 @@ void main() {
     await Firebase.initializeApp();
 
     NotificationHandler().initializeFcmNotification();
-    await NotificationController.initializeLocalNotifications();
+    if (Platform.isIOS) {
+      await NotificationController.initializeLocalNotifications();
+    }
 
     runApp(MaterialApp(home: MyHomePage()));
   });

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -16,6 +14,8 @@ const String navigationActionId = 'id_3';
 const String darwinNotificationCategoryPlain = 'plainCategory';
 
 class NotificationHandler {
+
+
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -28,6 +28,8 @@ class NotificationHandler {
     'High Importance Notifications',
     description: 'This channel is used for important notifications.',
   );
+
+
 
   final List<DarwinNotificationCategory> darwinNotificationCategories =
       <DarwinNotificationCategory>[
@@ -64,6 +66,7 @@ class NotificationHandler {
   ];
 
   initializeFcmNotification() async {
+
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -104,26 +107,26 @@ class NotificationHandler {
       String? title = message.notification?.title ?? '';
       String? body = message.notification?.body ?? '';
 
-      AwesomeNotifications().createNotification(
-          content: NotificationContent(
-            id: 123,
-            channelKey: 'alerts',
-            title: title,
-            body: body,
-            wakeUpScreen: true,
-            autoDismissible: true,
-            fullScreenIntent: true,
-            color: Colors.white,
-            category: NotificationCategory.Call,
-            // notificationLayout: NotificationLayout,
-            // bigPicture: 'assets/icons/adpopcorn.png'
-          ),
-          actionButtons: [
-            NotificationActionButton(
-                key: 'REPLY', label: 'Reply Message', autoDismissible: true),
-            NotificationActionButton(
-                key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
-          ]);
+      // AwesomeNotifications().createNotification(
+      //     content: NotificationContent(
+      //       id: 123,
+      //       channelKey: 'alerts',
+      //       title: title,
+      //       body: body,
+      //       wakeUpScreen: true,
+      //       autoDismissible: true,
+      //       fullScreenIntent: true,
+      //       color: Colors.white,
+      //       category: NotificationCategory.Call,
+      //       // notificationLayout: NotificationLayout,
+      //       // bigPicture: 'assets/icons/adpopcorn.png'
+      //     ),
+      //     actionButtons: [
+      //       NotificationActionButton(
+      //           key: 'REPLY', label: 'Reply Message', autoDismissible: true),
+      //       NotificationActionButton(
+      //           key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
+      //     ]);
     });
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -177,22 +180,22 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print("vao day khong");
     String? title = message.notification?.title ?? '';
     String? body = message.notification?.body ?? '';
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-            id: 123,
-            channelKey: 'alerts',
-            color: Colors.white,
-            category: NotificationCategory.Call,
-            title: title,
-            body: body,
-            wakeUpScreen: true,
-            autoDismissible: true,
-            fullScreenIntent: true),
-        actionButtons: [
-          NotificationActionButton(
-              key: 'REPLY', label: 'Reply Message', autoDismissible: true),
-          NotificationActionButton(
-              key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
-        ]);
+    // AwesomeNotifications().createNotification(
+    //     content: NotificationContent(
+    //         id: 123,
+    //         channelKey: 'alerts',
+    //         color: Colors.white,
+    //         category: NotificationCategory.Call,
+    //         title: title,
+    //         body: body,
+    //         wakeUpScreen: true,
+    //         autoDismissible: true,
+    //         fullScreenIntent: true),
+    //     actionButtons: [
+    //       NotificationActionButton(
+    //           key: 'REPLY', label: 'Reply Message', autoDismissible: true),
+    //       NotificationActionButton(
+    //           key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
+    //     ]);
   }
 }

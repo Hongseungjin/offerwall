@@ -50,11 +50,14 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     RxBus.destroy();
   }
 
+  
+
   @override
   void initState() {
     _registerEventBus();
     super.initState();
     settingBattery();
+  
 
     AwesomeNotifications().setListeners(
         onActionReceivedMethod: NotificationController.onActionReceivedMethod,

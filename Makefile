@@ -27,7 +27,8 @@ pod-install:
 	cd ios && rm -rf Pods && rm -rf build && rm -rf Podfile.lock && pod install && cd ..
 
 run:
-	fvm flutter run --no-sound-null-safety 
+	fvm flutter run -d 'R5CT90QNQBM'
+	#--no-sound-null-safety
 	
 
 run-web:

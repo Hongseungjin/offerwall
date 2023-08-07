@@ -5,13 +5,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 // import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
@@ -22,6 +19,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adv
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/watch_adver_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
+import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../../../api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import '../../../common/constants.dart';
@@ -108,7 +106,6 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     initFirebase();
     startTimer();
   }
-
   checkPermission() async {
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
@@ -172,9 +169,12 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
       if (!isRunning) {
         FlutterBackgroundService().startService();
       }
+      // int count = int.parse(await LocalStoreService().getCountAdvertisement());
       String? token = await FirebaseMessaging.instance.getToken();
       print('deviceToken ???? $token');
-      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      // if (count < 50) {
+        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      // }
     } else {
       FlutterBackgroundService().invoke("stopService");
     }
@@ -328,7 +328,6 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                         const SizedBox(width: 5),
                                         GestureDetector(
                                           onTap: () async {
-                                            print('isdisable $isdisable');
                                             setState(() {
                                               isdisable = !isdisable;
                                             });
@@ -338,7 +337,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                   await FirebaseMessaging
                                                       .instance
                                                       .getToken();
-                                              print('deviceToken $token');
+
                                               await EumsOfferWallServiceApi()
                                                   .unRegisterTokenNotifi(
                                                       token: token);
@@ -349,13 +348,19 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                   await FirebaseMessaging
                                                       .instance
                                                       .getToken();
-                                              print('deviceToken $token');
-                                              await EumsOfferWallServiceApi()
-                                                  .createTokenNotifi(
-                                                      token: token);
+                                              int count = int.parse(
+                                                  await LocalStoreService()
+                                                      .getCountAdvertisement());
+                                              if (count < 50) {
+                                                await EumsOfferWallServiceApi()
+                                                    .createTokenNotifi(
+                                                        token: token);
+                                              }
+
                                               bool isRunning =
                                                   await FlutterBackgroundService()
                                                       .isRunning();
+
                                               if (!isRunning) {
                                                 FlutterBackgroundService()
                                                     .startService();

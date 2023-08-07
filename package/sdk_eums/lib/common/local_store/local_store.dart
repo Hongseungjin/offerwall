@@ -40,4 +40,8 @@ abstract class LocalStore {
   Future setDeviceWidth(double width);
 
   Future<dynamic> getDeviceWidth();
+
+  Future setCountAdvertisement(dynamic data);
+
+  Future<dynamic> getCountAdvertisement();
 }

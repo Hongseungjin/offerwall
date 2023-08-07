@@ -7,6 +7,8 @@ import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
+import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
@@ -62,9 +64,13 @@ closeOverlay() async {
 registerDeviceToken() async {
   try {
     String? _token = await FirebaseMessaging.instance.getToken();
+    // int count = int.parse(await LocalStoreService().getCountAdvertisement());
+
     print('deviceToken $_token');
     if (_token != null && _token.isNotEmpty) {
+      // if(count < 50){
       await EumsOfferWallServiceApi().createTokenNotifi(token: _token);
+      // }
     }
   } catch (e) {
     print('e $e');
@@ -78,6 +84,7 @@ Future<void> onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
   Queue queue = Queue();
   registerDeviceToken();
+  CronCustom().initCron();
   try {
     service.on('showOverlay').listen((event) async {
       print('co vao day khong');

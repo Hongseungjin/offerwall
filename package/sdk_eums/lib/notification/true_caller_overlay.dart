@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   String? tokenSdk;
   double deviceWidth = 0;
   MethodChannel _backgroundChannel = MethodChannel("x-slayer/overlay");
+  int countAdvertisement = 0;
 
   @override
   void initState() {
@@ -70,8 +72,39 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   initCallbackDrag() {
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
+      await Firebase.initializeApp();
       if ('START_DRAG' == call.method) {
         print('start ${call.method} ${call.arguments}');
+     
+        if (await localStore.getCountAdvertisement() == '{}') {
+          print("vao day");
+          dynamic data = <String, dynamic>{
+            'count': 1,
+            'date': Constants.formatTime(DateTime.now().toIso8601String()),
+          };
+          localStore.setCountAdvertisement(data);
+        } else {
+             print("vao day hay hday");
+          setState(() {
+            countAdvertisement++;
+          });
+
+          dynamic data = <String, dynamic>{
+            'count': countAdvertisement,
+            'date': Constants.formatTime(DateTime.now().toIso8601String()),
+          };
+          print('countAdvertisement1231231 ${data}');
+          localStore.setCountAdvertisement(data);
+
+          if (countAdvertisement == 50) {
+            String? token = await FirebaseMessaging.instance.getToken();
+            if (token != null && token.isNotEmpty) {
+              FlutterBackgroundService().invoke("stopService");
+              await EumsOfferWallServiceApi()
+                  .unRegisterTokenNotifi(token: token);
+            }
+          }
+        }
         dyStart = call.arguments;
       } else if ('END_DRAG' == call.method) {
         print('end ${call.method} ${call.arguments}');
@@ -151,9 +184,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         actions: Row(
           children: [
             Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24)
-              ),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(24)),
               padding: EdgeInsets.symmetric(vertical: 5),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
@@ -161,7 +193,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                     width: MediaQuery.of(context).size.width - 64,
                     fit: BoxFit.cover,
                     imageUrl: Constants.baseUrlImage +
-                        (jsonDecode(dataEvent['data']))['advertiseSponsor']['image'],
+                        (jsonDecode(dataEvent['data']))['advertiseSponsor']
+                            ['image'],
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) {
@@ -170,7 +203,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                     }),
               ),
             ),
-                const SizedBox(width: 20,)
+            const SizedBox(
+              width: 20,
+            )
           ],
         ),
         onClose: () async {
