@@ -7,7 +7,6 @@ import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
-import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
 import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -84,7 +83,7 @@ Future<void> onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
   Queue queue = Queue();
   registerDeviceToken();
-  CronCustom().initCron();
+  // CronCustom().initCron();
   try {
     service.on('showOverlay').listen((event) async {
       print('co vao day khong');
@@ -143,6 +142,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memGen,
       String? memRegion,
       String? memBirth}) async {
+    // CronCustom().initCron();
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(
             // onForeground: onStart,

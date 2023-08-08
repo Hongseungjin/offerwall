@@ -75,36 +75,38 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       await Firebase.initializeApp();
       if ('START_DRAG' == call.method) {
         print('start ${call.method} ${call.arguments}');
-     
-        if (await localStore.getCountAdvertisement() == '{}') {
-          print("vao day");
-          dynamic data = <String, dynamic>{
-            'count': 1,
-            'date': Constants.formatTime(DateTime.now().toIso8601String()),
-          };
-          localStore.setCountAdvertisement(data);
-        } else {
-             print("vao day hay hday");
-          setState(() {
-            countAdvertisement++;
-          });
 
-          dynamic data = <String, dynamic>{
-            'count': countAdvertisement,
-            'date': Constants.formatTime(DateTime.now().toIso8601String()),
-          };
-          print('countAdvertisement1231231 ${data}');
-          localStore.setCountAdvertisement(data);
+        // if (await localStore.getCountAdvertisement() == '{}') {
+        //   print("vao day");
+        //   dynamic data = <String, dynamic>{
+        //     'count': 1,
+        //     'date': Constants.formatTime(DateTime.now().toIso8601String()),
+        //   };
+        //   localStore.setCountAdvertisement(data);
+        // } else {
+        //   countAdvertisement =
+        //       (await LocalStoreService().getCountAdvertisement())['count'];
+        //   print("vao day hay hday${countAdvertisement}");
+        //   setState(() {
+        //     countAdvertisement++;
+        //   });
 
-          if (countAdvertisement == 50) {
-            String? token = await FirebaseMessaging.instance.getToken();
-            if (token != null && token.isNotEmpty) {
-              FlutterBackgroundService().invoke("stopService");
-              await EumsOfferWallServiceApi()
-                  .unRegisterTokenNotifi(token: token);
-            }
-          }
-        }
+        //   dynamic data = <String, dynamic>{
+        //     'count': countAdvertisement,
+        //     'date': Constants.formatTime(DateTime.now().toIso8601String()),
+        //   };
+        //   print('countAdvertisement1231231 ${data}');
+        //   localStore.setCountAdvertisement(data);
+
+        //   if (countAdvertisement == 50) {
+        //     String? token = await FirebaseMessaging.instance.getToken();
+        //     if (token != null && token.isNotEmpty) {
+        //       FlutterBackgroundService().invoke("stopService");
+        //       await EumsOfferWallServiceApi()
+        //           .unRegisterTokenNotifi(token: token);
+        //     }
+        //   }
+        // }
         dyStart = call.arguments;
       } else if ('END_DRAG' == call.method) {
         print('end ${call.method} ${call.arguments}');

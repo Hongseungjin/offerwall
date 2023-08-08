@@ -348,14 +348,14 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                   await FirebaseMessaging
                                                       .instance
                                                       .getToken();
-                                              int count = int.parse(
-                                                  await LocalStoreService()
-                                                      .getCountAdvertisement());
-                                              if (count < 50) {
+                                              // int count = int.parse(
+                                              //     await LocalStoreService()
+                                              //         .getCountAdvertisement());
+                                              // if (count < 50) {
                                                 await EumsOfferWallServiceApi()
                                                     .createTokenNotifi(
                                                         token: token);
-                                              }
+                                              // }
 
                                               bool isRunning =
                                                   await FlutterBackgroundService()
