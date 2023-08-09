@@ -8,7 +8,6 @@ import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
-import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/const/values.dart';
@@ -71,6 +70,8 @@ class NotificationHandler {
         const AndroidInitializationSettings('mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
+            requestAlertPermission: false,
+            defaultPresentAlert: false,
             onDidReceiveLocalNotification: (id, title, body, payload) {
               print("object");
             },
@@ -79,23 +80,26 @@ class NotificationHandler {
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin);
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (details) {
-      switch (details.notificationResponseType) {
-        case NotificationResponseType.selectedNotification:
-          break;
-        case NotificationResponseType.selectedNotificationAction:
-          if (details.actionId == navigationActionId) {}
-          break;
-      }
-    }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
+    if (Platform.isAndroid) {
+      _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+          onDidReceiveNotificationResponse: (details) {
+        switch (details.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
+            break;
+          case NotificationResponseType.selectedNotificationAction:
+            if (details.actionId == navigationActionId) {}
+            break;
+        }
+      }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
+    }
+
     try {
-      await _fcm.requestPermission();
+      await _fcm.requestPermission(alert: false);
     } catch (e) {}
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-            alert: true, badge: true, sound: true);
+            alert: Platform.isAndroid ? true : false, badge: true, sound: true);
     _fcm.getInitialMessage().then((value) {
       if (value != null) {
         onNavigateToMyEvent(data: value.data);
@@ -105,29 +109,9 @@ class NotificationHandler {
       print("onMessage: $message");
       CountAdver().initCount();
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+   
       String? title = message.notification?.title ?? '';
       String? body = message.notification?.body ?? '';
-
-      // AwesomeNotifications().createNotification(
-      //     content: NotificationContent(
-      //       id: 123,
-      //       channelKey: 'alerts',
-      //       title: title,
-      //       body: body,
-      //       wakeUpScreen: true,
-      //       autoDismissible: true,
-      //       fullScreenIntent: true,
-      //       color: Colors.white,
-      //       category: NotificationCategory.Call,
-      //       // notificationLayout: NotificationLayout,
-      //       // bigPicture: 'assets/icons/adpopcorn.png'
-      //     ),
-      //     actionButtons: [
-      //       NotificationActionButton(
-      //           key: 'REPLY', label: 'Reply Message', autoDismissible: true),
-      //       NotificationActionButton(
-      //           key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
-      //     ]);
     });
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -176,30 +160,12 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("vao nhe ennnnn ");
   CountAdver().initCount();
-  CronCustom().initCron();
+  // CronCustom().initCron();
   if (Platform.isAndroid) {
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
   } else {
     print("vao day khong");
-    String? title = message.notification?.title ?? '';
-    String? body = message.notification?.body ?? '';
-    // AwesomeNotifications().createNotification(
-    //     content: NotificationContent(
-    //         id: 123,
-    //         channelKey: 'alerts',
-    //         color: Colors.white,
-    //         category: NotificationCategory.Call,
-    //         title: title,
-    //         body: body,
-    //         wakeUpScreen: true,
-    //         autoDismissible: true,
-    //         fullScreenIntent: true),
-    //     actionButtons: [
-    //       NotificationActionButton(
-    //           key: 'REPLY', label: 'Reply Message', autoDismissible: true),
-    //       NotificationActionButton(
-    //           key: 'DISMISS', label: 'Dismiss', autoDismissible: true)
-    //     ]);
+  
   }
 }
 
@@ -209,14 +175,18 @@ class CountAdver {
   dynamic dataCount;
   String dateCount = '';
   String dateNow = '';
+  bool isActive = false;
   initCount() async {
+    await Firebase.initializeApp();
     dataCount = await _localStore.getCountAdvertisement();
     countAdvertisement = dataCount['count'] ?? 0;
-    print("countAdvertisement${countAdvertisement}");
-  
-  // 50
+    isActive = await _localStore.getSaveAdver();
+    print("countAdvertisement${countAdvertisement} ${isActive}");
+
+    // 50
     if (countAdvertisement == 5) {
       print("remove tokem");
+
       String? token = await FirebaseMessaging.instance.getToken();
       if (token != null && token.isNotEmpty) {
         FlutterBackgroundService().invoke("stopService");
@@ -232,13 +202,15 @@ class CountAdver {
       };
       _localStore.setCountAdvertisement(data);
     } else {
-      countAdvertisement++;
-      dynamic data = <String, dynamic>{
-        'count': countAdvertisement,
-        'date': Constants.formatTime(DateTime.now().toIso8601String()),
-      };
-      print("datadata${data}");
-      _localStore.setCountAdvertisement(data);
+      if (!isActive) {
+        countAdvertisement++;
+        dynamic data = <String, dynamic>{
+          'count': countAdvertisement,
+          'date': Constants.formatTime(DateTime.now().toIso8601String()),
+        };
+        print("datadata${data}");
+        _localStore.setCountAdvertisement(data);
+      }
     }
   }
 
@@ -249,7 +221,7 @@ class CountAdver {
       dateCount = dataCount['date'] ?? '';
       countAdvertisement = dataCount['count'] ?? 0;
       dateNow = Constants.formatTime(DateTime.now().toIso8601String());
-      print("countAdvertisement${countAdvertisement}");
+      // print("countAdvertisement${countAdvertisement}");
     } catch (ex) {
       print("exexexex${ex}");
     }

@@ -56,6 +56,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     super.initState();
     settingBattery();
   
+  
 
     // AwesomeNotifications().setListeners(
     //     onActionReceivedMethod: NotificationController.onActionReceivedMethod,

@@ -61,6 +61,7 @@ dependencies:
   permission_handler: ^10.4.3
   awesome_notifications: ^0.7.4+1
   cron: ^0.5.1
+  awesome_notifications_fcm: ^0.7.4+1
   # restart_app: any
   # flutter_overlay_window:
   #   git:

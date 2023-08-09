@@ -17,9 +17,15 @@ void main() {
   SdkEums.instant.init(onRun: () async {
     await Firebase.initializeApp();
 
-    NotificationHandler().initializeFcmNotification();
+    if (Platform.isAndroid) {
+      NotificationHandler().initializeFcmNotification();
+    }
+
     if (Platform.isIOS) {
       await NotificationController.initializeLocalNotifications();
+      await NotificationController.initializeRemoteNotifications(debug: true);
+      await NotificationController.getInitialNotificationAction();
+      await NotificationController.initializeNotificationListeners();
     }
 
     runApp(MaterialApp(home: MyHomePage()));
@@ -152,6 +158,16 @@ class _AppMainScreenState extends State<AppMainScreen> {
                   memGen: "w",
                   memBirth: "2000-01-01",
                   memRegion: "인천_서");
+            },
+            child: Container(
+                color: AppColor.blue1,
+                padding: EdgeInsets.all(20),
+                child: const Text('go to sdk')),
+          ),
+           GestureDetector(
+            onTap: () async {
+              
+              NotificationController.scheduleNewNotification();
             },
             child: Container(
                 color: AppColor.blue1,

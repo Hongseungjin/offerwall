@@ -8,8 +8,10 @@ class CronCustom {
   final LocalStore localStore = LocalStoreService();
   initCron() async {
     //// 3600
-    cron.schedule(Schedule.parse('*/1800 * * * * *'), () async {
+    cron.schedule(Schedule.parse('*/5 * * * * *'), () async {
       try {
+        // print("con cac${await LocalStoreService().getCountAdvertisement()}");
+
         CountAdver().checkDate();
       } catch (ex) {
         print(ex);

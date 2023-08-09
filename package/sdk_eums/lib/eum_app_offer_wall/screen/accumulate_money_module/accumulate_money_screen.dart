@@ -106,6 +106,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     initFirebase();
     startTimer();
   }
+
   checkPermission() async {
     final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
@@ -173,7 +174,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
       String? token = await FirebaseMessaging.instance.getToken();
       print('deviceToken ???? $token');
       // if (count < 50) {
-        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
       // }
     } else {
       FlutterBackgroundService().invoke("stopService");
@@ -344,6 +345,13 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               FlutterBackgroundService()
                                                   .invoke("stopService");
                                             } else {
+                                              dynamic data = <String, dynamic>{
+                                                'count': 0,
+                                                'date': Constants.formatTime(
+                                                    DateTime.now()
+                                                        .toIso8601String()),
+                                              };
+                                              localStore?.setCountAdvertisement(data);
                                               String? token =
                                                   await FirebaseMessaging
                                                       .instance
@@ -352,9 +360,10 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                               //     await LocalStoreService()
                                               //         .getCountAdvertisement());
                                               // if (count < 50) {
-                                                await EumsOfferWallServiceApi()
-                                                    .createTokenNotifi(
-                                                        token: token);
+
+                                              await EumsOfferWallServiceApi()
+                                                  .createTokenNotifi(
+                                                      token: token);
                                               // }
 
                                               bool isRunning =

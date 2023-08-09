@@ -7,6 +7,8 @@ import IveOfferwallFramework
 
 
 public class SdkEumsPlugin: NSObject, FlutterPlugin, AppAllOfferwallSDKListener{
+    
+
     public func appAllOfferwallSDKCallback(_ result: Int32) {
         switch (result) {
                        case AppAllOfferwallSDK_SUCCES:

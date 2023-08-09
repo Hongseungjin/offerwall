@@ -7,6 +7,7 @@ import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
 import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -62,6 +63,7 @@ closeOverlay() async {
 
 registerDeviceToken() async {
   try {
+    CronCustom().initCron();
     String? _token = await FirebaseMessaging.instance.getToken();
     // int count = int.parse(await LocalStoreService().getCountAdvertisement());
 
