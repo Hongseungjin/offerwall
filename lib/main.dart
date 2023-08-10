@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/common/const/values.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/eum_app_offer_wall/awesome_notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:sdk_eums/eum_app_offer_wall/push_notification.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -22,10 +22,11 @@ void main() {
     }
 
     if (Platform.isIOS) {
-      await NotificationController.initializeLocalNotifications();
-      await NotificationController.initializeRemoteNotifications(debug: true);
-      await NotificationController.getInitialNotificationAction();
-      await NotificationController.initializeNotificationListeners();
+      await PushNotificationCustom().initializeFcmNotification();
+      await PushNotificationCustom.initializeNotificationListeners();
+      await PushNotificationCustom.initializeRemoteNotifications(debug: true);
+      await PushNotificationCustom.getInitialNotificationAction();
+
     }
 
     runApp(MaterialApp(home: MyHomePage()));
@@ -164,11 +165,8 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 padding: EdgeInsets.all(20),
                 child: const Text('go to sdk')),
           ),
-           GestureDetector(
-            onTap: () async {
-              
-              NotificationController.scheduleNewNotification();
-            },
+          GestureDetector(
+            onTap: () async {},
             child: Container(
                 color: AppColor.blue1,
                 padding: EdgeInsets.all(20),

@@ -108,12 +108,14 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
   }
 
   checkPermission() async {
-    final bool status = await FlutterOverlayWindow.isPermissionGranted();
+    if (Platform.isAndroid) {
+      final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
-    if (!status) {
-      await FlutterOverlayWindow.requestPermission();
-    } else {}
-    localStore?.setAccessToken(await localStore?.getAccessToken() ?? '');
+      if (!status) {
+        await FlutterOverlayWindow.requestPermission();
+      } else {}
+      localStore?.setAccessToken(await localStore?.getAccessToken() ?? '');
+    }
   }
 
   checkDataNoti() async {
@@ -351,7 +353,8 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                                     DateTime.now()
                                                         .toIso8601String()),
                                               };
-                                              localStore?.setCountAdvertisement(data);
+                                              localStore
+                                                  ?.setCountAdvertisement(data);
                                               String? token =
                                                   await FirebaseMessaging
                                                       .instance

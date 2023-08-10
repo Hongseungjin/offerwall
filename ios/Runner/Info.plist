@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>dev.flutter.background.refresh</string>
+	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -47,23 +51,20 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-    	<string>dev.flutter.background.refresh</string>
-	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

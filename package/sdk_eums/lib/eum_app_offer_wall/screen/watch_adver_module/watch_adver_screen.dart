@@ -1,8 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
-import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 // import 'package:flutter_background_service/flutter_background_service.dart';
@@ -159,18 +157,14 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                   checkSave = !checkSave;
                 });
                 if (checkSave) {
-                  globalKey.currentContext?.read<WatchAdverBloc>().add(
-                      SaveAdver(
-                          advertise_idx: Platform.isIOS
-                              ? jsonDecode(widget.data)['idx']
-                              : jsonDecode(widget.data['data'])['idx']));
+                  globalKey.currentContext
+                      ?.read<WatchAdverBloc>()
+                      .add(SaveAdver(advertise_idx: (widget.data)['idx']));
                 } else {
                   print('widget.data ${widget.data}');
-                  globalKey.currentContext?.read<WatchAdverBloc>().add(
-                      DeleteScrap(
-                          id: Platform.isIOS
-                              ? jsonDecode(widget.data)['idx']
-                              : jsonDecode(widget.data['data'])['idx']));
+                  globalKey.currentContext
+                      ?.read<WatchAdverBloc>()
+                      .add(DeleteScrap(id: (widget.data)['idx']));
                 }
               },
               child: Image.asset(
@@ -184,25 +178,16 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             },
             mission: () async {
               localStorel!.setDataShare(dataShare: null);
-              DialogUtils.showDialogSucessPoint(context,
-                  data: Platform.isIOS
-                      ? jsonDecode(widget.data)
-                      : jsonDecode(widget.data['data']),
+              DialogUtils.showDialogSucessPoint(context, data: (widget.data),
                   voidCallback: () async {
                 print("vao day");
                 Routing().popToRoot(context);
                 globalKey.currentContext?.read<WatchAdverBloc>().add(EarnPoin(
-                    advertise_idx: Platform.isIOS
-                        ? jsonDecode(widget.data)['idx']
-                        : jsonDecode(widget.data['data'])['idx'],
-                    pointType: Platform.isIOS
-                        ? jsonDecode(widget.data)['typePoint']
-                        : jsonDecode(widget.data['data'])['typePoint']));
+                    advertise_idx: (widget.data)['idx'],
+                    pointType: (widget.data)['typePoint']));
               });
             },
-            urlLink: Platform.isIOS
-                ? jsonDecode(widget.data)['url_link']
-                : jsonDecode(widget.data['data'])['url_link'],
+            urlLink: (widget.data)['url_link'],
             onClose: () {
               Routing().popToRoot(context);
             },

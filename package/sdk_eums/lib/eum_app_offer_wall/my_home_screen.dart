@@ -55,17 +55,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     _registerEventBus();
     super.initState();
     settingBattery();
-  
-  
 
-    // AwesomeNotifications().setListeners(
-    //     onActionReceivedMethod: NotificationController.onActionReceivedMethod,
-    //     onNotificationCreatedMethod:
-    //         NotificationController.onNotificationCreatedMethod,
-    //     onNotificationDisplayedMethod:
-    //         NotificationController.onNotificationDisplayedMethod,
-    //     onDismissActionReceivedMethod:
-    //         NotificationController.onDismissActionReceivedMethod);
   }
 
   getBatteryOptimization() async {

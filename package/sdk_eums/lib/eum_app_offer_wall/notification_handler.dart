@@ -80,6 +80,7 @@ class NotificationHandler {
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin);
+
     if (Platform.isAndroid) {
       _flutterLocalNotificationsPlugin.initialize(initializationSettings,
           onDidReceiveNotificationResponse: (details) {
@@ -92,6 +93,9 @@ class NotificationHandler {
         }
       }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
     }
+
+    _flutterLocalNotificationsPlugin.show(
+        1, '', '', const NotificationDetails(iOS: DarwinNotificationDetails()));
 
     try {
       await _fcm.requestPermission(alert: false);
@@ -109,7 +113,7 @@ class NotificationHandler {
       print("onMessage: $message");
       CountAdver().initCount();
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-   
+
       String? title = message.notification?.title ?? '';
       String? body = message.notification?.body ?? '';
     });
@@ -159,13 +163,12 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("vao nhe ennnnn ");
-  CountAdver().initCount();
+
   // CronCustom().initCron();
   if (Platform.isAndroid) {
+    CountAdver().initCount();
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
   } else {
-    print("vao day khong");
-  
   }
 }
 
