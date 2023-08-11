@@ -31,12 +31,13 @@ class NotificationHandler {
     description: 'This channel is used for important notifications.',
   );
 
+
   final List<DarwinNotificationCategory> darwinNotificationCategories =
       <DarwinNotificationCategory>[
     DarwinNotificationCategory(
       darwinNotificationCategoryPlain,
       actions: <DarwinNotificationAction>[
-        DarwinNotificationAction.plain('id_1', 'Action 1'),
+        // DarwinNotificationAction.plain('id_1', 'Action 1'),
         DarwinNotificationAction.plain(
           'id_2',
           'Action 2 (destructive)',
@@ -51,16 +52,16 @@ class NotificationHandler {
             DarwinNotificationActionOption.foreground,
           },
         ),
-        DarwinNotificationAction.plain(
-          'id_4',
-          'Action 4 (auth required)',
-          options: <DarwinNotificationActionOption>{
-            DarwinNotificationActionOption.authenticationRequired,
-          },
-        ),
+        // DarwinNotificationAction.plain(
+        //   'id_4',
+        //   'Action 4 (auth required)',
+        //   options: <DarwinNotificationActionOption>{
+        //     DarwinNotificationActionOption.authenticationRequired,
+        //   },
+        // ),
       ],
       options: <DarwinNotificationCategoryOption>{
-        DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+        DarwinNotificationCategoryOption.customDismissAction,
       },
     )
   ];
@@ -72,6 +73,8 @@ class NotificationHandler {
         DarwinInitializationSettings(
             requestAlertPermission: false,
             defaultPresentAlert: false,
+            
+            
             onDidReceiveLocalNotification: (id, title, body, payload) {
               print("object");
             },

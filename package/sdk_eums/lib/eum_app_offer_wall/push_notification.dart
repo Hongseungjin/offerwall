@@ -12,13 +12,46 @@ import 'screen/watch_adver_module/watch_adver_screen.dart';
 
 class PushNotificationCustom extends ChangeNotifier {
   ReceivedAction? initialAction;
+
+  Future<String> getFirebaseMessagingToken() async {
+    String firebaseAppToken = '';
+    if (await AwesomeNotificationsFcm().isFirebaseAvailable) {
+      try {
+        firebaseAppToken =
+            await AwesomeNotificationsFcm().requestFirebaseAppToken();
+        print("firebaseAppToken$firebaseAppToken");
+      } catch (exception) {
+        debugPrint('$exception');
+      }
+    } else {
+      debugPrint('Firebase is not available on this project');
+    }
+    return firebaseAppToken;
+  }
+
   initializeFcmNotification() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications(
+        permissions: [
+          NotificationPermission.Alert,
+          NotificationPermission.Sound,
+          NotificationPermission.Badge,
+          NotificationPermission.Vibration,
+          NotificationPermission.Light,
+          NotificationPermission.FullScreenIntent,
+        ],
+      );
+    }
+
+    getFirebaseMessagingToken();
+
     AwesomeNotifications().initialize(
         // set the icon to null if you want to use the default app icon
         'resource://drawable/res_app_icon',
         [
           NotificationChannel(
-              channelGroupKey: 'basic_channel_group',
+              channelGroupKey: 'group.awn.b2ece0c4',
               channelKey: 'basic_channel',
               channelName: 'Basic notifications',
               channelDescription: 'Notification channel for basic tests',
@@ -28,7 +61,7 @@ class PushNotificationCustom extends ChangeNotifier {
         // Channel groups are only visual and are not required
         channelGroups: [
           NotificationChannelGroup(
-            channelGroupKey: 'basic_channel_group',
+            channelGroupKey: 'group.awn.b2ece0c4',
             channelGroupName: 'Basic group',
           )
         ],
@@ -38,21 +71,34 @@ class PushNotificationCustom extends ChangeNotifier {
   }
 
   static Future<void> scheduleNewNotification({dynamic remoteMessage}) async {
-    await AwesomeNotifications().createNotification(
+    print("co vao day khong");
+
+    AwesomeNotifications().createNotification(
         content: NotificationContent(
-            id: remoteMessage.hashCode,
-            body: remoteMessage?.notification?.body ?? "",
-            title: remoteMessage?.notification?.title ?? "",
+            id: 1,
+            body: "ok",
+            title: "concac",
+            // id: remoteMessage.hashCode,
+            // body: remoteMessage?.notification?.body ?? "",
+            // title: remoteMessage?.notification?.title ?? "",
             channelKey: 'basic_channel',
             bigPicture: 'asset://assets/images/android-bg-worker.jpg',
             notificationLayout: NotificationLayout.BigPicture,
-            payload: {"data": remoteMessage?.data['data']},
+            // payload: {"data": remoteMessage?.data['data']},
             category: NotificationCategory.Service),
         schedule: NotificationCalendar.fromDate(
             date: DateTime.now().add(const Duration(milliseconds: 500))),
         actionButtons: [
-          NotificationActionButton(key: 'KEPP_ADVER', label: 'KEEP 하기'),
-          NotificationActionButton(key: 'SHOW_ADVER', label: '광고 시청하기')
+          NotificationActionButton(
+            key: 'KEPP_ADVER',
+            label: 'KEEP 하기',
+            // actionType: ActionType.SilentAction
+          ),
+          NotificationActionButton(
+            key: 'SHOW_ADVER',
+            label: '광고 시청하기',
+            // actionType: ActionType.SilentAction
+          )
         ]);
   }
 
@@ -99,6 +145,7 @@ class PushNotificationCustom extends ChangeNotifier {
   @pragma("vm:entry-point")
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
+    print("ok nhes");
     WidgetsFlutterBinding.ensureInitialized();
     dynamic data =
         jsonDecode(jsonDecode(jsonEncode(receivedAction.payload))['data']);
@@ -117,13 +164,13 @@ class PushNotificationCustom extends ChangeNotifier {
   @pragma("vm:entry-point")
   static Future<void> onNotificationCreatedMethod(
       ReceivedNotification receivedNotification) async {
-    // debugPrint("vao day 112312312308012-23123 $receivedNotification");
+    debugPrint("vao day 112312312308012-23123 $receivedNotification");
   }
 
   @pragma("vm:entry-point")
   static Future<void> onNotificationDisplayedMethod(
       ReceivedNotification receivedNotification) async {
-    // debugPrint("vao day 123121231233$receivedNotification");
+    debugPrint("vao day 123121231233$receivedNotification");
   }
 
   @pragma("vm:entry-point")

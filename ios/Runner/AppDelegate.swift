@@ -2,6 +2,8 @@ import UIKit
 import Flutter
 import Firebase
 import adlibrary
+import awesome_notifications
+import awesome_notifications_fcm
 // import awesome_notifications
 // import shared_preferences_ios
 
@@ -38,12 +40,20 @@ import adlibrary
     FirebaseApp.configure()
     GeneratedPluginRegistrant.register(with: self)
       AppAllOfferwallSDK.initialize()
-      //     SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
-      //     SwiftAwesomeNotificationsPlugin.register(
-      //       with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)          
-      //     FLTSharedPreferencesPlugin.register(
-      //       with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
-      // } 
+      
+    
+     
+     SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
+         SwiftAwesomeNotificationsPlugin.register(
+          with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)
+//         FLTSharedPreferencesPlugin.register(
+//          with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
+     }
+      
+    //  SwiftAwesomeNotificationsFcmPlugin.setPluginRegistrantCallback { registry in
+    //      FluttertoastPlugin.register(
+    //       with: registry.registrar(forPlugin: "io.flutter.plugins.fluttertoast.FluttertoastPlugin")!)
+    //  }
 //      AppAllOfferwallSDK.getInstance().initOfferWall(self, offerkey: "f3603a2a4d1a6f72fefba18e09a80698ec2a004e", userid: "abeeTest")
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
