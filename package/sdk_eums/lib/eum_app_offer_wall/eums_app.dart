@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -82,6 +81,7 @@ registerDeviceToken() async {
 Future<void> onStart(ServiceInstance service) async {
   print('onStart');
   DartPluginRegistrant.ensureInitialized();
+  
   await Firebase.initializeApp();
   Queue queue = Queue();
   registerDeviceToken();

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,25 +6,20 @@ import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
-import 'package:sdk_eums/eum_app_offer_wall/push_notification.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 void main() {
   SdkEums.instant.init(onRun: () async {
-    await Firebase.initializeApp();
-
-    if (Platform.isAndroid) {
+    // if (Platform.isAndroid) {
+      await Firebase.initializeApp();
       NotificationHandler().initializeFcmNotification();
-    }
+      
+    // }
 
-    if (Platform.isIOS) {
-      await PushNotificationCustom().initializeFcmNotification();
-      await PushNotificationCustom.initializeNotificationListeners();
-      await PushNotificationCustom.initializeRemoteNotifications(debug: true);
-      await PushNotificationCustom.getInitialNotificationAction();
-
-    }
+    // if (Platform.isIOS) {
+    //   PushNotificationIos().initApns();
+    // }
 
     runApp(MaterialApp(home: MyHomePage()));
   });

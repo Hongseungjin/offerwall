@@ -1,11 +1,9 @@
 import UIKit
 import Flutter
-import Firebase
 import adlibrary
-import awesome_notifications
-import awesome_notifications_fcm
-// import awesome_notifications
-// import shared_preferences_ios
+import Firebase
+import UserNotifications
+import flutter_local_notifications
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, AppAllOfferwallSDKListener{
@@ -38,23 +36,19 @@ import awesome_notifications_fcm
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     FirebaseApp.configure()
+    FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+        GeneratedPluginRegistrant.register(with: registry)
+    }
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+    }
     GeneratedPluginRegistrant.register(with: self)
-      AppAllOfferwallSDK.initialize()
-      
-    
-     
-     SwiftAwesomeNotificationsPlugin.setPluginRegistrantCallback { registry in
-         SwiftAwesomeNotificationsPlugin.register(
-          with: registry.registrar(forPlugin: "io.flutter.plugins.awesomenotifications.AwesomeNotificationsPlugin")!)
-//         FLTSharedPreferencesPlugin.register(
-//          with: registry.registrar(forPlugin: "io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin")!)
-     }
-      
-    //  SwiftAwesomeNotificationsFcmPlugin.setPluginRegistrantCallback { registry in
-    //      FluttertoastPlugin.register(
-    //       with: registry.registrar(forPlugin: "io.flutter.plugins.fluttertoast.FluttertoastPlugin")!)
-    //  }
-//      AppAllOfferwallSDK.getInstance().initOfferWall(self, offerkey: "f3603a2a4d1a6f72fefba18e09a80698ec2a004e", userid: "abeeTest")
+    AppAllOfferwallSDK.initialize()
+    UNUserNotificationCenter.current().delegate = self
+ 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+   override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error)
+    }
 }

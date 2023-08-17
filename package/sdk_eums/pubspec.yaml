@@ -59,9 +59,10 @@ dependencies:
   devicelocale: ^0.6.0
   disable_battery_optimization: ^1.1.0+1
   permission_handler: ^10.4.3
-  awesome_notifications: ^0.7.4+1
   cron: ^0.5.1
-  awesome_notifications_fcm: ^0.7.4+1
+  # flutter_apns:
+  
+
   # restart_app: any
   # flutter_overlay_window:
   #   git:
@@ -76,6 +77,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
   json_serializable: ^6.5.4
+  
   build_runner:
   flutter_gen_runner:
 

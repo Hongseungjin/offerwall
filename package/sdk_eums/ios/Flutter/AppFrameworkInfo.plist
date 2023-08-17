@@ -22,6 +22,12 @@
   <string>1.0</string>
   <key>MinimumOSVersion</key>
   <string>11.0</string>
+  <key>flutter_apns.disable_swizzling</key>
+  <false/>
+  <key>flutter_apns.disable_firebase_core</key>
+  <false/>
+  <key>FLTEnableImpeller</key>
+  <false/>
   <key>NSUserTrackingUsageDescription</key>
 	<string>을 추가합니다. 추가되는 문구는 앱 추적 동의 팝업 창에 노출됩니다</string>
   <key>NSCameraUsageDescription</key>

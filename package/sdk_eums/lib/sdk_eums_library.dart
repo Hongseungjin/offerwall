@@ -3,6 +3,7 @@
 // NOTE: generally, a Dart file is a Library
 library counter;
 
+export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:flutter_background_service/flutter_background_service.dart';
 export 'package:flutter_overlay_window/flutter_overlay_window.dart';

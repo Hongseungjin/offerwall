@@ -1,26 +1,29 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:sdk_eums/common/const/values.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
-import '../common/const/values.dart';
+import '../common/routing.dart';
 import 'screen/watch_adver_module/watch_adver_screen.dart';
 
-const String navigationActionId = 'id_3';
+const String keepID = 'id_1';
 
-const String darwinNotificationCategoryPlain = 'plainCategory';
+const String navigationScreenId = 'id_2';
+
+const String darwinNotificationCategoryPlain = 'EUMS_OFFERWALL';
 
 class NotificationHandler {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>
@@ -31,34 +34,22 @@ class NotificationHandler {
     description: 'This channel is used for important notifications.',
   );
 
-
   final List<DarwinNotificationCategory> darwinNotificationCategories =
       <DarwinNotificationCategory>[
     DarwinNotificationCategory(
       darwinNotificationCategoryPlain,
       actions: <DarwinNotificationAction>[
-        // DarwinNotificationAction.plain('id_1', 'Action 1'),
         DarwinNotificationAction.plain(
-          'id_2',
-          'Action 2 (destructive)',
-          options: <DarwinNotificationActionOption>{
-            DarwinNotificationActionOption.destructive,
-          },
+          keepID,
+          'KEEP 하기',
         ),
         DarwinNotificationAction.plain(
-          navigationActionId,
-          'Action 3 (foreground)',
+          navigationScreenId,
+          '광고 시청하기',
           options: <DarwinNotificationActionOption>{
             DarwinNotificationActionOption.foreground,
           },
         ),
-        // DarwinNotificationAction.plain(
-        //   'id_4',
-        //   'Action 4 (auth required)',
-        //   options: <DarwinNotificationActionOption>{
-        //     DarwinNotificationActionOption.authenticationRequired,
-        //   },
-        // ),
       ],
       options: <DarwinNotificationCategoryOption>{
         DarwinNotificationCategoryOption.customDismissAction,
@@ -66,54 +57,81 @@ class NotificationHandler {
     )
   ];
 
+  void onDidReceiveLocalNotification(
+      int id, String? title, String? body, String? payload) async {
+    print("vao day");
+  }
+
   initializeFcmNotification() async {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-            requestAlertPermission: false,
-            defaultPresentAlert: false,
-            
-            
-            onDidReceiveLocalNotification: (id, title, body, payload) {
-              print("object");
-            },
-            notificationCategories: darwinNotificationCategories);
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+      notificationCategories: darwinNotificationCategories,
+      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+    );
 
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsDarwin);
 
-    if (Platform.isAndroid) {
-      _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-          onDidReceiveNotificationResponse: (details) {
-        switch (details.notificationResponseType) {
-          case NotificationResponseType.selectedNotification:
-            break;
-          case NotificationResponseType.selectedNotificationAction:
-            if (details.actionId == navigationActionId) {}
-            break;
-        }
-      }, onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
-    }
+    flutterLocalNotificationsPlugin
+        .getNotificationAppLaunchDetails()
+        .then((value) {
+      print("valuevalue${value}");
+    });
 
-    _flutterLocalNotificationsPlugin.show(
-        1, '', '', const NotificationDetails(iOS: DarwinNotificationDetails()));
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+
+    try {
+      debugPrint("s12312312");
+      await flutterLocalNotificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse:
+            (NotificationResponse notificationResponse) {
+          debugPrint("12312312312313zsczxczx");
+          switch (notificationResponse.notificationResponseType) {
+            case NotificationResponseType.selectedNotification:
+              debugPrint("s12312312123123");
+              break;
+            case NotificationResponseType.selectedNotificationAction:
+              debugPrint("s1231asdasdasd2312");
+              if (notificationResponse.actionId == navigationScreenId) {
+                debugPrint("s123134sfczczsc2312");
+              }
+              break;
+          }
+        },
+        onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+      );
+    } catch (ex) {
+      print("exexex$ex");
+    }
 
     try {
       await _fcm.requestPermission(alert: false);
     } catch (e) {}
-
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-            alert: Platform.isAndroid ? true : false, badge: true, sound: true);
+            alert: true, badge: true, sound: true);
     _fcm.getInitialMessage().then((value) {
       if (value != null) {
         onNavigateToMyEvent(data: value.data);
       }
     });
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("onMessage: $message");
+      
       CountAdver().initCount();
       FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
 
@@ -124,8 +142,8 @@ class NotificationHandler {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print("onMessageOpenedApp: $message");
-      onNavigateToMyEvent(data: message.data);
+      print("concac${await message.data}");
+         print("concac${await message.notification?.body}");
     });
   }
 
@@ -152,15 +170,7 @@ class NotificationHandler {
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  // ignore: avoid_print
-  print('notification(${notificationResponse.id}) action tapped: '
-      '${notificationResponse.actionId} with'
-      ' payload: ${notificationResponse.payload}');
-  if (notificationResponse.input?.isNotEmpty ?? false) {
-    // ignore: avoid_print
-    print(
-        'notification action tapped with input: ${notificationResponse.input}');
-  }
+  print("vao day khong");
 }
 
 @pragma('vm:entry-point')
@@ -171,8 +181,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (Platform.isAndroid) {
     CountAdver().initCount();
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-  } else {
-  }
+  } else {}
 }
 
 class CountAdver {
