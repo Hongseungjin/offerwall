@@ -31,6 +31,7 @@ import flutter_local_notifications
     }
 
 
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -44,7 +45,6 @@ import flutter_local_notifications
     }
     GeneratedPluginRegistrant.register(with: self)
     AppAllOfferwallSDK.initialize()
-    UNUserNotificationCenter.current().delegate = self
  
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

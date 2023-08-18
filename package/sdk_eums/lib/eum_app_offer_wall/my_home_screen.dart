@@ -9,6 +9,7 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
+import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/accumulate_money_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/asked_question_module/asked_question_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/link_addvertising_module/link_addvertising_screen.dart';
@@ -48,14 +49,27 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     RxBus.destroy();
   }
 
-  
-
   @override
   void initState() {
     _registerEventBus();
     super.initState();
-    settingBattery();
+    if (Platform.isAndroid) {
+      settingBattery();
+    }
 
+    NotificationHandler()
+        .didReceiveLocalNotificationStream
+        .stream
+        .listen((ReceivedNotification receivedNotification) async {
+      print("co vao nhe dcm");
+    });
+
+    NotificationHandler()
+        .selectNotificationStream
+        .stream
+        .listen((String? payload) async {
+      print("co vao nhe dcasdasdadasdm");
+    });
   }
 
   getBatteryOptimization() async {
