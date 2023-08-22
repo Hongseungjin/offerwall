@@ -11,8 +11,13 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 
 void main() {
   SdkEums.instant.init(onRun: () async {
-      await Firebase.initializeApp();
+    await Firebase.initializeApp();
+    // if (Platform.isAndroid) {
       NotificationHandler().initializeFcmNotification();
+    // } else {
+    //   NotificationController.initializeLocalNotifications();
+    // }
+
     runApp(MaterialApp(home: MyHomePage()));
   });
 }

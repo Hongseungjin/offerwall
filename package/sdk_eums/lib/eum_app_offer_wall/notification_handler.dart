@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -82,17 +83,19 @@ class NotificationHandler {
       },
     )
   ];
+
   initializeFcmNotification() async {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('mipmap/ic_launcher');
+
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      // requestAlertPermission: false,
-      // requestBadgePermission: false,
-      // requestSoundPermission: false,
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
       onDidReceiveLocalNotification:
           (int id, String? title, String? body, String? payload) async {
-        didReceiveLocalNotificationStream.onListen?.call();
+        print("payloadpayloadpayloadpayloadpayload$payload");
         didReceiveLocalNotificationStream.add(
           ReceivedNotification(
             id: id,
@@ -120,33 +123,21 @@ class NotificationHandler {
           );
     }
 
-    debugPrint("s12312312");
-
-    NotificationResponse? response;
-
-    final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-        await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    final didNotificationLaunchApp =
-        notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
-
-    if (notificationAppLaunchDetails != null &&
-        notificationAppLaunchDetails.didNotificationLaunchApp) {}
-
-    response = notificationAppLaunchDetails?.notificationResponse;
-    print("objecrt${response?.payload}");
-    if (didNotificationLaunchApp) {
-      var payload = notificationAppLaunchDetails?.notificationResponse?.payload;
-      debugPrint("payload$payload");
-    } else {
-      await flutterLocalNotificationsPlugin.initialize(
-        initializationSettings,
-        onDidReceiveNotificationResponse:
-            (NotificationResponse notificationResponse) async {
-          print("detaildetaildetail$notificationResponse");
-        },
-        onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-      );
-    }
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {
+        final String? payload = notificationResponse.payload;
+        if (notificationResponse.payload != null) {
+          print(notificationResponse.actionId);
+          debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
+          if (notificationResponse.actionId == navigationScreenId) {
+            onNavigateToMyEvent(data: jsonDecode(payload ?? ''));
+          }
+        }
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+    );
 
     try {
       await _fcm.requestPermission(alert: false);
@@ -154,61 +145,57 @@ class NotificationHandler {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
             alert: true, badge: true, sound: true);
-    _fcm.getInitialMessage().then((value) {
-      if (value != null) {
-        onNavigateToMyEvent(data: value.data);
-      }
-    });
+
+    const DarwinNotificationDetails iosNotificationDetails =
+        DarwinNotificationDetails(
+      categoryIdentifier: darwinNotificationCategoryPlain,
+    );
+    const NotificationDetails notificationDetails = NotificationDetails(
+      iOS: iosNotificationDetails,
+    );
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
+        print("co vao day khong123123 ${message.data}");
         if (Platform.isAndroid) {
           CountAdver().initCount();
           FlutterBackgroundService()
               .invoke("showOverlay", {'data': message.data});
         }
-
-        String? title = message.notification?.title ?? '';
-        String? body = message.notification?.body ?? '';
+        flutterLocalNotificationsPlugin.show(0, '${message.data['title']}',
+            '${message.data['body']}', notificationDetails,
+            payload: jsonEncode(message.data));
       },
     );
 
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) async {
-        message.threadId;
-        print('messagemessage ${message.threadId}');
-        onSelectNotification(NotificationResponse(
-            id: message.hashCode,
-            payload: keepID,
-            notificationResponseType:
-                NotificationResponseType.selectedNotificationAction));
-      },
+      (RemoteMessage message) async {},
     );
   }
 
-  onSelectNotification(NotificationResponse notificationResponse) async {
-    print('payload ${notificationResponse.payload}');
-    if (notificationResponse.payload != null &&
-        notificationResponse.payload!.isNotEmpty) {
-      print('payloadssss $notificationResponse');
-    }
-    switch (notificationResponse.notificationResponseType) {
-      case NotificationResponseType.selectedNotification:
-        selectNotificationStream.add(notificationResponse.payload);
-        break;
-      case NotificationResponseType.selectedNotificationAction:
-        print("cos vao day khong");
-        if (notificationResponse.actionId == navigationScreenId) {
-          selectNotificationStream.add(notificationResponse.payload);
-          print("cos vao day khonsadasdasdg");
-        } else {
-          print("cos vao day khongasaaaaa ${notificationResponse.payload}");
-        }
-        break;
-    }
-  }
+  // onSelectNotification(NotificationResponse notificationResponse) async {
+  //   print('payload ${notificationResponse.payload}');
+  //   if (notificationResponse.payload != null &&
+  //       notificationResponse.payload!.isNotEmpty) {
+  //     print('payloadssss $notificationResponse');
+  //   }
+  //   switch (notificationResponse.notificationResponseType) {
+  //     case NotificationResponseType.selectedNotification:
+  //       selectNotificationStream.add(notificationResponse.payload);
+  //       break;
+  //     case NotificationResponseType.selectedNotificationAction:
+  //       print("cos vao day khong");
+  //       if (notificationResponse.actionId == navigationScreenId) {
+  //         selectNotificationStream.add(notificationResponse.payload);
+  //         print("cos vao day khonsadasdasdg");
+  //       } else {
+  //         print("cos vao day khongasaaaaa ${notificationResponse.payload}");
+  //       }
+  //       break;
+  //   }
+  // }
 
   onNavigateToMyEvent({dynamic data}) async {
     Routing().navigate(
@@ -233,25 +220,54 @@ class NotificationHandler {
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
-  print('notification(${notificationResponse.id}) action tapped: '
-      '${notificationResponse.actionId} with'
-      ' payload: ${notificationResponse.payload}');
-  if (notificationResponse.input?.isNotEmpty ?? false) {
-    // ignore: avoid_print
-    print(
-        'notification action tapped with input: ${notificationResponse.input}');
+  if (notificationResponse.actionId == keepID) {
+    final String? payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
+      if (notificationResponse.actionId == keepID) {
+        try {
+          EumsOfferWallServiceApi().saveKeep(
+              advertiseIdx:
+                  jsonDecode(jsonDecode(payload ?? '')['data'])['idx']);
+        } catch (ex) {
+          print('exexex$ex');
+        }
+      }
+    }
   }
+  // print('notification(${notificationResponse.id}) action tapped: '
+  //     '${notificationResponse.actionId} with'
+  //     ' payload: ${notificationResponse.payload}');
+  // if (notificationResponse.input?.isNotEmpty ?? false) {
+  //   // ignore: avoid_print
+  //   print(
+  //       'notification action tapped with input: ${notificationResponse.input}');
+  // }
 }
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("vao nhe ennnnn ");
+  const DarwinNotificationDetails iosNotificationDetails =
+      DarwinNotificationDetails(
+    categoryIdentifier: darwinNotificationCategoryPlain,
+  );
+  const NotificationDetails notificationDetails = NotificationDetails(
+    iOS: iosNotificationDetails,
+  );
 
   // CronCustom().initCron();
   if (Platform.isAndroid) {
     CountAdver().initCount();
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-  } else {}
+  } else {
+    NotificationHandler().flutterLocalNotificationsPlugin.show(
+        0,
+        '${message.data['title']}',
+        '${message.data['body']}',
+        notificationDetails,
+        payload: jsonEncode(message.data));
+  }
 }
 
 class CountAdver {

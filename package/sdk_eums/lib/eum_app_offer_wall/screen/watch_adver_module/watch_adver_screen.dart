@@ -1,5 +1,6 @@
 // ignore_for_file: unrelated_type_equality_checks
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
 
   @override
   void initState() {
+
+    print("asdkalsdk${widget.data}");
     localStorel = LocalStoreService();
     fToast.init(context);
     super.initState();
@@ -84,7 +87,8 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
     if (state.earnMoneyStatus == EarnMoneyStatus.success) {
       if (Platform.isIOS) {
         RxBus.post(UpdateUser());
-        Routing().popToRoot(context);
+        Navigator.of(context).pop();
+        // Routing().popToRoot(context);
       }
       if (Platform.isAndroid) {
         // FlutterBackgroundService().invoke("closeOverlay");
@@ -159,12 +163,12 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                 if (checkSave) {
                   globalKey.currentContext
                       ?.read<WatchAdverBloc>()
-                      .add(SaveAdver(advertise_idx: (widget.data)['idx']));
+                      .add(SaveAdver(advertise_idx: jsonDecode(widget.data)['idx']));
                 } else {
                   print('widget.data ${widget.data}');
                   globalKey.currentContext
                       ?.read<WatchAdverBloc>()
-                      .add(DeleteScrap(id: (widget.data)['idx']));
+                      .add(DeleteScrap(id: jsonDecode(widget.data)['idx']));
                 }
               },
               child: Image.asset(
@@ -178,16 +182,16 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             },
             mission: () async {
               localStorel!.setDataShare(dataShare: null);
-              DialogUtils.showDialogSucessPoint(context, data: (widget.data),
+              DialogUtils.showDialogSucessPoint(context, data: jsonDecode(widget.data),
                   voidCallback: () async {
                 print("vao day");
-                Routing().popToRoot(context);
+        
                 globalKey.currentContext?.read<WatchAdverBloc>().add(EarnPoin(
-                    advertise_idx: (widget.data)['idx'],
-                    pointType: (widget.data)['typePoint']));
+                    advertise_idx: jsonDecode(widget.data)['idx'],
+                    pointType: jsonDecode(widget.data)['typePoint']));
               });
             },
-            urlLink: (widget.data)['url_link'],
+            urlLink: jsonDecode(widget.data)['url_link'],
             onClose: () {
               Routing().popToRoot(context);
             },
