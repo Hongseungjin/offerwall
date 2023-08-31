@@ -22,9 +22,21 @@ class Constants {
     return dataFormat.toString();
   }
 
+  static String formatTimePoint(time) {
+    DateTime parseDt = DateTime.parse(time);
+    String dataFormat = DateFormat('yyyy/MM').format(parseDt);
+    return dataFormat.toString();
+  }
+
   static String formatTimeDay(time) {
     DateTime parseDt = DateTime.parse(time).toLocal();
     String dataFormat = DateFormat('yyyy.MM.dd HH:mm').format(parseDt);
+    return dataFormat.toString();
+  }
+
+  static String formatTimeDayPoint(time) {
+    DateTime parseDt = DateTime.parse(time).toLocal();
+    String dataFormat = DateFormat('yyyy.MM.dd HH:mm:ss').format(parseDt);
     return dataFormat.toString();
   }
 }

@@ -952,15 +952,6 @@ class _ListViewAccumulateMoneyScreenState
                               fontFamily: FontFamily.notoSansKR),
                         ),
                       ),
-                      // Text(
-                      //   "배달e음 첫",
-                      //   maxLines: 1,
-                      //   style: AppStyle.medium.copyWith(
-                      //       height: 2,
-                      //       fontSize: 12,
-                      //       color: AppColor.colorF7D,
-                      //       fontFamily: FontFamily.notoSansKR),
-                      // ),
                     ],
                   ),
                   const Spacer(),

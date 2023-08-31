@@ -11,19 +11,3 @@ class NextTab extends SettingEvent {
   @override
   List<Object?> get props => [];
 }
-
-// class UpdateUser extends SettingEvent {
-//   UpdateUser({this.account});
-
-//   final dynamic account;
-//   @override
-//   List<Object?> get props => [account];
-// }
-
-// class InfoUser extends SettingEvent {
-//   InfoUser({this.account});
-
-//   final dynamic account;
-//   @override
-//   List<Object?> get props => [account];
-// }

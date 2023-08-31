@@ -96,7 +96,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
         ),
       ], child: _buildContent(context)),
     );
-    ;
+
   }
 
   _buildContent(BuildContext context) {

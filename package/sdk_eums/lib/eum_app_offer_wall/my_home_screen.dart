@@ -12,6 +12,7 @@ import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/accumulate_money_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/asked_question_module/asked_question_screen.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/home_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/link_addvertising_module/link_addvertising_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/request_module/request_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/reward_guide_module/reward_guide_screen.dart';
@@ -393,7 +394,7 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
                 },
               ),
             ],
-            child: AccumulateMoneyScreen(),
+            child: const HomePage(),
           )),
     );
   }

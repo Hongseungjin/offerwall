@@ -104,6 +104,14 @@ class Assets {
       AssetGenImage('assets/icons/save_keep.png');
   static const AssetGenImage alertOverlay =
       AssetGenImage('assets/icons/alert_overlay.png');
+  static const AssetGenImage icon_info =
+      AssetGenImage('assets/icons/icon_info.png');
+  static const AssetGenImage icon_loudspeaker =
+      AssetGenImage('assets/icons/icon_loudspeaker.png');
+  static const AssetGenImage icon_point =
+      AssetGenImage('assets/icons/icon_point.png');
+  static const AssetGenImage adv_scrap =
+      AssetGenImage('assets/icons/icon-adv_scrap.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
