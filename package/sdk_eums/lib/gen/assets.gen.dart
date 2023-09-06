@@ -113,6 +113,44 @@ class Assets {
   static const AssetGenImage adv_scrap =
       AssetGenImage('assets/icons/icon-adv_scrap.png');
 
+  static const AssetGenImage coingif =
+      AssetGenImage('assets/icons/coin-loding.gif');
+
+  static const AssetGenImage setting =
+      AssetGenImage('assets/icons/setting.png');
+  static const AssetGenImage report = AssetGenImage('assets/icons/report.png');
+  static const AssetGenImage scrap_adver =
+      AssetGenImage('assets/icons/scrap_adver.png');
+  static const AssetGenImage service_info =
+      AssetGenImage('assets/icons/service_info.png');
+  static const AssetGenImage termofuser =
+      AssetGenImage('assets/icons/termofuser.png');
+  static const AssetGenImage point_conversion =
+      AssetGenImage('assets/icons/point_conversion.png');
+  static const AssetGenImage notifi = AssetGenImage('assets/icons/notifi.png');
+  static const AssetGenImage my_page =
+      AssetGenImage('assets/icons/my_page.png');
+  static const AssetGenImage keep_adver =
+      AssetGenImage('assets/icons/keep_adver.png');
+  static const AssetGenImage inquiry1 =
+      AssetGenImage('assets/icons/inquiry1.png');
+  static const AssetGenImage point_count =
+      AssetGenImage('assets/icons/point_count.png');
+
+  static const AssetGenImage history_point =
+      AssetGenImage('assets/icons/history_point.png');
+  static const AssetGenImage frequentlyAQ =
+      AssetGenImage('assets/icons/frequentlyAQ.png');
+  static const AssetGenImage frequentluasq =
+      AssetGenImage('assets/icons/frequentluasq.png');
+
+  static const AssetGenImage chat = AssetGenImage('assets/icons/chat.png');
+  static const AssetGenImage adscrap =
+      AssetGenImage('assets/icons/adscrap.png');
+
+  static const AssetGenImage adarchive =
+      AssetGenImage('assets/icons/adarchive.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         logo,

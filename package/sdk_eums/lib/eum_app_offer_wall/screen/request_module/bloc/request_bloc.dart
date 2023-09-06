@@ -34,6 +34,7 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
       await _eumsOfferWallService.createInquire(
           content: event.contents,
           type: event.type,
+          title: event.title,
           deviceAppVersion: event.deviceOsVersion,
           deviceManufacturer: event.deviceManufacturer,
           deviceModelName: event.deviceModelName,

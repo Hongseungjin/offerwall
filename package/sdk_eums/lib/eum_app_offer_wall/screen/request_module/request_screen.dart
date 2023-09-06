@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
@@ -129,6 +130,7 @@ class _RequestScreenState extends State<RequestScreen>
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
         leading: GestureDetector(
           onTap: () {
+            FocusScope.of(context).unfocus();
             Navigator.of(context).pop();
           },
           child: const Icon(Icons.arrow_back_ios_outlined,
@@ -138,23 +140,21 @@ class _RequestScreenState extends State<RequestScreen>
       body: Column(
         children: [
           TabBar(
-              indicator: const UnderlineTabIndicator(
-                borderSide: BorderSide(width: 3.0, color: AppColor.red),
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(width: 3.0, color: HexColor('#f4a43b')),
               ),
               controller: _tabController,
               labelPadding:
                   const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               isScrollable: true,
-              labelColor: AppColor.red,
-              indicatorColor: AppColor.red,
+              labelColor: HexColor('#f4a43b'),
+              indicatorColor: HexColor('#f4a43b'),
               unselectedLabelColor: AppColor.color70,
-              labelStyle: AppStyle.bold.copyWith(color: AppColor.red),
+              labelStyle: AppStyle.bold.copyWith(color: HexColor('#f4a43b')),
+              dividerColor: Colors.amber,
               unselectedLabelStyle:
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              tabs: [
-                _buildTitleTabBar(AppString.inquiry1),
-                _buildTitleTabBar(AppString.detailInquiry)
-              ]),
+              tabs: [_buildTitleTabBar('문의 하기'), _buildTitleTabBar('문의 내역')]),
           DefaultTabController(length: 2, child: _buildTabBar())
         ],
       ),
@@ -193,10 +193,12 @@ class MakeQuestion extends StatefulWidget {
 
 class _MakeQuestionState extends State<MakeQuestion> {
   dynamic selectedArea;
-  String nameBank = '문의 유형 선택';
+  String nameBank = '선택';
   bool check = false;
+  TextEditingController titleCtrl = TextEditingController();
   TextEditingController contentCtrl = TextEditingController();
   FToast fToast = FToast();
+  int maxlength = 0;
 
   @override
   void initState() {
@@ -210,10 +212,16 @@ class _MakeQuestionState extends State<MakeQuestion> {
       builder: (context, state) {
         return SingleChildScrollView(
           child: Container(
-            color: AppColor.colorC9.withOpacity(0.2),
+            // color: AppColor.colorC9.withOpacity(0.2),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 20),
+                Text(
+                  '문의 유형',
+                  style: AppStyle.bold,
+                ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 12),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -264,18 +272,55 @@ class _MakeQuestionState extends State<MakeQuestion> {
                     },
                   ),
                 ),
+                // Row(
+                //   children: [
+                //     Image.asset(Assets.errOrange.path,
+                //         package: "sdk_eums", height: 20),
+                //     Text('  문의 하기 안내  ',
+                //         style: AppStyle.bold
+                //             .copyWith(color: AppColor.orange4, fontSize: 16)),
+                //     const Icon(
+                //       Icons.keyboard_arrow_down_outlined,
+                //       size: 20,
+                //       color: AppColor.orange4,
+                //     )
+                //   ],
+                // ),
+                const SizedBox(height: 20),
+                Text(
+                  '제목',
+                  style: AppStyle.bold,
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.circular(6),
+                      border:
+                          Border.all(color: AppColor.color70.withOpacity(0.7))),
+                  child: TextFormField(
+                    controller: titleCtrl,
+                    decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        hintText: '문의 제목 입력',
+                        border: InputBorder.none,
+                        hintStyle: AppStyle.bold.copyWith(
+                            color: AppColor.color70.withOpacity(0.7))),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   children: [
-                    Image.asset(Assets.errOrange.path,
-                        package: "sdk_eums", height: 20),
-                    Text('  문의 하기 안내  ',
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.orange4, fontSize: 16)),
-                    const Icon(
-                      Icons.keyboard_arrow_down_outlined,
-                      size: 20,
-                      color: AppColor.orange4,
-                    )
+                    Text(
+                      '내용',
+                      style: AppStyle.bold,
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${maxlength} / 500',
+                      style: AppStyle.bold,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -286,10 +331,16 @@ class _MakeQuestionState extends State<MakeQuestion> {
                       border:
                           Border.all(color: AppColor.color70.withOpacity(0.7))),
                   child: TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        maxlength = value.length;
+                      });
+                    },
                     controller: contentCtrl,
-                    maxLength: 200,
-                    maxLines: 9,
+                    maxLength: 500,
+                    maxLines: 6,
                     decoration: InputDecoration(
+                        counterText: '',
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 10),
                         hintText: '문의 내용을 입력해 주세요.',
@@ -298,7 +349,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                             color: AppColor.color70.withOpacity(0.7))),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -311,50 +362,54 @@ class _MakeQuestionState extends State<MakeQuestion> {
                       children: [
                         Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
+                                shape: BoxShape.circle,
                                 color: check
                                     ? AppColor.orange4
-                                    : Colors.transparent,
+                                    : HexColor('#888888').withOpacity(0.3),
                                 border: Border.all(
                                     color: !check
-                                        ? AppColor.orange4
+                                        ? Colors.transparent
                                         : Colors.transparent)),
-                            child: Icon(
+                            child: const Icon(
                               Icons.check,
                               size: 17,
-                              color:
-                                  check ? AppColor.white : Colors.transparent,
+                              color: AppColor.white,
                             )),
                         const SizedBox(width: 8),
-                        RichText(
-                            text: TextSpan(
-                                text: '원활한 답변을 위한',
-                                style: AppStyle.bold.copyWith(
-                                    fontSize: 13, color: AppColor.black),
-                                children: [
-                              TextSpan(
-                                text: '기기 정보 수집 약관',
-                                style: AppStyle.bold.copyWith(
-                                    fontSize: 13, color: AppColor.red),
-                              ),
-                              TextSpan(
-                                text: '에 동의합니다',
-                                style: AppStyle.bold.copyWith(
-                                    fontSize: 13, color: AppColor.black),
-                              )
-                            ]))
+                        Text(
+                          '개인정보 수집 및 이용에 동의합니다.',
+                          style: AppStyle.regular
+                              .copyWith(color: HexColor('#555555')),
+                        )
+                        // RichText(
+                        //     text: TextSpan(
+                        //         text: '원활한 답변을 위한',
+                        //         style: AppStyle.bold.copyWith(
+                        //             fontSize: 13, color: AppColor.black),
+                        //         children: [
+                        //       TextSpan(
+                        //         text: '기기 정보 수집 약관',
+                        //         style: AppStyle.bold.copyWith(
+                        //             fontSize: 13, color: AppColor.red),
+                        //       ),
+                        //       TextSpan(
+                        //         text: '에 동의합니다',
+                        //         style: AppStyle.bold.copyWith(
+                        //             fontSize: 13, color: AppColor.black),
+                        //       )
+                        //     ]))
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Padding(
-                  padding: const EdgeInsets.only(left: 32),
-                  child: Text(
-                    '수집항목 \n - 안드로이드 버전 정보 (OS Version, API Version) \n- 기기 제조가 정보 \n- 기기 모델명 (기기 고유 모델명) \n- 현재 설치된 앱 버전 \n',
-                    style: AppStyle.regular.copyWith(color: AppColor.grey5D),
-                  ),
-                ),
+                // const SizedBox(height: 12),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 32),
+                //   child: Text(
+                //     '수집항목 \n - 안드로이드 버전 정보 (OS Version, API Version) \n- 기기 제조가 정보 \n- 기기 모델명 (기기 고유 모델명) \n- 현재 설치된 앱 버전 \n',
+                //     style: AppStyle.regular.copyWith(color: AppColor.grey5D),
+                //   ),
+                // ),
                 const SizedBox(height: 24),
                 GestureDetector(
                   onTap: () {
@@ -375,7 +430,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                             : AppColor.yellow,
                         borderRadius: BorderRadius.circular(8)),
                     child: Text(
-                      '문의하기 ',
+                      '문의 등록',
                       style: AppStyle.bold
                           .copyWith(color: AppColor.black, fontSize: 16),
                       textAlign: TextAlign.center,
@@ -418,6 +473,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
     context.read<RequestBloc>().add(RequestInquire(
         type: QUESTION_LIST[selectedArea]['media'],
         contents: contentCtrl.text,
+        title: titleCtrl.text,
         deviceAppVersion: deviceAppVersion,
         deviceManufacturer: deviceManufacturer,
         deviceModelName: deviceModelName,

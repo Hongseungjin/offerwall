@@ -24,14 +24,12 @@ class EarnCashBloc extends Bloc<EarnCashEvent, EarnCashState> {
     } else if (event is PointOfferWallList) {
       await _mapPointOfferWallListToState(event, emit);
     }
-    
   }
-  
+
   _mapEarnCashListToState(EarnCashList event, emit) async {
     emit(state.copyWith(earnCashStatus: EarnCashStatus.loading));
     try {
-      dynamic data =
-          await _eumsOfferWallService.getPointEum();
+      dynamic data = await _eumsOfferWallService.getPointEum();
       emit(state.copyWith(
           earnCashStatus: EarnCashStatus.success, dataEarnCash: data));
     } catch (e) {

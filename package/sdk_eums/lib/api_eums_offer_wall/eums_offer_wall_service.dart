@@ -51,6 +51,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> createInquire(
       {String? type,
       String? content,
+      String? title,
       String? deviceManufacturer,
       String? deviceModelName,
       String? deviceOsVersion,
@@ -71,10 +72,10 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> getDetailOffWall({int? xId});
 
   /// 외부 오퍼월 포인트 리스트
-  Future<dynamic> getPointOffWall();
+  Future<dynamic> getPointOffWall({int? month, int? year});
 
   /// eums 포인트 리스트
-  Future<dynamic> getPointEum();
+  Future<dynamic> getPointEum({int? limit, int? offset, int? month, int? year});
 
   /// KEEP광고 리스트
   Future<dynamic> getListKeep({int? limit, int? offset});

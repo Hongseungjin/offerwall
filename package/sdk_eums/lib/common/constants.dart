@@ -39,6 +39,12 @@ class Constants {
     String dataFormat = DateFormat('yyyy.MM.dd HH:mm:ss').format(parseDt);
     return dataFormat.toString();
   }
+
+  static String formatTimeNew(time) {
+    DateTime parseDt = DateTime.parse(time).toLocal();
+    String dataFormat = DateFormat('yyyy-MM-dd HH:mm:ss').format(parseDt);
+    return dataFormat.toString();
+  }
 }
 
 const DATA_MEDIA = [

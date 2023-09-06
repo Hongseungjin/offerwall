@@ -5,6 +5,7 @@ abstract class RequestEvent extends Equatable {}
 class RequestInquire extends RequestEvent {
   RequestInquire({
     this.contents,
+    this.title,
     this.type,
     this.deviceManufacturer,
     this.deviceModelName,
@@ -13,6 +14,7 @@ class RequestInquire extends RequestEvent {
     this.deviceAppVersion,
   });
 
+  final String? title;
   final String? type;
   final String? contents;
   final String? deviceManufacturer;
@@ -28,7 +30,8 @@ class RequestInquire extends RequestEvent {
         deviceManufacturer,
         deviceModelName,
         deviceOsVersion,
-        deviceSdkVersion
+        deviceSdkVersion,
+        title
       ];
 }
 

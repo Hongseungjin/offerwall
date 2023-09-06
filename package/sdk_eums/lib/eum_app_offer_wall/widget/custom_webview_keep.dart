@@ -3,9 +3,14 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_circular.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
+
+import '../screen/report_module/report_page.dart';
 
 class CustomWebViewKeep extends StatefulWidget {
   final dynamic urlLink;
@@ -20,7 +25,8 @@ class CustomWebViewKeep extends StatefulWidget {
   State<CustomWebViewKeep> createState() => _CustomWebViewKeepState();
 }
 
-class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
+class _CustomWebViewKeepState extends State<CustomWebViewKeep>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   ScrollController _scrollController = ScrollController();
 
   Timer? _timer;
@@ -28,10 +34,13 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
   Timer? timer5s;
   bool showButton = false;
   bool isRunning = true;
+  late LinearTimerController timerController = LinearTimerController(this);
 
   void startTimeDown() {
     _timer?.cancel();
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      timerController.start();
       if (_startTime == 0) {
         _timer?.cancel();
       } else {
@@ -70,6 +79,8 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
       _timer?.cancel();
       isRunning = false;
+      timerController.stop();
+      setState(() {});
     });
   }
 
@@ -81,6 +92,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
       if (!isRunning) {
         isRunning = true;
         startTimeDown();
+        // controller?.forward(from: _startTime.toDouble());
       }
       start5s();
     }
@@ -101,16 +113,15 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
           ),
         ),
         actions: [
-          // CachedNetworkImage(
-          //     width: MediaQuery.of(context).size.width - 64,
-          //     fit: BoxFit.cover,
-          //     imageUrl: widget.uriImage,
-          //     placeholder: (context, url) =>
-          //         const Center(child: CircularProgressIndicator()),
-          //     errorWidget: (context, url, error) {
-          //       return Image.asset(Assets.logo.path,
-          //           package: "sdk_eums", height: 16);
-          //     }),
+          GestureDetector(
+            onTap: () {
+              Routing().navigate(context, ReportPage());
+            },
+            child: Icon(
+              Icons.report,
+              color: Colors.amber,
+            ),
+          )
         ],
       ),
       body: Stack(
@@ -157,7 +168,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             color: !showButton
-                                ? AppColor.grey.withOpacity(0.5)
+                                ? HexColor('#cccccc')
                                 : AppColor.red),
                         child: Text(
                           '포인트 적립하기',
@@ -167,15 +178,40 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> {
                         ),
                       ),
                     ),
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: AppColor.grey.withOpacity(0.5),
-                            shape: BoxShape.circle),
-                        child: Text(
-                          _startTime.toString(),
-                          style: AppStyle.medium.copyWith(fontSize: 16),
-                        ))
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          width: 40,
+                          child: LinearTimer(
+                            color: AppColor.yellow,
+                            backgroundColor:
+                                HexColor('#888888').withOpacity(0.3),
+                            controller: timerController,
+                            duration: Duration(seconds: _startTime),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          top: 10,
+                          child: Image.asset(
+                            Assets.coingif.path,
+                            package: "sdk_eums",
+                            height: 25,
+                          ),
+                        )
+                      ],
+                    ),
+                    // Container(
+                    //     padding: const EdgeInsets.all(10),
+                    //     decoration: BoxDecoration(
+                    //         color: AppColor.grey.withOpacity(0.5),
+                    //         shape: BoxShape.circle),
+                    //     child: Text(
+                    //       _startTime.toString(),
+                    //       style: AppStyle.medium.copyWith(fontSize: 16),
+                    //     ))
                   ],
                 ),
               ))

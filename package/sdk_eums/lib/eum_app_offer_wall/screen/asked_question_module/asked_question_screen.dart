@@ -5,6 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../utils/appStyle.dart';
@@ -188,7 +189,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                       },
                       decoration: InputDecoration(
                           suffixIcon: Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.symmetric(vertical: 17),
                             child: checkSearch
                                 ? GestureDetector(
                                     onTap: () {
@@ -201,29 +202,30 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                                     },
                                     child: const Icon(
                                       Icons.close,
-                                      color: AppColor.orange1,
+                                      color: Colors.black,
                                     ))
                                 : Image.asset(Assets.searchOrange.path,
-                                    package: "sdk_eums", height: 24),
+                                    color: Colors.black,
+                                    package: "sdk_eums",
+                                    height: 15),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
-                              Radius.circular(40),
+                              Radius.circular(10),
                             ),
                             borderSide: BorderSide(
-                                color: AppColor.orange4.withOpacity(0.7),
-                                width: 1.5),
+                                color: HexColor('#e5e5e5'), width: 1.5),
                           ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(40),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
                             ),
-                            borderSide:
-                                BorderSide(color: AppColor.orange4, width: 1.5),
+                            borderSide: BorderSide(
+                                color: HexColor('#e5e5e5'), width: 1.5),
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
-                          hintText: '질문 키워드를 입력해 주세요.',
+                          hintText: '질문 키워드를 입력해 주세요',
                           border: InputBorder.none,
                           hintStyle: AppStyle.bold.copyWith(
                               color: AppColor.color70.withOpacity(0.7))),
@@ -243,7 +245,8 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                 children: [
                   Text(
                     '더 궁금한 점은 1:1문의하기를 통해 해결해 보세요.',
-                    style: AppStyle.bold.copyWith(fontSize: 14),
+                    style: AppStyle.bold
+                        .copyWith(fontSize: 14, color: HexColor('#666666')),
                   ),
                   const SizedBox(height: 16),
                   GestureDetector(
@@ -348,7 +351,16 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(Assets.question.path, package: "sdk_eums", height: 32),
+        Container(
+          padding: const EdgeInsets.all(6),
+          decoration:
+              BoxDecoration(shape: BoxShape.circle, color: HexColor('#fdd000')),
+          child: Text(
+            start1,
+            style: AppStyle.bold,
+          ),
+        ),
+        // Image.asset(Assets.question.path, package: "sdk_eums", height: 32),
         SizedBox(
             width: MediaQuery.of(context).size.width - 100,
             child: Text(

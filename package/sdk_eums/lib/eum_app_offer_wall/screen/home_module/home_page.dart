@@ -1,17 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
+
+import '../keep_adverbox_module/keep_adverbox_module.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -28,6 +35,7 @@ class _HomePageState extends State<HomePage>
   final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll =
       ValueNotifier(GlobalKey());
   late TabController _tabController;
+  String? filter;
 
   @override
   void initState() {
@@ -38,118 +46,183 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ValueListenableBuilder<GlobalKey<NestedScrollViewState>>(
-                valueListenable: globalKeyScroll,
-                builder: (context, value, child) {
-                  return NestedScrollView(
-                    key: value,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    floatHeaderSlivers: true,
-                    headerSliverBuilder:
-                        (BuildContext context, bool innerBoxIsScrolled) {
-                      return [
-                        SliverAppBar(
-                          toolbarHeight:
-                              MediaQuery.of(context).size.height / (5 / 3.5),
-                          backgroundColor: Colors.white,
-                          automaticallyImplyLeading: false,
-                          actions: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                children: [
-                                  _buildUIShowPoint(point: '2000'),
-                                  Wrap(
-                                    spacing: 10,
-                                    children: List.generate(
-                                        uiIconList.length,
-                                        (index) => _buildUiIcon(
-                                            onTap: () {
-                                              switch (index) {
-                                                case 0:
-                                                  Routing().navigate(context,
-                                                      StatusPointPage());
-                                                  break;
-                                                default:
-                                              }
-                                            },
-                                            urlImage: uiIconList[index]['icon'],
-                                            title: uiIconList[index]['title'])),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  _buildUIBannerImage()
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ];
-                    },
-                    body: Column(
-                      children: [
-                        TabBar(
-                          onTap: (value) {
-                            int index = value;
-                            setState(() {
-                              _tabController.index = index;
-                            });
-                          },
-                          labelPadding:
-                              const EdgeInsets.only(bottom: 10, top: 10),
-                          controller: _tabController,
-                          indicatorColor: HexColor('#f4a43b'),
-                          unselectedLabelColor: HexColor('#707070'),
-                          labelColor: HexColor('#f4a43b'),
-                          labelStyle: AppStyle.bold
-                              .copyWith(color: HexColor('#707070')),
-                          tabs: const [
-                            Text(
-                              '다이아 충전',
-                            ),
-                            Text('이용내역'),
-                          ],
-                        ),
-                        _buildUIPoint(point: 123123123),
-                        Expanded(
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(24),
-                                    topRight: Radius.circular(24))),
-                            child: TabBarView(
-                                controller: _tabController,
-                                children: [
-                                  ListViewHome(
-                                    tab: _tabController.index,
-                                  ),
-                                  ListViewHome(
-                                    tab: _tabController.index,
-                                  )
-                                ]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+    return BlocProvider<HomeBloc>(
+      create: (context) => HomeBloc()
+        ..add(ListOfferWall())
+        ..add(InfoUser()),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<HomeBloc, HomeState>(
+            listener: _listenListAdver,
+          ),
+        ],
+        child: WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: _buildContent(context)),
       ),
     );
   }
 
+  void _listenListAdver(BuildContext context, HomeState state) {
+    if (state.listAdverStatus == ListAdverStatus.loading) {
+      LoadingDialog.instance.show();
+      return;
+    }
+    if (state.listAdverStatus == ListAdverStatus.failure) {
+      LoadingDialog.instance.hide();
+      return;
+    }
+    if (state.listAdverStatus == ListAdverStatus.success) {
+      LoadingDialog.instance.hide();
+    }
+  }
+
+  _buildContent(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child:
+                      ValueListenableBuilder<GlobalKey<NestedScrollViewState>>(
+                    valueListenable: globalKeyScroll,
+                    builder: (context, value, child) {
+                      return NestedScrollView(
+                        key: value,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        floatHeaderSlivers: true,
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return [
+                            SliverAppBar(
+                              toolbarHeight:
+                                  MediaQuery.of(context).size.height /
+                                      (5 / 3.5),
+                              backgroundColor: Colors.white,
+                              automaticallyImplyLeading: false,
+                              actions: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    children: [
+                                      _buildUIShowPoint(point: '2000'),
+                                      Wrap(
+                                        spacing: 10,
+                                        children: List.generate(
+                                            uiIconList.length,
+                                            (index) => _buildUiIcon(
+                                                onTap: () {
+                                                  switch (index) {
+                                                    case 0:
+                                                      Routing().navigate(
+                                                          context,
+                                                          StatusPointPage(
+                                                              account: state
+                                                                  .account));
+                                                      break;
+                                                    case 1:
+                                                      Routing().navigate(
+                                                          context,
+                                                          KeepAdverboxScreen());
+                                                      break;
+                                                    case 2:
+                                                      Routing().navigate(
+                                                          context,
+                                                          ScrapAdverBoxScreen());
+
+                                                      break;
+                                                    default:
+                                                  }
+                                                },
+                                                urlImage: uiIconList[index]
+                                                    ['icon'],
+                                                title: uiIconList[index]
+                                                    ['title'])),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      _buildUIBannerImage()
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ];
+                        },
+                        body: Column(
+                          children: [
+                            TabBar(
+                              onTap: (value) {
+                                int index = value;
+                                setState(() {
+                                  _tabController.index = index;
+                                });
+                              },
+                              labelPadding:
+                                  const EdgeInsets.only(bottom: 10, top: 10),
+                              controller: _tabController,
+                              indicatorColor: HexColor('#f4a43b'),
+                              unselectedLabelColor: HexColor('#707070'),
+                              labelColor: HexColor('#f4a43b'),
+                              labelStyle: AppStyle.bold
+                                  .copyWith(color: HexColor('#707070')),
+                              tabs: const [
+                                Text(
+                                  '다이아 충전',
+                                ),
+                                Text('이용내역'),
+                              ],
+                            ),
+                            _buildUIPoint(point: 123123123),
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(24),
+                                        topRight: Radius.circular(24))),
+                                child: TabBarView(
+                                    controller: _tabController,
+                                    children: [
+                                      ListViewHome(
+                                        tab: _tabController.index,
+                                        filter: _filterMedia,
+                                      ),
+                                      ListViewHome(
+                                        tab: _tabController.index,
+                                        filter: _filterMedia,
+                                      )
+                                    ]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  _filterMedia(String? value) {
+    setState(() {
+      filter = value;
+    });
+    // _fetchData();
+  }
+
   _buildUIPoint({int? point}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
@@ -399,9 +472,18 @@ class _HomePageState extends State<HomePage>
 }
 
 class ListViewHome extends StatefulWidget {
-  const ListViewHome({Key? key, required this.tab}) : super(key: key);
+  const ListViewHome(
+      {Key? key,
+      required this.tab,
+      this.fetchData,
+      this.fetchDataLoadMore,
+      this.filter})
+      : super(key: key);
 
   final int tab;
+  final Function? fetchData;
+  final Function? fetchDataLoadMore;
+  final Function? filter;
 
   @override
   State<ListViewHome> createState() => _ListViewHomeState();
@@ -410,27 +492,193 @@ class ListViewHome extends StatefulWidget {
 class _ListViewHomeState extends State<ListViewHome> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
+  ScrollController? controller;
+
+  String allMedia = '최신순';
+
   @override
   Widget build(BuildContext context) {
     return _buildContent(context);
   }
 
-  _buildContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        child: Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: List.generate(10,
-              (index) => widget.tab == 0 ? _buildItemRow() : _buildItemColum()),
+  void _onRefresh() async {
+    await Future.delayed(const Duration(seconds: 0));
+    refreshController.refreshCompleted();
+    setState(() {});
+    widget.fetchData!();
+  }
+
+  void _onLoading() async {
+    await Future.delayed(const Duration(seconds: 0));
+    refreshController.loadComplete();
+    List<dynamic>? dataCampaign =
+        context.read<HomeBloc>().state.listDataOfferWall;
+    if (dataCampaign != null) {
+      widget.fetchDataLoadMore!(offset: dataCampaign.length);
+    }
+  }
+
+  Widget _buildDropDown(BuildContext context) {
+    dynamic medias = DATA_MEDIA.map((item) => item['name']).toList();
+    List<DropdownMenuItem<String>> items =
+        medias.map<DropdownMenuItem<String>>((String? value) {
+      return DropdownMenuItem<String>(
+        value: value,
+        child: Text(
+          value ?? "",
+          textAlign: TextAlign.center,
+          style: AppStyle.bold.copyWith(color: AppColor.black),
+          maxLines: 1,
         ),
+      );
+    }).toList();
+
+    // _filterMedia(String? value) {
+    //   if (value != '최신순') {
+    //     dynamic media = (DATA_MEDIA
+    //         .where((element) => element['name'] == value)
+    //         .toList())[0]['media'];
+
+    //     filter = media;
+    //   } else {
+    //     filter = DATA_MEDIA[2]['media'];
+    //   }
+    //   // _fetchData();
+    // }
+
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        isExpanded: true,
+        dropdownColor: AppColor.white,
+        value: allMedia,
+        style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
+        hint: Text(
+          allMedia,
+          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
+        ),
+        icon: const Icon(
+          Icons.arrow_drop_down,
+          color: AppColor.black,
+        ),
+        items: items,
+        onChanged: (value) {
+          setState(() {
+            allMedia = value!;
+          });
+
+          widget.filter!(value);
+
+          // _filterMedia(value);
+        },
       ),
     );
   }
 
-  _buildItemColum() {
+  _buildContent(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Text('asdjkas'),
+                Container(
+                  height: 35,
+                  width: 100,
+                  child: Center(child: _buildDropDown(context)),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.white,
+                      border: Border(
+                          top: BorderSide(
+                              color: AppColor.grey5D.withOpacity(0.2),
+                              width: 2))),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: SmartRefresher(
+                    controller: refreshController,
+                    onRefresh: _onRefresh,
+                    onLoading: _onLoading,
+                    header: CustomHeader(
+                      builder: (BuildContext context, RefreshStatus? mode) {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.black)));
+                      },
+                    ),
+                    footer: CustomFooter(
+                      builder: (BuildContext context, LoadStatus? mode) {
+                        return mode == LoadStatus.loading
+                            ? Center(
+                                child: Column(
+                                children: const [
+                                  Text(' '),
+                                  CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.black)),
+                                ],
+                              ))
+                            : SizedBox();
+                      },
+                    ),
+                    enablePullDown: true,
+                    enablePullUp: true,
+                    child: state.listDataOfferWall != null
+                        ? Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            children: List.generate(
+                                state.listDataOfferWall.length,
+                                (index) => widget.tab == 0
+                                    ? _buildItemRow(
+                                        data: state.listDataOfferWall[index])
+                                    : _buildItemColum(
+                                        data: state.listDataOfferWall[index])),
+                          )
+                        : SizedBox(),
+                    // child: state.listDataOfferWall != null
+                    //     ? ListView.builder(
+                    //         controller: controller,
+                    //         itemCount: state.listDataOfferWall.length ?? 0,
+                    //         itemBuilder: (context, index) {
+                    //           return widget.tab == 0
+                    //               ? _buildItemRow(
+                    //                   data: state.listDataOfferWall[index])
+                    //               : _buildItemColum(
+                    //                   data: state.listDataOfferWall[index]);
+                    //         },
+                    //       )
+                    //     : const SizedBox()),
+                  )),
+            ),
+          ],
+        );
+      },
+    );
+    // return Padding(
+    //   padding: const EdgeInsets.all(16),
+    //   child: SingleChildScrollView(
+    //     child: Wrap(
+    //       spacing: 12,
+    //       runSpacing: 12,
+    //       children: List.generate(10,
+    //           (index) => widget.tab == 0 ? _buildItemRow() : _buildItemColum()),
+    //     ),
+    //   ),
+    // );
+  }
+
+  _buildItemColum({dynamic data}) {
     return Container(
+      color: Colors.white,
       width: (MediaQuery.of(context).size.width - 48) / 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,13 +698,13 @@ class _ListViewHomeState extends State<ListViewHome> {
           ),
           const SizedBox(height: 4),
           Text(
-            '[교동] 진하고 얼큰하고 구수하고 속시원한 간편식 500g*4팩 (택1)',
+            data['title'] ?? "",
             maxLines: 2,
             style: AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
           ),
           const SizedBox(height: 4),
           Text(
-            Constants.formatMoney(10012938, suffix: '원'),
+            Constants.formatMoney(data['reward'], suffix: '원'),
             style: AppStyle.regular.copyWith(
                 decoration: TextDecoration.lineThrough,
                 color: HexColor('#888888')),
@@ -467,7 +715,7 @@ class _ListViewHomeState extends State<ListViewHome> {
               Text('60% ',
                   style: AppStyle.bold
                       .copyWith(color: HexColor('#ff7169'), fontSize: 16)),
-              Text(Constants.formatMoney(1938, suffix: '원'),
+              Text(Constants.formatMoney(data['reward'], suffix: '원'),
                   style: AppStyle.bold
                       .copyWith(color: HexColor('#000000'), fontSize: 16))
             ],
@@ -491,29 +739,35 @@ class _ListViewHomeState extends State<ListViewHome> {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: Image.asset(Assets.rewardGuide.path,
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+              child: CachedNetworkImage(
                   width: MediaQuery.of(context).size.width,
-                  height: 160,
-                  fit: BoxFit.fitWidth,
-                  package: "sdk_eums"),
+                  height: 200,
+                  fit: BoxFit.cover,
+                  imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) {
+                    return Image.asset(Assets.logo.path,
+                        package: "sdk_eums", width: 30, height: 30);
+                  }),
             ),
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "사전예약 기념! ",
+                data['title'] ?? "",
                 style: AppStyle.bold.copyWith(color: Colors.black),
               ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("리워드페이지 출석하고 캐시 받자!",
-                  style: AppStyle.bold.copyWith(color: Colors.black)),
-            ),
+            // const SizedBox(
+            //   height: 5,
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   child: Text("리워드페이지 출석하고 캐시 받자!",
+            //       style: AppStyle.bold.copyWith(color: Colors.black)),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -525,7 +779,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '+${Constants.formatMoney(10012938, suffix: '')}',
+                    '+${Constants.formatMoney(data['reward'], suffix: '')}',
                     style: AppStyle.bold
                         .copyWith(color: HexColor('f4a43b'), fontSize: 14),
                   ),

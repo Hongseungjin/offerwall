@@ -284,287 +284,265 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                 key: globalKey,
                 backgroundColor: AppColor.white,
                 body: SafeArea(
-                  child: Stack(
-                    children: [
-                      Builder(
-                        builder: (context) => Column(
-                          children: [
-                            const SizedBox(height: 16),
+                  child: Builder(
+                    builder: (context) => Column(
+                      children: [
+                        const SizedBox(height: 16),
 
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                      color: AppColor.colorCC, width: 1)),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                        color: AppColor.colorF5,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(12),
-                                            topRight: Radius.circular(12))),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          !isdisable
-                                              ? "물개 광고 활성화 중입니다."
-                                              : "물개 광고 비활성화 중입니다.",
-                                          style: AppStyle.bold.copyWith(
-                                              color: Colors.black,
-                                              fontSize: 14),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          isdisable ? 'OFF' : 'ON',
-                                          style: AppStyle.bold.copyWith(
-                                              color: isdisable
-                                                  ? Colors.black
-                                                  : AppColor.orange2,
-                                              fontSize: 14),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            setState(() {
-                                              isdisable = !isdisable;
-                                            });
-                                            localStore?.setSaveAdver(isdisable);
-                                            if (isdisable) {
-                                              String? token =
-                                                  await FirebaseMessaging
-                                                      .instance
-                                                      .getToken();
-
-                                              await EumsOfferWallServiceApi()
-                                                  .unRegisterTokenNotifi(
-                                                      token: token);
-                                              FlutterBackgroundService()
-                                                  .invoke("stopService");
-                                            } else {
-                                              dynamic data = <String, dynamic>{
-                                                'count': 0,
-                                                'date': Constants.formatTime(
-                                                    DateTime.now()
-                                                        .toIso8601String()),
-                                              };
-                                              localStore
-                                                  ?.setCountAdvertisement(data);
-                                              String? token =
-                                                  await FirebaseMessaging
-                                                      .instance
-                                                      .getToken();
-                                              // int count = int.parse(
-                                              //     await LocalStoreService()
-                                              //         .getCountAdvertisement());
-                                              // if (count < 50) {
-
-                                              await EumsOfferWallServiceApi()
-                                                  .createTokenNotifi(
-                                                      token: token);
-                                              // }
-
-                                              bool isRunning =
-                                                  await FlutterBackgroundService()
-                                                      .isRunning();
-
-                                              if (!isRunning) {
-                                                FlutterBackgroundService()
-                                                    .startService();
-                                              }
-                                            }
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 1, vertical: 1),
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                                color: !isdisable
-                                                    ? AppColor.orange2
-                                                    : AppColor.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                    color: !isdisable
-                                                        ? Colors.transparent
-                                                        : AppColor.color70)),
-                                            child: Row(
-                                              children: [
-                                                isdisable
-                                                    ? Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          color:
-                                                              AppColor.color70,
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(7),
-                                                      )
-                                                    : const SizedBox(),
-                                                const Spacer(),
-                                                isdisable
-                                                    ? const SizedBox()
-                                                    : Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          color: AppColor.white,
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4),
-                                                        child: Image.asset(
-                                                          Assets.check.path,
-                                                          package: "sdk_eums",
-                                                          height: 7,
-                                                        ), // Default: 2
-                                                      ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                  color: AppColor.colorCC, width: 1)),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                    color: AppColor.colorF5,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        topRight: Radius.circular(12))),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      !isdisable
+                                          ? "물개 광고 활성화 중입니다."
+                                          : "물개 광고 비활성화 중입니다.",
+                                      style: AppStyle.bold.copyWith(
+                                          color: Colors.black, fontSize: 14),
                                     ),
-                                  ),
-                                  Image.asset(
-                                    Assets.lineBreak.path,
-                                    package: "sdk_eums",
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    child: Row(
-                                      children: [
-                                        Image.asset(Assets.historyCash.path,
-                                            package: "sdk_eums", height: 65),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                    const Spacer(),
+                                    Text(
+                                      isdisable ? 'OFF' : 'ON',
+                                      style: AppStyle.bold.copyWith(
+                                          color: isdisable
+                                              ? Colors.black
+                                              : AppColor.orange2,
+                                          fontSize: 14),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        setState(() {
+                                          isdisable = !isdisable;
+                                        });
+                                        localStore?.setSaveAdver(isdisable);
+                                        if (isdisable) {
+                                          String? token =
+                                              await FirebaseMessaging.instance
+                                                  .getToken();
+
+                                          await EumsOfferWallServiceApi()
+                                              .unRegisterTokenNotifi(
+                                                  token: token);
+                                          FlutterBackgroundService()
+                                              .invoke("stopService");
+                                        } else {
+                                          dynamic data = <String, dynamic>{
+                                            'count': 0,
+                                            'date': Constants.formatTime(
+                                                DateTime.now()
+                                                    .toIso8601String()),
+                                          };
+                                          localStore
+                                              ?.setCountAdvertisement(data);
+                                          String? token =
+                                              await FirebaseMessaging.instance
+                                                  .getToken();
+                                          // int count = int.parse(
+                                          //     await LocalStoreService()
+                                          //         .getCountAdvertisement());
+                                          // if (count < 50) {
+
+                                          await EumsOfferWallServiceApi()
+                                              .createTokenNotifi(token: token);
+                                          // }
+
+                                          bool isRunning =
+                                              await FlutterBackgroundService()
+                                                  .isRunning();
+
+                                          if (!isRunning) {
+                                            FlutterBackgroundService()
+                                                .startService();
+                                          }
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 1, vertical: 1),
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                            color: !isdisable
+                                                ? AppColor.orange2
+                                                : AppColor.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                                color: !isdisable
+                                                    ? Colors.transparent
+                                                    : AppColor.color70)),
+                                        child: Row(
                                           children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Routing().navigate(
-                                                    context,
-                                                    EarnCashScreen(
-                                                      account:
-                                                          stateAccount.account,
-                                                    ));
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(Assets.point.path,
-                                                      package: "sdk_eums",
-                                                      height: 16),
-                                                  Text(
-                                                    '  나의 캐시 적립 내역 ',
-                                                    style: AppStyle.bold,
-                                                  ),
-                                                  const Icon(
-                                                    Icons
-                                                        .arrow_forward_ios_outlined,
-                                                    size: 14,
+                                            isdisable
+                                                ? Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: AppColor.color70,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(7),
                                                   )
-                                                ],
+                                                : const SizedBox(),
+                                            const Spacer(),
+                                            isdisable
+                                                ? const SizedBox()
+                                                : Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: AppColor.white,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(4),
+                                                    child: Image.asset(
+                                                      Assets.check.path,
+                                                      package: "sdk_eums",
+                                                      height: 7,
+                                                    ), // Default: 2
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Image.asset(
+                                Assets.lineBreak.path,
+                                package: "sdk_eums",
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Image.asset(Assets.historyCash.path,
+                                        package: "sdk_eums", height: 65),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Routing().navigate(
+                                                context,
+                                                EarnCashScreen(
+                                                  account: stateAccount.account,
+                                                ));
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Image.asset(Assets.point.path,
+                                                  package: "sdk_eums",
+                                                  height: 16),
+                                              Text(
+                                                '  나의 캐시 적립 내역 ',
+                                                style: AppStyle.bold,
                                               ),
-                                            ),
-                                            const SizedBox(height: 12),
-                                            Row(
-                                              children: [
-                                                _buildAdverBox(
-                                                    callback: () {
-                                                      Routing().navigate(
-                                                          context,
-                                                          KeepAdverboxScreen());
-                                                    },
-                                                    icon: Image.asset(
-                                                        Assets.advertisingBox
-                                                            .path,
-                                                        package: "sdk_eums",
-                                                        height: 16),
-                                                    title: AppString
-                                                        .saveAdvertisement,
-                                                    color: AppColor.blue1),
-                                                const SizedBox(width: 8),
-                                                _buildAdverBox(
-                                                    callback: () {
-                                                      Routing().navigate(
-                                                          context,
-                                                          ScrapAdverBoxScreen());
-                                                    },
-                                                    icon: Image.asset(
-                                                        Assets.advertisingScrap
-                                                            .path,
-                                                        package: "sdk_eums",
-                                                        height: 16),
-                                                    title: AppString
-                                                        .systemAdvertisement,
-                                                    color: AppColor.orange3)
-                                              ],
-                                            )
+                                              const Icon(
+                                                Icons
+                                                    .arrow_forward_ios_outlined,
+                                                size: 14,
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 12),
+                                        Row(
+                                          children: [
+                                            _buildAdverBox(
+                                                callback: () {
+                                                  Routing().navigate(context,
+                                                      KeepAdverboxScreen());
+                                                },
+                                                icon: Image.asset(
+                                                    Assets.advertisingBox.path,
+                                                    package: "sdk_eums",
+                                                    height: 16),
+                                                title:
+                                                    AppString.saveAdvertisement,
+                                                color: AppColor.blue1),
+                                            const SizedBox(width: 8),
+                                            _buildAdverBox(
+                                                callback: () {
+                                                  Routing().navigate(context,
+                                                      ScrapAdverBoxScreen());
+                                                },
+                                                icon: Image.asset(
+                                                    Assets
+                                                        .advertisingScrap.path,
+                                                    package: "sdk_eums",
+                                                    height: 16),
+                                                title: AppString
+                                                    .systemAdvertisement,
+                                                color: AppColor.orange3)
                                           ],
                                         )
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                const SizedBox(width: 16),
-                                Expanded(
-                                    child: TabBar(
-                                  indicator: const UnderlineTabIndicator(
-                                    borderSide: BorderSide(
-                                        width: 3.0, color: AppColor.orange4),
-                                  ),
-                                  controller: _tabController,
-                                  labelPadding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 0),
-                                  isScrollable: true,
-                                  labelColor: AppColor.orange4,
-                                  indicatorColor: AppColor.orange4,
-                                  unselectedLabelColor: AppColor.color70,
-                                  labelStyle: AppStyle.bold
-                                      .copyWith(color: AppColor.orange4),
-                                  unselectedLabelStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                  tabs: [
-                                    _buildTitleTabBar(AppString.all),
-                                    _buildTitleTabBar(AppString.missionType),
-                                    _buildTitleTabBar(
-                                        AppString.participationType),
-                                    _buildTitleTabBar(
-                                        AppString.chargingStation),
+                                    )
                                   ],
-                                )),
-                                Container(
-                                  height: 35,
-                                  width: 100,
-                                  child: Center(child: _buildDropDown(context)),
                                 ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const SizedBox(width: 16),
+                            Expanded(
+                                child: TabBar(
+                              indicator: const UnderlineTabIndicator(
+                                borderSide: BorderSide(
+                                    width: 3.0, color: AppColor.orange4),
+                              ),
+                              controller: _tabController,
+                              labelPadding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 0),
+                              isScrollable: true,
+                              labelColor: AppColor.orange4,
+                              indicatorColor: AppColor.orange4,
+                              unselectedLabelColor: AppColor.color70,
+                              labelStyle: AppStyle.bold
+                                  .copyWith(color: AppColor.orange4),
+                              unselectedLabelStyle: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                              tabs: [
+                                _buildTitleTabBar(AppString.all),
+                                _buildTitleTabBar(AppString.missionType),
+                                _buildTitleTabBar(AppString.participationType),
+                                _buildTitleTabBar(AppString.chargingStation),
                               ],
+                            )),
+                            Container(
+                              height: 35,
+                              width: 100,
+                              child: Center(child: _buildDropDown(context)),
                             ),
-                            // Divider(),
-                            DefaultTabController(
-                                length: 4, child: _buildTabBar())
                           ],
                         ),
-                      ),
-                    ],
+                        // Divider(),
+                        DefaultTabController(length: 4, child: _buildTabBar())
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -24,6 +24,7 @@ import 'package:sdk_eums/gen/assets.gen.dart';
 import '../common/local_store/local_store.dart';
 import '../common/routing.dart';
 import 'bloc/authentication_bloc/authentication_bloc.dart';
+import 'screen/my_page_module/my_page.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -172,12 +173,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               actions: [
                 InkWell(
                   onTap: () {
-                    setState(() {
-                      showAction = !showAction;
-                    });
+                    Routing().navigate(context, MyPage());
                   },
                   child: const Icon(
-                    Icons.more_vert_outlined,
+                    Icons.person_outline,
                     size: 24,
                     color: AppColor.black,
                   ),

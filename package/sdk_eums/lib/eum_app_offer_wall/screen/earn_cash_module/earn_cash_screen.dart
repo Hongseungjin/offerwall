@@ -342,7 +342,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
                                       width: MediaQuery.of(context).size.width *
                                           0.6,
                                       child: Text(
-                                          "${dataEums[index]['advertise'] != null ? dataEums[index]['advertise']['name'] :  ""}",
+                                          "${dataEums[index]['advertise'] != null ? dataEums[index]['advertise']['name'] : ""}",
                                           style: AppStyle.medium.copyWith(
                                               fontSize: 14,
                                               color: AppColor.grey)),

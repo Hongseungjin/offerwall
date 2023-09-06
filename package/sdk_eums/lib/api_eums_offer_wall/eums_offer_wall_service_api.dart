@@ -57,6 +57,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
       deviceModelName,
       deviceOsVersion,
       deviceSdkVersion,
+      title,
       deviceAppVersion}) async {
     dynamic data = <String, dynamic>{
       "type_fl": type,
@@ -65,7 +66,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
       "device_model_name": deviceModelName,
       "device_os_version": deviceOsVersion,
       "device_sdk_version": deviceSdkVersion,
-      "device_app_version": deviceAppVersion
+      "device_app_version": deviceAppVersion,
+      "title": title
     };
     await api.post('inquire', data: data);
     return;
@@ -163,12 +165,15 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future getPointEum() async {
+  Future getPointEum({limit, offset, month, year}) async {
     var params = {};
 
-    params['limit'] = 1000000000;
+    params['limit'] = limit;
 
-    params['offset'] = 0;
+    params['offset'] = offset;
+
+    params['month'] = month;
+    params['year'] = year;
 
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
 
@@ -177,8 +182,14 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future getPointOffWall() async {
-    Response result = await api.get('offerwall-log');
+  Future getPointOffWall({month, year}) async {
+    var params = {};
+    params['month'] = month;
+    params['year'] = year;
+
+    Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
+    Response result =
+        await api.get('offerwall-log', queryParameters: dataParams);
     return result.data;
   }
 
