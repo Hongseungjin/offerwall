@@ -151,6 +151,11 @@ class Assets {
   static const AssetGenImage adarchive =
       AssetGenImage('assets/icons/adarchive.png');
 
+  static const AssetGenImage banner_keep =
+      AssetGenImage('assets/icons/banner_keep.png');
+  static const AssetGenImage scrap_banner =
+      AssetGenImage('assets/icons/scrap_banner.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         logo,

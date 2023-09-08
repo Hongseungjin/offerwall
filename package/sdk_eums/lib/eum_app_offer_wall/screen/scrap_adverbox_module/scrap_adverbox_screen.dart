@@ -110,7 +110,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                         children: [
                           const SizedBox(height: 16),
                           Image.asset(
-                            Assets.banerAdverbox.path,
+                            Assets.scrap_banner.path,
                             package: "sdk_eums",
                           ),
                           const SizedBox(height: 16),
@@ -151,8 +151,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                 Row(
                                                   children: [
                                                     Image.asset(
-                                                        Assets
-                                                            .scrapAdverbox.path,
+                                                        Assets.keep_adver.path,
                                                         package: "sdk_eums",
                                                         height: 40),
                                                     const SizedBox(width: 10),

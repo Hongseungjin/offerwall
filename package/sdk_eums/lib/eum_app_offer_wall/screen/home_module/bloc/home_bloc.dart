@@ -27,6 +27,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is InfoUser) {
       await _mapInfoUserToState(event, emit);
     }
+    if (event is ListBanner) {
+      await _mapListBannerToState(event, emit);
+    }
   }
 
   _mapInfoUserToState(InfoUser event, emit) async {
@@ -34,6 +37,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       dynamic user = await _eumsOfferWallService.userInfo();
       emit(state.copyWith(account: user));
     } catch (ex) {}
+  }
+
+  _mapListBannerToState(ListBanner event, emit) async {
+    emit(state.copyWith(listAdverStatus: ListAdverStatus.loading));
+    try {
+      dynamic banner = await _eumsOfferWallService.getBanner(type: event.type);
+      emit(state.copyWith(
+          listAdverStatus: ListAdverStatus.success, bannerList: banner));
+    } catch (ex) {
+      emit(state.copyWith(listAdverStatus: ListAdverStatus.failure));
+    }
   }
 
   _mapListOfferWall(ListOfferWall event, emit) async {

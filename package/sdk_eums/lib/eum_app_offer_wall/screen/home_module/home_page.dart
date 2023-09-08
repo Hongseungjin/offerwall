@@ -8,6 +8,7 @@ import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
@@ -29,6 +30,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final GlobalKey<State<StatefulWidget>> globalKey =
+      GlobalKey<State<StatefulWidget>>();
   bool isdisable = false;
   LocalStore? localStore;
   final _currentPageNotifier = ValueNotifier<int>(0);
@@ -36,10 +39,12 @@ class _HomePageState extends State<HomePage>
       ValueNotifier(GlobalKey());
   late TabController _tabController;
   String? filter;
+  String? categary;
 
   @override
   void initState() {
     localStore = LocalStoreService();
+    categary = 'participation';
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     super.initState();
   }
@@ -48,8 +53,9 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
       create: (context) => HomeBloc()
-        ..add(ListOfferWall())
-        ..add(InfoUser()),
+        ..add(InfoUser())
+        ..add(ListBanner(type: 'main'))
+        ..add(ListOfferWall(category: categary, filter: filter)),
       child: MultiBlocListener(
         listeners: [
           BlocListener<HomeBloc, HomeState>(
@@ -82,7 +88,9 @@ class _HomePageState extends State<HomePage>
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
+     
         return Scaffold(
+          key: globalKey,
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
@@ -145,7 +153,8 @@ class _HomePageState extends State<HomePage>
                                                     ['title'])),
                                       ),
                                       const SizedBox(height: 20),
-                                      _buildUIBannerImage()
+                                      _buildUIBannerImage(
+                                          dataBanner: state.bannerList)
                                     ],
                                   ),
                                 )
@@ -158,6 +167,12 @@ class _HomePageState extends State<HomePage>
                             TabBar(
                               onTap: (value) {
                                 int index = value;
+                                if (_tabController.index == 0) {
+                                  categary = 'participation';
+                                } else {
+                                  categary = 'mission';
+                                }
+                                _fetchData();
                                 setState(() {
                                   _tabController.index = index;
                                 });
@@ -172,9 +187,9 @@ class _HomePageState extends State<HomePage>
                                   .copyWith(color: HexColor('#707070')),
                               tabs: const [
                                 Text(
-                                  '다이아 충전',
+                                  '참여하고 리워드',
                                 ),
-                                Text('이용내역'),
+                                Text('쇼핑하고 리워드'),
                               ],
                             ),
                             _buildUIPoint(point: 123123123),
@@ -213,11 +228,27 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  _fetchData() async {
+    print("filterfilter$filter");
+    await Future.delayed(const Duration(seconds: 0));
+
+    globalKey.currentContext
+        ?.read<HomeBloc>()
+        .add(ListOfferWall(limit: 10, filter: filter, category: categary));
+  }
+
   _filterMedia(String? value) {
-    setState(() {
-      filter = value;
-    });
-    // _fetchData();
+    if (value != '최신순') {
+      dynamic media = (DATA_MEDIA
+          .where((element) => element['name'] == value)
+          .toList())[0]['media'];
+
+      filter = media;
+    } else {
+      filter = DATA_MEDIA[2]['media'];
+    }
+
+    _fetchData();
   }
 
   _buildUIPoint({int? point}) {
@@ -425,7 +456,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  _buildUIBannerImage() {
+  _buildUIBannerImage({List? dataBanner}) {
     return Stack(
       children: [
         CarouselSlider(
@@ -439,15 +470,23 @@ class _HomePageState extends State<HomePage>
               _currentPageNotifier.value = index;
             },
           ),
-          items: imageList.map((i) {
+          items: (dataBanner ?? []).map((i) {
             return Builder(
               builder: (BuildContext context) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(i,
+                  child: CachedNetworkImage(
                       width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitWidth,
-                      package: "sdk_eums"),
+                      height: 200,
+                      fit: BoxFit.cover,
+                      imageUrl:
+                          'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+                      placeholder: (context, url) =>
+                          const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) {
+                        return Image.asset(Assets.logo.path,
+                            package: "sdk_eums", width: 30, height: 30);
+                      }),
                 );
               },
             );
@@ -462,7 +501,8 @@ class _HomePageState extends State<HomePage>
                 color: Colors.grey.withOpacity(.5),
                 borderRadius: BorderRadius.circular(12)),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('${_currentPageNotifier.value + 1}/${imageList.length}')
+              Text(
+                  '${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')
             ]),
           ),
         ),
@@ -515,7 +555,7 @@ class _ListViewHomeState extends State<ListViewHome> {
     List<dynamic>? dataCampaign =
         context.read<HomeBloc>().state.listDataOfferWall;
     if (dataCampaign != null) {
-      widget.fetchDataLoadMore!(offset: dataCampaign.length);
+      // widget.fetchDataLoadMore!(offset: dataCampaign.length);
     }
   }
 
@@ -580,15 +620,20 @@ class _ListViewHomeState extends State<ListViewHome> {
       builder: (context, state) {
         return Column(
           children: [
-            Row(
-              children: [
-                Text('asdjkas'),
-                Container(
-                  height: 35,
-                  width: 100,
-                  child: Center(child: _buildDropDown(context)),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Text(
+                      '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개'),
+                  Spacer(),
+                  Container(
+                    height: 35,
+                    width: 100,
+                    child: Center(child: _buildDropDown(context)),
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Container(
@@ -637,43 +682,35 @@ class _ListViewHomeState extends State<ListViewHome> {
                             runSpacing: 12,
                             children: List.generate(
                                 state.listDataOfferWall.length,
-                                (index) => widget.tab == 0
-                                    ? _buildItemRow(
-                                        data: state.listDataOfferWall[index])
-                                    : _buildItemColum(
-                                        data: state.listDataOfferWall[index])),
+                                (index) => GestureDetector(
+                                      child: widget.tab == 0
+                                          ? _buildItemRow(
+                                              data: state
+                                                  .listDataOfferWall[index])
+                                          : _buildItemColum(
+                                              data: state
+                                                  .listDataOfferWall[index]),
+                                      onTap: () {
+                                        Routing().navigate(
+                                            context,
+                                            DetailOffWallScreen(
+                                              xId:
+                                                  state.listDataOfferWall[index]
+                                                      ['idx'],
+                                              type:
+                                                  state.listDataOfferWall[index]
+                                                      ['type'],
+                                            ));
+                                      },
+                                    )),
                           )
                         : SizedBox(),
-                    // child: state.listDataOfferWall != null
-                    //     ? ListView.builder(
-                    //         controller: controller,
-                    //         itemCount: state.listDataOfferWall.length ?? 0,
-                    //         itemBuilder: (context, index) {
-                    //           return widget.tab == 0
-                    //               ? _buildItemRow(
-                    //                   data: state.listDataOfferWall[index])
-                    //               : _buildItemColum(
-                    //                   data: state.listDataOfferWall[index]);
-                    //         },
-                    //       )
-                    //     : const SizedBox()),
                   )),
             ),
           ],
         );
       },
     );
-    // return Padding(
-    //   padding: const EdgeInsets.all(16),
-    //   child: SingleChildScrollView(
-    //     child: Wrap(
-    //       spacing: 12,
-    //       runSpacing: 12,
-    //       children: List.generate(10,
-    //           (index) => widget.tab == 0 ? _buildItemRow() : _buildItemColum()),
-    //     ),
-    //   ),
-    // );
   }
 
   _buildItemColum({dynamic data}) {
@@ -684,17 +721,18 @@ class _ListViewHomeState extends State<ListViewHome> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
-                  borderRadius: BorderRadius.circular(10)),
-              child: Image.asset(Assets.rewardGuide.path,
-                  width: (MediaQuery.of(context).size.width - 48) / 2,
-                  height: (MediaQuery.of(context).size.width - 48) / 2,
-                  fit: BoxFit.fitWidth,
-                  package: "sdk_eums"),
-            ),
+            borderRadius: BorderRadius.circular(12),
+            child: CachedNetworkImage(
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                fit: BoxFit.cover,
+                imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) {
+                  return Image.asset(Assets.logo.path,
+                      package: "sdk_eums", width: 30, height: 30);
+                }),
           ),
           const SizedBox(height: 4),
           Text(
@@ -719,6 +757,17 @@ class _ListViewHomeState extends State<ListViewHome> {
                   style: AppStyle.bold
                       .copyWith(color: HexColor('#000000'), fontSize: 16))
             ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: HexColor('#fdd000'),
+                borderRadius: BorderRadius.circular(5)),
+            child: Text(
+              '+${Constants.formatMoney(data['reward'], suffix: '')}',
+              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 14),
+            ),
           ),
           const SizedBox(height: 30),
         ],
@@ -760,14 +809,6 @@ class _ListViewHomeState extends State<ListViewHome> {
                 style: AppStyle.bold.copyWith(color: Colors.black),
               ),
             ),
-            // const SizedBox(
-            //   height: 5,
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-            //   child: Text("리워드페이지 출석하고 캐시 받자!",
-            //       style: AppStyle.bold.copyWith(color: Colors.black)),
-            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
@@ -794,7 +835,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -814,5 +855,3 @@ List uiIconList = [
   },
   {'title': '이용안내', 'icon': Assets.icon_info.path}
 ];
-
-List imageList = [Assets.rewardGuide.path, Assets.rewardGuideMome.path];

@@ -278,4 +278,15 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     Response result = await api.get('advertises/get-advertise-sponsor');
     return result.data;
   }
+
+  @override
+  Future getBanner({type}) async {
+    var params = {};
+    if (type != null) {
+      params['type'] = type;
+    }
+    Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
+    Response result = await api.get('banner', queryParameters: dataParams);
+    return result.data;
+  }
 }

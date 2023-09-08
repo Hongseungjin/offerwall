@@ -8,7 +8,6 @@ import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/keep_adverbox_module/bloc/keep_adverbox_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -105,7 +104,6 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
           child: const Icon(Icons.arrow_back_ios_outlined,
               color: AppColor.dark, size: 25),
         ),
-   
       ),
       body: SmartRefresher(
         controller: refreshController,
@@ -142,63 +140,69 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                decoration: BoxDecoration(
-                    color: AppColor.red4.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(12)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('광고 볼 시간이 없다면',
-                        style: AppStyle.medium.copyWith(fontSize: 20)),
-                    RichText(
-                        text: TextSpan(
-                            text: '보관',
-                            style: AppStyle.bold
-                                .copyWith(color: Colors.blue, fontSize: 25),
-                            children: [
-                          TextSpan(
-                            text: '해두고 나중에 보세요~!',
-                            style: AppStyle.bold
-                                .copyWith(color: AppColor.black, fontSize: 25),
-                          )
-                        ])),
-                    const SizedBox(height: 5),
-                    RichText(
-                        text: TextSpan(
-                            text: '* 하루 최대 20개',
-                            style: AppStyle.regular
-                                .copyWith(color: AppColor.red, fontSize: 12),
-                            children: [
-                          TextSpan(
-                            text: '까지 가능합니다.',
-                            style: AppStyle.regular.copyWith(
-                                color: AppColor.color70, fontSize: 12),
-                          )
-                        ])),
-                    const SizedBox(height: 2),
-                    RichText(
-                        text: TextSpan(
-                            text: '* 3일동안 보관',
-                            style: AppStyle.regular
-                                .copyWith(color: AppColor.red, fontSize: 12),
-                            children: [
-                          TextSpan(
-                            text: '되며, 3일이 지난 광고는 다른 사람에게 갑니다',
-                            style: AppStyle.regular.copyWith(
-                                color: AppColor.color70, fontSize: 12),
-                          )
-                        ])),
-                    const SizedBox(height: 2),
-                    Text(
-                      '*광고가 만료되거나 소멸되면 저장된 광고가 사라질 수도 있습니다.',
-                      style: AppStyle.regular
-                          .copyWith(color: AppColor.color70, fontSize: 12),
-                    ),
-                  ],
-                ),
+              // Container(
+              //   padding:
+              //       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              //   decoration: BoxDecoration(
+              //       color: AppColor.red4.withOpacity(0.3),
+              //       borderRadius: BorderRadius.circular(12)),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text('광고 볼 시간이 없다면',
+              //           style: AppStyle.medium.copyWith(fontSize: 20)),
+              //       RichText(
+              //           text: TextSpan(
+              //               text: '보관',
+              //               style: AppStyle.bold
+              //                   .copyWith(color: Colors.blue, fontSize: 25),
+              //               children: [
+              //             TextSpan(
+              //               text: '해두고 나중에 보세요~!',
+              //               style: AppStyle.bold
+              //                   .copyWith(color: AppColor.black, fontSize: 25),
+              //             )
+              //           ])),
+              //       const SizedBox(height: 5),
+              //       RichText(
+              //           text: TextSpan(
+              //               text: '* 하루 최대 20개',
+              //               style: AppStyle.regular
+              //                   .copyWith(color: AppColor.red, fontSize: 12),
+              //               children: [
+              //             TextSpan(
+              //               text: '까지 가능합니다.',
+              //               style: AppStyle.regular.copyWith(
+              //                   color: AppColor.color70, fontSize: 12),
+              //             )
+              //           ])),
+              //       const SizedBox(height: 2),
+              //       RichText(
+              //           text: TextSpan(
+              //               text: '* 3일동안 보관',
+              //               style: AppStyle.regular
+              //                   .copyWith(color: AppColor.red, fontSize: 12),
+              //               children: [
+              //             TextSpan(
+              //               text: '되며, 3일이 지난 광고는 다른 사람에게 갑니다',
+              //               style: AppStyle.regular.copyWith(
+              //                   color: AppColor.color70, fontSize: 12),
+              //             )
+              //           ])),
+              //       const SizedBox(height: 2),
+              //       Text(
+              //         '*광고가 만료되거나 소멸되면 저장된 광고가 사라질 수도 있습니다.',
+              //         style: AppStyle.regular
+              //             .copyWith(color: AppColor.color70, fontSize: 12),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+
+              Image.asset(
+                Assets.banner_keep.path,
+                package: "sdk_eums",
+                // height: 40,
               ),
               const Divider(),
               data != null
@@ -226,7 +230,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  Assets.saveAdverbox.path,
+                                  Assets.scrap_adver.path,
                                   package: "sdk_eums",
                                   height: 40,
                                 ),

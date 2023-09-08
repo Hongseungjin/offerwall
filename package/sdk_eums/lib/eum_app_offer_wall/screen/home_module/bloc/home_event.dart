@@ -30,3 +30,11 @@ class InfoUser extends HomeEvent {
   @override
   List<Object?> get props => [account];
 }
+
+class ListBanner extends HomeEvent {
+  ListBanner({this.type});
+
+  final dynamic type;
+  @override
+  List<Object?> get props => [type];
+}

@@ -119,4 +119,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   /// GetAdvertiseSponsor
   Future<dynamic> getAdvertiseSponsor();
+
+  /// GetAdvertiseSponsor
+  Future<dynamic> getBanner({dynamic type});
 }
