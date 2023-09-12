@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
-import 'package:sdk_eums/eum_app_offer_wall/utils/app_string.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +21,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
         backgroundColor: AppColor.white,
         elevation: 1,
         centerTitle: true,
-        title: Text(AppString.linkAddvertising,
+        title: Text('제휴 및 광고 문의',
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
         leading: GestureDetector(
           onTap: () {
@@ -37,6 +37,14 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 32),
+            Image.asset(
+              Assets.textgt.path,
+              package: "sdk_eums",
+            ),
+            Image.asset(
+              Assets.watch_point.path,
+              package: "sdk_eums",
+            ),
             Center(
               child: Text(
                 '제휴 및 광고 문의',
@@ -61,36 +69,40 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                       ])),
             ),
             const SizedBox(height: 32),
-            _buidItem(
-                callback: () {},
-                title: '고객센터',
-                widget: Text(
-                  '1833-8590 / abee@abee.co.kr',
-                  style: AppStyle.bold
-                      .copyWith(color: AppColor.black, fontSize: 12),
-                )),
-            const SizedBox(height: 16),
-            _buidItem(
-                callback: () {},
-                title: '업무시간',
-                widget: RichText(
-                    text: TextSpan(
-                        text: '09:00 ~ 18:00',
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                  color: HexColor('#fdd000').withOpacity(.2),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                children: [
+                  _buidItem(
+                      callback: () {},
+                      title: '고객센터',
+                      widget: Text(
+                        '1833-8590 / abee@abee.co.kr',
                         style: AppStyle.bold
                             .copyWith(color: AppColor.black, fontSize: 12),
-                        children: [
-                      TextSpan(
-                        text: '(점심시간 : 12:00 ~ 13:00)',
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.grey5D, fontSize: 10),
-                      )
-                    ]))),
+                      )),
+                  _buidItem(
+                      callback: () {},
+                      title: '업무시간',
+                      widget: RichText(
+                          text: TextSpan(
+                              text: '09:00 ~ 18:00',
+                              style: AppStyle.bold.copyWith(
+                                  color: AppColor.black, fontSize: 12),
+                              children: [
+                            TextSpan(
+                              text: '(점심시간 : 12:00 ~ 13:00)',
+                              style: AppStyle.bold.copyWith(
+                                  color: AppColor.grey5D, fontSize: 10),
+                            )
+                          ]))),
+                ],
+              ),
+            ),
             const SizedBox(height: 16),
-            Center(
-                child: Image.asset(Assets.linkAdvertising.path,
-                    package: "sdk_eums",
-                    height: MediaQuery.of(context).size.width / 1.5,
-                    width: MediaQuery.of(context).size.width)),
             Spacer(),
             GestureDetector(
               onTap: () {
@@ -148,9 +160,9 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
       onTap: callback,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-            color: AppColor.colorF13, borderRadius: BorderRadius.circular(40)),
+        // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        // decoration: BoxDecoration(
+        //     color: AppColor.colorF13, borderRadius: BorderRadius.circular(40)),
         child: Row(
           children: [
             Text(

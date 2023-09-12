@@ -114,16 +114,16 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                             package: "sdk_eums",
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColor.grey5D.withOpacity(0.4)),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: _buildDropDown(context),
-                          ),
-                          const SizedBox(height: 16),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                          //   decoration: BoxDecoration(
+                          //     border: Border.all(
+                          //         color: AppColor.grey5D.withOpacity(0.4)),
+                          //     borderRadius: BorderRadius.circular(8),
+                          //   ),
+                          //   child: _buildDropDown(context),
+                          // ),
+                          // const SizedBox(height: 16),
                           state.dataScrapAdverbox != null
                               ? Wrap(
                                   children: List.generate(

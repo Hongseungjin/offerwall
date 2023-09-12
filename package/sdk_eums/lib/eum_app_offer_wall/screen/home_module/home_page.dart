@@ -10,19 +10,23 @@ import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/using_term_module/using_term_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../keep_adverbox_module/keep_adverbox_module.dart';
+import '../scrap_adverbox_module/scrap_adverbox_screen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,13 +44,25 @@ class _HomePageState extends State<HomePage>
   late TabController _tabController;
   String? filter;
   String? categary;
+  final ScrollController controller = ScrollController();
+  int tabIndex = 0;
+  int tabPreviousIndex = 0;
 
   @override
   void initState() {
     localStore = LocalStoreService();
     categary = 'participation';
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+    _tabController.addListener(_onTabChange);
     super.initState();
+  }
+
+  _onTabChange() {
+    tabIndex = _tabController.index;
+    if (tabIndex != tabPreviousIndex) {
+      _fetchData();
+    }
+    tabPreviousIndex = _tabController.index;
   }
 
   @override
@@ -54,6 +70,7 @@ class _HomePageState extends State<HomePage>
     return BlocProvider<HomeBloc>(
       create: (context) => HomeBloc()
         ..add(InfoUser())
+        ..add(GetTotalPoint())
         ..add(ListBanner(type: 'main'))
         ..add(ListOfferWall(category: categary, filter: filter)),
       child: MultiBlocListener(
@@ -61,14 +78,36 @@ class _HomePageState extends State<HomePage>
           BlocListener<HomeBloc, HomeState>(
             listener: _listenListAdver,
           ),
+          BlocListener<HomeBloc, HomeState>(
+            listenWhen: (previous, current) =>
+                previous.getPointStatus != current.getPointStatus,
+            listener: _listenDataPoint,
+          ),
         ],
         child: WillPopScope(
             onWillPop: () async {
-              return false;
+              return true;
             },
             child: _buildContent(context)),
       ),
     );
+  }
+
+  void _listenDataPoint(BuildContext context, HomeState state) {
+    if (state.getPointStatus == GetPointStatus.loading) {
+      LoadingDialog.instance.show();
+      return;
+    }
+    if (state.getPointStatus == GetPointStatus.failure) {
+      LoadingDialog.instance.hide();
+      return;
+    }
+    if (state.getPointStatus == GetPointStatus.success) {
+      LoadingDialog.instance.hide();
+      if (state.totalPoint != null) {
+        DialogUtils.showDialogGetPoint(context, data: state.totalPoint);
+      }
+    }
   }
 
   void _listenListAdver(BuildContext context, HomeState state) {
@@ -88,140 +127,122 @@ class _HomePageState extends State<HomePage>
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-     
         return Scaffold(
           key: globalKey,
-          backgroundColor: Colors.white,
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child:
-                      ValueListenableBuilder<GlobalKey<NestedScrollViewState>>(
-                    valueListenable: globalKeyScroll,
-                    builder: (context, value, child) {
-                      return NestedScrollView(
-                        key: value,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        floatHeaderSlivers: true,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return [
-                            SliverAppBar(
-                              toolbarHeight:
-                                  MediaQuery.of(context).size.height /
-                                      (5 / 3.5),
-                              backgroundColor: Colors.white,
-                              automaticallyImplyLeading: false,
-                              actions: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Column(
-                                    children: [
-                                      _buildUIShowPoint(point: '2000'),
-                                      Wrap(
-                                        spacing: 10,
-                                        children: List.generate(
-                                            uiIconList.length,
-                                            (index) => _buildUiIcon(
-                                                onTap: () {
-                                                  switch (index) {
-                                                    case 0:
-                                                      Routing().navigate(
-                                                          context,
-                                                          StatusPointPage(
-                                                              account: state
-                                                                  .account));
-                                                      break;
-                                                    case 1:
-                                                      Routing().navigate(
-                                                          context,
-                                                          KeepAdverboxScreen());
-                                                      break;
-                                                    case 2:
-                                                      Routing().navigate(
-                                                          context,
-                                                          ScrapAdverBoxScreen());
-
-                                                      break;
-                                                    default:
-                                                  }
-                                                },
-                                                urlImage: uiIconList[index]
-                                                    ['icon'],
-                                                title: uiIconList[index]
-                                                    ['title'])),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      _buildUIBannerImage(
-                                          dataBanner: state.bannerList)
-                                    ],
-                                  ),
-                                )
-                              ],
-                            )
-                          ];
-                        },
-                        body: Column(
-                          children: [
-                            TabBar(
-                              onTap: (value) {
-                                int index = value;
-                                if (_tabController.index == 0) {
-                                  categary = 'participation';
-                                } else {
-                                  categary = 'mission';
-                                }
-                                _fetchData();
-                                setState(() {
-                                  _tabController.index = index;
-                                });
-                              },
-                              labelPadding:
-                                  const EdgeInsets.only(bottom: 10, top: 10),
-                              controller: _tabController,
-                              indicatorColor: HexColor('#f4a43b'),
-                              unselectedLabelColor: HexColor('#707070'),
-                              labelColor: HexColor('#f4a43b'),
-                              labelStyle: AppStyle.bold
-                                  .copyWith(color: HexColor('#707070')),
-                              tabs: const [
-                                Text(
-                                  '참여하고 리워드',
-                                ),
-                                Text('쇼핑하고 리워드'),
-                              ],
-                            ),
-                            _buildUIPoint(point: 123123123),
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(24),
-                                        topRight: Radius.circular(24))),
-                                child: TabBarView(
-                                    controller: _tabController,
-                                    children: [
-                                      ListViewHome(
-                                        tab: _tabController.index,
-                                        filter: _filterMedia,
-                                      ),
-                                      ListViewHome(
-                                        tab: _tabController.index,
-                                        filter: _filterMedia,
-                                      )
-                                    ]),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+          body: CustomScrollView(
+            controller: controller,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
             ),
+            slivers: [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Container(
+                  color: Colors.transparent,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildUIShowPoint(
+                          point: state.totalPoint != null
+                              ? state.totalPoint['userPoint']
+                              : 0),
+                      Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 20,
+                        children: List.generate(
+                            uiIconList.length,
+                            (index) => _buildUiIcon(
+                                onTap: () {
+                                  switch (index) {
+                                    case 0:
+                                      Routing().navigate(
+                                          context,
+                                          StatusPointPage(
+                                              account: state.account));
+                                      break;
+                                    case 1:
+                                      Routing().navigate(
+                                          context, const KeepAdverboxScreen());
+                                      break;
+                                    case 2:
+                                      Routing().navigate(
+                                          context, const ScrapAdverBoxScreen());
+                                      break;
+                                    case 3:
+                                      Routing()
+                                          .navigate(context, UsingTermScreen());
+                                      break;
+                                    default:
+                                  }
+                                },
+                                urlImage: uiIconList[index]['icon'],
+                                title: uiIconList[index]['title'])),
+                      ),
+                      const SizedBox(height: 20),
+                      _buildUIBannerImage(dataBanner: state.bannerList),
+                      TabBar(
+                        onTap: (value) {
+                          int index = value;
+                          if (_tabController.index == 0) {
+                            categary = 'participation';
+                          } else {
+                            categary = 'mission';
+                          }
+                          _fetchData();
+                          setState(() {
+                            _tabController.index = index;
+                          });
+                        },
+                        labelPadding:
+                            const EdgeInsets.only(bottom: 10, top: 10),
+                        controller: _tabController,
+                        indicatorColor: HexColor('#f4a43b'),
+                        unselectedLabelColor: HexColor('#707070'),
+                        labelColor: HexColor('#f4a43b'),
+                        labelStyle:
+                            AppStyle.bold.copyWith(color: HexColor('#707070')),
+                        tabs: const [
+                          Text(
+                            '참여하고 리워드',
+                          ),
+                          Text('쇼핑하고 리워드'),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ])),
+              SliverFillRemaining(
+                fillOverscroll: true,
+                hasScrollBody: true,
+                child: Column(
+                  children: [
+                    _buildUIPoint(
+                        point: state.totalPoint != null
+                            ? state.totalPoint['totalPointCanGet']
+                            : 0),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: <Widget>[
+                          ListViewHome(
+                            tab: _tabController.index,
+                            filter: _filterMedia,
+                            scrollController: controller,
+                          ),
+                          ListViewHome(
+                            tab: _tabController.index,
+                            filter: _filterMedia,
+                            scrollController: controller,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         );
       },
@@ -229,7 +250,11 @@ class _HomePageState extends State<HomePage>
   }
 
   _fetchData() async {
-    print("filterfilter$filter");
+    if (_tabController.index == 0) {
+      categary = 'participation';
+    } else {
+      categary = 'mission';
+    }
     await Future.delayed(const Duration(seconds: 0));
 
     globalKey.currentContext
@@ -260,31 +285,38 @@ class _HomePageState extends State<HomePage>
                   color: HexColor('#888888').withOpacity(.2), width: 5),
               top: BorderSide(
                   color: HexColor('#888888').withOpacity(.2), width: 5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text(
-            '지금 획득 가능한 포인트',
-            style: AppStyle.regular
-                .copyWith(color: HexColor('#888888'), fontSize: 14),
-          ),
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: HexColor('#fcc900')),
-            child: Text('P', style: AppStyle.bold.copyWith(fontSize: 18)),
-          ),
-          Text(
-            Constants.formatMoney(point, suffix: ''),
-            style: AppStyle.bold.copyWith(fontSize: 20),
-          )
-        ],
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              '지금 획득 가능한 포인트',
+              style: AppStyle.regular
+                  .copyWith(color: HexColor('#888888'), fontSize: 14),
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: HexColor('#fcc900')),
+                  child: Text('P', style: AppStyle.bold.copyWith(fontSize: 18)),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  Constants.formatMoney(point, suffix: ''),
+                  style: AppStyle.bold.copyWith(fontSize: 20),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   _buildUIShowPoint({
-    String? point,
+    int? point,
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -314,7 +346,7 @@ class _HomePageState extends State<HomePage>
                   child: Text('P', style: AppStyle.bold.copyWith(fontSize: 18)),
                 ),
                 const SizedBox(width: 12),
-                Text(point ?? '',
+                Text(Constants.formatMoney(point, suffix: ''),
                     style: AppStyle.bold
                         .copyWith(fontSize: 30, color: Colors.black)),
                 Text('P',
@@ -517,6 +549,7 @@ class ListViewHome extends StatefulWidget {
       required this.tab,
       this.fetchData,
       this.fetchDataLoadMore,
+      this.scrollController,
       this.filter})
       : super(key: key);
 
@@ -524,6 +557,7 @@ class ListViewHome extends StatefulWidget {
   final Function? fetchData;
   final Function? fetchDataLoadMore;
   final Function? filter;
+  final ScrollController? scrollController;
 
   @override
   State<ListViewHome> createState() => _ListViewHomeState();
@@ -626,7 +660,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                 children: [
                   Text(
                       '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개'),
-                  Spacer(),
+                  const Spacer(),
                   Container(
                     height: 35,
                     width: 100,
@@ -663,7 +697,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                         return mode == LoadStatus.loading
                             ? Center(
                                 child: Column(
-                                children: const [
+                                children: [
                                   Text(' '),
                                   CircularProgressIndicator(
                                       strokeWidth: 2,
@@ -671,7 +705,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                                           Colors.black)),
                                 ],
                               ))
-                            : SizedBox();
+                            : const SizedBox();
                       },
                     ),
                     enablePullDown: true,
@@ -704,7 +738,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                                       },
                                     )),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                   )),
             ),
           ],

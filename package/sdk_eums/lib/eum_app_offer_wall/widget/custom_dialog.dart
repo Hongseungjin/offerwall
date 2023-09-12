@@ -2,11 +2,88 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../utils/appColor.dart';
 
 class DialogUtils {
+  static void showDialogGetPoint(
+    BuildContext context, {
+    dynamic data,
+    dynamic voidCallback,
+  }) {
+    showDialog(
+        context: context,
+        builder: (buildContext) {
+          Future.delayed(Duration(seconds: 5), () {
+            Navigator.of(buildContext).pop(true);
+          });
+          return Dialog(
+            insetPadding: EdgeInsets.all(0),
+            insetAnimationCurve: Curves.bounceIn,
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          Assets.get_point.path,
+                          package: "sdk_eums",
+                          height: 200,
+                          width: 200,
+                        ),
+                        const SizedBox(height: 40),
+                        Text(
+                          '지금 획득 가능한 포인트',
+                          style: AppStyle.medium
+                              .copyWith(fontSize: 18, color: Colors.white),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              Constants.formatMoney(
+                                  data != null ? data['totalPointCanGet'] : 0,
+                                  suffix: ''),
+                              style: AppStyle.bold.copyWith(
+                                  color: HexColor('#fdd000'), fontSize: 40),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: HexColor('#fdd000'),
+                              ),
+                              child: Text(
+                                'P',
+                                style: AppStyle.bold,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
+  }
+
   static void showDialogMissingPoint(
     BuildContext context, {
     dynamic data,

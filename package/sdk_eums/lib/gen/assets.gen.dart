@@ -53,7 +53,7 @@ class Assets {
   static const AssetGenImage hmall = AssetGenImage('assets/icons/hmall.png');
   static const AssetGenImage lineBreak =
       AssetGenImage('assets/icons/line_break.png');
-  static const AssetGenImage link = AssetGenImage('assets/icons/link.png');
+
   static const AssetGenImage linkAdvertising =
       AssetGenImage('assets/icons/link_advertising.png');
   static const AssetGenImage icon_logo =
@@ -156,6 +156,13 @@ class Assets {
   static const AssetGenImage scrap_banner =
       AssetGenImage('assets/icons/scrap_banner.png');
 
+  static const AssetGenImage user = AssetGenImage('assets/icons/user.png');
+  static const AssetGenImage get_point =
+      AssetGenImage('assets/icons/get_point.png');
+  static const AssetGenImage watch_point =
+      AssetGenImage('assets/icons/watch_point.png');
+  static const AssetGenImage textgt = AssetGenImage('assets/icons/textgt.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         logo,
@@ -183,7 +190,6 @@ class Assets {
         heartRed,
         hmall,
         lineBreak,
-        link,
         linkAdvertising,
         icon_logo,
         logo1,

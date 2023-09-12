@@ -47,3 +47,8 @@ class UpdateUser {
 class ShareData {
   ShareData();
 }
+
+class ShareUser {
+  dynamic dataUser;
+  ShareUser(dataUser);
+}

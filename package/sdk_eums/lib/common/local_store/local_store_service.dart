@@ -13,6 +13,7 @@ class LocalStoreService extends LocalStore {
   static const SAVE_DEVICE_TOKEN = 'SAVE_DEVICE_TOKEN';
   static const DEVICE_WIDTH = 'DEVICE_WIDTH';
   static const COUNT_ADVER = 'COUNT_ADVER';
+  static const dataUser = 'dataUser';
 
   @override
   Future<bool> hasAuthenticated() async {
@@ -153,5 +154,17 @@ class LocalStoreService extends LocalStore {
   Future setCountAdvertisement(dynamic data) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString(COUNT_ADVER, jsonEncode(data));
+  }
+
+  @override
+  Future getDataUser() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return jsonDecode(preferences.getString(dataUser) ?? '{}');
+  }
+
+  @override
+  Future setDataUser(account) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString(dataUser, jsonEncode(account));
   }
 }

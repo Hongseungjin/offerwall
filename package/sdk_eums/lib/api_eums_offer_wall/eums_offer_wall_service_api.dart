@@ -289,4 +289,20 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     Response result = await api.get('banner', queryParameters: dataParams);
     return result.data;
   }
+
+  @override
+  Future getTotalPoint() async {
+    Response result = await api.get('point/total');
+    return result.data;
+  }
+
+  @override
+  Future reportAdver({adsIdx, reason, type}) async {
+    dynamic data = <String, dynamic>{
+      "adsIdx": adsIdx,
+      "reason": reason,
+      "type": type
+    };
+    await api.post('report-ads', data: data);
+  }
 }

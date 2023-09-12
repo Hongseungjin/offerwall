@@ -8,7 +8,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
-import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/constants.dart';
 import '../../utils/appColor.dart';
@@ -113,7 +112,7 @@ class _RequestScreenState extends State<RequestScreen>
       context.read<RequestBloc>().add(ListInquire(limit: Constants.LIMIT_DATA));
       setState(() {
         _tabController.animateTo(_tabController.index + 1,
-            duration: Duration(milliseconds: 300));
+            duration: const Duration(milliseconds: 300));
       });
       // EasyLoading.dismiss();
     }
@@ -165,7 +164,7 @@ class _RequestScreenState extends State<RequestScreen>
     return Expanded(
       child: TabBarView(
         controller: _tabController,
-        children: [MakeQuestion(), HistoryRequest()],
+        children: [const MakeQuestion(), const HistoryRequest()],
       ),
     );
   }
@@ -515,7 +514,7 @@ class _HistoryRequestState extends State<HistoryRequest> {
                     return mode == LoadStatus.loading
                         ? Center(
                             child: Column(
-                            children: const [
+                            children: [
                               Text(' '),
                               CircularProgressIndicator(
                                   strokeWidth: 2,
@@ -529,25 +528,17 @@ class _HistoryRequestState extends State<HistoryRequest> {
                 enablePullDown: true,
                 enablePullUp: true,
                 child: SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.colorC9)),
-                      child: Wrap(
-                        children: List.generate(
-                            state.dataListInquire.length,
-                            (index) => _buildItem(
-                                index: index,
-                                data: state.dataListInquire[index],
-                                dataRequest: state.dataListInquire)),
-                      ),
-                    ),
+                  child: Wrap(
+                    children: List.generate(
+                        state.dataListInquire.length,
+                        (index) => _buildItem(
+                            index: index,
+                            data: state.dataListInquire[index],
+                            dataRequest: state.dataListInquire)),
                   ),
                 ),
               )
-            : SizedBox();
+            : const SizedBox();
       },
     );
   }
@@ -587,6 +578,7 @@ class _HistoryRequestState extends State<HistoryRequest> {
   _buildItem({int? index, dynamic data, List? dataRequest}) {
     bool isShowDes = _saved.contains(data);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {
@@ -604,86 +596,134 @@ class _HistoryRequestState extends State<HistoryRequest> {
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: isShowDes ? AppColor.blue2 : AppColor.white,
-            ),
-            child: Row(
+            decoration: const BoxDecoration(
+                // color: isShowDes ? AppColor.blue2 : AppColor.white,
+                ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(
-                      "${data['contents']}",
-                      style: AppStyle.bold
-                          .copyWith(color: AppColor.black, fontSize: 14),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: data['ripple_fl'] == 0
+                            ? HexColor('#eeeeee')
+                            : HexColor('#fdd000'),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        data['ripple_fl'] != 0 ? '답변완료' : '답변대기',
+                        style: AppStyle.medium
+                            .copyWith(color: Colors.black, fontSize: 12),
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                    const Spacer(),
                     Text(
                       Constants.formatTime(data['regist_date']),
                       style: AppStyle.medium
-                          .copyWith(color: AppColor.black, fontSize: 12),
+                          .copyWith(color: HexColor('#888888'), fontSize: 12),
                     )
                   ],
                 ),
-                const Spacer(),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: data['ripple_fl'] == 0
-                            ? AppColor.color70
-                            : AppColor.red,
-                      )),
-                  child: Text(
-                    data['ripple_fl'] != 0 ? '답변완료' : '대기중',
-                    style: AppStyle.bold.copyWith(
-                        color: data['ripple_fl'] == 0
-                            ? AppColor.color70
-                            : AppColor.red,
-                        fontSize: 10),
-                  ),
-                )
+                Row(
+                  children: [
+                    const Spacer(),
+                    Icon(
+                      !isShowDes
+                          ? Icons.keyboard_arrow_down_outlined
+                          : Icons.keyboard_arrow_up_outlined,
+                      size: 16,
+                    )
+                  ],
+                ),
+                Text(
+                  "${data['title'] ?? ''}",
+                  style: AppStyle.bold
+                      .copyWith(color: AppColor.black, fontSize: 14),
+                ),
               ],
             ),
           ),
         ),
-        if (isShowDes)
-          if (data['answers'] != []) ...{
-            Wrap(
-              children: List.generate(
-                  data['answers'].length,
-                  (index) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        child: Column(
+        if (isShowDes) ...{
+          Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            decoration: BoxDecoration(color: HexColor('#f9f9f9')),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${data['title'] ?? ''}",
+                  style: AppStyle.regular
+                      .copyWith(color: HexColor('#707070'), fontSize: 14),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "${data['contents'] ?? ''}",
+                  style: AppStyle.bold
+                      .copyWith(color: AppColor.black, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          if (data['answers'].length > 0) ...{
+            Divider(
+              color: HexColor(
+                '#e5e5e5',
+              ),
+              height: 1,
+              thickness: 1,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              decoration: BoxDecoration(color: HexColor('#f9f9f9')),
+              child: Wrap(
+                children: List.generate(
+                    data['answers'].length,
+                    (index) => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                Image.asset(Assets.enter.path,
-                                    package: "sdk_eums", height: 24),
-                                Text(
-                                  "${data['answers'][index]['contents']}",
-                                  style: AppStyle.bold.copyWith(
-                                      color: AppColor.black, fontSize: 14),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 3, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                          color: HexColor('#dddddd'))),
+                                  child: Text('답변내용'),
                                 ),
+                                const Spacer(),
+                                Text(
+                                  Constants.formatTime(
+                                      data['answers'][index]['regist_date']),
+                                  style: AppStyle.medium.copyWith(
+                                      color: HexColor('#888888'), fontSize: 12),
+                                )
                               ],
                             ),
                             const SizedBox(height: 12),
                             Text(
                               "${data['answers'][index]['contents']}",
                               style: AppStyle.bold.copyWith(
-                                  color: AppColor.color70, fontSize: 14),
+                                  color: AppColor.black, fontSize: 14),
                             ),
-                            const SizedBox(height: 24),
                           ],
-                        ),
-                      )),
+                        )),
+              ),
             ),
           },
-        index != dataRequest!.length - 1 ? Divider() : SizedBox()
+        },
+        index != dataRequest!.length - 1
+            ? const Divider(
+                height: 0,
+              )
+            : const SizedBox()
       ],
     );
   }

@@ -3,22 +3,25 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_circular.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
-import '../screen/report_module/report_page.dart';
-
 class CustomWebViewKeep extends StatefulWidget {
   final dynamic urlLink;
   final dynamic uriImage;
   final Widget? bookmark;
+  final Widget? report;
   final Function()? mission;
   const CustomWebViewKeep(
-      {Key? key, this.urlLink, this.bookmark, this.mission, this.uriImage})
+      {Key? key,
+      this.urlLink,
+      this.bookmark,
+      this.mission,
+      this.report,
+      this.uriImage})
       : super(key: key);
 
   @override
@@ -112,17 +115,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
             color: AppColor.black,
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              Routing().navigate(context, ReportPage());
-            },
-            child: Icon(
-              Icons.report,
-              color: Colors.amber,
-            ),
-          )
-        ],
+        actions: [widget.report ?? SizedBox()],
       ),
       body: Stack(
         children: [
@@ -188,7 +181,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
                             backgroundColor:
                                 HexColor('#888888').withOpacity(0.3),
                             controller: timerController,
-                            duration: Duration(seconds: _startTime),
+                            duration: Duration(seconds: _startTime - 1),
                           ),
                         ),
                         Positioned(

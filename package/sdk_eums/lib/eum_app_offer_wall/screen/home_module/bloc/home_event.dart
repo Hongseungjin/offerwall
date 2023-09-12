@@ -38,3 +38,10 @@ class ListBanner extends HomeEvent {
   @override
   List<Object?> get props => [type];
 }
+
+class GetTotalPoint extends HomeEvent {
+  GetTotalPoint();
+
+  @override
+  List<Object?> get props => [];
+}

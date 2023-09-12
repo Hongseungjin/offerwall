@@ -91,7 +91,6 @@ class _StatusPointPageState extends State<StatusPointPage>
     await Future.delayed(const Duration(seconds: 0));
 
     if (_tabController.index == 0) {
-      print("co vao day khong");
       globalKey.currentContext?.read<StatusPointBloc>().add(LoadMoreListPoint(
           limit: 10,
           offset: offset,

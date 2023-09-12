@@ -36,6 +36,7 @@ class MyHomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<MyHomeScreen> {
   bool showAction = false;
   Timer? timer;
+  dynamic dataUser;
 
   Future<void> _registerEventBus() async {
     RxBus.register<ShowAction>().listen((event) {
@@ -62,16 +63,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     NotificationHandler()
         .didReceiveLocalNotificationStream
         .stream
-        .listen((ReceivedNotification receivedNotification) async {
-      print("co vao nhe dcm");
-    });
+        .listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler()
         .selectNotificationStream
         .stream
-        .listen((String? payload) async {
-      print("co vao nhe dcasdasdadasdm");
-    });
+        .listen((String? payload) async {});
   }
 
   getBatteryOptimization() async {
@@ -318,29 +315,14 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
     WidgetsBinding.instance.addObserver(this);
   }
 
-  // checkPermission() async {
-  //   final bool status = await FlutterOverlayWindow.isPermissionGranted();
-
-  //   if (!status) {
-  //     await FlutterOverlayWindow.requestPermission();
-  //   } else {}
-  // }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
-  Future<void> _registerEventBus() async {
-    // RxBus.register<TestBus>().listen((event) {});
+  Future<void> _registerEventBus() async {}
 
-    // RxBus.register<ShowDataAdver>(tag: Constants.showDataAdver)
-    //     .listen((event) {});
-  }
-
-  void _unregisterEventBus() {
-    // RxBus.destroy();
-  }
+  void _unregisterEventBus() {}
 
   @override
   void dispose() {

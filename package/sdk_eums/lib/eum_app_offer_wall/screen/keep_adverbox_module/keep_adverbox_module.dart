@@ -8,6 +8,7 @@ import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/keep_adverbox_module/bloc/keep_adverbox_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -213,11 +214,12 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                             Routing().navigate(
                                 context,
                                 DetailKeepScreen(
-                                  urlImage: data[index][''],
-                                  url: data[index]['url_link'],
-                                  id: data[index]['advertiseIdx'],
-                                  idx: data[index]['idx'],
-                                  typePoint: data[index]['typePoint'],
+                                  data: data[index],
+                                  // urlImage: data[index][''],
+                                  // url: data[index]['url_link'],
+                                  // id: data[index]['advertiseIdx'],
+                                  // idx: data[index]['idx'],
+                                  // typePoint: data[index]['typePoint'],
                                 ));
                           },
                           child: Container(
@@ -238,11 +240,16 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '${data[index]['name'] ?? ''}',
-                                      maxLines: 2,
-                                      style: AppStyle.bold.copyWith(
-                                          color: AppColor.black, fontSize: 14),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          1.9,
+                                      child: Text(
+                                        '${data[index]['name'] ?? ''}',
+                                        maxLines: 2,
+                                        style: AppStyle.bold.copyWith(
+                                            color: AppColor.black,
+                                            fontSize: 14),
+                                      ),
                                     ),
                                     const SizedBox(height: 4),
                                     RichText(
@@ -353,15 +360,9 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
 }
 
 class DetailKeepScreen extends StatefulWidget {
-  const DetailKeepScreen(
-      {Key? key, this.url, this.idx, this.id, this.typePoint, this.urlImage})
-      : super(key: key);
+  const DetailKeepScreen({Key? key, this.data}) : super(key: key);
 
-  final String? url;
-  final String? urlImage;
-  final dynamic id;
-  final dynamic typePoint;
-  final dynamic idx;
+  final dynamic data;
 
   @override
   State<DetailKeepScreen> createState() => _DetailKeepScreenState();
@@ -493,21 +494,34 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
         body: BlocBuilder<KeepAdverboxBloc, KeepAdverboxState>(
           builder: (context, state) {
             return CustomWebViewKeep(
-              urlLink: widget.url,
-              uriImage: widget.urlImage,
+              urlLink: widget.data['url_link'],
+              uriImage: widget.data[''],
+              report: GestureDetector(
+                  onTap: () {
+                    Routing().navigate(
+                        context,
+                        ReportPage(
+                          data: widget.data,
+                          deleteAdver: true,
+                        ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Image.asset(Assets.report.path,
+                        package: "sdk_eums", height: 16),
+                  )),
               bookmark: GestureDetector(
                 onTap: () {
                   setState(() {
                     checkSave = !checkSave;
                   });
                   if (!checkSave) {
-                    globalKey.currentContext
-                        ?.read<KeepAdverboxBloc>()
-                        .add(SaveScrap(advertise_idx: widget.id));
+                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(
+                        SaveScrap(advertise_idx: widget.data['advertiseIdx']));
                   } else {
-                    globalKey.currentContext
-                        ?.read<KeepAdverboxBloc>()
-                        .add(DeleteScrap(advertise_idx: widget.id));
+                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(
+                        DeleteScrap(
+                            advertise_idx: widget.data['advertiseIdx']));
                   }
                 },
                 child: Image.asset(
@@ -519,15 +533,15 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
               mission: () {
                 DialogUtils.showDialogSucessPoint(context,
                     checkImage: true,
-                    point: widget.typePoint,
+                    point: widget.data['typePoint'],
                     data: (state.dataAdvertiseSponsor), voidCallback: () {
                   context
                       .read<KeepAdverboxBloc>()
-                      .add(DeleteKeep(id: widget.id));
+                      .add(DeleteKeep(id: widget.data['advertiseIdx']));
                   globalKey.currentContext?.read<KeepAdverboxBloc>().add(
                       EarnPoin(
-                          advertise_idx: widget.id,
-                          pointType: widget.typePoint));
+                          advertise_idx: widget.data['advertiseIdx'],
+                          pointType: widget.data['typePoint']));
                 });
               },
             );
