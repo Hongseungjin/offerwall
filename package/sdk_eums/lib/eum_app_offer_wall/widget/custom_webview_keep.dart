@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gif/flutter_gif.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -15,9 +16,11 @@ class CustomWebViewKeep extends StatefulWidget {
   final Widget? bookmark;
   final Widget? report;
   final Function()? mission;
+  final String? title;
   const CustomWebViewKeep(
       {Key? key,
       this.urlLink,
+      this.title,
       this.bookmark,
       this.mission,
       this.report,
@@ -29,8 +32,9 @@ class CustomWebViewKeep extends StatefulWidget {
 }
 
 class _CustomWebViewKeepState extends State<CustomWebViewKeep>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   ScrollController _scrollController = ScrollController();
+  FlutterGifController? gifController;
 
   Timer? _timer;
   int _startTime = 15;
@@ -53,6 +57,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
         if (_startTime == 0) {
           setState(() {
             showButton = true;
+            gifController?.stop();
             _timer?.cancel();
           });
         }
@@ -62,11 +67,20 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
 
   @override
   void initState() {
+    gifController = FlutterGifController(vsync: this);
     // TODO: implement initState
     super.initState();
     startTimeDown();
     start5s();
+    // gifController?.animateTo(52, duration: Duration(seconds: 1));
     _scrollController.addListener(_scrollListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      gifController?.repeat(
+        min: 0,
+        max: 53,
+        period: const Duration(milliseconds: 2000),
+      );
+    });
   }
 
   @override
@@ -106,6 +120,9 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.white,
+        centerTitle: true,
+        title: Text(widget.title ?? '',
+            style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18)),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -146,7 +163,8 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
               bottom: 0,
               child: Container(
                 padding: EdgeInsets.only(
-                    top: 5, bottom: MediaQuery.of(context).padding.bottom + 20),
+                    top: 10,
+                    bottom: MediaQuery.of(context).padding.bottom + 20),
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
                 child: Row(
@@ -173,27 +191,35 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
                     ),
                     Stack(
                       children: [
-                        SizedBox(
-                          height: 40,
-                          width: 40,
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          height: 50,
+                          width: 50,
                           child: LinearTimer(
                             color: AppColor.yellow,
                             backgroundColor:
                                 HexColor('#888888').withOpacity(0.3),
                             controller: timerController,
-                            duration: Duration(seconds: _startTime - 1),
+                            duration: const Duration(milliseconds: 14000),
                           ),
                         ),
                         Positioned(
-                          right: 0,
-                          left: 0,
-                          top: 10,
-                          child: Image.asset(
-                            Assets.coingif.path,
-                            package: "sdk_eums",
-                            height: 25,
-                          ),
-                        )
+                            right: 0,
+                            left: 0,
+                            top: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: GifImage(
+                                height: 30,
+                                width: 30,
+                                fit: BoxFit.fill,
+                                controller: gifController!,
+                                image: AssetImage(
+                                  package: "sdk_eums",
+                                  Assets.coingif.path,
+                                ),
+                              ),
+                            ))
                       ],
                     ),
                     // Container(

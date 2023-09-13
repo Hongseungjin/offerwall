@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +56,19 @@ class _HomePageState extends State<HomePage>
     categary = 'participation';
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
+    checkPermission();
     super.initState();
+  }
+
+  checkPermission() async {
+    if (Platform.isAndroid) {
+      final bool status = await FlutterOverlayWindow.isPermissionGranted();
+
+      if (!status) {
+        await FlutterOverlayWindow.requestPermission();
+      } else {}
+      localStore?.setAccessToken(await localStore?.getAccessToken() ?? '');
+    }
   }
 
   _onTabChange() {
@@ -296,12 +310,8 @@ class _HomePageState extends State<HomePage>
             ),
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: HexColor('#fcc900')),
-                  child: Text('P', style: AppStyle.bold.copyWith(fontSize: 18)),
-                ),
+                Image.asset(Assets.icon_point_y.path,
+                    package: "sdk_eums", height: 24),
                 const SizedBox(width: 6),
                 Text(
                   Constants.formatMoney(point, suffix: ''),
@@ -339,12 +349,8 @@ class _HomePageState extends State<HomePage>
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: HexColor('#fcc900')),
-                  child: Text('P', style: AppStyle.bold.copyWith(fontSize: 18)),
-                ),
+                Image.asset(Assets.icon_point_y.path,
+                    package: "sdk_eums", height: 24),
                 const SizedBox(width: 12),
                 Text(Constants.formatMoney(point, suffix: ''),
                     style: AppStyle.bold
@@ -363,9 +369,17 @@ class _HomePageState extends State<HomePage>
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              '서비스 이용 안내',
-              style: AppStyle.regular12.copyWith(color: HexColor('#888888')),
+            child: Row(
+              children: [
+                Image.asset(Assets.err_grey.path,
+                    package: "sdk_eums", height: 12),
+                const SizedBox(width: 4),
+                Text(
+                  '서비스 이용 안내',
+                  style:
+                      AppStyle.regular12.copyWith(color: HexColor('#888888')),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 10),
@@ -632,8 +646,9 @@ class _ListViewHomeState extends State<ListViewHome> {
           style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
         ),
         icon: const Icon(
-          Icons.arrow_drop_down,
+          Icons.keyboard_arrow_down_rounded,
           color: AppColor.black,
+          size: 24,
         ),
         items: items,
         onChanged: (value) {
@@ -654,14 +669,15 @@ class _ListViewHomeState extends State<ListViewHome> {
       builder: (context, state) {
         return Column(
           children: [
-            Padding(
+            Container(
+              color: AppColor.white,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
                   Text(
                       '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개'),
                   const Spacer(),
-                  Container(
+                  SizedBox(
                     height: 35,
                     width: 100,
                     child: Center(child: _buildDropDown(context)),
@@ -671,12 +687,13 @@ class _ListViewHomeState extends State<ListViewHome> {
             ),
             Expanded(
               child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: AppColor.white,
                       border: Border(
-                          top: BorderSide(
-                              color: AppColor.grey5D.withOpacity(0.2),
-                              width: 2))),
+                          // top: BorderSide(
+                          //     color: AppColor.grey5D.withOpacity(0.2),
+                          //     width: 2)
+                          )),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: SmartRefresher(
@@ -728,6 +745,9 @@ class _ListViewHomeState extends State<ListViewHome> {
                                         Routing().navigate(
                                             context,
                                             DetailOffWallScreen(
+                                              title:
+                                                  state.listDataOfferWall[index]
+                                                      ['title'],
                                               xId:
                                                   state.listDataOfferWall[index]
                                                       ['idx'],

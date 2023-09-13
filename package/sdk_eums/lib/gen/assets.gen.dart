@@ -162,6 +162,21 @@ class Assets {
   static const AssetGenImage watch_point =
       AssetGenImage('assets/icons/watch_point.png');
   static const AssetGenImage textgt = AssetGenImage('assets/icons/textgt.png');
+  static const AssetGenImage icon_point_y =
+      AssetGenImage('assets/icons/icon_point_y.png');
+  static const AssetGenImage err_grey =
+      AssetGenImage('assets/icons/err_grey.png');
+  static const AssetGenImage icon_reward =
+      AssetGenImage('assets/icons/icon_reward.png');
+  static const AssetGenImage icon_sub =
+      AssetGenImage('assets/icons/icon_sub.png');
+  static const AssetGenImage icon_upload =
+      AssetGenImage('assets/icons/icon_upload.png');
+  static const AssetGenImage icon_check =
+      AssetGenImage('assets/icons/icon_check.png');
+  static const AssetGenImage camera = AssetGenImage('assets/icons/camera.png');
+  static const AssetGenImage point_dialog =
+      AssetGenImage('assets/icons/point_dialog.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [

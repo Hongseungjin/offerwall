@@ -136,6 +136,116 @@ class DialogUtils {
         });
   }
 
+  static void showDialogRewardPoint(BuildContext context,
+      {dynamic data,
+      dynamic voidCallback,
+      bool checkImage = false,
+      dynamic point}) {
+    dynamic reward;
+
+    switch (checkImage ? point : data['typePoint']) {
+      case 'POINT_8':
+        reward = 5;
+        break;
+      case 'POINT_16':
+        reward = 10;
+        break;
+      case 'POINT_32':
+        reward = 20;
+        break;
+      case 'POINT_80':
+        reward = 50;
+        break;
+      case 'POINT_160':
+        reward = 100;
+        break;
+
+      default:
+        break;
+    }
+
+    showDialog(
+        context: context,
+        builder: (buildContext) {
+          return Dialog(
+            insetPadding: EdgeInsets.all(16),
+            insetAnimationCurve: Curves.bounceIn,
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 16),
+                        Image.asset(
+                          Assets.point_dialog.path,
+                          package: "sdk_eums",
+                          height: 177,
+                        ),
+                        Text('$reward포인트',
+                            style: AppStyle.medium.copyWith(
+                                fontSize: 20, color: HexColor('#f4a43b'))),
+                        Text('가적립되었어요!,',
+                            style: AppStyle.medium
+                                .copyWith(color: AppColor.black, fontSize: 20)),
+                        // Center(
+                        //   child: RichText(
+                        //       text: TextSpan(
+                        //           text: '$reward포인트',
+                        //           style: AppStyle.medium
+                        //               .copyWith(color: HexColor('#f4a43b')),
+                        //           children: [
+                        //         TextSpan(
+                        //             text: '\n가적립되었어요!',
+                        //             style: AppStyle.medium
+                        //                 .copyWith(color: AppColor.black))
+                        //       ])),
+                        // ),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(buildContext);
+
+                            if (voidCallback != null) {
+                              voidCallback();
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 10),
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColor.yellow,
+                            ),
+                            child: Text(
+                              '확인',
+                              style: AppStyle.medium
+                                  .copyWith(color: AppColor.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
+  }
+
   static void showDialogSucessPoint(BuildContext context,
       {dynamic data,
       dynamic voidCallback,

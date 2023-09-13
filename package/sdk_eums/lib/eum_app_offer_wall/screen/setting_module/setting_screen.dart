@@ -1,5 +1,13 @@
 // import 'package:flutter/cupertino.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:sdk_eums/common/constants.dart';
+import 'package:sdk_eums/common/local_store/local_store.dart';
+import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
@@ -7,6 +15,7 @@ import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
 // import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
 
 import '../../utils/appColor.dart';
+import 'bloc/setting_bloc.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -16,159 +25,268 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+  final GlobalKey<State<StatefulWidget>> globalKey =
+      GlobalKey<State<StatefulWidget>>();
   bool checkToken = false;
   bool checkTime = false;
 
+  LocalStore? localStore;
   DateTime? startDate;
   DateTime? endDate;
 
   TimePickerEntryMode entryMode = TimePickerEntryMode.input;
   Orientation? orientation;
+  String? version;
 
   @override
   void initState() {
+    localStore = LocalStoreService();
     startDate = DateTime.now();
     endDate = DateTime.now();
+    checkBoolTime();
+    checkVersionApp();
+
     super.initState();
+  }
+
+  checkBoolTime() async {
+    checkTime = await localStore?.getBoolTime();
+    checkToken = await localStore?.getSaveAdver();
+    print("checkTokencheckToken$checkToken");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return BlocProvider<SettingBloc>(
+      create: (context) => SettingBloc()..add(GetSettingTime())
+      // ..add(GetTotalPoint())
+      // ..add(ListBanner(type: 'main'))
+      // ..add(ListOfferWall(category: categary, filter: filter))
+      ,
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<SettingBloc, SettingState>(
+            listenWhen: (previous, current) =>
+                previous.settingStatus != current.settingStatus,
+            listener: _listenSettingTime,
           ),
-        ),
-        title: Text(
-          '설정',
-          style: AppStyle.bold.copyWith(color: Colors.black),
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '마케팅 알림',
-                  style: AppStyle.regular.copyWith(color: HexColor('#888888')),
-                ),
-                const SizedBox(height: 15),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      checkToken = !checkToken;
-                    });
-                  },
-                  child: _buildCheckSetting(
-                      checkSetting: checkToken, title: '벌 광고 활성화'),
-                ),
-                const SizedBox(height: 30),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      checkTime = !checkTime;
-                    });
-                  },
-                  child: _buildCheckSetting(
-                      checkSetting: checkTime, title: '광고 시간대 설정'),
-                ),
-                const SizedBox(height: 7),
-                Text(
-                  '벌 광고를 받지 않을 시간을 설정합니다.',
-                  style: AppStyle.regular.copyWith(color: HexColor('#888888')),
-                ),
-                const SizedBox(height: 20),
-                if (!checkTime) ...{
-                  Row(
-                    children: [
-                      _buildSelectDate(dateNumber: 1, title: '시작 시간'),
-                      _buildSelectDate(dateNumber: 2, title: '종료 시간'),
-                    ],
-                  ),
-                }
-              ],
-            ),
-          ),
-          const SizedBox(height: 40),
-          Divider(
-            thickness: 5,
-            height: 0,
-            color: HexColor('#e5e5e5'),
-          ),
-          Divider(
-            height: 1,
-            thickness: 5,
-            color: HexColor('#f4f4f4'),
-          ),
-          const SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text('정보 수신 동의', style: AppStyle.bold),
-                    const Spacer(),
-                    Text(
-                      '동의',
-                      style: AppStyle.bold.copyWith(color: HexColor('#f4a43b')),
-                    ),
-                    const Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      size: 16,
-                    )
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text('2018/07/29',
-                    style:
-                        AppStyle.regular.copyWith(color: HexColor('#888888'))),
-                const SizedBox(height: 31),
-                Row(
-                  children: [
-                    Text('버전정보', style: AppStyle.bold),
-                    const Spacer(),
-                    Text(
-                      '최신 버전을 사용 중입니다.',
-                      style: AppStyle.bold.copyWith(color: HexColor('#f4a43b')),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text('Ver 457.000.05',
-                    style:
-                        AppStyle.regular.copyWith(color: HexColor('#888888'))),
-              ],
-            ),
-          ),
-          const SizedBox(height: 40),
-          Divider(
-            thickness: 5,
-            height: 0,
-            color: HexColor('#e5e5e5'),
-          ),
-          Divider(
-            height: 1,
-            thickness: 5,
-            color: HexColor('#f4f4f4'),
+          BlocListener<SettingBloc, SettingState>(
+            listenWhen: (previous, current) =>
+                previous.updateSettingStatus != current.updateSettingStatus,
+            listener: _listenUpdateSettingStatus,
           ),
         ],
+        child: WillPopScope(
+            onWillPop: () async {
+              return true;
+            },
+            child: _buildContent(context)),
       ),
+    );
+  }
+
+  void _listenUpdateSettingStatus(BuildContext context, SettingState state) {
+    if (state.updateSettingStatus == UpdateSettingStatus.loading) {
+      return;
+    }
+    if (state.updateSettingStatus == UpdateSettingStatus.failure) {
+      return;
+    }
+    if (state.updateSettingStatus == UpdateSettingStatus.success) {
+      globalKey.currentContext?.read<SettingBloc>().add(GetSettingTime());
+    }
+  }
+
+  void _listenSettingTime(BuildContext context, SettingState state) {}
+
+  checkVersionApp() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+  }
+
+  _buildContent(BuildContext context) {
+    return BlocBuilder<SettingBloc, SettingState>(
+      builder: (context, state) {
+        try {
+          startDate = state.dataSetting != null
+              ? DateTime.tryParse(state.dataSetting['startTimeCron'])
+              : DateTime.now();
+
+          endDate = state.dataSetting != null
+              ? DateTime.tryParse(state.dataSetting['endTimeCron'])
+              : DateTime.now();
+        } catch (ex) {}
+
+        return Scaffold(
+          key: globalKey,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            ),
+            title: Text(
+              '설정',
+              style: AppStyle.bold.copyWith(color: Colors.black),
+            ),
+          ),
+          body: Column(
+            children: [
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '마케팅 알림',
+                      style:
+                          AppStyle.regular.copyWith(color: HexColor('#888888')),
+                    ),
+                    const SizedBox(height: 15),
+                    GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          checkToken = !checkToken;
+                          localStore?.setSaveAdver(checkToken);
+                        });
+                        if (!checkToken) {
+                          String? token =
+                              await FirebaseMessaging.instance.getToken();
+
+                          await EumsOfferWallServiceApi()
+                              .unRegisterTokenNotifi(token: token);
+                          FlutterBackgroundService().invoke("stopService");
+                        } else {
+                          dynamic data = <String, dynamic>{
+                            'count': 0,
+                            'date': Constants.formatTime(
+                                DateTime.now().toIso8601String()),
+                          };
+                          localStore?.setCountAdvertisement(data);
+                          String? token =
+                              await FirebaseMessaging.instance.getToken();
+                          await EumsOfferWallServiceApi()
+                              .createTokenNotifi(token: token);
+                          bool isRunning =
+                              await FlutterBackgroundService().isRunning();
+                          if (!isRunning) {
+                            FlutterBackgroundService().startService();
+                          }
+                        }
+                      },
+                      child: _buildCheckSetting(
+                          checkSetting: !checkToken, title: '벌 광고 활성화'),
+                    ),
+                    const SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          checkTime = !checkTime;
+                          localStore?.setBoolTime(checkTime);
+                        });
+                        globalKey.currentContext?.read<SettingBloc>().add(
+                            EnableOrDisbleSetting(enableOrDisble: checkTime));
+                      },
+                      child: _buildCheckSetting(
+                          checkSetting: checkTime, title: '광고 시간대 설정'),
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      '벌 광고를 받지 않을 시간을 설정합니다.',
+                      style:
+                          AppStyle.regular.copyWith(color: HexColor('#888888')),
+                    ),
+                    const SizedBox(height: 20),
+                    if (checkTime) ...{
+                      Row(
+                        children: [
+                          _buildSelectDate(dateNumber: 1, title: '시작 시간'),
+                          _buildSelectDate(dateNumber: 2, title: '종료 시간'),
+                        ],
+                      ),
+                    }
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              Divider(
+                thickness: 5,
+                height: 0,
+                color: HexColor('#e5e5e5'),
+              ),
+              Divider(
+                height: 1,
+                thickness: 5,
+                color: HexColor('#f4f4f4'),
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text('정보 수신 동의', style: AppStyle.bold),
+                        const Spacer(),
+                        Text(
+                          '동의',
+                          style: AppStyle.bold
+                              .copyWith(color: HexColor('#f4a43b')),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios_outlined,
+                          size: 16,
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text('2018/07/29',
+                        style: AppStyle.regular
+                            .copyWith(color: HexColor('#888888'))),
+                    const SizedBox(height: 31),
+                    Row(
+                      children: [
+                        Text('버전정보', style: AppStyle.bold),
+                        const Spacer(),
+                        Text(
+                          '최신 버전을 사용 중입니다.',
+                          style: AppStyle.bold
+                              .copyWith(color: HexColor('#f4a43b')),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text('Ver ${version ?? ''}',
+                        style: AppStyle.regular
+                            .copyWith(color: HexColor('#888888'))),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
+              Divider(
+                thickness: 5,
+                height: 0,
+                color: HexColor('#e5e5e5'),
+              ),
+              Divider(
+                height: 1,
+                thickness: 5,
+                color: HexColor('#f4f4f4'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -199,14 +317,23 @@ class _SettingScreenState extends State<SettingScreen> {
                       break;
                     default:
                   }
-
                   setState(() {});
+                  createOrUpdateSettingTime(
+                      startTime: startDate, endTime: endDate);
                 });
           },
           child: dateNumber == 1
               ? _buildViewDate(dateTime: startDate, title: title)
               : _buildViewDate(dateTime: endDate, title: title))
     ]);
+  }
+
+  createOrUpdateSettingTime({DateTime? startTime, DateTime? endTime}) {
+    try {
+      globalKey.currentContext
+          ?.read<SettingBloc>()
+          .add(SettingTime(startTime: startTime, endTime: endTime));
+    } catch (ex) {}
   }
 
   _buildViewDate({DateTime? dateTime, String? title}) {
@@ -222,7 +349,7 @@ class _SettingScreenState extends State<SettingScreen> {
           width: (MediaQuery.of(context).size.width - 32) / 2,
           child: Row(
             children: [
-              Text('${dateTime!.hour < 0 ? 'AM' : 'PM'} '
+              Text('${dateTime!.hour < 10 ? 'AM' : 'PM'} '
                   '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}'),
               const Spacer(),
               const Icon(Icons.keyboard_arrow_down_outlined)
@@ -306,10 +433,10 @@ class _SettingScreenState extends State<SettingScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
+              color: !checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
           child: Row(
             children: [
-              checkSetting
+              !checkSetting
                   ? Container(
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
@@ -319,7 +446,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     )
                   : const SizedBox(),
               const Spacer(),
-              checkSetting
+              !checkSetting
                   ? const SizedBox()
                   : Container(
                       decoration: const BoxDecoration(

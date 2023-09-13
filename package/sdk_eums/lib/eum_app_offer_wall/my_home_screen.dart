@@ -172,10 +172,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   onTap: () {
                     Routing().navigate(context, MyPage());
                   },
-                  child: const Icon(
-                    Icons.person_outline,
-                    size: 24,
-                    color: AppColor.black,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: Image.asset(Assets.my_page.path,
+                        package: "sdk_eums", height: 24),
                   ),
                 ),
                 const SizedBox(

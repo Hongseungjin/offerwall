@@ -32,12 +32,23 @@ class _StatusPointPageState extends State<StatusPointPage>
   dynamic countPoint;
   dynamic totalPointEum = 0;
   int totalPointOfferWall = 0;
+  int tabIndex = 0;
+  int tabPreviousIndex = 0;
 
   @override
   void initState() {
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     account = widget.account;
+    _tabController.addListener(_onTabChange);
     super.initState();
+  }
+
+  _onTabChange() {
+    tabIndex = _tabController.index;
+    if (tabIndex != tabPreviousIndex) {
+      _fetchData();
+    }
+    tabPreviousIndex = _tabController.index;
   }
 
   @override
@@ -52,6 +63,12 @@ class _StatusPointPageState extends State<StatusPointPage>
         BlocListener<StatusPointBloc, StatusPointState>(
           listenWhen: (previous, current) =>
               previous.loadListPointStatus != current.loadListPointStatus,
+          listener: _listenFetchDataLoadMore,
+        ),
+        BlocListener<StatusPointBloc, StatusPointState>(
+          listenWhen: (previous, current) =>
+              previous.loadMoreListPointStatus !=
+              current.loadMoreListPointStatus,
           listener: _listenFetchData,
         ),
       ], child: _buildContent(context)),
@@ -59,6 +76,20 @@ class _StatusPointPageState extends State<StatusPointPage>
   }
 
   void _listenFetchData(BuildContext context, StatusPointState state) {
+    if (state.loadMoreListPointStatus == LoadMoreListPointStatus.loading) {
+      LoadingDialog.instance.show();
+      return;
+    }
+    if (state.loadMoreListPointStatus == LoadMoreListPointStatus.failure) {
+      LoadingDialog.instance.hide();
+      return;
+    }
+    if (state.loadMoreListPointStatus == LoadMoreListPointStatus.success) {
+      LoadingDialog.instance.hide();
+    }
+  }
+
+  void _listenFetchDataLoadMore(BuildContext context, StatusPointState state) {
     if (state.loadListPointStatus == LoadListPointStatus.loading) {
       LoadingDialog.instance.show();
       return;
@@ -153,14 +184,8 @@ class _StatusPointPageState extends State<StatusPointPage>
                     ),
                     Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: HexColor('#fcc900')),
-                          child: Text('P',
-                              style: AppStyle.bold.copyWith(fontSize: 18)),
-                        ),
+                        Image.asset(Assets.icon_point_y.path,
+                            package: "sdk_eums", height: 24),
                         const SizedBox(width: 8),
                         Text(
                           Constants.formatMoney(account['memPoint'] ?? 0,
@@ -255,6 +280,28 @@ class _StatusPointPageState extends State<StatusPointPage>
               ]),
             ),
           ),
+          GestureDetector(
+              onTap: () {
+                dynamic offerset = globalKey.currentContext
+                    ?.read<StatusPointBloc>()
+                    .state
+                    .dataPoint
+                    .length;
+                _onLoading(offerset);
+              },
+              child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: HexColor('#e5e5e5'))),
+                  child: Text(
+                    "더보기",
+                    textAlign: TextAlign.center,
+                    style: AppStyle.bold.copyWith(color: Colors.black),
+                  )))
         ],
       ),
     );

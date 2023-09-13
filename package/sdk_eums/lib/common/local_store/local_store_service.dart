@@ -167,4 +167,16 @@ class LocalStoreService extends LocalStore {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString(dataUser, jsonEncode(account));
   }
+
+  @override
+  Future getBoolTime() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString("boolTime") == 'true' ? true : false;
+  }
+
+  @override
+  Future setBoolTime(bool checkBool) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString("boolTime", checkBool.toString());
+  }
 }

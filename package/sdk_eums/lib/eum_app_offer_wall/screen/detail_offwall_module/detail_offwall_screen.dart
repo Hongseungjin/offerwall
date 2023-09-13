@@ -14,23 +14,24 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/join_offerwall_module/join_of
 import 'package:sdk_eums/eum_app_offer_wall/screen/purchase_offerwall_internal_module/purchase_offerwall_internal_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/register_link_module/register_link_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/visit_offerwall_module/visit_offerwall_screen.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
-import 'package:sdk_eums/gen/fonts.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/routing.dart';
 import '../../utils/appColor.dart';
 import '../../utils/appStyle.dart';
-import '../../utils/app_string.dart';
 import '../../widget/custom_dialog.dart';
-import '../request_module/request_screen.dart';
 
 class DetailOffWallScreen extends StatefulWidget {
-  const DetailOffWallScreen({Key? key, this.xId, this.type}) : super(key: key);
+  const DetailOffWallScreen({Key? key, this.xId, this.type, this.title})
+      : super(key: key);
 
   final dynamic xId;
   final dynamic type;
+  final String? title;
 
   @override
   State<DetailOffWallScreen> createState() => _DetailOffWallScreenState();
@@ -47,6 +48,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
 
   List? _languages = [];
   String lang = '';
+  String? title;
 
   Future<void> _getPreferredLanguages() async {
     try {
@@ -165,20 +167,19 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
     }
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.failure) {
+      AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+
       return;
     }
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.success) {
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context,
-          data: dataOfferWallVisit['reward'], voidCallback: () {
-        // Navigator.pop(context);
-      });
+          data: dataOfferWallVisit['reward'], voidCallback: () {});
     }
   }
 
-
-    void _listenJoinOfferWall(BuildContext context, DetailOffWallState state) {
+  void _listenJoinOfferWall(BuildContext context, DetailOffWallState state) {
     if (state.joinOfferWallInternalStatus ==
         JoinOfferWallInternalStatus.loading) {
       return;
@@ -223,16 +224,16 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
 
   _listenerDetailOffWall(BuildContext context, DetailOffWallState state) async {
     if (state.detailOffWallStatus == DetailOffWallStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
 
     if (state.detailOffWallStatus == DetailOffWallStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.detailOffWallStatus == DetailOffWallStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
@@ -256,12 +257,12 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   Widget _buildContent(BuildContext context) {
     return Scaffold(
         key: globalKey,
-        backgroundColor: AppColor.colorF4,
+        backgroundColor: AppColor.white,
         appBar: AppBar(
-          backgroundColor: AppColor.colorF4,
-          elevation: 1,
+          backgroundColor: AppColor.white,
+          elevation: 0,
           centerTitle: true,
-          title: Text(AppString.earnCash,
+          title: Text(widget.title ?? '',
               style:
                   AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
           leading: GestureDetector(
@@ -278,6 +279,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
               point = state.dataDetailOffWall['reward'] ?? 0;
               urlApi = state.dataDetailOffWall['api'] ?? '';
               dataOfferWallVisit = state.dataDetailOffWall;
+              title = state.dataDetailOffWall['title'] ?? "";
             }
             return state.dataDetailOffWall == null
                 ? SizedBox()
@@ -285,57 +287,95 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.width,
-                                fit: BoxFit.cover,
-                                imageUrl: state.dataDetailOffWall != null
-                                    ? "${Constants.baseUrlImage}${state.dataDetailOffWall['thumbnail']}"
-                                    : "",
-                                placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) {
-                                  return Assets.logo.image();
-                                }),
-                          ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CachedNetworkImage(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width,
+                              fit: BoxFit.cover,
+                              imageUrl: state.dataDetailOffWall != null
+                                  ? "${Constants.baseUrlImage}${state.dataDetailOffWall['thumbnail']}"
+                                  : "",
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) {
+                                return Assets.logo.image();
+                              }),
                         ),
+                        const SizedBox(height: 12),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 state.dataDetailOffWall != null
                                     ? state.dataDetailOffWall['title']
                                     : "",
                                 maxLines: 1,
-                                style: AppStyle.medium.copyWith(
-                                    height: 2,
-                                    fontSize: 16,
-                                    fontFamily: FontFamily.notoSansKR),
+                                style: AppStyle.bold.copyWith(fontSize: 18),
                               ),
-                              const Spacer(),
+                              const SizedBox(height: 4),
                               Text(
                                 Constants.formatMoney(
                                     state.dataDetailOffWall != null
                                         ? state.dataDetailOffWall['reward']
                                         : 0,
-                                    suffix: '캐시'),
+                                    suffix: 'P'),
                                 style: AppStyle.bold.copyWith(
-                                    fontSize: 18, color: AppColor.orange1),
+                                    fontSize: 18, color: HexColor('#f4a43b')),
                               )
                             ],
                           ),
                         ),
-                        const Divider(
-                          color: AppColor.colorC9,
-                          thickness: 8,
-                        ),
+                        // const Divider(
+                        //   color: AppColor.colorC9,
+                        //   thickness: 8,
+                        // ),
                         const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          child: Text(
+                            '적립 방법',
+                            style: AppStyle.bold
+                                .copyWith(fontSize: 18, color: AppColor.black),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            child: buidlHtml(
+                                html: state.dataDetailOffWall != null
+                                    ? state.dataDetailOffWall['description']
+                                    : '')),
+                        const SizedBox(height: 16),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          color: HexColor('#f9f9f9'),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '적립 방법',
+                                style: AppStyle.bold.copyWith(
+                                    fontSize: 18, color: AppColor.black),
+                              ),
+                              const SizedBox(height: 8),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: buidlHtml(
+                                    html: state.dataDetailOffWall != null
+                                        ? state.dataDetailOffWall['precaution']
+                                        : ''),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                         GestureDetector(
                           onTap: () {
                             if (widget.type == 'install') {
@@ -377,75 +417,32 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                 borderRadius: BorderRadius.circular(8),
                                 color: AppColor.yellow),
                             child: Text(
-                              AppString.joinAndGetCash,
+                              '참여하고 포인트 받기',
                               style: AppStyle.bold.copyWith(
                                   fontSize: 16, color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          child: Text(
-                            '적립 방법',
-                            style: AppStyle.bold
-                                .copyWith(fontSize: 18, color: AppColor.black),
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
-                            child: buidlHtml(
-                                html: state.dataDetailOffWall != null
-                                    ? state.dataDetailOffWall['description']
-                                    : '')),
-                        const SizedBox(height: 16),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                          color: AppColor.colorC9.withOpacity(0.5),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '적립 방법',
-                                style: AppStyle.bold.copyWith(
-                                    fontSize: 18, color: AppColor.black),
-                              ),
-                              const SizedBox(height: 8),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: buidlHtml(
-                                    html: state.dataDetailOffWall != null
-                                        ? state.dataDetailOffWall['precaution']
-                                        : ''),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () {
-                            Routing().navigate(context, RequestScreen());
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: AppColor.colorC9.withOpacity(0.5)),
-                            child: Text(
-                              AppString.earningInquiry,
-                              style: AppStyle.medium.copyWith(
-                                  fontSize: 16, color: AppColor.black),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Routing().navigate(context, RequestScreen());
+                        //   },
+                        //   child: Container(
+                        //     margin: const EdgeInsets.symmetric(horizontal: 16),
+                        //     padding: const EdgeInsets.symmetric(vertical: 16),
+                        //     width: MediaQuery.of(context).size.width,
+                        //     decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(8),
+                        //         color: AppColor.colorC9.withOpacity(0.5)),
+                        //     child: Text(
+                        //       AppString.earningInquiry,
+                        //       style: AppStyle.medium.copyWith(
+                        //           fontSize: 16, color: AppColor.black),
+                        //       textAlign: TextAlign.center,
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 16),
                       ],
                     ),

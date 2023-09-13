@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_gif/flutter_gif.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_circular.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -46,10 +49,13 @@ class CustomWebView2 extends StatefulWidget {
   State<CustomWebView2> createState() => _CustomWebView2State();
 }
 
-class _CustomWebView2State extends State<CustomWebView2> {
+class _CustomWebView2State extends State<CustomWebView2>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   late final WebViewController _controller;
   bool isLoading = true;
   ScrollController _scrollController = ScrollController();
+  FlutterGifController? gifController;
+  late LinearTimerController timerController = LinearTimerController(this);
 
   Timer? _timeDown;
   int _startTime = 15;
@@ -68,6 +74,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
   void startTimeDown() {
     _timeDown?.cancel();
     _timeDown = Timer.periodic(const Duration(seconds: 1), (timer) {
+      timerController.start();
       if (_startTime == 0) {
         _timeDown?.cancel();
       } else {
@@ -77,6 +84,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
         if (_startTime == 0) {
           setState(() {
             showButton = true;
+            gifController?.stop();
             _timeDown?.cancel();
           });
         }
@@ -89,6 +97,8 @@ class _CustomWebView2State extends State<CustomWebView2> {
     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
       _timeDown?.cancel();
       isRunning = false;
+      timerController.stop();
+      setState(() {});
     });
   }
 
@@ -107,6 +117,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
 
   @override
   void initState() {
+    gifController = FlutterGifController(vsync: this);
     // TODO: implement initState
     if (widget.showMission) {
       startTimeDown();
@@ -114,6 +125,14 @@ class _CustomWebView2State extends State<CustomWebView2> {
     }
     super.initState();
     _scrollController.addListener(_scrollListener);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      gifController?.repeat(
+        min: 0,
+        max: 53,
+        period: const Duration(milliseconds: 2000),
+      );
+    });
 
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -226,8 +245,7 @@ class _CustomWebView2State extends State<CustomWebView2> {
                     child: Container(
                       padding: EdgeInsets.only(
                           top: 5,
-                          bottom: MediaQuery.of(context).padding.bottom + 10
-                          ),
+                          bottom: MediaQuery.of(context).padding.bottom + 10),
                       width: widget.deviceWidth > 0
                           ? widget.deviceWidth
                           : MediaQuery.of(context).size.width,
@@ -261,15 +279,48 @@ class _CustomWebView2State extends State<CustomWebView2> {
                               ),
                             ),
                           ),
-                          Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: AppColor.grey.withOpacity(0.5),
-                                  shape: BoxShape.circle),
-                              child: Text(
-                                _startTime.toString(),
-                                style: AppStyle.medium.copyWith(fontSize: 16),
-                              ))
+                          Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(4),
+                                height: 50,
+                                width: 50,
+                                child: LinearTimer(
+                                  color: AppColor.yellow,
+                                  backgroundColor:
+                                      HexColor('#888888').withOpacity(0.3),
+                                  controller: timerController,
+                                  duration: const Duration(milliseconds: 14000),
+                                ),
+                              ),
+                              Positioned(
+                                  right: 0,
+                                  left: 0,
+                                  top: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: GifImage(
+                                      height: 30,
+                                      width: 30,
+                                      fit: BoxFit.fill,
+                                      controller: gifController!,
+                                      image: AssetImage(
+                                        package: "sdk_eums",
+                                        Assets.coingif.path,
+                                      ),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                          // Container(
+                          //     padding: const EdgeInsets.all(10),
+                          //     decoration: BoxDecoration(
+                          //         color: AppColor.grey.withOpacity(0.5),
+                          //         shape: BoxShape.circle),
+                          //     child: Text(
+                          //       _startTime.toString(),
+                          //       style: AppStyle.medium.copyWith(fontSize: 16),
+                          //     ))
                         ],
                       ),
                     ))

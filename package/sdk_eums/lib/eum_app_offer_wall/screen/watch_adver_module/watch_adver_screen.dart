@@ -41,7 +41,6 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
 
   @override
   void initState() {
-
     print("asdkalsdk${widget.data}");
     localStorel = LocalStoreService();
     fToast.init(context);
@@ -161,9 +160,8 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
                   checkSave = !checkSave;
                 });
                 if (checkSave) {
-                  globalKey.currentContext
-                      ?.read<WatchAdverBloc>()
-                      .add(SaveAdver(advertise_idx: jsonDecode(widget.data)['idx']));
+                  globalKey.currentContext?.read<WatchAdverBloc>().add(
+                      SaveAdver(advertise_idx: jsonDecode(widget.data)['idx']));
                 } else {
                   print('widget.data ${widget.data}');
                   globalKey.currentContext
@@ -182,10 +180,10 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             },
             mission: () async {
               localStorel!.setDataShare(dataShare: null);
-              DialogUtils.showDialogSucessPoint(context, data: jsonDecode(widget.data),
-                  voidCallback: () async {
+              DialogUtils.showDialogRewardPoint(context,
+                  data: jsonDecode(widget.data), voidCallback: () async {
                 print("vao day");
-        
+
                 globalKey.currentContext?.read<WatchAdverBloc>().add(EarnPoin(
                     advertise_idx: jsonDecode(widget.data)['idx'],
                     pointType: jsonDecode(widget.data)['typePoint']));

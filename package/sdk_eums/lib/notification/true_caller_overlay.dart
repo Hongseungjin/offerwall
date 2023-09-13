@@ -208,7 +208,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         ),
         mission: () {
           if (dataEvent != null && dataEvent['data'] != null) {
-            DialogUtils.showDialogSucessPoint(context,
+            DialogUtils.showDialogRewardPoint(context,
                 data: jsonDecode(dataEvent['data']), voidCallback: () async {
               try {
                 TrueOverlauService().missionOfferWallOutside(

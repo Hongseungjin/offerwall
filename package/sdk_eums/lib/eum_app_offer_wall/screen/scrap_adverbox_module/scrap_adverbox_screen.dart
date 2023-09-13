@@ -7,6 +7,7 @@ import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
@@ -247,15 +248,15 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
 
   void _listenFetchData(BuildContext context, ScrapAdverboxState state) {
     if (state.status == ScrapAdverboxStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.status == ScrapAdverboxStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.status == ScrapAdverboxStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 

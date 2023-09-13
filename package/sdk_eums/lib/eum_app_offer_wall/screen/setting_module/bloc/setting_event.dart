@@ -13,7 +13,15 @@ class SettingTime extends SettingEvent {
 }
 
 class EnableOrDisbleSetting extends SettingEvent {
-  EnableOrDisbleSetting();
+  EnableOrDisbleSetting({this.enableOrDisble});
+  final bool? enableOrDisble;
+
+  @override
+  List<Object?> get props => [enableOrDisble];
+}
+
+class GetSettingTime extends SettingEvent {
+  GetSettingTime();
 
   @override
   List<Object?> get props => [];

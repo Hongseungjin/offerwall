@@ -25,7 +25,7 @@ abstract class LocalStore {
 
   Future<bool> getSaveOrNotCredentials();
 
-  Future<bool> getSaveAdver();
+  Future<dynamic> getSaveAdver();
 
   Future setSaveAdver(bool status);
 
@@ -48,4 +48,8 @@ abstract class LocalStore {
   Future setDataUser(dynamic account);
 
   Future<dynamic> getDataUser();
+
+  Future setBoolTime(bool checkBool);
+
+  Future<dynamic> getBoolTime();
 }

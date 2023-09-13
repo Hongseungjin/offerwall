@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_inappweb.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/select_image_picker_dialog.dart';
@@ -126,6 +127,13 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         ),
         centerTitle: true,
         elevation: 1,
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Image.asset(Assets.chat.path,
+                package: "sdk_eums", height: 24, width: 24),
+          )
+        ],
         backgroundColor: AppColor.white,
         title: Text(
           '캐시적립',
@@ -137,7 +145,6 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              color: AppColor.color70.withOpacity(0.2),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 children: [
@@ -174,32 +181,35 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                         ),
                       ),
                       Text(
-                        '도달시 캐시 적립',
+                        '구독시 포인트 적립',
                         style: AppStyle.regular
                             .copyWith(color: AppColor.black, fontSize: 14),
-                      )
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        "+ ${Constants.formatMoney(widget.data['reward'] ?? 0, suffix: 'P')}",
+                        style: AppStyle.bold
+                            .copyWith(color: HexColor('#f4a43b'), fontSize: 18),
+                      ),
                     ],
                   ),
-                  const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        "+ ${widget.data['reward']}",
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.orange4, fontSize: 20),
-                      ),
-                      Text(
-                        "+캐시",
-                        style: AppStyle.medium
-                            .copyWith(color: AppColor.black, fontSize: 14),
-                      )
-                    ],
-                  )
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            Divider(
+              thickness: 5,
+              height: 0,
+              color: HexColor('#e5e5e5'),
+            ),
+            Divider(
+              height: 1,
+              thickness: 7,
+              color: HexColor('#f4f4f4'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Text('구독 참여 절차', style: AppStyle.bold),
+            ),
             Row(
               children: [
                 const SizedBox(width: 16),
@@ -208,6 +218,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   children: List.generate(
                       listResLink.length,
                       (index) => Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(
@@ -216,10 +227,17 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(listResLink[index]['link'],
-                                        package: "sdk_eums",
-                                        width: 44,
-                                        height: 44),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: HexColor('#eeeeee')),
+                                      child: Image.asset(
+                                          listResLink[index]['link'],
+                                          package: "sdk_eums",
+                                          width: 44,
+                                          height: 44),
+                                    ),
                                     const SizedBox(height: 16),
                                     Text(
                                       '${listResLink[index]['name']}',
@@ -232,107 +250,135 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                               ),
                               const SizedBox(width: 16),
                               if (listResLink[index]['name'] != '리워드 지금') ...{
-                                Image.asset(
-                                  Assets.arrow.path,
-                                  package: "sdk_eums",
-                                  height: 16,
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 20,
+                                  ),
+                                  child: Icon(Icons.arrow_forward_ios_rounded,
+                                      size: 16),
                                 ),
-                                const SizedBox(width: 16),
+                                const SizedBox(width: 10),
                               }
                             ],
                           )),
                 ),
               ],
             ),
+            const SizedBox(height: 32),
+            Divider(
+              thickness: 5,
+              height: 0,
+              color: HexColor('#e5e5e5'),
+            ),
+            Divider(
+              height: 1,
+              thickness: 7,
+              color: HexColor('#f4f4f4'),
+            ),
             const SizedBox(height: 16),
-            const Divider(thickness: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  _buildTilte('STEP 1   ', '아래의 버튼을 눌러 구독해주세요'),
-                  GestureDetector(
-                    onTap: () {
-                      Routing().navigate(
-                          context,
-                          CustomInappWebView(
-                            urlLink: widget.data['api'],
-                            onClose: (){},
-                          ));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 16),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: AppColor.blue1,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Text(
-                        '구독하러 가기',
-                        textAlign: TextAlign.center,
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.white, fontSize: 16),
-                      ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                _buildTilte('STEP 1   ', '아래의 버튼을 눌러 구독해주세요'),
+                GestureDetector(
+                  onTap: () {
+                    Routing().navigate(
+                        context,
+                        CustomInappWebView(
+                          urlLink: widget.data['api'],
+                          onClose: () {},
+                        ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: HexColor('#fdd000'),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      '구독하러 가기',
+                      textAlign: TextAlign.center,
+                      style: AppStyle.bold
+                          .copyWith(color: AppColor.black, fontSize: 16),
                     ),
                   ),
-                  Image.asset(
-                    Assets.lineBreak.path,
-                    package: "sdk_eums",
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTilte('STEP 2   ', '언론사 페이지 캡쳐하기'),
-                  const SizedBox(height: 4),
-                  Text(
-                    '국민일보 페이지에서 구독된 화면을 캡쳐해 주세요.',
+                ),
+                Divider(),
+                // Image.asset(
+                //   Assets.lineBreak.path,
+                //   package: "sdk_eums",
+                // ),
+                const SizedBox(height: 16),
+                _buildTilte('STEP 2   ', '인천e몰 유튜브 구독 후 캡쳐하기'),
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    '인천e음 유튜브 페이지에서 구독된 화면을 캡쳐해주세요.',
                     style: AppStyle.medium
                         .copyWith(color: AppColor.black, fontSize: 14),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
+                ),
+                // const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
                     '※ 아래의 예시와 같이 언론사 페이지에서 구독 상태가 보이도록 캡쳐해 주세요',
                     style: AppStyle.medium
-                        .copyWith(color: AppColor.orange4, fontSize: 12),
+                        .copyWith(color: HexColor('#ff0019'), fontSize: 12),
                   ),
-                  const SizedBox(height: 12),
-                  Image.asset(
-                    Assets.resLinkBanner.path,
-                    package: "sdk_eums",
-                  ),
-                  const SizedBox(height: 12),
-                  const SizedBox(height: 12),
-                  Image.asset(
-                    Assets.lineBreak.path,
-                    package: "sdk_eums",
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTilte('STEP 3   ', '스크린 샷 업로드 하기'),
-                  const SizedBox(height: 4),
-                  Text(
+                ),
+                const SizedBox(height: 12),
+
+                Image.asset(
+                  Assets.resLinkBanner.path,
+                  package: "sdk_eums",
+                ),
+                const SizedBox(height: 12),
+                const SizedBox(height: 12),
+                Divider(),
+                // Image.asset(
+                //   Assets.lineBreak.path,
+                //   package: "sdk_eums",
+                // ),
+                const SizedBox(height: 16),
+                _buildTilte('STEP 3   ', '스크린 샷 업로드 하기'),
+                const SizedBox(height: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
                     '이미지가 업로드 완료 된 후, 지급받기 버튼을 눌러주세요. ',
                     style: AppStyle.medium
                         .copyWith(color: AppColor.black, fontSize: 14),
                   ),
-                  const SizedBox(height: 24),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.color70),
-                          borderRadius: BorderRadius.circular(12)),
-                      width: MediaQuery.of(context).size.width,
+                ),
+                const SizedBox(height: 24),
+                GestureDetector(
+                  onTap: () {
+                    _addImages();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: AppColor.color70),
+                        borderRadius: BorderRadius.circular(12)),
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(Assets.upImage.path,
+                          Image.asset(Assets.camera.path,
                               package: "sdk_eums", height: 24, width: 24),
                           const SizedBox(width: 10),
                           SizedBox(
-                              width: MediaQuery.of(context).size.width / 2 + 50,
                               child: Text(
-                                  files.isNotEmpty ? urlImage : '이미지 업로드',
+                                  files.isNotEmpty ? urlImage : '이미지 업로드 하기',
                                   style: AppStyle.medium
                                       .copyWith(color: AppColor.black),
                                   overflow: TextOverflow.clip)),
@@ -340,29 +386,27 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      _addImages();
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 16),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                          color: AppColor.blue1,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Text(
-                        '이미지 업로드하기',
-                        textAlign: TextAlign.center,
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.white, fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                // GestureDetector(
+                //   onTap: () {},
+                //   child: Container(
+                //     margin: const EdgeInsets.symmetric(vertical: 16),
+                //     padding: const EdgeInsets.symmetric(vertical: 16),
+                //     width: MediaQuery.of(context).size.width,
+                //     decoration: BoxDecoration(
+                //         color: AppColor.blue1,
+                //         borderRadius: BorderRadius.circular(4)),
+                //     child: Text(
+                //       '이미지 업로드하기',
+                //       textAlign: TextAlign.center,
+                //       style: AppStyle.bold
+                //           .copyWith(color: AppColor.white, fontSize: 16),
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
-            const Divider(thickness: 10),
+            // const Divider(thickness: 10),
             GestureDetector(
               onTap: () {
                 String lang = '';
@@ -388,7 +432,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                     color: AppColor.yellow,
-                    borderRadius: BorderRadius.circular(4)),
+                    borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   '참여하고 캐시 받기',
                   textAlign: TextAlign.center,
@@ -430,16 +474,34 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
   }
 
   _buildTilte(String? step, String? title) {
-    return RichText(
-        text: TextSpan(
-            text: step ?? '',
-            style: AppStyle.bold.copyWith(color: AppColor.red, fontSize: 16),
-            children: [
-          TextSpan(
-            text: title ?? '',
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            step ?? '',
+            style: AppStyle.bold
+                .copyWith(color: HexColor('#f4a43b'), fontSize: 16),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title ?? '',
             style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
           )
-        ]));
+        ],
+      ),
+    );
+    // RichText(
+    //     text: TextSpan(
+    //         text: step ?? '',
+    //         style: AppStyle.bold.copyWith(color: AppColor.red, fontSize: 16),
+    //         children: [
+    //       TextSpan(
+    //         text: title ?? '',
+    //         style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
+    //       )
+    //     ]));
   }
 
   void printWrapped(String text) {
@@ -449,8 +511,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
 }
 
 List listResLink = [
-  {"name": '구독 하기', "link": Assets.reward.path},
-  {"name": '구독 화면 캡쳐', "link": Assets.checkin.path},
-  {"name": '스크린샷 업로드', "link": Assets.uploadImage.path},
-  {"name": '리워드 지금', "link": Assets.receivePoint.path}
+  {"name": '구독하기', "link": Assets.icon_sub.path},
+  {"name": '구독 화면 캡쳐', "link": Assets.icon_check.path},
+  {"name": '스크린샷 업로드', "link": Assets.icon_upload.path},
+  {"name": '리워드 지금', "link": Assets.icon_reward.path}
 ];

@@ -12,6 +12,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dar
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview_keep.dart';
@@ -67,22 +68,15 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
 
   void _listenFetchData(BuildContext context, KeepAdverboxState state) {
     if (state.status == KeepAdverboxStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.status == KeepAdverboxStatus.failure) {
-      // EasyLoading.dismiss();
-      // AppAlert.showError(
-      //     fToast,
-      //     state.error != null
-      //         ? state.error!.message != null
-      //             ? state.error!.message!
-      //             : 'Error!'
-      //         : 'Error!');
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.status == KeepAdverboxStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
@@ -496,6 +490,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
             return CustomWebViewKeep(
               urlLink: widget.data['url_link'],
               uriImage: widget.data[''],
+              title: widget.data['name'],
               report: GestureDetector(
                   onTap: () {
                     Routing().navigate(
@@ -524,14 +519,20 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                             advertise_idx: widget.data['advertiseIdx']));
                   }
                 },
-                child: Image.asset(
-                    checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
-                    package: "sdk_eums",
-                    height: 27,
-                    color: AppColor.black),
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: HexColor('#eeeeee')),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Image.asset(
+                      checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
+                      package: "sdk_eums",
+                      height: 18,
+                      color: AppColor.black),
+                ),
               ),
               mission: () {
-                DialogUtils.showDialogSucessPoint(context,
+                DialogUtils.showDialogRewardPoint(context,
                     checkImage: true,
                     point: widget.data['typePoint'],
                     data: (state.dataAdvertiseSponsor), voidCallback: () {

@@ -305,4 +305,43 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     };
     await api.post('report-ads', data: data);
   }
+
+  @override
+  Future createOrUpdateSettingTime({startTime, endTime}) async {
+    try {
+      dynamic data = <String, dynamic>{
+        "startTime": {"hours": startTime?.hour, "minutes": startTime?.minute},
+        "endTime": {"hours": endTime?.hour, "minutes": endTime?.minute},
+      };
+      await api.post('setting-time', data: data);
+    } catch (ex) {}
+  }
+
+  @override
+  Future enableOrDisebleSettingTime({enable}) async {
+    dynamic data = <String, dynamic>{
+      "enable": enable,
+    };
+    await api.put('setting-time', data: data);
+  }
+
+  @override
+  Future getSettingTime() async {
+    Response result = await api.get('setting-time');
+    return result.data;
+  }
+
+  @override
+  Future getListNotifi({int? limit, int? offset}) async {
+    var params = {};
+    if (limit != null) {
+      params['limit'] = limit;
+    }
+    if (offset != null) {
+      params['offset'] = offset;
+    }
+    Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
+    Response result = await api.get('notice', queryParameters: dataParams);
+    return result.data['data'];
+  }
 }

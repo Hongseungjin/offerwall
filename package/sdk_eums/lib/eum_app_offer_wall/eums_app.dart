@@ -81,7 +81,7 @@ registerDeviceToken() async {
 Future<void> onStart(ServiceInstance service) async {
   print('onStart');
   DartPluginRegistrant.ensureInitialized();
-  
+
   await Firebase.initializeApp();
   Queue queue = Queue();
   registerDeviceToken();
@@ -144,19 +144,20 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memGen,
       String? memRegion,
       String? memBirth}) async {
+    print("co vao day khong");
     // CronCustom().initCron();
     await FlutterBackgroundService().configure(
-        iosConfiguration: IosConfiguration(
-            // onForeground: onStart,
-            // onBackground: onIosBackground,
-            // autoStart: true
-            ),
+        iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
             autoStart: false,
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+    bool isRunning = await FlutterBackgroundService().isRunning();
+    if (!isRunning) {
+      FlutterBackgroundService().startService();
+    }
     Routing().navigate(context, MyHomeScreen());
   }
 }

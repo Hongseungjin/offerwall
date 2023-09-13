@@ -125,4 +125,13 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> getTotalPoint();
 
   Future<dynamic> reportAdver({dynamic adsIdx, dynamic reason, dynamic type});
+
+  Future<dynamic> createOrUpdateSettingTime(
+      {DateTime? startTime, DateTime? endTime});
+
+  Future<dynamic> getSettingTime();
+
+  Future<dynamic> enableOrDisebleSettingTime({bool? enable});
+
+  Future<dynamic> getListNotifi({int? limit, int? offset});
 }
