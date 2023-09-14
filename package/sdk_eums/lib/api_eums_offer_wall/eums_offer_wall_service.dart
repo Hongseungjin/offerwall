@@ -134,4 +134,6 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> enableOrDisebleSettingTime({bool? enable});
 
   Future<dynamic> getListNotifi({int? limit, int? offset});
+
+  Future<dynamic> getPointEarmed();
 }

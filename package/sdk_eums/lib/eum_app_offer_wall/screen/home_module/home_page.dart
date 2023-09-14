@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage>
   final ScrollController controller = ScrollController();
   int tabIndex = 0;
   int tabPreviousIndex = 0;
+  dynamic accont;
 
   @override
   void initState() {
@@ -141,6 +142,10 @@ class _HomePageState extends State<HomePage>
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
+        if (state.account != null) {
+          accont = state.account;
+        }
+
         return Scaffold(
           key: globalKey,
           body: CustomScrollView(
@@ -344,42 +349,52 @@ class _HomePageState extends State<HomePage>
                   AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(Assets.icon_point_y.path,
-                    package: "sdk_eums", height: 24),
-                const SizedBox(width: 12),
-                Text(Constants.formatMoney(point, suffix: ''),
-                    style: AppStyle.bold
-                        .copyWith(fontSize: 30, color: Colors.black)),
-                Text('P',
-                    style: AppStyle.bold
-                        .copyWith(fontSize: 18, color: Colors.black)),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.black,
-                  size: 18,
-                )
-              ],
+          GestureDetector(
+            onTap: () {
+              Routing().navigate(context, StatusPointPage(account: accont));
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(Assets.icon_point_y.path,
+                      package: "sdk_eums", height: 24),
+                  const SizedBox(width: 12),
+                  Text(Constants.formatMoney(point, suffix: ''),
+                      style: AppStyle.bold
+                          .copyWith(fontSize: 30, color: Colors.black)),
+                  Text('P',
+                      style: AppStyle.bold
+                          .copyWith(fontSize: 18, color: Colors.black)),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.black,
+                    size: 18,
+                  )
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Image.asset(Assets.err_grey.path,
-                    package: "sdk_eums", height: 12),
-                const SizedBox(width: 4),
-                Text(
-                  '서비스 이용 안내',
-                  style:
-                      AppStyle.regular12.copyWith(color: HexColor('#888888')),
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              Routing().navigate(context, UsingTermScreen());
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Image.asset(Assets.err_grey.path,
+                      package: "sdk_eums", height: 12),
+                  const SizedBox(width: 4),
+                  Text(
+                    '서비스 이용 안내',
+                    style:
+                        AppStyle.regular12.copyWith(color: HexColor('#888888')),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 10),

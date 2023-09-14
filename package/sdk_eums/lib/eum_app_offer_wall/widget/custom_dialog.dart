@@ -16,7 +16,7 @@ class DialogUtils {
     showDialog(
         context: context,
         builder: (buildContext) {
-          Future.delayed(Duration(seconds: 5), () {
+          Future.delayed(Duration(seconds: 1), () {
             Navigator.of(buildContext).pop(true);
           });
           return Dialog(

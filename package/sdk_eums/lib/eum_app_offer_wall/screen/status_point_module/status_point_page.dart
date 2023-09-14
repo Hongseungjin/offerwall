@@ -55,6 +55,7 @@ class _StatusPointPageState extends State<StatusPointPage>
   Widget build(BuildContext context) {
     return BlocProvider<StatusPointBloc>(
       create: (context) => StatusPointBloc()
+        ..add(GetPoint())
         ..add(ListPoint(
             limit: 10, month: firstMonth.month, year: firstMonth.year))
         ..add(PointOutsideAdvertisinglList(
@@ -132,179 +133,189 @@ class _StatusPointPageState extends State<StatusPointPage>
 
   _buildContent(BuildContext context) {
     return Scaffold(
-      key: globalKey,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0.0,
+        key: globalKey,
         backgroundColor: Colors.white,
-        centerTitle: true,
-        title:
-            Text('포인트 현황', style: AppStyle.bold.copyWith(color: Colors.black)),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(Icons.arrow_back, size: 24, color: Colors.black),
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text('포인트 현황',
+              style: AppStyle.bold.copyWith(color: Colors.black)),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Icon(Icons.arrow_back, size: 24, color: Colors.black),
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          TabBar(
-            onTap: (value) {
-              int index = value;
-              setState(() {
-                _tabController.index = index;
-                _fetchData();
-              });
-            },
-            labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
-            controller: _tabController,
-            indicatorColor: HexColor('#f4a43b'),
-            unselectedLabelColor: HexColor('#707070'),
-            labelColor: HexColor('#f4a43b'),
-            labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
-            tabs: const [
-              Text(
-                '포인트 적립 내역',
-              ),
-              Text(' 포인트 전환'),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            child: Row(
+        body: BlocBuilder<StatusPointBloc, StatusPointState>(
+          builder: (context, state) {
+            return Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                TabBar(
+                  onTap: (value) {
+                    int index = value;
+                    setState(() {
+                      _tabController.index = index;
+                      _fetchData();
+                    });
+                  },
+                  labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
+                  controller: _tabController,
+                  indicatorColor: HexColor('#f4a43b'),
+                  unselectedLabelColor: HexColor('#707070'),
+                  labelColor: HexColor('#f4a43b'),
+                  labelStyle:
+                      AppStyle.bold.copyWith(color: HexColor('#707070')),
+                  tabs: const [
                     Text(
-                      '현재 보유 포인트',
-                      style:
-                          AppStyle.medium.copyWith(color: HexColor('707070')),
+                      '포인트 적립 내역',
                     ),
-                    Row(
-                      children: [
-                        Image.asset(Assets.icon_point_y.path,
-                            package: "sdk_eums", height: 24),
-                        const SizedBox(width: 8),
-                        Text(
-                          Constants.formatMoney(account['memPoint'] ?? 0,
-                              suffix: '원'),
-                          style: AppStyle.bold.copyWith(fontSize: 20),
-                        ),
-                      ],
-                    )
+                    Text(' 포인트 전환'),
                   ],
                 ),
-                const Spacer(),
                 Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: HexColor('#fcc900')),
-                  child:
-                      Text('소멸예정', style: AppStyle.bold.copyWith(fontSize: 12)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '현재 보유 포인트',
+                            style: AppStyle.medium
+                                .copyWith(color: HexColor('707070')),
+                          ),
+                          Row(
+                            children: [
+                              Image.asset(Assets.icon_point_y.path,
+                                  package: "sdk_eums", height: 24),
+                              const SizedBox(width: 8),
+                              Text(
+                                Constants.formatMoney(
+                                    state.dataTotalPoint != null
+                                        ? state.dataTotalPoint['totalPoint']
+                                        : 0,
+                                    suffix: '원'),
+                                style: AppStyle.bold.copyWith(fontSize: 20),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: HexColor('#fcc900')),
+                        child: Text('소멸예정',
+                            style: AppStyle.bold.copyWith(fontSize: 12)),
+                      ),
+                    ],
+                  ),
                 ),
+                Divider(thickness: 7, color: HexColor('#f4f4f4')),
+                _buildWidgetDate(),
+                BlocBuilder<StatusPointBloc, StatusPointState>(
+                  builder: (context, state) {
+                    totalPointEum = 0;
+                    totalPointOfferWall = 0;
+                    try {
+                      if (_tabController.index == 0) {
+                        if (state.dataPoint != null &&
+                            state.dataPoint.length > 0) {
+                          for (int i = 0; i < state.dataPoint.length; i++) {
+                            totalPointEum = totalPointEum +
+                                state.dataPoint[i]['user_point'];
+                          }
+                        }
+                      } else {
+                        if (state.dataPointOutsideAdvertising != null &&
+                            state.dataPointOutsideAdvertising.length > 0) {
+                          for (int i = 0;
+                              i < state.dataPointOutsideAdvertising.length;
+                              i++) {
+                            totalPointOfferWall = totalPointOfferWall +
+                                int.parse(state.dataPointOutsideAdvertising[i]
+                                        ['point']
+                                    .toString());
+                          }
+                        }
+                      }
+                    } catch (ex) {}
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 15),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: _tabController.index == 0
+                              ? HexColor('#f4f4f4')
+                              : HexColor('#fdde4c')),
+                      child: Column(
+                        children: [
+                          Text(
+                            '현재까지 캐시로 전환된 포인트 ${_tabController.index == 0 ? totalPointEum : totalPointOfferWall}',
+                            style: AppStyle.regular,
+                          ),
+                          // Text(Constants.formatMoney(countPoint ?? 0, suffix: 'P'),
+                          //     style: AppStyle.bold),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24))),
+                    child: TabBarView(controller: _tabController, children: [
+                      ListViewPointPage(
+                        tab: _tabController.index,
+                        fetchData: _fetchData,
+                        fetchDataLoadMore: _onLoading,
+                      ),
+                      ListViewPointPage(
+                        tab: _tabController.index,
+                        fetchData: _fetchData,
+                        fetchDataLoadMore: _onLoading,
+                      )
+                    ]),
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      dynamic offerset = globalKey.currentContext
+                          ?.read<StatusPointBloc>()
+                          .state
+                          .dataPoint
+                          .length;
+                      _onLoading(offerset);
+                    },
+                    child: Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: HexColor('#e5e5e5'))),
+                        child: Text(
+                          "더보기",
+                          textAlign: TextAlign.center,
+                          style: AppStyle.bold.copyWith(color: Colors.black),
+                        )))
               ],
-            ),
-          ),
-          Divider(thickness: 7, color: HexColor('#f4f4f4')),
-          _buildWidgetDate(),
-          BlocBuilder<StatusPointBloc, StatusPointState>(
-            builder: (context, state) {
-              totalPointEum = 0;
-              totalPointOfferWall = 0;
-              try {
-                if (_tabController.index == 0) {
-                  if (state.dataPoint != null && state.dataPoint.length > 0) {
-                    for (int i = 0; i < state.dataPoint.length; i++) {
-                      totalPointEum =
-                          totalPointEum + state.dataPoint[i]['user_point'];
-                    }
-                  }
-                } else {
-                  if (state.dataPointOutsideAdvertising != null &&
-                      state.dataPointOutsideAdvertising.length > 0) {
-                    for (int i = 0;
-                        i < state.dataPointOutsideAdvertising.length;
-                        i++) {
-                      totalPointOfferWall = totalPointOfferWall +
-                          int.parse(state.dataPointOutsideAdvertising[i]
-                                  ['point']
-                              .toString());
-                    }
-                  }
-                }
-              } catch (ex) {}
-              return Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: _tabController.index == 0
-                        ? HexColor('#f4f4f4')
-                        : HexColor('#fdde4c')),
-                child: Column(
-                  children: [
-                    Text(
-                      '현재까지 캐시로 전환된 포인트 ${_tabController.index == 0 ? totalPointEum : totalPointOfferWall}',
-                      style: AppStyle.regular,
-                    ),
-                    // Text(Constants.formatMoney(countPoint ?? 0, suffix: 'P'),
-                    //     style: AppStyle.bold),
-                  ],
-                ),
-              );
-            },
-          ),
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24))),
-              child: TabBarView(controller: _tabController, children: [
-                ListViewPointPage(
-                  tab: _tabController.index,
-                  fetchData: _fetchData,
-                  fetchDataLoadMore: _onLoading,
-                ),
-                ListViewPointPage(
-                  tab: _tabController.index,
-                  fetchData: _fetchData,
-                  fetchDataLoadMore: _onLoading,
-                )
-              ]),
-            ),
-          ),
-          GestureDetector(
-              onTap: () {
-                dynamic offerset = globalKey.currentContext
-                    ?.read<StatusPointBloc>()
-                    .state
-                    .dataPoint
-                    .length;
-                _onLoading(offerset);
-              },
-              child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: HexColor('#e5e5e5'))),
-                  child: Text(
-                    "더보기",
-                    textAlign: TextAlign.center,
-                    style: AppStyle.bold.copyWith(color: Colors.black),
-                  )))
-        ],
-      ),
-    );
+            );
+          },
+        ));
   }
 
   _buildWidgetDate() {

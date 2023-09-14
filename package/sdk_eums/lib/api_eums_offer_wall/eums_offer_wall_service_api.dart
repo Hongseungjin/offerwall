@@ -344,4 +344,12 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     Response result = await api.get('notice', queryParameters: dataParams);
     return result.data['data'];
   }
+
+  @override
+  Future getPointEarmed() async {
+    Response result = await api.get(
+      '/point/earned',
+    );
+    return result.data;
+  }
 }

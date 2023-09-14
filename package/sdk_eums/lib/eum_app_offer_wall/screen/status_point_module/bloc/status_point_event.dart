@@ -2,6 +2,13 @@ part of 'status_point_bloc.dart';
 
 abstract class StatusPointEvent extends Equatable {}
 
+class GetPoint extends StatusPointEvent {
+  GetPoint();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class ListPoint extends StatusPointEvent {
   ListPoint({this.limit, this.offset, this.month, this.year});
 

@@ -28,6 +28,18 @@ class StatusPointBloc extends Bloc<StatusPointEvent, StatusPointState> {
     if (event is PointOutsideAdvertisinglList) {
       await _mapPointOutsideAdvertisinglListState(event, emit);
     }
+    if (event is GetPoint) {
+      await _mapGetPointListState(event, emit);
+    }
+  }
+
+  _mapGetPointListState(GetPoint event, emit) async {
+    try {
+      dynamic data = await _eumsOfferWallService.getPointEarmed();
+      print("datadatadata$data");
+
+      emit(state.copyWith(dataTotalPoint: data));
+    } catch (ex) {}
   }
 
   _mapLoadListPoint(LoadMoreListPoint event, emit) async {
