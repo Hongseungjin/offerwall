@@ -178,7 +178,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
 
     Response result = await api.get('point/e-um', queryParameters: dataParams);
-    return result.data['data'];
+    return result.data;
   }
 
   @override
@@ -351,5 +351,11 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
       '/point/earned',
     );
     return result.data;
+  }
+
+  @override
+  Future updateLocation({lat, log}) async {
+    dynamic data = <String, dynamic>{"longitude": log, "latitude": lat};
+    await api.put('user/location', data: data);
   }
 }

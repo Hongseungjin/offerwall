@@ -10,20 +10,24 @@ class StatusPointState extends Equatable {
       this.loadMoreListPointStatus = LoadMoreListPointStatus.initial,
       this.dataPoint,
       this.dataTotalPoint,
+      this.totalPoint,
       this.dataPointOutsideAdvertising});
   final LoadListPointStatus loadListPointStatus;
   final LoadMoreListPointStatus loadMoreListPointStatus;
   final dynamic dataPointOutsideAdvertising;
   final dynamic dataPoint;
   final dynamic dataTotalPoint;
+  final dynamic totalPoint;
 
   StatusPointState copyWith(
       {LoadListPointStatus? loadListPointStatus,
       LoadMoreListPointStatus? loadMoreListPointStatus,
       dynamic dataPoint,
       dynamic dataTotalPoint,
+      dynamic totalPoint,
       dynamic dataPointOutsideAdvertising}) {
     return StatusPointState(
+        totalPoint: totalPoint ?? this.totalPoint,
         loadListPointStatus: loadListPointStatus ?? this.loadListPointStatus,
         loadMoreListPointStatus:
             loadMoreListPointStatus ?? this.loadMoreListPointStatus,
@@ -40,6 +44,7 @@ class StatusPointState extends Equatable {
         loadMoreListPointStatus,
         dataPointOutsideAdvertising,
         dataPoint,
-        dataTotalPoint
+        dataTotalPoint,
+        totalPoint
       ];
 }

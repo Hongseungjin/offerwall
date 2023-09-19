@@ -136,4 +136,6 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> getListNotifi({int? limit, int? offset});
 
   Future<dynamic> getPointEarmed();
+
+  Future<dynamic> updateLocation({dynamic lat, dynamic log});
 }

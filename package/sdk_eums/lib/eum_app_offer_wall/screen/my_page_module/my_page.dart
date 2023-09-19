@@ -195,7 +195,7 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ),
                 ),
-                _buildUIBannerImage(dataBanner: state.listBanner),
+                // _buildUIBannerImage(dataBanner: state.listBanner),
                 _buildItem()
               ],
             ),

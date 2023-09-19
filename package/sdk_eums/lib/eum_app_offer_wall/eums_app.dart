@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
@@ -88,7 +90,6 @@ Future<void> onStart(ServiceInstance service) async {
   // CronCustom().initCron();
   try {
     service.on('showOverlay').listen((event) async {
-      print('co vao day khong');
       if (Platform.isAndroid) {
         queue.add(() async => await jobQueue(event));
         NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
@@ -109,9 +110,34 @@ Future<void> onStart(ServiceInstance service) async {
       }
       service.stopSelf();
     });
+    startTimeDown();
   } catch (e) {
     print(e);
   }
+}
+
+void startTimeDown() async {
+  Timer? _timer;
+  int _startTime = 300;
+  bool _serviceEnabled = false;
+
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (_startTime == 0) {
+      _timer?.cancel();
+    } else {
+      _startTime--;
+
+      if (_startTime == 0) {
+        _startTime = 300;
+        try {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          await EumsOfferWallServiceApi()
+              .updateLocation(lat: position.latitude, log: position.longitude);
+        } catch (ex) {}
+      }
+    }
+  });
 }
 
 @pragma('vm:entry-point')
@@ -144,8 +170,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memGen,
       String? memRegion,
       String? memBirth}) async {
-    print("co vao day khong");
-    // CronCustom().initCron();
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(

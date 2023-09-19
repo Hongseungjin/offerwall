@@ -198,7 +198,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                                         ? state.dataTotalPoint['totalPoint']
                                         : 0,
                                     suffix: '원'),
-                                style: AppStyle.bold.copyWith(fontSize: 20),
+                                style: AppStyle.bold.copyWith(fontSize: 26),
                               ),
                             ],
                           )
@@ -245,6 +245,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                         }
                       }
                     } catch (ex) {}
+
                     return Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 15),
@@ -258,11 +259,19 @@ class _StatusPointPageState extends State<StatusPointPage>
                       child: Column(
                         children: [
                           Text(
-                            '현재까지 캐시로 전환된 포인트 ${_tabController.index == 0 ? totalPointEum : totalPointOfferWall}',
+                            _tabController.index == 0
+                                ? '총 누적 적립 포인트'
+                                : '현재까지 캐시로 전환된 포인트',
                             style: AppStyle.regular,
+                            textAlign: TextAlign.center,
                           ),
-                          // Text(Constants.formatMoney(countPoint ?? 0, suffix: 'P'),
-                          //     style: AppStyle.bold),
+                          Text(
+                              Constants.formatMoney(
+                                  _tabController.index == 0
+                                      ? state.totalPoint ?? 0
+                                      : totalPointOfferWall,
+                                  suffix: '원'),
+                              style: AppStyle.bold.copyWith(fontSize: 22)),
                         ],
                       ),
                     );

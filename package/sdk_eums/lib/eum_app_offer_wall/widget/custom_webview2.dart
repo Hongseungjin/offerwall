@@ -246,9 +246,11 @@ class _CustomWebView2State extends State<CustomWebView2>
                       padding: EdgeInsets.only(
                           top: 5,
                           bottom: MediaQuery.of(context).padding.bottom + 10),
-                      width: widget.deviceWidth > 0
-                          ? widget.deviceWidth
-                          : MediaQuery.of(context).size.width,
+                      width:
+                          // widget.deviceWidth > 0
+                          //     ? widget.deviceWidth
+                          //     :
+                          MediaQuery.of(context).size.width,
                       color: Colors.white,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,

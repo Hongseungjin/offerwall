@@ -177,6 +177,8 @@ class Assets {
   static const AssetGenImage camera = AssetGenImage('assets/icons/camera.png');
   static const AssetGenImage point_dialog =
       AssetGenImage('assets/icons/point_dialog.png');
+  static const AssetGenImage logo_eums =
+      AssetGenImage('assets/icons/logo_eums.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [

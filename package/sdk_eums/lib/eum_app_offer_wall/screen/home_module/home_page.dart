@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -12,6 +13,7 @@ import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/widget/custom_web_view_banner.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/using_term_module/using_term_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -58,10 +60,13 @@ class _HomePageState extends State<HomePage>
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
     checkPermission();
+
     super.initState();
   }
 
   checkPermission() async {
+    final languages = await Devicelocale.defaultLocale;
+    print("languageslanguages$languages");
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
@@ -448,7 +453,7 @@ class _HomePageState extends State<HomePage>
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                    width: 40,
+                    width: 34,
                     decoration: BoxDecoration(
                         color: !isdisable ? AppColor.orange2 : AppColor.white,
                         borderRadius: BorderRadius.circular(12),
@@ -464,7 +469,13 @@ class _HomePageState extends State<HomePage>
                                   shape: BoxShape.circle,
                                   color: AppColor.color70,
                                 ),
-                                padding: const EdgeInsets.all(7),
+                                padding: const EdgeInsets.all(4),
+                                child: Image.asset(
+                                  Assets.check.path,
+                                  package: "sdk_eums",
+                                  height: 7,
+                                  color: Colors.transparent,
+                                ),
                               )
                             : const SizedBox(),
                         const Spacer(),
@@ -501,11 +512,11 @@ class _HomePageState extends State<HomePage>
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: HexColor('#888888').withOpacity(0.3)),
-            child: Image.asset(urlImage ?? '', package: "sdk_eums", height: 35),
+            child: Image.asset(urlImage ?? '', package: "sdk_eums", height: 50),
           ),
           const SizedBox(height: 4),
           Text(
@@ -520,38 +531,51 @@ class _HomePageState extends State<HomePage>
   _buildUIBannerImage({List? dataBanner}) {
     return Stack(
       children: [
-        CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: true,
-            scrollDirection: Axis.horizontal,
-            enlargeCenterPage: true,
-            viewportFraction: 1,
-            onPageChanged: (int index, CarouselPageChangedReason c) {
-              setState(() {});
-              _currentPageNotifier.value = index;
-            },
-          ),
-          items: (dataBanner ?? []).map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      imageUrl:
-                          'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(Assets.logo.path,
-                            package: "sdk_eums", width: 30, height: 30);
-                      }),
-                );
+        SizedBox(
+          height: 164,
+          width: MediaQuery.of(context).size.width,
+          child: CarouselSlider(
+            options: CarouselOptions(
+              autoPlay: true,
+              scrollDirection: Axis.horizontal,
+              enlargeCenterPage: true,
+              viewportFraction: 1,
+              onPageChanged: (int index, CarouselPageChangedReason c) {
+                setState(() {});
+                _currentPageNotifier.value = index;
               },
-            );
-          }).toList(),
+            ),
+            items: (dataBanner ?? []).map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () {
+                      Routing().navigate(
+                          context,
+                          CustomWebViewBanner(
+                            urlLink: i['deep_link_url'],
+                          ));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: CachedNetworkImage(
+                          height: 164,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                          imageUrl:
+                              'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) {
+                            return Image.asset(Assets.logo.path,
+                                package: "sdk_eums", width: 30, height: 30);
+                          }),
+                    ),
+                  );
+                },
+              );
+            }).toList(),
+          ),
         ),
         Positioned(
           top: 12,

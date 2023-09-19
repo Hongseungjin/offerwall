@@ -56,13 +56,14 @@ class StatusPointBloc extends Bloc<StatusPointEvent, StatusPointState> {
       List<dynamic> dataCampaign = [];
 
       if (state.dataPoint != null) {
-        dataCampaign = List.of(state.dataPoint!)..addAll(data);
+        dataCampaign = List.of(state.dataPoint!)..addAll(data['data']);
       } else {
-        dataCampaign = data;
+        dataCampaign = data['data'];
       }
       emit(state.copyWith(
-          loadMoreListPointStatus: LoadMoreListPointStatus.success,
-          dataPoint: dataCampaign));
+        loadMoreListPointStatus: LoadMoreListPointStatus.success,
+        dataPoint: dataCampaign,
+      ));
     } catch (ex) {
       emit(state.copyWith(
           loadMoreListPointStatus: LoadMoreListPointStatus.failure));
@@ -78,8 +79,11 @@ class StatusPointBloc extends Bloc<StatusPointEvent, StatusPointState> {
           offset: event.offset,
           month: event.month,
           year: event.year);
+
       emit(state.copyWith(
-          loadListPointStatus: LoadListPointStatus.success, dataPoint: data));
+          loadListPointStatus: LoadListPointStatus.success,
+          dataPoint: data['data'],
+          totalPoint: data['totalPoint']));
     } catch (ex) {
       emit(state.copyWith(loadListPointStatus: LoadListPointStatus.failure));
     }
