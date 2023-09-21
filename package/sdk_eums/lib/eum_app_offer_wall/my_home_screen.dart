@@ -254,7 +254,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                       style: AppStyle.bold
                           .copyWith(color: AppColor.black, fontSize: 18)),
                 ),
-                SizedBox(width: 80),
+                SizedBox(width: 90),
                 InkWell(
                   onTap: () {
                     Routing().navigate(context, MyPage());

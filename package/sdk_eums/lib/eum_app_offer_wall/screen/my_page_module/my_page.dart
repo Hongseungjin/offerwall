@@ -284,15 +284,15 @@ class _MyPageState extends State<MyPage> {
                       onTap: () {
                         switch (data[index]['id']) {
                           case 1:
+                            break;
+                          case 2:
                             Routing().navigate(
                                 context, StatusPointPage(account: dataUser));
                             break;
-                          case 2:
-                            Routing()
-                                .navigate(context, const KeepAdverboxScreen());
-                            break;
                           case 3:
                             print("asdlkajsd");
+                            Routing()
+                                .navigate(context, const KeepAdverboxScreen());
                             break;
                           case 4:
                             Routing()

@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     localStore = LocalStoreService();
+
     categary = 'participation';
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
@@ -65,6 +66,7 @@ class _HomePageState extends State<HomePage>
   }
 
   checkPermission() async {
+    isdisable = await localStore!.getSaveAdver();
     final languages = await Devicelocale.defaultLocale;
     print("languageslanguages$languages");
     if (Platform.isAndroid) {
