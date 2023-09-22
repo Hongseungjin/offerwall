@@ -178,10 +178,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-    bool isRunning = await FlutterBackgroundService().isRunning();
-    if (!isRunning) {
-      FlutterBackgroundService().startService();
-    }
+
     Routing().navigate(context, MyHomeScreen());
   }
 }

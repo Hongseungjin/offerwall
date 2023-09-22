@@ -67,6 +67,13 @@ class _HomePageState extends State<HomePage>
 
   checkPermission() async {
     isdisable = await localStore!.getSaveAdver();
+    print("isdisable$isdisable");
+    if (!isdisable) {
+      bool isRunning = await FlutterBackgroundService().isRunning();
+      if (!isRunning) {
+        FlutterBackgroundService().startService();
+      }
+    }
     final languages = await Devicelocale.defaultLocale;
     print("languageslanguages$languages");
     if (Platform.isAndroid) {
@@ -416,7 +423,7 @@ class _HomePageState extends State<HomePage>
             child: Row(
               children: [
                 Text(
-                  isdisable ? ' 벌 광고 활성화 중 입니다.' : '벌 광고 비활성화 중 입니다.',
+                  isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
                   style: AppStyle.medium
                       .copyWith(color: Colors.black, fontSize: 14),
                 ),

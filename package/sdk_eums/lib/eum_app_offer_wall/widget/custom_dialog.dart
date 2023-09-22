@@ -191,10 +191,21 @@ class DialogUtils {
                           package: "sdk_eums",
                           height: 177,
                         ),
-                        Text('$reward포인트',
-                            style: AppStyle.medium.copyWith(
-                                fontSize: 20, color: HexColor('#f4a43b'))),
-                        Text('가적립되었어요!,',
+                        // Text('$reward포인트',
+                        //     style: AppStyle.medium.copyWith(
+                        //         fontSize: 20, color: HexColor('#f4a43b'))),
+                        RichText(
+                            text: TextSpan(
+                                text: '$reward포인트',
+                                style: AppStyle.medium.copyWith(
+                                    fontSize: 20, color: HexColor('#f4a43b')),
+                                children: [
+                              TextSpan(
+                                  text: '가',
+                                  style: AppStyle.medium.copyWith(
+                                      color: AppColor.black, fontSize: 20))
+                            ])),
+                        Text('적립되었습니다!',
                             style: AppStyle.medium
                                 .copyWith(color: AppColor.black, fontSize: 20)),
                         // Center(

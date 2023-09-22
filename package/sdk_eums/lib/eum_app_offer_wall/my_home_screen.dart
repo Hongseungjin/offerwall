@@ -239,22 +239,28 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   color: AppColor.black,
                 ),
               ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Image.asset(
-                    Assets.logo_eums.path,
-                    package: "sdk_eums",
+              centerTitle: true,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Image.asset(
+                      Assets.logo_eums.path,
+                      package: "sdk_eums",
+                      height: 20,
+                    ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 14),
-                  child: Text('리워드',
-                      style: AppStyle.bold
-                          .copyWith(color: AppColor.black, fontSize: 18)),
-                ),
-                SizedBox(width: 90),
+                  const SizedBox(width: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 14),
+                    child: Text('리워드',
+                        style: AppStyle.bold
+                            .copyWith(color: AppColor.black, fontSize: 18)),
+                  ),
+                ],
+              ),
+              actions: [
                 InkWell(
                   onTap: () {
                     Routing().navigate(context, MyPage());
