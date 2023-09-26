@@ -94,8 +94,8 @@ class _PurchaseOfferwallInternalScreenState
     return Scaffold(
       key: globalKey,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: (){
+        leading: InkWell(
+          onTap: () {
             Navigator.pop(context);
           },
           child: const Icon(

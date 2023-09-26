@@ -106,7 +106,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
         centerTitle: true,
         title: Text(AppString.askedQuestion,
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -191,7 +191,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                           suffixIcon: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 17),
                             child: checkSearch
-                                ? GestureDetector(
+                                ? InkWell(
                                     onTap: () {
                                       setState(() {
                                         searchCtrl.clear();
@@ -249,7 +249,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                         .copyWith(fontSize: 14, color: HexColor('#666666')),
                   ),
                   const SizedBox(height: 16),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Routing().navigate(context, RequestScreen());
                     },
@@ -284,7 +284,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () {
               if (isShowDes) {
                 setState(() {

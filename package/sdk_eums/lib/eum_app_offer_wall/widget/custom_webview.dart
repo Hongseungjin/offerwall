@@ -94,7 +94,6 @@ class _CustomWebViewState extends State<CustomWebView> {
             print("errorerror$error");
           },
           onNavigationRequest: (NavigationRequest request) {
-
             if (request.url.startsWith(getProperHtml(widget.urlLink))) {
               return NavigationDecision.prevent;
             }
@@ -134,7 +133,7 @@ class _CustomWebViewState extends State<CustomWebView> {
         backgroundColor: widget.color,
         title: Text(widget.title, style: AppStyle.bold.copyWith(fontSize: 16)),
         centerTitle: true,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             if (widget.colorIconBack == AppColor.white) {
               Navigator.of(context).pop();

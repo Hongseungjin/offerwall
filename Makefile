@@ -29,6 +29,9 @@ pod-install:
 run:
 	fvm flutter run -d 'R5CT90QNQBM'
 	#--no-sound-null-safety
+	#emulator-5554
+	#R5CT90QNQBM
+	#ce071717818b84fd0b
 	
 
 run-web:

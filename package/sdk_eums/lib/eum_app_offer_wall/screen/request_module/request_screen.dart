@@ -127,7 +127,7 @@ class _RequestScreenState extends State<RequestScreen>
         centerTitle: true,
         title: Text(AppString.inquiry,
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             FocusScope.of(context).unfocus();
             Navigator.of(context).pop();
@@ -349,7 +349,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     setState(() {
                       check = !check;
@@ -410,7 +410,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                 //   ),
                 // ),
                 const SizedBox(height: 24),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     if (contentCtrl.text == "" || selectedArea == null) {
                       AppAlert.showError(context, fToast, "empty field");
@@ -580,7 +580,7 @@ class _HistoryRequestState extends State<HistoryRequest> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () {
             // if (data['ripple_fl'] == "0") {
             if (isShowDes) {

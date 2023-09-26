@@ -13,7 +13,7 @@ void main() {
   SdkEums.instant.init(onRun: () async {
     await Firebase.initializeApp();
     // if (Platform.isAndroid) {
-      NotificationHandler().initializeFcmNotification();
+    NotificationHandler().initializeFcmNotification();
     // } else {
     //   NotificationController.initializeLocalNotifications();
     // }
@@ -127,11 +127,15 @@ class AppMainScreen extends StatefulWidget {
 
 class _AppMainScreenState extends State<AppMainScreen> {
   LocalStore? localStore;
+
   @override
   void initState() {
     localStore = LocalStoreService();
     super.initState();
+    getSizeDevice();
   }
+
+  getSizeDevice() {}
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +144,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
       appBar: AppBar(),
       body: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () async {
               await localStore?.setDataShare(dataShare: null);
               EumsAppOfferWallService.instance.openSdk(context,
@@ -154,7 +158,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 padding: EdgeInsets.all(20),
                 child: const Text('go to sdk')),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () async {},
             child: Container(
                 color: AppColor.blue1,

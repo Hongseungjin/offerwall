@@ -206,13 +206,17 @@ class _CustomWebView2State extends State<CustomWebView2>
         backgroundColor: AppColor.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               widget.onClose();
             },
             child: Container(
                 padding: EdgeInsets.all(16),
                 child: Icon(Icons.arrow_back, color: Colors.black, size: 24)),
+          ),
+          title: Text(
+            widget.title ?? '',
+            style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18),
           ),
           actions: [widget.actions ?? const SizedBox()],
         ),
@@ -256,13 +260,13 @@ class _CustomWebView2State extends State<CustomWebView2>
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           widget.bookmark ?? SizedBox(),
-                          // GestureDetector(
+                          // InkWell(
                           //     onTap: widget.onSave,
                           //     child: Image.asset(Assets.bookmark.path,
                           //         package: "sdk_eums",
                           //         height: 27,
                           //         color: AppColor.black)),
-                          GestureDetector(
+                          InkWell(
                             onTap: !showButton ? null : widget.mission,
                             child: Container(
                               padding: const EdgeInsets.symmetric(

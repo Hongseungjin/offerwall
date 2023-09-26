@@ -96,7 +96,6 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
         ),
       ], child: _buildContent(context)),
     );
-
   }
 
   _buildContent(BuildContext context) {
@@ -104,7 +103,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
       key: globalKey,
       appBar: AppBar(
         backgroundColor: AppColor.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             widget.onCallBack!(checkJoin);
             Navigator.of(context).pop();
@@ -143,7 +142,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               print("shouldInterceptFetchRequest$fetchRequest");
               return;
             },
-          
+
             androidShouldInterceptRequest: (controller, request) async {
               print("requestrequestrequest$request");
 

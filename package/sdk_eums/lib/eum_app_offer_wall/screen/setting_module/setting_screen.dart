@@ -124,7 +124,7 @@ class _SettingScreenState extends State<SettingScreen> {
             elevation: 0,
             backgroundColor: Colors.white,
             centerTitle: true,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.of(context).pop();
               },
@@ -152,7 +152,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           AppStyle.regular.copyWith(color: HexColor('#888888')),
                     ),
                     const SizedBox(height: 15),
-                    GestureDetector(
+                    InkWell(
                       onTap: () async {
                         setState(() {
                           checkToken = !checkToken;
@@ -187,7 +187,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           checkSetting: !checkToken, title: '벌 광고 활성화'),
                     ),
                     const SizedBox(height: 30),
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         setState(() {
                           checkTime = !checkTime;
@@ -303,7 +303,7 @@ class _SettingScreenState extends State<SettingScreen> {
       default:
     }
     return Column(children: [
-      GestureDetector(
+      InkWell(
           onTap: () async {
             _selectDate(
                 dateTime: date,
@@ -391,7 +391,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                   const Spacer(),
-                  GestureDetector(
+                  InkWell(
                       onTap: () {
                         callBack!(dateTime);
                         Navigator.of(context).pop();

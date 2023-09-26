@@ -116,7 +116,7 @@ class DialogUtils {
                       Positioned(
                         top: 16,
                         right: 16,
-                        child: GestureDetector(
+                        child: InkWell(
                           onTap: () {
                             Navigator.pop(buildContext);
                             if (voidCallback != null) {
@@ -222,7 +222,7 @@ class DialogUtils {
                         //       ])),
                         // ),
                         const SizedBox(height: 16),
-                        GestureDetector(
+                        InkWell(
                           onTap: () {
                             Navigator.pop(buildContext);
 
@@ -400,7 +400,7 @@ class DialogUtils {
                               // Assets.icons.logo.image(height: 200);
                             }),
                         const SizedBox(height: 16),
-                        GestureDetector(
+                        InkWell(
                           onTap: () {
                             Navigator.pop(buildContext);
 
@@ -573,7 +573,7 @@ class DialogUtils {
                               );
                             }),
                         const SizedBox(height: 16),
-                        GestureDetector(
+                        InkWell(
                           onTap: voidCallback,
                           child: Container(
                             width: MediaQuery.of(context).size.width,

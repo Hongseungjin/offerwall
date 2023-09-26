@@ -123,7 +123,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
         centerTitle: true,
         title: Text(widget.title ?? '',
             style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18)),
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
@@ -171,7 +171,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     widget.bookmark ?? SizedBox(),
-                    GestureDetector(
+                    InkWell(
                       onTap: !showButton ? null : widget.mission,
                       child: Container(
                         padding: const EdgeInsets.symmetric(

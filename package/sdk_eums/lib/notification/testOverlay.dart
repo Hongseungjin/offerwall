@@ -31,7 +31,7 @@
 //       appBar: AppBar(),
 //       body: Column(
 //         children: [
-//           GestureDetector(
+//           InkWell(
 //             behavior: HitTestBehavior.translucent,
 //             onTap: () async {
 //               checkBack();

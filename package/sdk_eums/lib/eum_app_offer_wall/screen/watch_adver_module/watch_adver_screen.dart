@@ -154,7 +154,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             showMission: true,
             paddingTop: 0,
             deviceWidth: deviceWidth,
-            bookmark: GestureDetector(
+            bookmark: InkWell(
               onTap: () {
                 setState(() {
                   checkSave = !checkSave;
@@ -198,8 +198,8 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
       );
     } catch (ex) {
       print("exxxxx$ex");
-      return GestureDetector(
-        behavior: HitTestBehavior.translucent,
+      return InkWell(
+        // behavior: HitTestBehavior.translucent,
         onTap: () {
           Routing().popToRoot(context);
           checkBack();

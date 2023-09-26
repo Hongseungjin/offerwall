@@ -137,7 +137,7 @@ class _CustomWebViewJoinState extends State<CustomWebViewJoin> {
         backgroundColor: widget.color,
         title: Text(widget.title, style: AppStyle.bold.copyWith(fontSize: 16)),
         centerTitle: true,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             if (widget.colorIconBack == AppColor.white) {
               Navigator.of(context).pop();

@@ -121,7 +121,7 @@ class _MyhomePageState extends State<MyhomePage> {
                   },
                 ),
               ],
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
                 child: WillPopScope(
                   onWillPop: () async {

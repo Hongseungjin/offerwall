@@ -63,7 +63,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               title: Text('광고 스크랩',
                   style: AppStyle.bold
                       .copyWith(fontSize: 16, color: AppColor.black)),
-              leading: GestureDetector(
+              leading: InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
@@ -129,7 +129,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                               ? Wrap(
                                   children: List.generate(
                                       state.dataScrapAdverbox.length,
-                                      (index) => GestureDetector(
+                                      (index) => InkWell(
                                             onTap: () {
                                               if (state.dataScrapAdverbox[index]
                                                       ['url_link'] !=
@@ -342,7 +342,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
               title: '광고 스크랩',
               color: AppColor.red,
               colorIconBack: AppColor.white,
-              actions: GestureDetector(
+              actions: InkWell(
                 onTap: () {
                   globalKey.currentContext
                       ?.read<ScrapAdverboxBloc>()

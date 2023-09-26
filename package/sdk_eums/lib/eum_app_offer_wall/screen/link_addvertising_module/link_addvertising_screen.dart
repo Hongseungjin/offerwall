@@ -23,7 +23,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
         centerTitle: true,
         title: Text('제휴 및 광고 문의',
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -104,7 +104,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
             ),
             const SizedBox(height: 16),
             Spacer(),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 _launchURL();
               },
@@ -156,7 +156,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
 
   Widget _buidItem(
       {required VoidCallback callback, String? title, Widget? widget}) {
-    return GestureDetector(
+    return InkWell(
       onTap: callback,
       child: Container(
         width: MediaQuery.of(context).size.width,

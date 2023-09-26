@@ -65,7 +65,7 @@ class _NotifiScreenState extends State<NotifiScreen> {
             title: Text('공지사항',
                 style: AppStyle.bold
                     .copyWith(fontSize: 16, color: AppColor.black)),
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.of(context).pop();
               },
@@ -123,7 +123,7 @@ class _NotifiScreenState extends State<NotifiScreen> {
     bool isShowDes = _saved.contains(data);
     return Column(
       children: [
-        GestureDetector(
+        InkWell(
           onTap: () {
             if (isShowDes) {
               setState(() {

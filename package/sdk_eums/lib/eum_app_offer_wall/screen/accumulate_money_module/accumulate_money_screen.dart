@@ -274,7 +274,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
           child: BlocBuilder<AccumulateMoneyBloc, AccumulateMoneyState>(
               builder: ((context, stateAccount) {
             dataAccount = stateAccount.account;
-            return GestureDetector(
+            return InkWell(
               onTap: () {
                 setState(() {
                   RxBus.post(ShowAction());
@@ -325,7 +325,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                           fontSize: 14),
                                     ),
                                     const SizedBox(width: 5),
-                                    GestureDetector(
+                                    InkWell(
                                       onTap: () async {
                                         setState(() {
                                           isdisable = !isdisable;
@@ -878,7 +878,7 @@ class _ListViewAccumulateMoneyScreenState
   }
 
   Widget _buildItem({dynamic data}) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         RxBus.post(ShowAction());
         Routing().navigate(

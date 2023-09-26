@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
+import 'package:sdk_eums/common/routing.dart';
+import 'package:sdk_eums/eum_app_offer_wall/eums_app.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview2.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
@@ -42,6 +45,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   double? dyStart;
   String? tokenSdk;
   double deviceWidth = 0;
+  double deviceHeight = 0;
   MethodChannel _backgroundChannel = MethodChannel("x-slayer/overlay");
   int countAdvertisement = 0;
 
@@ -57,27 +61,35 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         setState(() {
           dataEvent = event;
           tokenSdk = event['tokenSdk'] ?? '';
+          // deviceHeight = event['sizeDevice'] ?? 0;
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
           checkSave = false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
-        print('overlayListener $event');
+        printWrapped('overlayListener $event');
       } catch (e) {
         print('errorrrrrr $e');
       }
     });
   }
 
+  var pixelRatio = window.devicePixelRatio;
+
   initCallbackDrag() {
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
       await Firebase.initializeApp();
+
       if ('START_DRAG' == call.method) {
         print('start ${call.method} ${call.arguments}');
+        // dyStart = call.arguments;
         dyStart = call.arguments;
       } else if ('END_DRAG' == call.method) {
         print('end ${call.method} ${call.arguments}');
         dy = call.arguments;
+        // dy = 1900;
+        print("co vao day khongs");
+
         onVerticalDragEnd();
       }
     });
@@ -145,33 +157,49 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     return BlocProvider<WatchAdverBloc>(
       create: (context) => WatchAdverBloc(),
       child: CustomWebView2(
-        title: '',
+        title: '${(jsonDecode(dataEvent['data']))['name']}',
         key: webViewKey,
         showImage: true,
         showMission: true,
         deviceWidth: deviceWidth,
         actions: Row(
           children: [
-            Container(
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(24)),
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                    width: MediaQuery.of(context).size.width - 64,
-                    fit: BoxFit.cover,
-                    imageUrl: Constants.baseUrlImage +
-                        (jsonDecode(dataEvent['data']))['advertiseSponsor']
-                            ['image'],
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) {
-                      return Image.asset(Assets.logo.path,
-                          package: "sdk_eums", height: 16);
-                    }),
-              ),
-            ),
+            InkWell(
+                onTap: () {
+                  Routing().navigate(
+                      context,
+                      ReportPage(
+                        checkOverlay: true,
+                        paddingTop: 100,
+                        data: (jsonDecode(dataEvent['data'])),
+                        deleteAdver: true,
+                      ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.asset(Assets.report.path,
+                      package: "sdk_eums", height: 25),
+                )),
+            // Container(
+            //   decoration:
+            //       BoxDecoration(borderRadius: BorderRadius.circular(24)),
+            //   padding: EdgeInsets.symmetric(vertical: 5),
+            //   child: ClipRRect(
+            //     borderRadius: BorderRadius.circular(12),
+            //     child: CachedNetworkImage(
+            //         width: MediaQuery.of(context).size.width - 64,
+            //         fit: BoxFit.cover,
+            //         imageUrl: Constants.baseUrlImage +
+            //             (jsonDecode(dataEvent['data']))['advertiseSponsor']
+            //                 ['image'],
+            //         placeholder: (context, url) =>
+            //             const Center(child: CircularProgressIndicator()),
+            //         errorWidget: (context, url, error) {
+            //           return Image.asset(Assets.logo.path,
+            //               package: "sdk_eums", height: 16);
+            //         }),
+            //   ),
+            // ),
             const SizedBox(
               width: 20,
             )
@@ -180,32 +208,42 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         onClose: () async {
           FlutterBackgroundService().invoke("closeOverlay");
         },
-        bookmark: GestureDetector(
-          onTap: () {
-            setState(() {
-              checkSave = !checkSave;
-            });
-            try {
-              if (checkSave) {
-                TrueOverlauService().saveScrap(
-                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                    token: tokenSdk);
-              } else {
-                TrueOverlauService().deleteScrap(
-                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                    token: tokenSdk);
+        bookmark: InkWell(
+            onTap: () {
+              setState(() {
+                checkSave = !checkSave;
+              });
+              try {
+                if (checkSave) {
+                  TrueOverlauService().saveScrap(
+                      advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
+                      token: tokenSdk);
+                } else {
+                  TrueOverlauService().deleteScrap(
+                      advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
+                      token: tokenSdk);
+                }
+              } catch (e) {
+                print('e $e');
+                FlutterBackgroundService().invoke("closeOverlay");
               }
-            } catch (e) {
-              print('e $e');
-              FlutterBackgroundService().invoke("closeOverlay");
-            }
-          },
-          child: checkSave
-              ? Image.asset(Assets.saveKeep.path,
-                  package: "sdk_eums", height: 30, color: AppColor.black)
-              : Image.asset(Assets.deleteKeep.path,
-                  package: "sdk_eums", height: 30, color: AppColor.black),
-        ),
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, color: HexColor('#eeeeee')),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Image.asset(
+                  checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
+                  package: "sdk_eums",
+                  height: 18,
+                  color: AppColor.black),
+            )
+            // checkSave
+            //     ? Image.asset(Assets.saveKeep.path,
+            //         package: "sdk_eums", height: 30, color: AppColor.black)
+            //     : Image.asset(Assets.deleteKeep.path,
+            //         package: "sdk_eums", height: 30, color: AppColor.black),
+            ),
         mission: () {
           if (dataEvent != null && dataEvent['data'] != null) {
             DialogUtils.showDialogRewardPoint(context,
@@ -239,8 +277,16 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   }
 
   void onVerticalDragEnd() async {
-    if (dy != null && dyStart != null && dy! < dyStart!) {
-      print('up$dataEvent');
+    double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
+    print('deviceWithdeviceWith $deviceHeight');
+
+    print('upupupuasdasdpupu $dy');
+    if (dy != null && dyStart != null && dy! < (deviceWith / 7)
+
+        ///300
+        // dyStart!
+        ) {
+      print('upupupupupup$dataEvent');
       if (dataEvent != null) {
         dataEvent['isWebView'] = true;
         FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
@@ -249,7 +295,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       }
     }
 
-    if (dy != null && dyStart != null && dy! > dyStart!) {
+    if (dy != null && dyStart != null && dy! > (deviceWith - deviceWith / 7)
+        //  > dyStart!
+        ) {
       print('downnnn$dataEvent');
       if (dataEvent != null) {
         try {
@@ -296,7 +344,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           key: globalKey,
           body: Container(
             constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
-            // child: GestureDetector(
+            // child: InkWell(
             //   onTap: openWebView,
             //   onVerticalDragStart: (details) {
             //     print('start ${details.localPosition.dy}');

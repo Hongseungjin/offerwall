@@ -52,4 +52,8 @@ abstract class LocalStore {
   Future setBoolTime(bool checkBool);
 
   Future<dynamic> getBoolTime();
+
+  Future<dynamic> getSizeDevice();
+
+  Future setSizeDevice(double sizeHeight);
 }

@@ -92,7 +92,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         centerTitle: true,
         title: Text('광고 보관함',
             style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -203,7 +203,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
               data != null
                   ? Wrap(
                       children: List.generate(data.length, (index) {
-                        return GestureDetector(
+                        return InkWell(
                           onTap: () {
                             Routing().navigate(
                                 context,
@@ -491,7 +491,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
               urlLink: widget.data['url_link'],
               uriImage: widget.data[''],
               title: widget.data['name'],
-              report: GestureDetector(
+              report: InkWell(
                   onTap: () {
                     Routing().navigate(
                         context,
@@ -505,7 +505,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                     child: Image.asset(Assets.report.path,
                         package: "sdk_eums", height: 16),
                   )),
-              bookmark: GestureDetector(
+              bookmark: InkWell(
                 onTap: () {
                   setState(() {
                     checkSave = !checkSave;

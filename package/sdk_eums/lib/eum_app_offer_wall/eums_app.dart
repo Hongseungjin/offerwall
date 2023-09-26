@@ -14,12 +14,18 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
 
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}');
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
+
 showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-    event?['data']['deviceWidth'] =
-        double.parse(await LocalStoreService().getDeviceWidth());
+    event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
+    // event?['data']['deviceWidth'] =
+    //     double.parse(await LocalStoreService().getDeviceWidth());
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {
     if (event?['data']['isToast'] != null) {
@@ -39,6 +45,7 @@ showOverlay(event) async {
           alignment: OverlayAlignment.center);
     }
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
+    // event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
 }
@@ -156,9 +163,15 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       String? memGen,
       String? memRegion,
       String? memBirth}) async {
+    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    Size size = view.physicalSize;
+    double height = size.height;
+    print("height$height");
+
     dynamic data = await EumsOfferWallService.instance.authConnect(
         memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     localStore.setAccessToken(data['token']);
+    localStore.setSizeDevice(height);
     if (await localStore.getAccessToken() != null) {
       openAppSkd(context);
     }

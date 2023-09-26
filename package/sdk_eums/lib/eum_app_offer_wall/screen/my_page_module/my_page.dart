@@ -36,11 +36,10 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   dynamic dataUser;
-  LocalStore? localStore;
+  LocalStore? localStore = LocalStoreService();
 
   @override
   void initState() {
-    localStore = LocalStoreService();
     getUser();
     _registerEventBus();
     super.initState();
@@ -48,6 +47,7 @@ class _MyPageState extends State<MyPage> {
 
   getUser() async {
     dataUser = await localStore?.getDataUser();
+    setState(() {});
   }
 
   Future<void> _registerEventBus() async {}
@@ -65,18 +65,16 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MyPageBloc>(
-      create: (context) => MyPageBloc()..add(ListBanner(type: 'setting')),
+      create: (context) => MyPageBloc()
+      // ..add(ListBanner(type: 'setting'))
+      ,
       child: MultiBlocListener(
         listeners: [
           BlocListener<MyPageBloc, MyPageState>(
             listener: _listenListAdver,
           ),
         ],
-        child: WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: _buildContent(context)),
+        child: _buildContent(context),
       ),
     );
   }
@@ -109,6 +107,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   _buildContent(BuildContext context) {
+    print("dataUser$dataUser");
     return BlocBuilder<MyPageBloc, MyPageState>(
       builder: (context, state) {
         return Scaffold(
@@ -117,7 +116,7 @@ class _MyPageState extends State<MyPage> {
             elevation: 0,
             backgroundColor: Colors.white,
             centerTitle: true,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.of(context).pop();
               },
@@ -152,7 +151,7 @@ class _MyPageState extends State<MyPage> {
                     ],
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Routing()
                         .navigate(context, StatusPointPage(account: dataUser));
@@ -280,17 +279,26 @@ class _MyPageState extends State<MyPage> {
             direction: Axis.horizontal,
             children: List.generate(
                 data.length,
-                (index) => GestureDetector(
+                (index) => InkWell(
                       onTap: () {
                         switch (data[index]['id']) {
                           case 1:
+                            Routing().navigate(
+                                context,
+                                StatusPointPage(
+                                  account: dataUser,
+                                  tabCount: 0,
+                                ));
                             break;
                           case 2:
                             Routing().navigate(
-                                context, StatusPointPage(account: dataUser));
+                                context,
+                                StatusPointPage(
+                                  account: dataUser,
+                                  tabCount: 1,
+                                ));
                             break;
                           case 3:
-                            print("asdlkajsd");
                             Routing()
                                 .navigate(context, const KeepAdverboxScreen());
                             break;

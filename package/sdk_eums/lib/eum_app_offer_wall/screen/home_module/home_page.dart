@@ -14,6 +14,8 @@ import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/widget/custom_web_view_banner.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/my_page_module/my_page.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/using_term_module/using_term_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -25,7 +27,7 @@ import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../keep_adverbox_module/keep_adverbox_module.dart';
-import '../scrap_adverbox_module/scrap_adverbox_screen.dart';
+import 'widget/custom_scroll_campaign_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -61,6 +63,7 @@ class _HomePageState extends State<HomePage>
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
     checkPermission();
+    controller.addListener(() {});
 
     super.initState();
   }
@@ -161,26 +164,68 @@ class _HomePageState extends State<HomePage>
         }
 
         return Scaffold(
-          key: globalKey,
-          body: CustomScrollView(
-            controller: controller,
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
+          appBar: AppBar(
+            backgroundColor: AppColor.white,
+            leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColor.black,
+              ),
             ),
-            slivers: [
-              SliverList(
-                  delegate: SliverChildListDelegate([
-                Container(
-                  color: Colors.transparent,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildUIShowPoint(
-                          point: state.totalPoint != null
-                              ? state.totalPoint['userPoint']
-                              : 0),
-                      Wrap(
+            centerTitle: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Image.asset(
+                    Assets.logo_eums.path,
+                    package: "sdk_eums",
+                    height: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 14),
+                  child: Text('리워드',
+                      style: AppStyle.bold
+                          .copyWith(color: AppColor.black, fontSize: 18)),
+                ),
+              ],
+            ),
+            actions: [
+              InkWell(
+                onTap: () {
+                  Routing().navigate(context, MyPage());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Image.asset(Assets.my_page.path,
+                      package: "sdk_eums", height: 24),
+                ),
+              ),
+              const SizedBox(
+                width: 25,
+              )
+            ],
+          ),
+          key: globalKey,
+          body: CustomScrollCampaignDetail(
+            buildChildren: (BuildContext context,
+                ValueNotifier<bool> showAppBar,
+                ScrollController scrollController) {
+              return [
+                CustomSliverList(
+                  children: [
+                    _buildUIShowPoint(
+                        point: state.totalPoint != null
+                            ? state.totalPoint['userPoint']
+                            : 0),
+                    Center(
+                      child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 20,
                         children: List.generate(
@@ -212,70 +257,67 @@ class _HomePageState extends State<HomePage>
                                 urlImage: uiIconList[index]['icon'],
                                 title: uiIconList[index]['title'])),
                       ),
-                      const SizedBox(height: 20),
-                      _buildUIBannerImage(dataBanner: state.bannerList),
-                      TabBar(
-                        onTap: (value) {
-                          int index = value;
-                          if (_tabController.index == 0) {
-                            categary = 'participation';
-                          } else {
-                            categary = 'mission';
-                          }
-                          _fetchData();
-                          setState(() {
-                            _tabController.index = index;
-                          });
-                        },
-                        labelPadding:
-                            const EdgeInsets.only(bottom: 10, top: 10),
-                        controller: _tabController,
-                        indicatorColor: HexColor('#f4a43b'),
-                        unselectedLabelColor: HexColor('#707070'),
-                        labelColor: HexColor('#f4a43b'),
-                        labelStyle:
-                            AppStyle.bold.copyWith(color: HexColor('#707070')),
-                        tabs: const [
-                          Text(
-                            '참여하고 리워드',
-                          ),
-                          Text('쇼핑하고 리워드'),
-                        ],
+                    ),
+                    const SizedBox(height: 20),
+                    _buildUIBannerImage(dataBanner: state.bannerList),
+                  ],
+                ),
+                CustomSliverAppBar(
+                  expandedHeight: 0,
+                  toolbarHeight:
+                      kToolbarHeight - MediaQuery.of(context).padding.top,
+                  header: TabBar(
+                    onTap: (value) {
+                      int index = value;
+                      if (_tabController.index == 0) {
+                        categary = 'participation';
+                      } else {
+                        categary = 'mission';
+                      }
+                      _fetchData();
+                      setState(() {
+                        _tabController.index = index;
+                      });
+                    },
+                    labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
+                    controller: _tabController,
+                    indicatorColor: HexColor('#f4a43b'),
+                    unselectedLabelColor: HexColor('#707070'),
+                    labelColor: HexColor('#f4a43b'),
+                    labelStyle:
+                        AppStyle.bold.copyWith(color: HexColor('#707070')),
+                    tabs: const [
+                      Text(
+                        '참여하고 리워드',
                       ),
+                      Text('쇼핑하고 리워드'),
                     ],
                   ),
-                )
-              ])),
-              SliverFillRemaining(
-                fillOverscroll: true,
-                hasScrollBody: true,
-                child: Column(
+                ),
+                CustomSliverList(
                   children: [
                     _buildUIPoint(
                         point: state.totalPoint != null
                             ? state.totalPoint['totalPointCanGet']
                             : 0),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: <Widget>[
-                          ListViewHome(
-                            tab: _tabController.index,
-                            filter: _filterMedia,
-                            scrollController: controller,
-                          ),
-                          ListViewHome(
-                            tab: _tabController.index,
-                            filter: _filterMedia,
-                            scrollController: controller,
-                          )
-                        ],
-                      ),
+                    ListViewHome(
+                      tab: _tabController.index,
+                      filter: _filterMedia,
+                      scrollController: controller,
                     ),
+                    // ListViewHome(
+                    //   tab: _tabController.index,
+                    //   filter: _filterMedia,
+                    //   scrollController: controller,
+                    // )
                   ],
-                ),
-              )
-            ],
+                )
+              ];
+            },
+            onRefresh: () {
+              _fetchData();
+            },
+            scrollController: controller,
           ),
         );
       },
@@ -290,9 +332,11 @@ class _HomePageState extends State<HomePage>
     }
     await Future.delayed(const Duration(seconds: 0));
 
-    globalKey.currentContext
-        ?.read<HomeBloc>()
-        .add(ListOfferWall(limit: 10, filter: filter, category: categary));
+    globalKey.currentContext?.read<HomeBloc>().add(ListOfferWall(
+          limit: 10,
+          filter: filter,
+          category: categary,
+        ));
   }
 
   _filterMedia(String? value) {
@@ -363,7 +407,7 @@ class _HomePageState extends State<HomePage>
                   AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
             ),
           ),
-          GestureDetector(
+          InkWell(
             onTap: () {
               Routing().navigate(context, StatusPointPage(account: accont));
             },
@@ -391,7 +435,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           const SizedBox(height: 8),
-          GestureDetector(
+          InkWell(
             onTap: () {
               Routing().navigate(context, UsingTermScreen());
             },
@@ -428,7 +472,7 @@ class _HomePageState extends State<HomePage>
                       .copyWith(color: Colors.black, fontSize: 14),
                 ),
                 const Spacer(),
-                GestureDetector(
+                InkWell(
                   onTap: () async {
                     setState(() {
                       isdisable = !isdisable;
@@ -516,7 +560,7 @@ class _HomePageState extends State<HomePage>
   }
 
   _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Column(
         children: [
@@ -557,7 +601,7 @@ class _HomePageState extends State<HomePage>
             items: (dataBanner ?? []).map((i) {
               return Builder(
                 builder: (BuildContext context) {
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       Routing().navigate(
                           context,
@@ -733,81 +777,42 @@ class _ListViewHomeState extends State<ListViewHome> {
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: AppColor.white,
-                      border: Border(
-                          // top: BorderSide(
-                          //     color: AppColor.grey5D.withOpacity(0.2),
-                          //     width: 2)
-                          )),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: SmartRefresher(
-                    controller: refreshController,
-                    onRefresh: _onRefresh,
-                    onLoading: _onLoading,
-                    header: CustomHeader(
-                      builder: (BuildContext context, RefreshStatus? mode) {
-                        return const Center(
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.black)));
-                      },
-                    ),
-                    footer: CustomFooter(
-                      builder: (BuildContext context, LoadStatus? mode) {
-                        return mode == LoadStatus.loading
-                            ? Center(
-                                child: Column(
-                                children: [
-                                  Text(' '),
-                                  CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.black)),
-                                ],
-                              ))
-                            : const SizedBox();
-                      },
-                    ),
-                    enablePullDown: true,
-                    enablePullUp: true,
-                    child: state.listDataOfferWall != null
-                        ? Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            children: List.generate(
-                                state.listDataOfferWall.length,
-                                (index) => GestureDetector(
-                                      child: widget.tab == 0
-                                          ? _buildItemRow(
-                                              data: state
-                                                  .listDataOfferWall[index])
-                                          : _buildItemColum(
-                                              data: state
-                                                  .listDataOfferWall[index]),
-                                      onTap: () {
-                                        Routing().navigate(
-                                            context,
-                                            DetailOffWallScreen(
-                                              title:
-                                                  state.listDataOfferWall[index]
-                                                      ['title'],
-                                              xId:
-                                                  state.listDataOfferWall[index]
-                                                      ['idx'],
-                                              type:
-                                                  state.listDataOfferWall[index]
-                                                      ['type'],
-                                            ));
-                                      },
-                                    )),
-                          )
-                        : const SizedBox(),
-                  )),
+            Container(
+              decoration: const BoxDecoration(
+                  color: AppColor.white,
+                  border: Border(
+                      // top: BorderSide(
+                      //     color: AppColor.grey5D.withOpacity(0.2),
+                      //     width: 2)
+                      )),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: state.listDataOfferWall != null
+                  ? Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      children: List.generate(
+                          state.listDataOfferWall?.length ?? 0,
+                          (index) => InkWell(
+                                child: widget.tab == 0
+                                    ? _buildItemRow(
+                                        data: state.listDataOfferWall[index])
+                                    : _buildItemColum(
+                                        data: state.listDataOfferWall[index]),
+                                onTap: () {
+                                  Routing().navigate(
+                                      context,
+                                      DetailOffWallScreen(
+                                        title: state.listDataOfferWall[index]
+                                            ['title'],
+                                        xId: state.listDataOfferWall[index]
+                                            ['idx'],
+                                        type: state.listDataOfferWall[index]
+                                            ['type'],
+                                      ));
+                                },
+                              )),
+                    )
+                  : const SizedBox(),
             ),
           ],
         );

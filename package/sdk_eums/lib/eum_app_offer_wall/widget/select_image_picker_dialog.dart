@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../utils/appColor.dart';
@@ -39,7 +38,7 @@ class _SelectImgPickerDialogState extends State<SelectImgPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return Material(
-        color: Colors.transparent,
+      color: Colors.transparent,
       child: Stack(
         children: [
           Positioned(
@@ -48,14 +47,16 @@ class _SelectImgPickerDialogState extends State<SelectImgPickerDialog> {
               child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius:
-                          BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8))),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.center,
                   child: Column(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
                           if (widget.openCameraTap != null) {
@@ -65,10 +66,14 @@ class _SelectImgPickerDialogState extends State<SelectImgPickerDialog> {
                         child: Container(
                           margin: const EdgeInsets.only(top: 10),
                           width: MediaQuery.of(context).size.width,
-                          child: Text('사진촬영', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),),
+                          child: Text(
+                            '사진촬영',
+                            style: AppStyle.bold
+                                .copyWith(color: AppColor.black, fontSize: 16),
+                          ),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
                           if (widget.chooseImgTap != null) {
@@ -78,17 +83,21 @@ class _SelectImgPickerDialogState extends State<SelectImgPickerDialog> {
                         child: Container(
                           margin: const EdgeInsets.only(top: 10),
                           width: MediaQuery.of(context).size.width,
-                          child: Text('사진 선택', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16)),
+                          child: Text('사진 선택',
+                              style: AppStyle.bold.copyWith(
+                                  color: AppColor.black, fontSize: 16)),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
                         },
                         child: Container(
                           margin: const EdgeInsets.only(top: 10),
                           width: MediaQuery.of(context).size.width,
-                          child: Text('취소', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16)),
+                          child: Text('취소',
+                              style: AppStyle.bold.copyWith(
+                                  color: AppColor.black, fontSize: 16)),
                         ),
                       ),
                     ],

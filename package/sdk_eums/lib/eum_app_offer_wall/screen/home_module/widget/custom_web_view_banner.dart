@@ -42,7 +42,7 @@ class _CustomWebViewBannerState extends State<CustomWebViewBanner> {
         appBar: AppBar(
           backgroundColor: AppColor.white,
           centerTitle: true,
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },

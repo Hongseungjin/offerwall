@@ -118,7 +118,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
       key: globalKey,
       backgroundColor: AppColor.white,
       appBar: AppBar(
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
@@ -281,7 +281,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
               children: [
                 const SizedBox(height: 16),
                 _buildTilte('STEP 1   ', '아래의 버튼을 눌러 구독해주세요'),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Routing().navigate(
                         context,
@@ -356,7 +356,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     _addImages();
                   },
@@ -387,7 +387,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     ),
                   ),
                 ),
-                // GestureDetector(
+                // InkWell(
                 //   onTap: () {},
                 //   child: Container(
                 //     margin: const EdgeInsets.symmetric(vertical: 16),
@@ -407,7 +407,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
               ],
             ),
             // const Divider(thickness: 10),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 String lang = '';
                 if (_languages?[0] == 'ko-KR') {

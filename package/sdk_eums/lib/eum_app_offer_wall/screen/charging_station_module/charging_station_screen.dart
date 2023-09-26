@@ -55,7 +55,7 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
           title: Text(AppString.chargingStation,
               style:
                   AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               widget.callBack(widget.tab);
               // Routing().popToRoot(context);
@@ -161,7 +161,7 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
   }
 
   _buildItem({String? urlImage, String? title, Function()? voidCallBack}) {
-    return GestureDetector(
+    return InkWell(
       onTap: voidCallBack,
       child: Container(
         decoration: BoxDecoration(

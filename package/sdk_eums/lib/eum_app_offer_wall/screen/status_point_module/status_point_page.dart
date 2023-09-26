@@ -13,8 +13,10 @@ import '../../../common/constants.dart';
 enum Units { MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR }
 
 class StatusPointPage extends StatefulWidget {
-  const StatusPointPage({Key? key, this.account}) : super(key: key);
+  const StatusPointPage({Key? key, this.account, this.tabCount})
+      : super(key: key);
   final dynamic account;
+  final int? tabCount;
 
   @override
   State<StatusPointPage> createState() => _StatusPointPageState();
@@ -40,6 +42,9 @@ class _StatusPointPageState extends State<StatusPointPage>
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     account = widget.account;
     _tabController.addListener(_onTabChange);
+    if (widget.tabCount == 1) {
+      _tabController.animateTo(widget.tabCount ?? 0);
+    }
     super.initState();
   }
 
@@ -60,19 +65,22 @@ class _StatusPointPageState extends State<StatusPointPage>
             limit: 10, month: firstMonth.month, year: firstMonth.year))
         ..add(PointOutsideAdvertisinglList(
             month: firstMonth.month, year: firstMonth.year)),
-      child: MultiBlocListener(listeners: [
-        BlocListener<StatusPointBloc, StatusPointState>(
-          listenWhen: (previous, current) =>
-              previous.loadListPointStatus != current.loadListPointStatus,
-          listener: _listenFetchDataLoadMore,
-        ),
-        BlocListener<StatusPointBloc, StatusPointState>(
-          listenWhen: (previous, current) =>
-              previous.loadMoreListPointStatus !=
-              current.loadMoreListPointStatus,
-          listener: _listenFetchData,
-        ),
-      ], child: _buildContent(context)),
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<StatusPointBloc, StatusPointState>(
+            listenWhen: (previous, current) =>
+                previous.loadListPointStatus != current.loadListPointStatus,
+            listener: _listenFetchDataLoadMore,
+          ),
+          BlocListener<StatusPointBloc, StatusPointState>(
+            listenWhen: (previous, current) =>
+                previous.loadMoreListPointStatus !=
+                current.loadMoreListPointStatus,
+            listener: _listenFetchData,
+          ),
+        ],
+        child: _buildContent(context),
+      ),
     );
   }
 
@@ -141,7 +149,7 @@ class _StatusPointPageState extends State<StatusPointPage>
           centerTitle: true,
           title: Text('포인트 현황',
               style: AppStyle.bold.copyWith(color: Colors.black)),
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
             },
@@ -298,7 +306,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                     ]),
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                     onTap: () {
                       dynamic offerset = globalKey.currentContext
                           ?.read<StatusPointBloc>()
@@ -333,7 +341,7 @@ class _StatusPointPageState extends State<StatusPointPage>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          GestureDetector(
+          InkWell(
               onTap: () {
                 setState(() {
                   firstMonth = DateTime.parse(
@@ -352,7 +360,7 @@ class _StatusPointPageState extends State<StatusPointPage>
             Constants.formatTimePoint(firstMonth.toString()),
             style: AppStyle.bold.copyWith(fontSize: 16),
           ),
-          GestureDetector(
+          InkWell(
               onTap: () {
                 setState(() {
                   firstMonth = DateTime.parse(
@@ -430,8 +438,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
                       runSpacing: 20,
                       children: List.generate(
                           widget.tab == 0
-                              ? state.dataPoint.length ?? 0
-                              : state.dataPointOutsideAdvertising.length ?? 0,
+                              ? state.dataPoint?.length ?? 0
+                              : state.dataPointOutsideAdvertising?.length ?? 0,
                           (index) {
                         String? title;
                         String? date;

@@ -45,11 +45,8 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
     }
   }
 
-
-
   @override
   void initState() {
-
     _getPreferredLanguages();
     super.initState();
     // webView?.loadUrl(urlRequest: URLRequest(url: Uri.parse(myurl)));
@@ -65,10 +62,10 @@ class _CustomInappWebViewState extends State<CustomInappWebView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
-           widget.onClose!();
+            widget.onClose!();
           },
           child: const Icon(
             Icons.arrow_back,

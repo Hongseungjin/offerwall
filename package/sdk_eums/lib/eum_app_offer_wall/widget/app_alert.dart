@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -47,11 +46,14 @@ class AppAlert {
         });
   }
 
-  static void showError(BuildContext context, FToast fToast, String message) {
+  static void showError(BuildContext context, FToast fToast, String message,
+      {bool checkOver = false}) {
     fToast.showToast(
         child: Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: checkOver
+                ? EdgeInsets.only(top: 100)
+                : EdgeInsets.symmetric(horizontal: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(

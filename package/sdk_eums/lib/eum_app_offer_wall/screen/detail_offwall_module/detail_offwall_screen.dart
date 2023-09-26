@@ -265,7 +265,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
           title: Text(widget.title ?? '',
               style:
                   AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
             },
@@ -376,7 +376,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                           ),
                         ),
                         const SizedBox(height: 16),
-                        GestureDetector(
+                        InkWell(
                           onTap: () {
                             if (widget.type == 'install') {
                               checkInstallApp();
@@ -424,7 +424,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                             ),
                           ),
                         ),
-                        // GestureDetector(
+                        // InkWell(
                         //   onTap: () {
                         //     Routing().navigate(context, RequestScreen());
                         //   },

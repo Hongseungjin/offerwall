@@ -134,7 +134,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
           title: Text('포인트 현황',
               style:
                   AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
-          leading: GestureDetector(
+          leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
             },
@@ -266,7 +266,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
             int.parse(dataOfferWall[i]['point'].toString());
       }
     }
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         // setState(() {
         //   checkShowList = !checkShowList;
@@ -274,7 +274,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
       },
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () {
               setState(() {
                 checkBee = !checkBee;
@@ -363,7 +363,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
                     ),
                   ),
           ],
-          GestureDetector(
+          InkWell(
             onTap: () {
               setState(() {
                 setState(() {

@@ -56,7 +56,7 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
       backgroundColor: AppColor.white,
       appBar: AppBar(
         backgroundColor: AppColor.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.maybePop(context);
           },

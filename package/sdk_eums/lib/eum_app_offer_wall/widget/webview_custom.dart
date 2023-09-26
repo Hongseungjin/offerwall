@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -229,7 +228,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
         backgroundColor: widget.color,
         title: Text(widget.title, style: AppStyle.bold.copyWith(fontSize: 16)),
         centerTitle: true,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             if (widget.colorIconBack == AppColor.white) {
               Navigator.of(context).pop();
@@ -269,13 +268,13 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         widget.bookmark ??
-                            GestureDetector(
+                            InkWell(
                                 onTap: widget.onSave,
                                 child: Image.asset(Assets.deleteKeep.path,
                                     package: "sdk_eums",
                                     height: 27,
                                     color: AppColor.black)),
-                        GestureDetector(
+                        InkWell(
                           onTap: !showButton ? null : widget.mission,
                           child: Container(
                             padding: const EdgeInsets.symmetric(

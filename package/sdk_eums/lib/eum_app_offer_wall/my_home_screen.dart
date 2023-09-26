@@ -25,7 +25,6 @@ import 'package:sdk_eums/gen/assets.gen.dart';
 import '../common/local_store/local_store.dart';
 import '../common/routing.dart';
 import 'bloc/authentication_bloc/authentication_bloc.dart';
-import 'screen/my_page_module/my_page.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -228,54 +227,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             ),
           ],
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColor.white,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: AppColor.black,
-                ),
-              ),
-              centerTitle: true,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Image.asset(
-                      Assets.logo_eums.path,
-                      package: "sdk_eums",
-                      height: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 14),
-                    child: Text('리워드',
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.black, fontSize: 18)),
-                  ),
-                ],
-              ),
-              actions: [
-                InkWell(
-                  onTap: () {
-                    Routing().navigate(context, MyPage());
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Image.asset(Assets.my_page.path,
-                        package: "sdk_eums", height: 24),
-                  ),
-                ),
-                const SizedBox(
-                  width: 25,
-                )
-              ],
-            ),
             body: Stack(
               children: [
                 MyHomePagePage2(),
@@ -315,7 +266,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                                 child: Wrap(
                                   children: List.generate(
                                       action.length,
-                                      (index) => GestureDetector(
+                                      (index) => InkWell(
                                             onTap: () {
                                               setState(() {
                                                 showAction = false;
@@ -395,9 +346,6 @@ class MyHomePagePage2 extends StatefulWidget {
 
 class _MyHomePagePage2State extends State<MyHomePagePage2>
     with WidgetsBindingObserver {
-  Timer? _timer;
-  int _start = 10;
-
   @override
   void initState() {
     _registerEventBus();
