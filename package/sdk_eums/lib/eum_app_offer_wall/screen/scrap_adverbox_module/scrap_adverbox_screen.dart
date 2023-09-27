@@ -7,8 +7,10 @@ import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
@@ -129,7 +131,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                               ? Wrap(
                                   children: List.generate(
                                       state.dataScrapAdverbox.length,
-                                      (index) => InkWell(
+                                      (index) => WidgetAnimationClick(
                                             onTap: () {
                                               if (state.dataScrapAdverbox[index]
                                                       ['url_link'] !=
@@ -161,16 +163,24 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          state.dataScrapAdverbox[
-                                                                      index]
-                                                                  ['name'] ??
-                                                              '',
-                                                          style: AppStyle.bold
-                                                              .copyWith(
-                                                                  color: AppColor
-                                                                      .black,
-                                                                  fontSize: 14),
+                                                        Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              1.9,
+                                                          child: Text(
+                                                            state.dataScrapAdverbox[
+                                                                        index]
+                                                                    ['name'] ??
+                                                                '',
+                                                            style: AppStyle.bold
+                                                                .copyWith(
+                                                                    color: AppColor
+                                                                        .black,
+                                                                    fontSize:
+                                                                        14),
+                                                          ),
                                                         ),
                                                         const SizedBox(
                                                             height: 2),
@@ -184,6 +194,23 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                         ),
                                                       ],
                                                     ),
+                                                    const Spacer(),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 6,
+                                                          vertical: 6),
+                                                      decoration: BoxDecoration(
+                                                          color: HexColor(
+                                                              '#fdd000'),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5)),
+                                                      child: Text(
+                                                        '광고보기',
+                                                        style: AppStyle.bold,
+                                                      ),
+                                                    )
                                                   ],
                                                 ),
                                                 const SizedBox(height: 8),

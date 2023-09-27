@@ -19,6 +19,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/rx_bus.dart';
@@ -151,7 +152,7 @@ class _MyPageState extends State<MyPage> {
                     ],
                   ),
                 ),
-                InkWell(
+                WidgetAnimationClick(
                   onTap: () {
                     Routing()
                         .navigate(context, StatusPointPage(account: dataUser));
@@ -279,7 +280,7 @@ class _MyPageState extends State<MyPage> {
             direction: Axis.horizontal,
             children: List.generate(
                 data.length,
-                (index) => InkWell(
+                (index) => WidgetAnimationClick(
                       onTap: () {
                         switch (data[index]['id']) {
                           case 1:

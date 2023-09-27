@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,36 +39,40 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
           children: [
             const SizedBox(height: 32),
             Image.asset(
-              Assets.textgt.path,
+              Assets.text.path,
               package: "sdk_eums",
             ),
             Image.asset(
               Assets.watch_point.path,
               package: "sdk_eums",
             ),
-            Center(
-              child: Text(
-                '제휴 및 광고 문의',
-                style:
-                    AppStyle.bold.copyWith(color: AppColor.black, fontSize: 32),
-              ),
-            ),
+            // Center(
+            //   child: Text(
+            //     '제휴 및 광고 문의',
+            //     style:
+            //         AppStyle.bold.copyWith(color: AppColor.black, fontSize: 32),
+            //   ),
+            // ),
             const SizedBox(height: 12),
-            Center(
-              child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text: '포인트',
-                      style: AppStyle.medium
-                          .copyWith(color: AppColor.red, fontSize: 16),
-                      children: [
-                        TextSpan(
-                          text: '광고주는 를 쌓고광고주는 ',
-                          style: AppStyle.medium
-                              .copyWith(color: AppColor.black, fontSize: 16),
-                        )
-                      ])),
+            Image.asset(
+              Assets.note_text.path,
+              package: "sdk_eums",
             ),
+            // Center(
+            //   child: RichText(
+            //       textAlign: TextAlign.center,
+            //       text: TextSpan(
+            //           text: '포인트',
+            //           style: AppStyle.medium
+            //               .copyWith(color: AppColor.red, fontSize: 16),
+            //           children: [
+            //             TextSpan(
+            //               text: '광고주는 를 쌓고광고주는 ',
+            //               style: AppStyle.medium
+            //                   .copyWith(color: AppColor.black, fontSize: 16),
+            //             )
+            //           ])),
+            // ),
             const SizedBox(height: 32),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -104,7 +109,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
             ),
             const SizedBox(height: 16),
             Spacer(),
-            InkWell(
+            WidgetAnimationClick(
               onTap: () {
                 _launchURL();
               },
@@ -121,7 +126,8 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                   textAlign: TextAlign.center,
                 ),
               ),
-            )
+            ),
+            const SizedBox(height: 12),
           ],
         ),
       ),

@@ -158,7 +158,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           checkToken = !checkToken;
                           localStore?.setSaveAdver(checkToken);
                         });
-                        if (!checkToken) {
+                        if (checkToken) {
                           String? token =
                               await FirebaseMessaging.instance.getToken();
 

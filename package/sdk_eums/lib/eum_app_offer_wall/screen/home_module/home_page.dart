@@ -22,6 +22,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
@@ -166,7 +167,7 @@ class _HomePageState extends State<HomePage>
         return Scaffold(
           appBar: AppBar(
             backgroundColor: AppColor.white,
-            leading: InkWell(
+            leading: WidgetAnimationClick(
               onTap: () {
                 Navigator.pop(context);
               },
@@ -197,7 +198,7 @@ class _HomePageState extends State<HomePage>
               ],
             ),
             actions: [
-              InkWell(
+              WidgetAnimationClick(
                 onTap: () {
                   Routing().navigate(context, MyPage());
                 },
@@ -407,7 +408,7 @@ class _HomePageState extends State<HomePage>
                   AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
             ),
           ),
-          InkWell(
+          WidgetAnimationClick(
             onTap: () {
               Routing().navigate(context, StatusPointPage(account: accont));
             },
@@ -435,7 +436,7 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           const SizedBox(height: 8),
-          InkWell(
+          WidgetAnimationClick(
             onTap: () {
               Routing().navigate(context, UsingTermScreen());
             },
@@ -472,7 +473,7 @@ class _HomePageState extends State<HomePage>
                       .copyWith(color: Colors.black, fontSize: 14),
                 ),
                 const Spacer(),
-                InkWell(
+                WidgetAnimationClick(
                   onTap: () async {
                     setState(() {
                       isdisable = !isdisable;
@@ -560,7 +561,7 @@ class _HomePageState extends State<HomePage>
   }
 
   _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
-    return InkWell(
+    return WidgetAnimationClick(
       onTap: onTap,
       child: Column(
         children: [
@@ -601,7 +602,7 @@ class _HomePageState extends State<HomePage>
             items: (dataBanner ?? []).map((i) {
               return Builder(
                 builder: (BuildContext context) {
-                  return InkWell(
+                  return WidgetAnimationClick(
                     onTap: () {
                       Routing().navigate(
                           context,
@@ -792,7 +793,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                       runSpacing: 12,
                       children: List.generate(
                           state.listDataOfferWall?.length ?? 0,
-                          (index) => InkWell(
+                          (index) => WidgetAnimationClick(
                                 child: widget.tab == 0
                                     ? _buildItemRow(
                                         data: state.listDataOfferWall[index])
@@ -883,6 +884,26 @@ class _ListViewHomeState extends State<ListViewHome> {
   }
 
   _buildItemRow({dynamic data}) {
+    String title = '';
+    switch (data['type']) {
+      case 'install':
+        title = '설치하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        break;
+      case 'visit':
+        title = '방문하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        break;
+      case 'join':
+        title = '가입하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        break;
+      case 'shopping':
+        title = '구매하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        break;
+      case 'subscribe':
+        title =
+            '구독/좋아요/팔로우 하면 ${Constants.formatMoney(data['reward'], suffix: '')}적립 ';
+        break;
+      default:
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -921,15 +942,9 @@ class _ListViewHomeState extends State<ListViewHome> {
               child: Row(
                 children: [
                   Text(
-                    '출석하면 최대',
+                    title,
                     style: AppStyle.regular
                         .copyWith(color: HexColor('#666666'), fontSize: 14),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    '+${Constants.formatMoney(data['reward'], suffix: '')}',
-                    style: AppStyle.bold
-                        .copyWith(color: HexColor('f4a43b'), fontSize: 14),
                   ),
                   const Spacer(),
                   Container(

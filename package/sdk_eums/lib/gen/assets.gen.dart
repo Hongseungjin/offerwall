@@ -179,6 +179,9 @@ class Assets {
       AssetGenImage('assets/icons/point_dialog.png');
   static const AssetGenImage logo_eums =
       AssetGenImage('assets/icons/logo_eums.png');
+  static const AssetGenImage text = AssetGenImage('assets/icons/text.png');
+  static const AssetGenImage note_text =
+      AssetGenImage('assets/icons/note_text.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [

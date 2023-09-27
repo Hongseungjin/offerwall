@@ -14,6 +14,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview_keep.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
@@ -203,7 +204,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
               data != null
                   ? Wrap(
                       children: List.generate(data.length, (index) {
-                        return InkWell(
+                        return WidgetAnimationClick(
                           onTap: () {
                             Routing().navigate(
                                 context,

@@ -1,3 +1,4 @@
+// import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,17 @@ void main() {
     //   NotificationController.initializeLocalNotifications();
     // }
 
-    runApp(MaterialApp(home: MyHomePage()));
+    runApp(MaterialApp(
+      home: MyHomePage(),
+      // home: DevicePreview(
+      //   enabled: true,
+      //   // tools: [
+      //   //   ...DevicePreview.defaultTools,
+      //   //   // const CustomPlugin(),
+      //   // ],
+      //   builder: (context) => const MyHomePage(),
+      // ),
+    ));
   });
 }
 
