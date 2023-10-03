@@ -6,6 +6,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/earn_cash_module/bloc/earn_ca
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/app_string.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 class EarnCashScreen extends StatefulWidget {
@@ -57,29 +58,29 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
 
   void _listenLoadMoreData(BuildContext context, EarnCashState state) {
     if (state.loadMoreEarnCashStatus == LoadMoreEarnCashStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.loadMoreEarnCashStatus == LoadMoreEarnCashStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.loadMoreEarnCashStatus == LoadMoreEarnCashStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
   void _listenFetchData(BuildContext context, EarnCashState state) {
     if (state.earnCashStatus == EarnCashStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.earnCashStatus == EarnCashStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.earnCashStatus == EarnCashStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 

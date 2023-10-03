@@ -58,12 +58,8 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
           leading: InkWell(
             onTap: () {
               widget.callBack(widget.tab);
-              // Routing().popToRoot(context);
-              //  Routing().popToRoot(context);
+
               Navigator.of(context).pop();
-              // RxBus.post(
-              //   BackToTab(tab: widget.tab),
-              // );
             },
             child: const Icon(Icons.arrow_back_ios_outlined,
                 color: AppColor.dark, size: 25),

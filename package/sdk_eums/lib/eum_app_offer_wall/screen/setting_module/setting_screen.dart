@@ -10,6 +10,7 @@ import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
 
 // import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
@@ -52,7 +53,6 @@ class _SettingScreenState extends State<SettingScreen> {
   checkBoolTime() async {
     checkTime = await localStore?.getBoolTime();
     checkToken = await localStore?.getSaveAdver();
-    print("checkTokencheckToken$checkToken");
   }
 
   @override
@@ -87,12 +87,15 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void _listenUpdateSettingStatus(BuildContext context, SettingState state) {
     if (state.updateSettingStatus == UpdateSettingStatus.loading) {
+      LoadingDialog.instance.show();
       return;
     }
     if (state.updateSettingStatus == UpdateSettingStatus.failure) {
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.updateSettingStatus == UpdateSettingStatus.success) {
+      LoadingDialog.instance.hide();
       globalKey.currentContext?.read<SettingBloc>().add(GetSettingTime());
     }
   }

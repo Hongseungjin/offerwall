@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_inappweb.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/select_image_picker_dialog.dart';
@@ -77,10 +78,11 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
 
   void _listenFetchData(BuildContext context, RegisterLinkState state) {
     if (state.registerLinkStatus == RegisterLinkStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.registerLinkStatus == RegisterLinkStatus.failure) {
+      LoadingDialog.instance.hide();
       AppAlert.showError(
         context,
         fToast,
@@ -90,7 +92,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
     }
     if (state.registerLinkStatus == RegisterLinkStatus.success) {
       RxBus.post(UpdateUser());
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'],
           voidCallback: () {
         Navigator.pop(context);

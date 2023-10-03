@@ -53,8 +53,14 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
     try {
       dynamic data =
           await _eumsOfferWallService.getListInquire(limit: event.limit);
+
+      dynamic dataList = data.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
       emit(state.copyWith(
-          inquireListStatus: InquireListStatus.success, dataListInquire: data));
+          inquireListStatus: InquireListStatus.success,
+          dataListInquire: dataList));
     } catch (e) {
       emit(state.copyWith(inquireListStatus: InquireListStatus.failure));
     }
@@ -72,10 +78,14 @@ class RequestBloc extends Bloc<RequestEvent, RequestState> {
       } else {
         dataRequest = data;
       }
+      dynamic dataList = dataRequest.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
 
       emit(state.copyWith(
           inquireLoadMoreListStatus: InquireLoadMoreListStatus.success,
-          dataListInquire: dataRequest));
+          dataListInquire: dataList));
     } catch (e) {
       emit(state.copyWith(
           inquireLoadMoreListStatus: InquireLoadMoreListStatus.failure));

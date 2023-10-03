@@ -97,7 +97,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
 
   @override
   void dispose() {
-    print('disposeeeee');
     // TODO: implement dispose
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
@@ -114,9 +113,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           ],
           child: MultiBlocProvider(
               providers: [
-                // BlocProvider<PushNotificationServiceBloc>(
-                //   create: (context) => PushNotificationServiceBloc(),
-                // ),
                 BlocProvider<AuthenticationBloc>(
                   create: (context) =>
                       AuthenticationBloc()..add(CheckSaveAccountLogged()),
@@ -137,7 +133,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                       },
                     ),
                   ],
-                  // child: _buildWidgetToast(),
+          
                   child: !!isToast
                       ? _buildWidgetToast()
                       : !!isWebView

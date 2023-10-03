@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 
 import 'bloc/using_term_bloc.dart';
 
@@ -32,22 +33,15 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
 
   void _listenFetchData(BuildContext context, UsingTermState state) {
     if (state.status == UsingTermStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.status == UsingTermStatus.failure) {
-      // EasyLoading.dismiss();
-      // AppAlert.showError(
-      //     fToast,
-      //     state.error != null
-      //         ? state.error!.message != null
-      //             ? state.error!.message!
-      //             : 'Error!'
-      //         : 'Error!');
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.status == UsingTermStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 

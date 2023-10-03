@@ -11,6 +11,7 @@ import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview2.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
@@ -76,18 +77,18 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
   void _listenFetchDataEarnPoint(
       BuildContext context, WatchAdverState state) async {
     if (state.earnMoneyStatus == EarnMoneyStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.earnMoneyStatus == EarnMoneyStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.earnMoneyStatus == EarnMoneyStatus.success) {
+      LoadingDialog.instance.hide();
       if (Platform.isIOS) {
         RxBus.post(UpdateUser());
         Navigator.of(context).pop();
-        // Routing().popToRoot(context);
       }
       if (Platform.isAndroid) {
         // FlutterBackgroundService().invoke("closeOverlay");
@@ -99,15 +100,15 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
 
   void _listenDelete(BuildContext context, WatchAdverState state) {
     if (state.deleteScrapStatus == DeleteScrapStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.deleteScrapStatus == DeleteScrapStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.deleteScrapStatus == DeleteScrapStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       AppAlert.showSuccess(
         context,
         fToast,
@@ -118,15 +119,15 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
 
   void _listenSave(BuildContext context, WatchAdverState state) {
     if (state.saveKeepAdverboxStatus == SaveKeepAdverboxStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.saveKeepAdverboxStatus == SaveKeepAdverboxStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.saveKeepAdverboxStatus == SaveKeepAdverboxStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       AppAlert.showSuccess(
         context,
         fToast,

@@ -34,8 +34,12 @@ class NotifiBloc extends Bloc<NotifiEvent, NotifiState> {
       dynamic data = await _eumsOfferWallService.getListNotifi(
         limit: event.limit,
       );
+      dynamic dataList = data.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
       emit(state.copyWith(
-          listNotifiStatus: ListNotifiStatus.success, dataNotifi: data));
+          listNotifiStatus: ListNotifiStatus.success, dataNotifi: dataList));
     } catch (e) {
       emit(state.copyWith(listNotifiStatus: ListNotifiStatus.failure));
     }
@@ -53,9 +57,13 @@ class NotifiBloc extends Bloc<NotifiEvent, NotifiState> {
       } else {
         dataNotifi = data;
       }
+      dynamic dataList = dataNotifi.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
       emit(state.copyWith(
           loaMoreListNotifiStatus: LoaMoreListNotifiStatus.success,
-          dataNotifi: dataNotifi));
+          dataNotifi: dataList));
     } catch (e) {
       emit(state.copyWith(
           loaMoreListNotifiStatus: LoaMoreListNotifiStatus.failure));

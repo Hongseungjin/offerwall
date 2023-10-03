@@ -31,8 +31,14 @@ class AskedQuestionBloc extends Bloc<AskedQuestionEvent, AskedQuestionState> {
     try {
       dynamic data = await _eumsOfferWallService.getQuestion(
           limit: event.limit, search: event.search);
+
+      dynamic dataNew = data.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
+
       emit(state.copyWith(
-          status: AskedQuestionStatus.success, dataUsingTerm: data));
+          status: AskedQuestionStatus.success, dataUsingTerm: dataNew));
     } catch (e) {
       emit(state.copyWith(status: AskedQuestionStatus.failure));
     }
@@ -51,9 +57,13 @@ class AskedQuestionBloc extends Bloc<AskedQuestionEvent, AskedQuestionState> {
       } else {
         dataAsked = data;
       }
+      dynamic dataList = dataAsked.map((e) {
+        e['isExpanded'] = false;
+        return e;
+      }).toList();
       emit(state.copyWith(
           loadMoreAskedQuestionStatus: LoadMoreAskedQuestionStatus.success,
-          dataUsingTerm: dataAsked));
+          dataUsingTerm: dataList));
     } catch (e) {
       emit(state.copyWith(
           loadMoreAskedQuestionStatus: LoadMoreAskedQuestionStatus.failure));

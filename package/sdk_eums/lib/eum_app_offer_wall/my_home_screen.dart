@@ -52,53 +52,11 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     RxBus.destroy();
   }
 
-  // Future<void> initPlatformState() async {
-  //   // Configure BackgroundFetch.
-  //   int status = await BackgroundFetch.configure(
-  //       BackgroundFetchConfig(
-  //           minimumFetchInterval: 1,
-  //           stopOnTerminate: false,
-  //           enableHeadless: true,
-  //           requiresBatteryNotLow: false,
-  //           requiresCharging: false,
-  //           requiresStorageNotLow: false,
-  //           requiresDeviceIdle: false,
-  //           requiredNetworkType: NetworkType.NONE), (String taskId) async {
-  //     print("[BackgroundFetch] Event received $taskId");
-  //     setState(() {});
-
-  //     BackgroundFetch.finish(taskId);
-  //   }, (String taskId) async {
-  //     print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
-  //     BackgroundFetch.finish(taskId);
-  //   });
-  //   if (status == BackgroundFetch.STATUS_AVAILABLE) {
-  //     startTimeDown();
-  //     print('[BackgroundFetch] configure success: $status');
-  //   }
-
-  //   setState(() {});
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-  // }
-
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
 
@@ -106,23 +64,14 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
 
@@ -170,18 +119,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
-  @override
-  void didUpdateWidget(covariant MyHomeScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   void dispose() {
     _unregisterEventBus();
     super.dispose();
@@ -202,11 +139,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             create: (context) =>
                 AuthenticationBloc()..add(CheckSaveAccountLogged()),
           ),
-          // BlocProvider<PushNotificationServiceBloc>(
-          //   create: (context) => PushNotificationServiceBloc(),
-          // ),
-          // BlocProvider<SettingBloc>(
-          //     create: (context) => SettingBloc()..add(InfoUser())),
         ],
         child: MultiBlocListener(
           listeners: [
@@ -215,12 +147,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                   previous.logoutStatus != current.logoutStatus,
               listener: (context, state) {
                 if (state.logoutStatus == LogoutStatus.loading) {
-                  // EasyLoading.show();
                   return;
                 }
 
                 if (state.logoutStatus == LogoutStatus.finish) {
-                  // EasyLoading.dismiss();
                   return;
                 }
               },
@@ -327,11 +257,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         ),
       ),
     );
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   home: ,
-
-    // );
   }
 }
 
@@ -348,7 +273,6 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    _registerEventBus();
     if (Platform.isAndroid) {
       // checkPermission();
     }
@@ -357,24 +281,9 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  Future<void> _registerEventBus() async {}
-
-  void _unregisterEventBus() {}
-
-  @override
   void dispose() {
-    _unregisterEventBus();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -392,11 +301,6 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
               create: (context) =>
                   AuthenticationBloc()..add(CheckSaveAccountLogged()),
             ),
-            // BlocProvider<PushNotificationServiceBloc>(
-            //   create: (context) => PushNotificationServiceBloc(),
-            // ),
-            // BlocProvider<SettingBloc>(
-            //     create: (context) => SettingBloc()..add(InfoUser())),
           ],
           child: MultiBlocListener(
             listeners: [
@@ -405,12 +309,10 @@ class _MyHomePagePage2State extends State<MyHomePagePage2>
                     previous.logoutStatus != current.logoutStatus,
                 listener: (context, state) {
                   if (state.logoutStatus == LogoutStatus.loading) {
-                    // EasyLoading.show();
                     return;
                   }
 
                   if (state.logoutStatus == LogoutStatus.finish) {
-                    // EasyLoading.dismiss();
                     return;
                   }
                 },

@@ -31,14 +31,10 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   }
 
   _mapEnableOrDisbleSettingToState(EnableOrDisbleSetting event, emit) async {
-    // emit(state.copyWith(updateSettingStatus: UpdateSettingStatus.loading));
     try {
       await _eumsOfferWallService.enableOrDisebleSettingTime(
           enable: event.enableOrDisble);
-      // emit(state.copyWith(updateSettingStatus: UpdateSettingStatus.success));
-    } catch (ex) {
-      // emit(state.copyWith(updateSettingStatus: UpdateSettingStatus.failure));
-    }
+    } catch (ex) {}
   }
 
   _mapSettingTimeToState(SettingTime event, emit) async {

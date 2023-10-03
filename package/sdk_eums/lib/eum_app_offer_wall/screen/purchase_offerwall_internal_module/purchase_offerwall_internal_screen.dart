@@ -6,6 +6,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -74,14 +75,17 @@ class _PurchaseOfferwallInternalScreenState
   void _listenFetchData(BuildContext context, PuschaseOffWallState state) {
     if (state.puschaseOfferWallInternalStatus ==
         PuschaseOfferWallInternalStatus.loading) {
+      LoadingDialog.instance.show();
       return;
     }
     if (state.puschaseOfferWallInternalStatus ==
         PuschaseOfferWallInternalStatus.failure) {
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.puschaseOfferWallInternalStatus ==
         PuschaseOfferWallInternalStatus.success) {
+      LoadingDialog.instance.hide();
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'],
           voidCallback: () {

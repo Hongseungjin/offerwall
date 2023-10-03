@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -6,6 +8,8 @@ import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../utils/appStyle.dart';
@@ -48,22 +52,15 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
 
   void _listenFetchData(BuildContext context, AskedQuestionState state) {
     if (state.status == AskedQuestionStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.status == AskedQuestionStatus.failure) {
-      // EasyLoading.dismiss();
-      // AppAlert.showError(
-      //     fToast,
-      //     state.error != null
-      //         ? state.error!.message != null
-      //             ? state.error!.message!
-      //             : 'Error!'
-      //         : 'Error!');
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.status == AskedQuestionStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
@@ -157,11 +154,12 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                   padding: const EdgeInsets.all(16),
                   child: dataAskedQuestion != null
                       ? Wrap(
-                          children: List.generate(
-                              dataAskedQuestion.length,
-                              (index) => _buildItem(
-                                  index: index,
-                                  data: dataAskedQuestion[index])),
+                          children:
+                              List.generate(dataAskedQuestion.length, (index) {
+                            dynamic data = dataAskedQuestion[index];
+
+                            return _buildItem(index: index, data: data);
+                          }),
                         )
                       : SizedBox(),
                 ),
@@ -276,70 +274,68 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
     );
   }
 
-  final Set<dynamic> _saved = Set<dynamic>();
-
   Widget _buildItem({int? index, dynamic data}) {
-    bool isShowDes = _saved.contains(data);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () {
-              if (isShowDes) {
-                setState(() {
-                  _saved.remove(data);
-                });
-              } else {
-                setState(() {
-                  _saved.add(data);
-                });
-              }
-            },
-            child: Row(
-              children: [
-                _buildTitle(
-                  title: '${data['title']}',
-                ),
-                // SizedBox(
-                //     width: MediaQuery.of(context).size.width - 70,
-                //     child: Text(
-                //       '${data['title']}',
-                //       style: AppStyle.bold.copyWith(fontSize: 14),
-                //     )),
-                Spacer(),
-                Icon(
-                  isShowDes
-                      ? Icons.keyboard_arrow_down_rounded
-                      : Icons.keyboard_arrow_up_outlined,
-                  size: 24,
-                  color: AppColor.grey5D,
-                )
-              ],
-            ),
-          ),
-          if (isShowDes)
-            Container(
-              margin: const EdgeInsets.only(top: 12, bottom: 8),
-              decoration: BoxDecoration(
-                  color: AppColor.colorF4,
-                  borderRadius: BorderRadius.circular(12)),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: HtmlWidget(
-                data['content'],
-                customStylesBuilder: (e) {
-                  if (e.classes.contains('ql-align-center')) {
-                    return {'text-align': 'center'};
-                  }
-
-                  return null;
-                },
+    return WidgetExpansionTitle(
+      initiallyExpanded: data['isExpanded'],
+      onExpansionChanged: (expanded) {
+        setState(() {
+          data['isExpanded'] = expanded;
+        });
+      },
+      header: (BuildContext text, dynamic Function(bool?) onExpand) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  _buildTitle(
+                    title: '${data['title']}',
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: 30,
+                    height: 50,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(
+                          begin: 0.0,
+                          end: data['isExpanded'] == true ? 1.0 : 0.0),
+                      duration: const Duration(milliseconds: 200),
+                      builder: (context, value, child) => Center(
+                        child: Transform.rotate(
+                          angle: -value * pi,
+                          child: const Icon(Icons.expand_more,
+                              color: AppColor.grey5D),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          const SizedBox(height: 8),
-          const Divider()
-        ],
-      ),
+            ],
+          ),
+        );
+      },
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 12, bottom: 8),
+          decoration: BoxDecoration(
+              color: AppColor.colorF4, borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: HtmlWidget(
+            data['content'],
+            customStylesBuilder: (e) {
+              if (e.classes.contains('ql-align-center')) {
+                return {'text-align': 'center'};
+              }
+
+              return null;
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        const Divider()
+      ],
     );
   }
 

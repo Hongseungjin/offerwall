@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -7,6 +9,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 
 import 'bloc/notifi_bloc.dart';
 
@@ -22,8 +25,6 @@ class _NotifiScreenState extends State<NotifiScreen> {
       GlobalKey<State<StatefulWidget>>();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
-
-  final Set<dynamic> _saved = Set<dynamic>();
 
   @override
   Widget build(BuildContext context) {
@@ -120,94 +121,100 @@ class _NotifiScreenState extends State<NotifiScreen> {
   }
 
   _buildItem({dynamic data}) {
-    bool isShowDes = _saved.contains(data);
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            if (isShowDes) {
-              setState(() {
-                _saved.remove(data);
-              });
-            } else {
-              setState(() {
-                _saved.add(data);
-              });
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(),
-            child: Row(
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: HexColor('#fdd000')),
-                  child: Text(
-                    '공지',
-                    style: AppStyle.bold
-                        .copyWith(fontSize: 12, color: AppColor.black),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${data['title']}',
+    return WidgetExpansionTitle(
+      initiallyExpanded: data['isExpanded'],
+      onExpansionChanged: (expanded) {
+        setState(() {
+          data['isExpanded'] = expanded;
+        });
+      },
+      header: (BuildContext context, dynamic Function(bool?) onExpand) {
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: HexColor('#fdd000')),
+                    child: Text(
+                      '공지',
                       style: AppStyle.bold
-                          .copyWith(color: Colors.black, fontSize: 14),
+                          .copyWith(fontSize: 12, color: AppColor.black),
                     ),
-                    Text(
-                      Constants.formatTime(data['registDate']),
-                      style: AppStyle.regular
-                          .copyWith(color: HexColor('#888888'), fontSize: 12),
-                    )
-                  ],
-                ),
-                Spacer(),
-                Icon(
-                  !isShowDes
-                      ? Icons.keyboard_arrow_down_outlined
-                      : Icons.keyboard_arrow_up_outlined,
-                  size: 16,
-                )
-              ],
-            ),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${data['title']}',
+                        style: AppStyle.bold
+                            .copyWith(color: Colors.black, fontSize: 14),
+                      ),
+                      Text(
+                        Constants.formatTime(data['registDate']),
+                        style: AppStyle.regular
+                            .copyWith(color: HexColor('#888888'), fontSize: 12),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: 30,
+                    height: 50,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(
+                          begin: 0.0,
+                          end: data['isExpanded'] == true ? 1.0 : 0.0),
+                      duration: const Duration(milliseconds: 200),
+                      builder: (context, value, child) => Center(
+                        child: Transform.rotate(
+                          angle: -value * pi,
+                          child: const Icon(Icons.expand_more,
+                              color: AppColor.grey5D),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(
+                height: 0,
+                thickness: 0,
+              )
+            ],
+          ),
+        );
+      },
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          color: HexColor('#f9f9f9'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '적립 방법',
+                style:
+                    AppStyle.bold.copyWith(fontSize: 18, color: AppColor.black),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: buidlHtml(html: data != null ? data['content'] : ''),
+              ),
+            ],
           ),
         ),
-        if (isShowDes) ...{
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            color: HexColor('#f9f9f9'),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '적립 방법',
-                  style: AppStyle.bold
-                      .copyWith(fontSize: 18, color: AppColor.black),
-                ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: buidlHtml(html: data != null ? data['content'] : ''),
-                ),
-              ],
-            ),
-          ),
-          const Divider(
-            height: 0,
-          )
-        } else ...{
-          const Divider(
-            height: 0,
-          )
-        }
+        const Divider(
+          height: 0,
+        )
       ],
     );
   }

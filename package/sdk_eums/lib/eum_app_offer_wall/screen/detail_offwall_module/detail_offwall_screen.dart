@@ -143,15 +143,26 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
       child: MultiBlocListener(
         listeners: [
           BlocListener<DetailOffWallBloc, DetailOffWallState>(
+            listenWhen: (previous, current) =>
+                previous.detailOffWallStatus != current.detailOffWallStatus,
             listener: _listenerDetailOffWall,
           ),
           BlocListener<DetailOffWallBloc, DetailOffWallState>(
+            listenWhen: (previous, current) =>
+                previous.missionCompleteOfferWallStatus !=
+                current.missionCompleteOfferWallStatus,
             listener: _listenerMissionOffWall,
           ),
           BlocListener<DetailOffWallBloc, DetailOffWallState>(
+            listenWhen: (previous, current) =>
+                previous.visitOfferWallInternalStatus !=
+                current.visitOfferWallInternalStatus,
             listener: _listenFetchData,
           ),
           BlocListener<DetailOffWallBloc, DetailOffWallState>(
+            listenWhen: (previous, current) =>
+                previous.joinOfferWallInternalStatus !=
+                current.joinOfferWallInternalStatus,
             listener: _listenJoinOfferWall,
           )
         ],
@@ -163,16 +174,19 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   void _listenFetchData(BuildContext context, DetailOffWallState state) {
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.loading) {
+      LoadingDialog.instance.show();
       return;
     }
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.failure) {
+      LoadingDialog.instance.hide();
       AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
 
       return;
     }
     if (state.visitOfferWallInternalStatus ==
         VisitOfferWallInternalStatus.success) {
+      LoadingDialog.instance.hide();
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context,
           data: dataOfferWallVisit['reward'], voidCallback: () {});
@@ -182,14 +196,17 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   void _listenJoinOfferWall(BuildContext context, DetailOffWallState state) {
     if (state.joinOfferWallInternalStatus ==
         JoinOfferWallInternalStatus.loading) {
+      LoadingDialog.instance.show();
       return;
     }
     if (state.joinOfferWallInternalStatus ==
         JoinOfferWallInternalStatus.failure) {
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.joinOfferWallInternalStatus ==
         JoinOfferWallInternalStatus.success) {
+      LoadingDialog.instance.hide();
       RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context,
           data: dataOfferWallVisit['reward'], voidCallback: () {
@@ -202,22 +219,20 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
       BuildContext context, DetailOffWallState state) async {
     if (state.missionCompleteOfferWallStatus ==
         MissionCompleteOfferWallStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
 
     if (state.missionCompleteOfferWallStatus ==
         MissionCompleteOfferWallStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.missionCompleteOfferWallStatus ==
         MissionCompleteOfferWallStatus.success) {
-      // EasyLoading.dismiss();
-      DialogUtils.showDialogMissingPoint(context, data: point,
-          voidCallback: () {
-        // Navigator.pop(context);
-      });
+      LoadingDialog.instance.hide();
+      DialogUtils.showDialogMissingPoint(context,
+          data: point, voidCallback: () {});
       RxBus.post(UpdateUser());
     }
   }
@@ -238,16 +253,13 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   }
 
   _fetchData() async {
-    print("concac");
     globalKey.currentContext
         ?.read<DetailOffWallBloc>()
         .add(VisitOffWall(xId: dataOfferWallVisit['idx'], lang: lang));
   }
 
   _joinOfferWall(bool checkJoin) async {
-    print("checkJoin$checkJoin");
     if (checkJoin) {
-      print("checkJoin$checkJoin");
       globalKey.currentContext
           ?.read<DetailOffWallBloc>()
           .add(JoinOffWall(xId: dataOfferWallVisit['idx'], lang: lang));

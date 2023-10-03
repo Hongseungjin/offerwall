@@ -13,11 +13,8 @@ import 'package:sdk_eums/sdk_eums_library.dart';
 void main() {
   SdkEums.instant.init(onRun: () async {
     await Firebase.initializeApp();
-    // if (Platform.isAndroid) {
+
     NotificationHandler().initializeFcmNotification();
-    // } else {
-    //   NotificationController.initializeLocalNotifications();
-    // }
 
     runApp(MaterialApp(
       home: MyHomePage(),
@@ -97,9 +94,6 @@ class _MyHomePageState extends State<MyHomePage>
               create: (context) =>
                   AuthenticationBloc()..add(CheckSaveAccountLogged()),
             ),
-            // BlocProvider<PushNotificationServiceBloc>(
-            //   create: (context) => PushNotificationServiceBloc(),
-            // ),
           ],
           child: MultiBlocListener(
             listeners: [

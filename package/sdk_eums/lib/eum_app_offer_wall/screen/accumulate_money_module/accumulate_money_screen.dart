@@ -99,7 +99,6 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
       tabPreviousIndex = _tabController.index;
     });
     checkPermission();
-    // checkDataNoti();
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);

@@ -24,8 +24,6 @@ showOverlay(event) async {
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
-    // event?['data']['deviceWidth'] =
-    //     double.parse(await LocalStoreService().getDeviceWidth());
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {
     if (event?['data']['isToast'] != null) {
@@ -45,7 +43,6 @@ showOverlay(event) async {
           alignment: OverlayAlignment.center);
     }
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-    // event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
 }
@@ -73,9 +70,6 @@ registerDeviceToken() async {
   try {
     CronCustom().initCron();
     String? _token = await FirebaseMessaging.instance.getToken();
-    // int count = int.parse(await LocalStoreService().getCountAdvertisement());
-
-    print('deviceToken $_token');
     if (_token != null && _token.isNotEmpty) {
       // if(count < 50){
       await EumsOfferWallServiceApi().createTokenNotifi(token: _token);
@@ -94,7 +88,6 @@ Future<void> onStart(ServiceInstance service) async {
   await Firebase.initializeApp();
   Queue queue = Queue();
   registerDeviceToken();
-  // CronCustom().initCron();
   try {
     service.on('showOverlay').listen((event) async {
       if (Platform.isAndroid) {
@@ -126,7 +119,6 @@ Future<void> onStart(ServiceInstance service) async {
 void startTimeDown() async {
   Timer? _timer;
   int _startTime = 300;
-  bool _serviceEnabled = false;
 
   _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
     if (_startTime == 0) {
@@ -166,7 +158,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     Size size = view.physicalSize;
     double height = size.height;
-    print("height$height");
 
     dynamic data = await EumsOfferWallService.instance.authConnect(
         memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);

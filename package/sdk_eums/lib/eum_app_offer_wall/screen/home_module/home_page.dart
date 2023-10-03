@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -71,15 +70,12 @@ class _HomePageState extends State<HomePage>
 
   checkPermission() async {
     isdisable = await localStore!.getSaveAdver();
-    print("isdisable$isdisable");
     if (!isdisable) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
         FlutterBackgroundService().startService();
       }
     }
-    final languages = await Devicelocale.defaultLocale;
-    print("languageslanguages$languages");
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
 
@@ -695,9 +691,7 @@ class _ListViewHomeState extends State<ListViewHome> {
     refreshController.loadComplete();
     List<dynamic>? dataCampaign =
         context.read<HomeBloc>().state.listDataOfferWall;
-    if (dataCampaign != null) {
-      // widget.fetchDataLoadMore!(offset: dataCampaign.length);
-    }
+    if (dataCampaign != null) {}
   }
 
   Widget _buildDropDown(BuildContext context) {
@@ -714,19 +708,6 @@ class _ListViewHomeState extends State<ListViewHome> {
         ),
       );
     }).toList();
-
-    // _filterMedia(String? value) {
-    //   if (value != '최신순') {
-    //     dynamic media = (DATA_MEDIA
-    //         .where((element) => element['name'] == value)
-    //         .toList())[0]['media'];
-
-    //     filter = media;
-    //   } else {
-    //     filter = DATA_MEDIA[2]['media'];
-    //   }
-    //   // _fetchData();
-    // }
 
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
@@ -750,8 +731,6 @@ class _ListViewHomeState extends State<ListViewHome> {
           });
 
           widget.filter!(value);
-
-          // _filterMedia(value);
         },
       ),
     );
@@ -779,13 +758,8 @@ class _ListViewHomeState extends State<ListViewHome> {
               ),
             ),
             Container(
-              decoration: const BoxDecoration(
-                  color: AppColor.white,
-                  border: Border(
-                      // top: BorderSide(
-                      //     color: AppColor.grey5D.withOpacity(0.2),
-                      //     width: 2)
-                      )),
+              decoration:
+                  const BoxDecoration(color: AppColor.white, border: Border()),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: state.listDataOfferWall != null
                   ? Wrap(

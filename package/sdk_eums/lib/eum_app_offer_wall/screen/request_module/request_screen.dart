@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
+import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 
 import '../../../common/constants.dart';
 import '../../utils/appColor.dart';
@@ -73,39 +76,39 @@ class _RequestScreenState extends State<RequestScreen>
 
   void _listenFetchDataListType(BuildContext context, RequestState state) {
     if (state.inquireListStatus == InquireListStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.inquireListStatus == InquireListStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.inquireListStatus == InquireListStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
   void _listenFetchDataType(BuildContext context, RequestState state) {
     if (state.typeInquireStatus == TypeInquireStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.typeInquireStatus == TypeInquireStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.typeInquireStatus == TypeInquireStatus.success) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
   void _listenFetchData(BuildContext context, RequestState state) {
     if (state.inquireStatus == InquireStatus.loading) {
-      // EasyLoading.show();
+      LoadingDialog.instance.show();
       return;
     }
     if (state.inquireStatus == InquireStatus.failure) {
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
       return;
     }
     if (state.inquireStatus == InquireStatus.success) {
@@ -114,7 +117,7 @@ class _RequestScreenState extends State<RequestScreen>
         _tabController.animateTo(_tabController.index + 1,
             duration: const Duration(milliseconds: 300));
       });
-      // EasyLoading.dismiss();
+      LoadingDialog.instance.hide();
     }
   }
 
@@ -573,155 +576,173 @@ class _HistoryRequestState extends State<HistoryRequest> {
     }
   }
 
-  final Set<dynamic> _saved = Set<dynamic>();
-
   _buildItem({int? index, dynamic data, List? dataRequest}) {
-    bool isShowDes = _saved.contains(data);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            // if (data['ripple_fl'] == "0") {
-            if (isShowDes) {
-              setState(() {
-                _saved.remove(data);
-              });
-            } else {
-              setState(() {
-                _saved.add(data);
-              });
-            }
-            // }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: const BoxDecoration(
-                // color: isShowDes ? AppColor.blue2 : AppColor.white,
-                ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: data['ripple_fl'] == 0
-                            ? HexColor('#eeeeee')
-                            : HexColor('#fdd000'),
-                        borderRadius: BorderRadius.circular(4),
+    return WidgetExpansionTitle(
+      initiallyExpanded: data['isExpanded'],
+      onExpansionChanged: (expanded) {
+        setState(() {
+          data['isExpanded'] = expanded;
+        });
+      },
+      header: (BuildContext context, dynamic Function(bool?) onExpand) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: const BoxDecoration(
+                  // color: isShowDes ? AppColor.blue2 : AppColor.white,
+                  ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: data['ripple_fl'] == 0
+                              ? HexColor('#eeeeee')
+                              : HexColor('#fdd000'),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          data['ripple_fl'] != 0 ? '답변완료' : '답변대기',
+                          style: AppStyle.medium
+                              .copyWith(color: Colors.black, fontSize: 12),
+                        ),
                       ),
-                      child: Text(
-                        data['ripple_fl'] != 0 ? '답변완료' : '답변대기',
+                      const Spacer(),
+                      Text(
+                        Constants.formatTime(data['regist_date']),
                         style: AppStyle.medium
-                            .copyWith(color: Colors.black, fontSize: 12),
+                            .copyWith(color: HexColor('#888888'), fontSize: 12),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "${data['title'] ?? ''}",
+                        style: AppStyle.bold
+                            .copyWith(color: AppColor.black, fontSize: 14),
                       ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      Constants.formatTime(data['regist_date']),
-                      style: AppStyle.medium
-                          .copyWith(color: HexColor('#888888'), fontSize: 12),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    Icon(
-                      !isShowDes
-                          ? Icons.keyboard_arrow_down_outlined
-                          : Icons.keyboard_arrow_up_outlined,
-                      size: 16,
-                    )
-                  ],
-                ),
-                Text(
-                  "${data['title'] ?? ''}",
-                  style: AppStyle.bold
-                      .copyWith(color: AppColor.black, fontSize: 14),
-                ),
-              ],
+                      const Spacer(),
+                      SizedBox(
+                        width: 30,
+                        height: 50,
+                        child: TweenAnimationBuilder<double>(
+                          tween: Tween<double>(
+                              begin: 0.0,
+                              end: data['isExpanded'] == true ? 1.0 : 0.0),
+                          duration: const Duration(milliseconds: 200),
+                          builder: (context, value, child) => Center(
+                            child: Transform.rotate(
+                              angle: -value * pi,
+                              child: const Icon(Icons.expand_more,
+                                  color: AppColor.grey5D),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
+            data['isExpanded']
+                ? const SizedBox()
+                : index != dataRequest!.length - 1
+                    ? Divider(
+                        color: HexColor(
+                          '#e5e5e5',
+                        ),
+                        height: 1,
+                        thickness: 1,
+                      )
+                    : const SizedBox()
+          ],
+        );
+      },
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          decoration: BoxDecoration(color: HexColor('#f9f9f9')),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${data['title'] ?? ''}",
+                style: AppStyle.regular
+                    .copyWith(color: HexColor('#707070'), fontSize: 14),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                "${data['contents'] ?? ''}",
+                style:
+                    AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
+              ),
+            ],
           ),
         ),
-        if (isShowDes) ...{
+        if (data['answers'].length > 0) ...{
+          Divider(
+            color: HexColor(
+              '#e5e5e5',
+            ),
+            height: 1,
+            thickness: 1,
+          ),
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             decoration: BoxDecoration(color: HexColor('#f9f9f9')),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${data['title'] ?? ''}",
-                  style: AppStyle.regular
-                      .copyWith(color: HexColor('#707070'), fontSize: 14),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  "${data['contents'] ?? ''}",
-                  style: AppStyle.bold
-                      .copyWith(color: AppColor.black, fontSize: 14),
-                ),
-              ],
+            child: Wrap(
+              children: List.generate(
+                  data['answers'].length,
+                  (index) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 3, horizontal: 8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    border:
+                                        Border.all(color: HexColor('#dddddd'))),
+                                child: Text('답변내용'),
+                              ),
+                              const Spacer(),
+                              Text(
+                                Constants.formatTime(
+                                    data['answers'][index]['regist_date']),
+                                style: AppStyle.medium.copyWith(
+                                    color: HexColor('#888888'), fontSize: 12),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "${data['answers'][index]['contents']}",
+                            style: AppStyle.bold
+                                .copyWith(color: AppColor.black, fontSize: 14),
+                          ),
+                        ],
+                      )),
             ),
           ),
-          if (data['answers'].length > 0) ...{
-            Divider(
-              color: HexColor(
-                '#e5e5e5',
-              ),
-              height: 1,
-              thickness: 1,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              decoration: BoxDecoration(color: HexColor('#f9f9f9')),
-              child: Wrap(
-                children: List.generate(
-                    data['answers'].length,
-                    (index) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
-                                          color: HexColor('#dddddd'))),
-                                  child: Text('답변내용'),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  Constants.formatTime(
-                                      data['answers'][index]['regist_date']),
-                                  style: AppStyle.medium.copyWith(
-                                      color: HexColor('#888888'), fontSize: 12),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              "${data['answers'][index]['contents']}",
-                              style: AppStyle.bold.copyWith(
-                                  color: AppColor.black, fontSize: 14),
-                            ),
-                          ],
-                        )),
-              ),
-            ),
-          },
         },
-        index != dataRequest!.length - 1
-            ? const Divider(
-                height: 0,
+        data['isExpanded']
+            ? Divider(
+                color: HexColor(
+                  '#e5e5e5',
+                ),
+                height: 1,
+                thickness: 1,
               )
             : const SizedBox()
       ],
