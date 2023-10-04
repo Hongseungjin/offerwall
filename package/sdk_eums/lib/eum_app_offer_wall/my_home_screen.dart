@@ -5,6 +5,7 @@ import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
@@ -20,6 +21,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/reward_guide_module/reward_gu
 import 'package:sdk_eums/eum_app_offer_wall/screen/using_term_module/using_term_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../common/local_store/local_store.dart';
@@ -75,10 +77,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     return await Geolocator.getCurrentPosition();
   }
 
+  SettingFontSize controllerGet = Get.put(SettingFontSize());
+
   @override
   void initState() {
     _registerEventBus();
     _determinePosition();
+    SettingFontSize().initSetingFontSize(controllerGet);
     super.initState();
     if (Platform.isAndroid) {
       settingBattery();

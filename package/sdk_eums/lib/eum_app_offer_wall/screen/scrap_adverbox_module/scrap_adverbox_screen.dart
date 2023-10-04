@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/routing.dart';
@@ -12,6 +13,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_webview.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/constants.dart';
@@ -29,6 +31,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
       GlobalKey<State<StatefulWidget>>();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  final controllerGet = Get.put(SettingFontSize());
 
   String allMedia = '날짜 오름차순';
   String? dataSort;
@@ -63,8 +66,9 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               elevation: 1,
               centerTitle: true,
               title: Text('광고 스크랩',
-                  style: AppStyle.bold
-                      .copyWith(fontSize: 16, color: AppColor.black)),
+                  style: AppStyle.bold.copyWith(
+                      fontSize: 16 + controllerGet.fontSizeObx.value,
+                      color: AppColor.black)),
               leading: InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -174,23 +178,26 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                                         index]
                                                                     ['name'] ??
                                                                 '',
-                                                            style: AppStyle.bold
-                                                                .copyWith(
-                                                                    color: AppColor
-                                                                        .black,
-                                                                    fontSize:
-                                                                        14),
+                                                            style: AppStyle.bold.copyWith(
+                                                                color: AppColor
+                                                                    .black,
+                                                                fontSize: 14 +
+                                                                    controllerGet
+                                                                        .fontSizeObx
+                                                                        .value),
                                                           ),
                                                         ),
                                                         const SizedBox(
                                                             height: 2),
                                                         Text(
                                                           '스크랩 날짜 ${state.dataScrapAdverbox[index]['regist_date'] != null ? Constants.formatTimeDay(state.dataScrapAdverbox[index]['regist_date']) : ''} ',
-                                                          style: AppStyle.medium
-                                                              .copyWith(
-                                                                  color: AppColor
-                                                                      .grey5D,
-                                                                  fontSize: 10),
+                                                          style: AppStyle.medium.copyWith(
+                                                              color: AppColor
+                                                                  .grey5D,
+                                                              fontSize: 10 +
+                                                                  controllerGet
+                                                                      .fontSizeObx
+                                                                      .value),
                                                         ),
                                                       ],
                                                     ),
@@ -208,7 +215,12 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                                   .circular(5)),
                                                       child: Text(
                                                         '광고보기',
-                                                        style: AppStyle.bold,
+                                                        style: AppStyle.bold
+                                                            .copyWith(
+                                                                fontSize: 14 +
+                                                                    controllerGet
+                                                                        .fontSizeObx
+                                                                        .value),
                                                       ),
                                                     )
                                                   ],
@@ -343,6 +355,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
   final GlobalKey<State<StatefulWidget>> globalKey =
       GlobalKey<State<StatefulWidget>>();
   FToast fToast = FToast();
+
   @override
   void initState() {
     fToast.init(context);

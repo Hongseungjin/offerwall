@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
@@ -23,6 +26,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
@@ -153,6 +157,8 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  final controllerGet = Get.put(SettingFontSize());
+
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
@@ -160,163 +166,171 @@ class _HomePageState extends State<HomePage>
           accont = state.account;
         }
 
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: AppColor.white,
-            leading: WidgetAnimationClick(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: AppColor.black,
-              ),
-            ),
-            centerTitle: true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Image.asset(
-                    Assets.logo_eums.path,
-                    package: "sdk_eums",
-                    height: 20,
+        return Obx(() => Scaffold(
+              appBar: AppBar(
+                backgroundColor: AppColor.white,
+                leading: WidgetAnimationClick(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: AppColor.black,
                   ),
                 ),
-                const SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 14),
-                  child: Text('리워드',
-                      style: AppStyle.bold
-                          .copyWith(color: AppColor.black, fontSize: 18)),
-                ),
-              ],
-            ),
-            actions: [
-              WidgetAnimationClick(
-                onTap: () {
-                  Routing().navigate(context, MyPage());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Image.asset(Assets.my_page.path,
-                      package: "sdk_eums", height: 24),
-                ),
-              ),
-              const SizedBox(
-                width: 25,
-              )
-            ],
-          ),
-          key: globalKey,
-          body: CustomScrollCampaignDetail(
-            buildChildren: (BuildContext context,
-                ValueNotifier<bool> showAppBar,
-                ScrollController scrollController) {
-              return [
-                CustomSliverList(
+                centerTitle: true,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildUIShowPoint(
-                        point: state.totalPoint != null
-                            ? state.totalPoint['userPoint']
-                            : 0),
-                    Center(
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 20,
-                        children: List.generate(
-                            uiIconList.length,
-                            (index) => _buildUiIcon(
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Routing().navigate(
-                                          context,
-                                          StatusPointPage(
-                                              account: state.account));
-                                      break;
-                                    case 1:
-                                      Routing().navigate(
-                                          context, const KeepAdverboxScreen());
-                                      break;
-                                    case 2:
-                                      Routing().navigate(
-                                          context, const ScrapAdverBoxScreen());
-                                      break;
-                                    case 3:
-                                      Routing()
-                                          .navigate(context, UsingTermScreen());
-                                      break;
-                                    default:
-                                  }
-                                },
-                                urlImage: uiIconList[index]['icon'],
-                                title: uiIconList[index]['title'])),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Image.asset(
+                        Assets.logo_eums.path,
+                        package: "sdk_eums",
+                        height: 20,
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    _buildUIBannerImage(dataBanner: state.bannerList),
+                    const SizedBox(width: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 14),
+                      child: Text('리워드',
+                          style: AppStyle.bold.copyWith(
+                              color: AppColor.black,
+                              fontSize: 18 + controllerGet.fontSizeObx.value)),
+                    ),
                   ],
                 ),
-                CustomSliverAppBar(
-                  expandedHeight: 0,
-                  toolbarHeight:
-                      kToolbarHeight - MediaQuery.of(context).padding.top,
-                  header: TabBar(
-                    onTap: (value) {
-                      int index = value;
-                      if (_tabController.index == 0) {
-                        categary = 'participation';
-                      } else {
-                        categary = 'mission';
-                      }
-                      _fetchData();
-                      setState(() {
-                        _tabController.index = index;
-                      });
+                actions: [
+                  WidgetAnimationClick(
+                    onTap: () {
+                      Routing().navigate(context, MyPage());
                     },
-                    labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
-                    controller: _tabController,
-                    indicatorColor: HexColor('#f4a43b'),
-                    unselectedLabelColor: HexColor('#707070'),
-                    labelColor: HexColor('#f4a43b'),
-                    labelStyle:
-                        AppStyle.bold.copyWith(color: HexColor('#707070')),
-                    tabs: const [
-                      Text(
-                        '참여하고 리워드',
-                      ),
-                      Text('쇼핑하고 리워드'),
-                    ],
-                  ),
-                ),
-                CustomSliverList(
-                  children: [
-                    _buildUIPoint(
-                        point: state.totalPoint != null
-                            ? state.totalPoint['totalPointCanGet']
-                            : 0),
-                    ListViewHome(
-                      tab: _tabController.index,
-                      filter: _filterMedia,
-                      scrollController: controller,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Image.asset(Assets.my_page.path,
+                          package: "sdk_eums", height: 24),
                     ),
-                    // ListViewHome(
-                    //   tab: _tabController.index,
-                    //   filter: _filterMedia,
-                    //   scrollController: controller,
-                    // )
-                  ],
-                )
-              ];
-            },
-            onRefresh: () {
-              _fetchData();
-            },
-            scrollController: controller,
-          ),
-        );
+                  ),
+                  const SizedBox(
+                    width: 25,
+                  )
+                ],
+              ),
+              key: globalKey,
+              body: CustomScrollCampaignDetail(
+                buildChildren: (BuildContext context,
+                    ValueNotifier<bool> showAppBar,
+                    ScrollController scrollController) {
+                  return [
+                    CustomSliverList(
+                      children: [
+                        _buildUIShowPoint(
+                            point: state.totalPoint != null
+                                ? state.totalPoint['userPoint']
+                                : 0),
+                        Center(
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            spacing: 20,
+                            children: List.generate(
+                                uiIconList.length,
+                                (index) => _buildUiIcon(
+                                    onTap: () {
+                                      switch (index) {
+                                        case 0:
+                                          Routing().navigate(
+                                              context,
+                                              StatusPointPage(
+                                                  account: state.account));
+                                          break;
+                                        case 1:
+                                          Routing().navigate(context,
+                                              const KeepAdverboxScreen());
+                                          break;
+                                        case 2:
+                                          Routing().navigate(context,
+                                              const ScrapAdverBoxScreen());
+                                          break;
+                                        case 3:
+                                          Routing().navigate(
+                                              context, UsingTermScreen());
+                                          break;
+                                        default:
+                                      }
+                                    },
+                                    urlImage: uiIconList[index]['icon'],
+                                    title: uiIconList[index]['title'])),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        _buildUIBannerImage(dataBanner: state.bannerList),
+                      ],
+                    ),
+                    CustomSliverAppBar(
+                      expandedHeight: 0,
+                      toolbarHeight:
+                          kToolbarHeight - MediaQuery.of(context).padding.top,
+                      header: TabBar(
+                        onTap: (value) {
+                          int index = value;
+                          if (_tabController.index == 0) {
+                            categary = 'participation';
+                          } else {
+                            categary = 'mission';
+                          }
+                          _fetchData();
+                          setState(() {
+                            _tabController.index = index;
+                          });
+                        },
+                        labelPadding:
+                            const EdgeInsets.only(bottom: 10, top: 10),
+                        controller: _tabController,
+                        indicatorColor: HexColor('#f4a43b'),
+                        unselectedLabelColor: HexColor('#707070'),
+                        labelColor: HexColor('#f4a43b'),
+                        labelStyle:
+                            AppStyle.bold.copyWith(color: HexColor('#707070')),
+                        tabs: [
+                          Text(
+                            '참여하고 리워드',
+                            style: AppStyle.regular.copyWith(
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                          ),
+                          Text(
+                            '쇼핑하고 리워드',
+                            style: AppStyle.regular.copyWith(
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                          ),
+                        ],
+                      ),
+                    ),
+                    CustomSliverList(
+                      children: [
+                        _buildUIPoint(
+                            point: state.totalPoint != null
+                                ? state.totalPoint['totalPointCanGet']
+                                : 0),
+                        ListViewHome(
+                          tab: _tabController.index,
+                          filter: _filterMedia,
+                          scrollController: controller,
+                        ),
+                        // ListViewHome(
+                        //   tab: _tabController.index,
+                        //   filter: _filterMedia,
+                        //   scrollController: controller,
+                        // )
+                      ],
+                    )
+                  ];
+                },
+                onRefresh: () {
+                  _fetchData();
+                },
+                scrollController: controller,
+              ),
+            ));
       },
     );
   }
@@ -365,8 +379,9 @@ class _HomePageState extends State<HomePage>
           children: [
             Text(
               '지금 획득 가능한 포인트',
-              style: AppStyle.regular
-                  .copyWith(color: HexColor('#888888'), fontSize: 14),
+              style: AppStyle.regular.copyWith(
+                  color: HexColor('#888888'),
+                  fontSize: 14 + controllerGet.fontSizeObx.value),
             ),
             Row(
               children: [
@@ -375,7 +390,8 @@ class _HomePageState extends State<HomePage>
                 const SizedBox(width: 6),
                 Text(
                   Constants.formatMoney(point, suffix: ''),
-                  style: AppStyle.bold.copyWith(fontSize: 20),
+                  style: AppStyle.bold
+                      .copyWith(fontSize: 20 + controllerGet.fontSizeObx.value),
                 )
               ],
             ),
@@ -400,8 +416,9 @@ class _HomePageState extends State<HomePage>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Text(
               '현재 적립된 포인트',
-              style:
-                  AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
+              style: AppStyle.regular.copyWith(
+                  fontSize: 14 + controllerGet.fontSizeObx.value,
+                  color: Colors.black),
             ),
           ),
           WidgetAnimationClick(
@@ -445,8 +462,9 @@ class _HomePageState extends State<HomePage>
                   const SizedBox(width: 4),
                   Text(
                     '서비스 이용 안내',
-                    style:
-                        AppStyle.regular12.copyWith(color: HexColor('#888888')),
+                    style: AppStyle.regular12.copyWith(
+                        color: HexColor('#888888'),
+                        fontSize: 12 + controllerGet.fontSizeObx.value),
                   ),
                 ],
               ),
@@ -465,8 +483,9 @@ class _HomePageState extends State<HomePage>
               children: [
                 Text(
                   isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
-                  style: AppStyle.medium
-                      .copyWith(color: Colors.black, fontSize: 14),
+                  style: AppStyle.medium.copyWith(
+                      color: Colors.black,
+                      fontSize: 14 + controllerGet.fontSizeObx.value),
                 ),
                 const Spacer(),
                 WidgetAnimationClick(
@@ -571,7 +590,9 @@ class _HomePageState extends State<HomePage>
           const SizedBox(height: 4),
           Text(
             title ?? '',
-            style: AppStyle.regular12.copyWith(color: Colors.black),
+            style: AppStyle.regular12.copyWith(
+                color: Colors.black,
+                fontSize: 12 + controllerGet.fontSizeObx.value),
           )
         ],
       ),
@@ -673,6 +694,7 @@ class _ListViewHomeState extends State<ListViewHome> {
   ScrollController? controller;
 
   String allMedia = '최신순';
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   Widget build(BuildContext context) {
@@ -703,7 +725,9 @@ class _ListViewHomeState extends State<ListViewHome> {
         child: Text(
           value ?? "",
           textAlign: TextAlign.center,
-          style: AppStyle.bold.copyWith(color: AppColor.black),
+          style: AppStyle.bold.copyWith(
+              color: AppColor.black,
+              fontSize: 14 + controllerGet.fontSizeObx.value),
           maxLines: 1,
         ),
       );
@@ -747,7 +771,10 @@ class _ListViewHomeState extends State<ListViewHome> {
               child: Row(
                 children: [
                   Text(
-                      '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개'),
+                    '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개',
+                    style: AppStyle.regular.copyWith(
+                        fontSize: 14 + controllerGet.fontSizeObx.value),
+                  ),
                   const Spacer(),
                   SizedBox(
                     height: 35,
@@ -820,24 +847,29 @@ class _ListViewHomeState extends State<ListViewHome> {
           Text(
             data['title'] ?? "",
             maxLines: 2,
-            style: AppStyle.regular.copyWith(fontSize: 14, color: Colors.black),
+            style: AppStyle.regular.copyWith(
+                fontSize: 14 + controllerGet.fontSizeObx.value,
+                color: Colors.black),
           ),
           const SizedBox(height: 4),
           Text(
             Constants.formatMoney(data['reward'], suffix: '원'),
             style: AppStyle.regular.copyWith(
                 decoration: TextDecoration.lineThrough,
+                fontSize: 14 + controllerGet.fontSizeObx.value,
                 color: HexColor('#888888')),
           ),
           const SizedBox(height: 4),
           Row(
             children: [
               Text('60% ',
-                  style: AppStyle.bold
-                      .copyWith(color: HexColor('#ff7169'), fontSize: 16)),
+                  style: AppStyle.bold.copyWith(
+                      color: HexColor('#ff7169'),
+                      fontSize: 16 + controllerGet.fontSizeObx.value)),
               Text(Constants.formatMoney(data['reward'], suffix: '원'),
-                  style: AppStyle.bold
-                      .copyWith(color: HexColor('#000000'), fontSize: 16))
+                  style: AppStyle.bold.copyWith(
+                      color: HexColor('#000000'),
+                      fontSize: 16 + controllerGet.fontSizeObx.value))
             ],
           ),
           Container(
@@ -848,7 +880,9 @@ class _ListViewHomeState extends State<ListViewHome> {
                 borderRadius: BorderRadius.circular(5)),
             child: Text(
               '+${Constants.formatMoney(data['reward'], suffix: '')}',
-              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 14),
+              style: AppStyle.bold.copyWith(
+                  color: Colors.black,
+                  fontSize: 14 + controllerGet.fontSizeObx.value),
             ),
           ),
           const SizedBox(height: 30),
@@ -904,21 +938,29 @@ class _ListViewHomeState extends State<ListViewHome> {
                   }),
             ),
             const SizedBox(height: 16),
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
                 data['title'] ?? "",
-                style: AppStyle.bold.copyWith(color: Colors.black),
+                maxLines: 2,
+                style: AppStyle.bold.copyWith(
+                    color: Colors.black,
+                    fontSize: 16 + controllerGet.fontSizeObx.value),
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    title,
-                    style: AppStyle.regular
-                        .copyWith(color: HexColor('#666666'), fontSize: 14),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Text(
+                      title,
+                      style: AppStyle.regular.copyWith(
+                          color: HexColor('#666666'),
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                    ),
                   ),
                   const Spacer(),
                   Container(
@@ -927,7 +969,12 @@ class _ListViewHomeState extends State<ListViewHome> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
                         color: HexColor('#fdd000')),
-                    child: const Text('포인트받기'),
+                    child: Text(
+                      '포인트받기',
+                      maxLines: 2,
+                      style: AppStyle.regular.copyWith(
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                    ),
                   )
                 ],
               ),

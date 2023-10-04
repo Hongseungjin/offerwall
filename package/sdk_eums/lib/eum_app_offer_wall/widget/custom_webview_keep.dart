@@ -4,10 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_circular.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 class CustomWebViewKeep extends StatefulWidget {
@@ -41,6 +43,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
   Timer? timer5s;
   bool showButton = false;
   bool isRunning = true;
+  final controllerGet = Get.put(SettingFontSize());
   late LinearTimerController timerController = LinearTimerController(this);
 
   void startTimeDown() {
@@ -122,7 +125,9 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
         backgroundColor: AppColor.white,
         centerTitle: true,
         title: Text(widget.title ?? '',
-            style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18)),
+            style: AppStyle.bold.copyWith(
+                color: Colors.black,
+                fontSize: 18 + controllerGet.fontSizeObx.value)),
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -184,6 +189,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
                         child: Text(
                           '포인트 적립하기',
                           style: AppStyle.medium.copyWith(
+                              fontSize: 14 + controllerGet.fontSizeObx.value,
                               color:
                                   !showButton ? AppColor.grey : AppColor.white),
                         ),

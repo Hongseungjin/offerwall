@@ -5,11 +5,13 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 
 import '../../../common/constants.dart';
@@ -30,6 +32,7 @@ class _RequestScreenState extends State<RequestScreen>
   late TabController _tabController;
   int tabIndex = 0;
   int tabPreviousIndex = 0;
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -129,7 +132,9 @@ class _RequestScreenState extends State<RequestScreen>
         elevation: 1,
         centerTitle: true,
         title: Text(AppString.inquiry,
-            style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
+            style: AppStyle.bold.copyWith(
+                fontSize: 16 + controllerGet.fontSizeObx.value,
+                color: AppColor.black)),
         leading: InkWell(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -180,7 +185,7 @@ class _RequestScreenState extends State<RequestScreen>
           child: Center(
               child: Text(text,
                   style: AppStyle.bold14.copyWith(
-                    fontSize: 14,
+                    fontSize: 14 + controllerGet.fontSizeObx.value,
                   )))),
     );
   }
@@ -201,6 +206,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
   TextEditingController contentCtrl = TextEditingController();
   FToast fToast = FToast();
   int maxlength = 0;
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -222,7 +228,8 @@ class _MakeQuestionState extends State<MakeQuestion> {
                 const SizedBox(height: 20),
                 Text(
                   '문의 유형',
-                  style: AppStyle.bold,
+                  style: AppStyle.bold
+                      .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 12),
@@ -243,7 +250,10 @@ class _MakeQuestionState extends State<MakeQuestion> {
                     hint: Text(
                       nameBank,
                     ),
-                    style: AppStyle.bold.copyWith(color: AppColor.grey5D),
+                    style: AppStyle.bold.copyWith(
+                      color: AppColor.grey5D,
+                      fontSize: 14 + controllerGet.fontSizeObx.value,
+                    ),
                     value: selectedArea,
                     icon: const Icon(
                       Icons.keyboard_arrow_down_outlined,
@@ -262,7 +272,8 @@ class _MakeQuestionState extends State<MakeQuestion> {
                             "${QUESTION_LIST[value]['name']}",
                             overflow: TextOverflow.visible,
                             textAlign: TextAlign.start,
-                            // style: AppTextStyles.medium16,
+                            style: AppStyle.medium16.copyWith(
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
                           ),
                         ),
                       );
@@ -291,7 +302,8 @@ class _MakeQuestionState extends State<MakeQuestion> {
                 const SizedBox(height: 20),
                 Text(
                   '제목',
-                  style: AppStyle.bold,
+                  style: AppStyle.bold
+                      .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
                 ),
                 const SizedBox(height: 12),
                 Container(
@@ -308,6 +320,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                         hintText: '문의 제목 입력',
                         border: InputBorder.none,
                         hintStyle: AppStyle.bold.copyWith(
+                            fontSize: 14 + controllerGet.fontSizeObx.value,
                             color: AppColor.color70.withOpacity(0.7))),
                   ),
                 ),
@@ -316,12 +329,14 @@ class _MakeQuestionState extends State<MakeQuestion> {
                   children: [
                     Text(
                       '내용',
-                      style: AppStyle.bold,
+                      style: AppStyle.bold.copyWith(
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
                     ),
                     const Spacer(),
                     Text(
                       '${maxlength} / 500',
-                      style: AppStyle.bold,
+                      style: AppStyle.bold.copyWith(
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
                     ),
                   ],
                 ),
@@ -348,6 +363,7 @@ class _MakeQuestionState extends State<MakeQuestion> {
                         hintText: '문의 내용을 입력해 주세요.',
                         border: InputBorder.none,
                         hintStyle: AppStyle.bold.copyWith(
+                            fontSize: 14 + controllerGet.fontSizeObx.value,
                             color: AppColor.color70.withOpacity(0.7))),
                   ),
                 ),
@@ -380,8 +396,9 @@ class _MakeQuestionState extends State<MakeQuestion> {
                         const SizedBox(width: 8),
                         Text(
                           '개인정보 수집 및 이용에 동의합니다.',
-                          style: AppStyle.regular
-                              .copyWith(color: HexColor('#555555')),
+                          style: AppStyle.regular.copyWith(
+                              color: HexColor('#555555'),
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                         )
                         // RichText(
                         //     text: TextSpan(
@@ -433,8 +450,9 @@ class _MakeQuestionState extends State<MakeQuestion> {
                         borderRadius: BorderRadius.circular(8)),
                     child: Text(
                       '문의 등록',
-                      style: AppStyle.bold
-                          .copyWith(color: AppColor.black, fontSize: 16),
+                      style: AppStyle.bold.copyWith(
+                          color: AppColor.black,
+                          fontSize: 16 + controllerGet.fontSizeObx.value),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -494,6 +512,8 @@ class HistoryRequest extends StatefulWidget {
 class _HistoryRequestState extends State<HistoryRequest> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
+  final controllerGet = Get.put(SettingFontSize());
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RequestBloc, RequestState>(
@@ -609,15 +629,17 @@ class _HistoryRequestState extends State<HistoryRequest> {
                         ),
                         child: Text(
                           data['ripple_fl'] != 0 ? '답변완료' : '답변대기',
-                          style: AppStyle.medium
-                              .copyWith(color: Colors.black, fontSize: 12),
+                          style: AppStyle.medium.copyWith(
+                              color: Colors.black,
+                              fontSize: 12 + controllerGet.fontSizeObx.value),
                         ),
                       ),
                       const Spacer(),
                       Text(
                         Constants.formatTime(data['regist_date']),
-                        style: AppStyle.medium
-                            .copyWith(color: HexColor('#888888'), fontSize: 12),
+                        style: AppStyle.medium.copyWith(
+                            color: HexColor('#888888'),
+                            fontSize: 12 + controllerGet.fontSizeObx.value),
                       )
                     ],
                   ),
@@ -625,8 +647,9 @@ class _HistoryRequestState extends State<HistoryRequest> {
                     children: [
                       Text(
                         "${data['title'] ?? ''}",
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.black, fontSize: 14),
+                        style: AppStyle.bold.copyWith(
+                            color: AppColor.black,
+                            fontSize: 14 + controllerGet.fontSizeObx.value),
                       ),
                       const Spacer(),
                       SizedBox(
@@ -675,14 +698,16 @@ class _HistoryRequestState extends State<HistoryRequest> {
             children: [
               Text(
                 "${data['title'] ?? ''}",
-                style: AppStyle.regular
-                    .copyWith(color: HexColor('#707070'), fontSize: 14),
+                style: AppStyle.regular.copyWith(
+                    color: HexColor('#707070'),
+                    fontSize: 14 + controllerGet.fontSizeObx.value),
               ),
               const SizedBox(height: 5),
               Text(
                 "${data['contents'] ?? ''}",
-                style:
-                    AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
+                style: AppStyle.bold.copyWith(
+                    color: AppColor.black,
+                    fontSize: 14 + controllerGet.fontSizeObx.value),
               ),
             ],
           ),
@@ -714,22 +739,30 @@ class _HistoryRequestState extends State<HistoryRequest> {
                                     borderRadius: BorderRadius.circular(4),
                                     border:
                                         Border.all(color: HexColor('#dddddd'))),
-                                child: Text('답변내용'),
+                                child: Text(
+                                  '답변내용',
+                                  style: AppStyle.regular.copyWith(
+                                      fontSize:
+                                          14 + controllerGet.fontSizeObx.value),
+                                ),
                               ),
                               const Spacer(),
                               Text(
                                 Constants.formatTime(
                                     data['answers'][index]['regist_date']),
                                 style: AppStyle.medium.copyWith(
-                                    color: HexColor('#888888'), fontSize: 12),
+                                    color: HexColor('#888888'),
+                                    fontSize:
+                                        12 + controllerGet.fontSizeObx.value),
                               )
                             ],
                           ),
                           const SizedBox(height: 12),
                           Text(
                             "${data['answers'][index]['contents']}",
-                            style: AppStyle.bold
-                                .copyWith(color: AppColor.black, fontSize: 14),
+                            style: AppStyle.bold.copyWith(
+                                color: AppColor.black,
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
                           ),
                         ],
                       )),

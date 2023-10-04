@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/events/events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
@@ -17,6 +18,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/visit_offerwall_module/visit_
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -49,6 +51,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   List? _languages = [];
   String lang = '';
   String? title;
+  final controllerGet = Get.put(SettingFontSize());
 
   Future<void> _getPreferredLanguages() async {
     try {
@@ -275,8 +278,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
           elevation: 0,
           centerTitle: true,
           title: Text(widget.title ?? '',
-              style:
-                  AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
+              style: AppStyle.bold.copyWith(
+                  fontSize: 16 + controllerGet.fontSizeObx.value,
+                  color: AppColor.black)),
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -325,7 +329,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                     ? state.dataDetailOffWall['title']
                                     : "",
                                 maxLines: 1,
-                                style: AppStyle.bold.copyWith(fontSize: 18),
+                                style: AppStyle.bold.copyWith(
+                                    fontSize:
+                                        18 + controllerGet.fontSizeObx.value),
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -335,7 +341,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                         : 0,
                                     suffix: 'P'),
                                 style: AppStyle.bold.copyWith(
-                                    fontSize: 18, color: HexColor('#f4a43b')),
+                                    fontSize:
+                                        18 + controllerGet.fontSizeObx.value,
+                                    color: HexColor('#f4a43b')),
                               )
                             ],
                           ),
@@ -350,8 +358,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                               horizontal: 16, vertical: 12),
                           child: Text(
                             '적립 방법',
-                            style: AppStyle.bold
-                                .copyWith(fontSize: 18, color: AppColor.black),
+                            style: AppStyle.bold.copyWith(
+                                fontSize: 18 + controllerGet.fontSizeObx.value,
+                                color: AppColor.black),
                           ),
                         ),
                         Padding(
@@ -374,7 +383,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                               Text(
                                 '적립 방법',
                                 style: AppStyle.bold.copyWith(
-                                    fontSize: 18, color: AppColor.black),
+                                    fontSize:
+                                        18 + controllerGet.fontSizeObx.value,
+                                    color: AppColor.black),
                               ),
                               const SizedBox(height: 8),
                               Padding(
@@ -431,7 +442,9 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                             child: Text(
                               '참여하고 포인트 받기',
                               style: AppStyle.bold.copyWith(
-                                  fontSize: 16, color: AppColor.black),
+                                  fontSize:
+                                      16 + controllerGet.fontSizeObx.value,
+                                  color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),
                           ),

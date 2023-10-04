@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/instance_manager.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/bloc/status_point_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/constants.dart';
@@ -36,6 +38,7 @@ class _StatusPointPageState extends State<StatusPointPage>
   int totalPointOfferWall = 0;
   int tabIndex = 0;
   int tabPreviousIndex = 0;
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -148,7 +151,9 @@ class _StatusPointPageState extends State<StatusPointPage>
           backgroundColor: Colors.white,
           centerTitle: true,
           title: Text('포인트 현황',
-              style: AppStyle.bold.copyWith(color: Colors.black)),
+              style: AppStyle.bold.copyWith(
+                  color: Colors.black,
+                  fontSize: 18 + controllerGet.fontSizeObx.value)),
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -175,11 +180,17 @@ class _StatusPointPageState extends State<StatusPointPage>
                   labelColor: HexColor('#f4a43b'),
                   labelStyle:
                       AppStyle.bold.copyWith(color: HexColor('#707070')),
-                  tabs: const [
+                  tabs: [
                     Text(
                       '포인트 적립 내역',
+                      style: AppStyle.regular.copyWith(
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
                     ),
-                    Text(' 포인트 전환'),
+                    Text(
+                      ' 포인트 전환',
+                      style: AppStyle.regular.copyWith(
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                    ),
                   ],
                 ),
                 Container(
@@ -192,8 +203,9 @@ class _StatusPointPageState extends State<StatusPointPage>
                         children: [
                           Text(
                             '현재 보유 포인트',
-                            style: AppStyle.medium
-                                .copyWith(color: HexColor('707070')),
+                            style: AppStyle.medium.copyWith(
+                                color: HexColor('707070'),
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
                           ),
                           Row(
                             children: [
@@ -206,7 +218,9 @@ class _StatusPointPageState extends State<StatusPointPage>
                                         ? state.dataTotalPoint['totalPoint']
                                         : 0,
                                     suffix: '원'),
-                                style: AppStyle.bold.copyWith(fontSize: 26),
+                                style: AppStyle.bold.copyWith(
+                                    fontSize:
+                                        26 + controllerGet.fontSizeObx.value),
                               ),
                             ],
                           )
@@ -219,7 +233,9 @@ class _StatusPointPageState extends State<StatusPointPage>
                             borderRadius: BorderRadius.circular(5),
                             color: HexColor('#fcc900')),
                         child: Text('소멸예정',
-                            style: AppStyle.bold.copyWith(fontSize: 12)),
+                            style: AppStyle.bold.copyWith(
+                                fontSize:
+                                    12 + controllerGet.fontSizeObx.value)),
                       ),
                     ],
                   ),
@@ -270,7 +286,8 @@ class _StatusPointPageState extends State<StatusPointPage>
                             _tabController.index == 0
                                 ? '총 누적 적립 포인트'
                                 : '현재까지 캐시로 전환된 포인트',
-                            style: AppStyle.regular,
+                            style: AppStyle.regular.copyWith(
+                                fontSize: 14 + controllerGet.fontSizeObx.value),
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -279,7 +296,9 @@ class _StatusPointPageState extends State<StatusPointPage>
                                       ? state.totalPoint ?? 0
                                       : totalPointOfferWall,
                                   suffix: '원'),
-                              style: AppStyle.bold.copyWith(fontSize: 22)),
+                              style: AppStyle.bold.copyWith(
+                                  fontSize:
+                                      22 + controllerGet.fontSizeObx.value)),
                         ],
                       ),
                     );
@@ -327,7 +346,9 @@ class _StatusPointPageState extends State<StatusPointPage>
                         child: Text(
                           "더보기",
                           textAlign: TextAlign.center,
-                          style: AppStyle.bold.copyWith(color: Colors.black),
+                          style: AppStyle.bold.copyWith(
+                              color: Colors.black,
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                         )))
               ],
             );
@@ -358,7 +379,8 @@ class _StatusPointPageState extends State<StatusPointPage>
               )),
           Text(
             Constants.formatTimePoint(firstMonth.toString()),
-            style: AppStyle.bold.copyWith(fontSize: 16),
+            style: AppStyle.bold
+                .copyWith(fontSize: 16 + controllerGet.fontSizeObx.value),
           ),
           InkWell(
               onTap: () {
@@ -399,6 +421,7 @@ class ListViewPointPage extends StatefulWidget {
 class _ListViewPointPageState extends State<ListViewPointPage> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  final controllerGet = Get.put(SettingFontSize());
   @override
   Widget build(BuildContext context) {
     return _buildContent(context);
@@ -499,13 +522,15 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
             children: [
               Text(
                 title ?? '',
-                style: AppStyle.medium.copyWith(fontSize: 14),
+                style: AppStyle.medium
+                    .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
               ),
               const SizedBox(height: 5),
               Text(
                 '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}',
-                style: AppStyle.regular
-                    .copyWith(fontSize: 12, color: HexColor('#707070')),
+                style: AppStyle.regular.copyWith(
+                    fontSize: 12 + controllerGet.fontSizeObx.value,
+                    color: HexColor('#707070')),
               )
 
               ///  오퍼월 광고
@@ -514,7 +539,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
         ),
         Text(
           Constants.formatMoney(point ?? 0, suffix: 'P'),
-          style: AppStyle.bold.copyWith(fontSize: 14),
+          style: AppStyle.bold
+              .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
         ),
       ],
     );

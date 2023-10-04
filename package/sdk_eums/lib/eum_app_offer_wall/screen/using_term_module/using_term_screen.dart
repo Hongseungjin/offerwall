@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 
 import 'bloc/using_term_bloc.dart';
 
@@ -15,6 +17,7 @@ class UsingTermScreen extends StatefulWidget {
 }
 
 class _UsingTermScreenState extends State<UsingTermScreen> {
+  final controllerGet = Get.put(SettingFontSize());
   @override
   Widget build(BuildContext context) {
     return BlocProvider<UsingTermnBloc>(
@@ -60,7 +63,9 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
         centerTitle: true,
         title: Text(
           '서비스 이용약관',
-          style: AppStyle.bold.copyWith(color: AppColor.black),
+          style: AppStyle.bold.copyWith(
+              color: AppColor.black,
+              fontSize: 14 + controllerGet.fontSizeObx.value),
         ),
       ),
       body: dataUsingTerm != null
@@ -76,6 +81,8 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
 
                     return null;
                   },
+                  textStyle: AppStyle.regular
+                      .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
                 ),
               ),
             )

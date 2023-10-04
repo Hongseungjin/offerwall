@@ -41,11 +41,14 @@ dependencies:
   device_apps: ^2.2.0
   image_picker: ^0.8.6+4
   shared_preferences: ^2.0.13
+  syncfusion_flutter_sliders: ^23.1.39
+  syncfusion_flutter_charts: ^23.1.39
   intl:
   flutter_easyloading: ^3.0.5
   rxdart: ^0.27.7
   cached_network_image: ^3.2.0
   webview_flutter: ^4.0.7
+  get: any
   webview_flutter_android: ^3.7.1
   webview_flutter_wkwebview: ^3.7.2
   # webview_flutter_wkwebview: ^3.4.4

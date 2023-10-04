@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 
 import 'bloc/notifi_bloc.dart';
@@ -25,6 +27,10 @@ class _NotifiScreenState extends State<NotifiScreen> {
       GlobalKey<State<StatefulWidget>>();
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
+  final controllerGet = Get.put(SettingFontSize());
+
+  ///
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +70,9 @@ class _NotifiScreenState extends State<NotifiScreen> {
             elevation: 0,
             centerTitle: true,
             title: Text('공지사항',
-                style: AppStyle.bold
-                    .copyWith(fontSize: 16, color: AppColor.black)),
+                style: AppStyle.bold.copyWith(
+                    fontSize: 16 + controllerGet.fontSizeObx.value,
+                    color: AppColor.black)),
             leading: InkWell(
               onTap: () {
                 Navigator.of(context).pop();
@@ -143,8 +150,9 @@ class _NotifiScreenState extends State<NotifiScreen> {
                         color: HexColor('#fdd000')),
                     child: Text(
                       '공지',
-                      style: AppStyle.bold
-                          .copyWith(fontSize: 12, color: AppColor.black),
+                      style: AppStyle.bold.copyWith(
+                          fontSize: 12 + controllerGet.fontSizeObx.value,
+                          color: AppColor.black),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -153,13 +161,15 @@ class _NotifiScreenState extends State<NotifiScreen> {
                     children: [
                       Text(
                         '${data['title']}',
-                        style: AppStyle.bold
-                            .copyWith(color: Colors.black, fontSize: 14),
+                        style: AppStyle.bold.copyWith(
+                            color: Colors.black,
+                            fontSize: 14 + controllerGet.fontSizeObx.value),
                       ),
                       Text(
                         Constants.formatTime(data['registDate']),
-                        style: AppStyle.regular
-                            .copyWith(color: HexColor('#888888'), fontSize: 12),
+                        style: AppStyle.regular.copyWith(
+                            color: HexColor('#888888'),
+                            fontSize: 12 + controllerGet.fontSizeObx.value),
                       )
                     ],
                   ),
@@ -201,8 +211,9 @@ class _NotifiScreenState extends State<NotifiScreen> {
             children: [
               Text(
                 '적립 방법',
-                style:
-                    AppStyle.bold.copyWith(fontSize: 18, color: AppColor.black),
+                style: AppStyle.bold.copyWith(
+                    fontSize: 18 + controllerGet.fontSizeObx.value,
+                    color: AppColor.black),
               ),
               const SizedBox(height: 8),
               Padding(

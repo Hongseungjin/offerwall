@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
@@ -12,6 +13,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 
 // import 'package:sdk_eums/eum_app_offer_wall/widget/set_date_dialog.dart';
 
@@ -38,6 +40,7 @@ class _SettingScreenState extends State<SettingScreen> {
   TimePickerEntryMode entryMode = TimePickerEntryMode.input;
   Orientation? orientation;
   String? version;
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -138,7 +141,9 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             title: Text(
               '설정',
-              style: AppStyle.bold.copyWith(color: Colors.black),
+              style: AppStyle.bold.copyWith(
+                  color: Colors.black,
+                  fontSize: 18 + controllerGet.fontSizeObx.value),
             ),
           ),
           body: Column(
@@ -151,8 +156,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     Text(
                       '마케팅 알림',
-                      style:
-                          AppStyle.regular.copyWith(color: HexColor('#888888')),
+                      style: AppStyle.regular.copyWith(
+                          color: HexColor('#888888'),
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 15),
                     InkWell(
@@ -205,8 +211,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(height: 7),
                     Text(
                       '벌 광고를 받지 않을 시간을 설정합니다.',
-                      style:
-                          AppStyle.regular.copyWith(color: HexColor('#888888')),
+                      style: AppStyle.regular.copyWith(
+                          color: HexColor('#888888'),
+                          fontSize: 14 + controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 20),
                     if (checkTime) ...{
@@ -239,12 +246,16 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     Row(
                       children: [
-                        Text('정보 수신 동의', style: AppStyle.bold),
+                        Text('정보 수신 동의',
+                            style: AppStyle.bold.copyWith(
+                                fontSize:
+                                    14 + controllerGet.fontSizeObx.value)),
                         const Spacer(),
                         Text(
                           '동의',
-                          style: AppStyle.bold
-                              .copyWith(color: HexColor('#f4a43b')),
+                          style: AppStyle.bold.copyWith(
+                              color: HexColor('#f4a43b'),
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                         ),
                         const Icon(
                           Icons.arrow_forward_ios_outlined,
@@ -254,24 +265,30 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text('2018/07/29',
-                        style: AppStyle.regular
-                            .copyWith(color: HexColor('#888888'))),
+                        style: AppStyle.regular.copyWith(
+                            color: HexColor('#888888'),
+                            fontSize: 14 + controllerGet.fontSizeObx.value)),
                     const SizedBox(height: 31),
                     Row(
                       children: [
-                        Text('버전정보', style: AppStyle.bold),
+                        Text('버전정보',
+                            style: AppStyle.bold.copyWith(
+                                fontSize:
+                                    14 + controllerGet.fontSizeObx.value)),
                         const Spacer(),
                         Text(
                           '최신 버전을 사용 중입니다.',
-                          style: AppStyle.bold
-                              .copyWith(color: HexColor('#f4a43b')),
+                          style: AppStyle.bold.copyWith(
+                              color: HexColor('#f4a43b'),
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text('Ver ${version ?? ''}',
-                        style: AppStyle.regular
-                            .copyWith(color: HexColor('#888888'))),
+                        style: AppStyle.regular.copyWith(
+                            color: HexColor('#888888'),
+                            fontSize: 14 + controllerGet.fontSizeObx.value)),
                   ],
                 ),
               ),
@@ -345,15 +362,21 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Text(
           title ?? "",
-          style: AppStyle.regular.copyWith(color: HexColor('#888888')),
+          style: AppStyle.regular.copyWith(
+              color: HexColor('#888888'),
+              fontSize: 14 + controllerGet.fontSizeObx.value),
         ),
         const SizedBox(height: 8),
         SizedBox(
           width: (MediaQuery.of(context).size.width - 32) / 2,
           child: Row(
             children: [
-              Text('${dateTime!.hour < 10 ? 'AM' : 'PM'} '
-                  '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}'),
+              Text(
+                '${dateTime!.hour < 10 ? 'AM' : 'PM'} '
+                '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}',
+                style: AppStyle.regular
+                    .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
+              ),
               const Spacer(),
               const Icon(Icons.keyboard_arrow_down_outlined)
             ],
@@ -409,7 +432,8 @@ class _SettingScreenState extends State<SettingScreen> {
                             color: HexColor('#fdd000')),
                         child: Text(
                           '확인',
-                          style: AppStyle.bold.copyWith(),
+                          style: AppStyle.bold.copyWith(
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                           textAlign: TextAlign.center,
                         ),
                       ))
@@ -428,7 +452,8 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Text(
           title ?? '',
-          style: AppStyle.bold.copyWith(fontSize: 14),
+          style: AppStyle.bold
+              .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
         ),
         const Spacer(),
         Container(

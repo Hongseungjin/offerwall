@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -14,6 +15,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_inappweb.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/select_image_picker_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/constants.dart';
@@ -41,6 +43,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
 
   String urlImage = '';
   String htmlWeb = '';
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -139,7 +142,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         backgroundColor: AppColor.white,
         title: Text(
           '캐시적립',
-          style: AppStyle.bold.copyWith(color: AppColor.black),
+          style: AppStyle.bold.copyWith(
+              color: AppColor.black,
+              fontSize: 18 + controllerGet.fontSizeObx.value),
         ),
       ),
       body: SingleChildScrollView(
@@ -178,20 +183,23 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                         child: Text(
                           widget.data['title'],
                           overflow: TextOverflow.ellipsis,
-                          style: AppStyle.bold
-                              .copyWith(color: AppColor.black, fontSize: 16),
+                          style: AppStyle.bold.copyWith(
+                              color: AppColor.black,
+                              fontSize: 16 + controllerGet.fontSizeObx.value),
                         ),
                       ),
                       Text(
                         '구독시 포인트 적립',
-                        style: AppStyle.regular
-                            .copyWith(color: AppColor.black, fontSize: 14),
+                        style: AppStyle.regular.copyWith(
+                            color: AppColor.black,
+                            fontSize: 14 + controllerGet.fontSizeObx.value),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         "+ ${Constants.formatMoney(widget.data['reward'] ?? 0, suffix: 'P')}",
-                        style: AppStyle.bold
-                            .copyWith(color: HexColor('#f4a43b'), fontSize: 18),
+                        style: AppStyle.bold.copyWith(
+                            color: HexColor('#f4a43b'),
+                            fontSize: 18 + controllerGet.fontSizeObx.value),
                       ),
                     ],
                   ),
@@ -210,7 +218,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Text('구독 참여 절차', style: AppStyle.bold),
+              child: Text('구독 참여 절차',
+                  style: AppStyle.bold.copyWith(
+                      fontSize: 14 + controllerGet.fontSizeObx.value)),
             ),
             Row(
               children: [
@@ -245,7 +255,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                                       '${listResLink[index]['name']}',
                                       textAlign: TextAlign.center,
                                       style: AppStyle.bold.copyWith(
-                                          color: AppColor.black, fontSize: 12),
+                                          color: AppColor.black,
+                                          fontSize: 12 +
+                                              controllerGet.fontSizeObx.value),
                                     ),
                                   ],
                                 ),
@@ -303,8 +315,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     child: Text(
                       '구독하러 가기',
                       textAlign: TextAlign.center,
-                      style: AppStyle.bold
-                          .copyWith(color: AppColor.black, fontSize: 16),
+                      style: AppStyle.bold.copyWith(
+                          color: AppColor.black,
+                          fontSize: 16 + controllerGet.fontSizeObx.value),
                     ),
                   ),
                 ),
@@ -320,8 +333,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     '인천e음 유튜브 페이지에서 구독된 화면을 캡쳐해주세요.',
-                    style: AppStyle.medium
-                        .copyWith(color: AppColor.black, fontSize: 14),
+                    style: AppStyle.medium.copyWith(
+                        color: AppColor.black,
+                        fontSize: 14 + controllerGet.fontSizeObx.value),
                   ),
                 ),
                 // const SizedBox(height: 4),
@@ -329,8 +343,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     '※ 아래의 예시와 같이 언론사 페이지에서 구독 상태가 보이도록 캡쳐해 주세요',
-                    style: AppStyle.medium
-                        .copyWith(color: HexColor('#ff0019'), fontSize: 12),
+                    style: AppStyle.medium.copyWith(
+                        color: HexColor('#ff0019'),
+                        fontSize: 12 + controllerGet.fontSizeObx.value),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -353,8 +368,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
                     '이미지가 업로드 완료 된 후, 지급받기 버튼을 눌러주세요. ',
-                    style: AppStyle.medium
-                        .copyWith(color: AppColor.black, fontSize: 14),
+                    style: AppStyle.medium.copyWith(
+                        color: AppColor.black,
+                        fontSize: 14 + controllerGet.fontSizeObx.value),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -381,8 +397,10 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                           SizedBox(
                               child: Text(
                                   files.isNotEmpty ? urlImage : '이미지 업로드 하기',
-                                  style: AppStyle.medium
-                                      .copyWith(color: AppColor.black),
+                                  style: AppStyle.medium.copyWith(
+                                      color: AppColor.black,
+                                      fontSize:
+                                          14 + controllerGet.fontSizeObx.value),
                                   overflow: TextOverflow.clip)),
                         ],
                       ),
@@ -483,13 +501,16 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         children: [
           Text(
             step ?? '',
-            style: AppStyle.bold
-                .copyWith(color: HexColor('#f4a43b'), fontSize: 16),
+            style: AppStyle.bold.copyWith(
+                color: HexColor('#f4a43b'),
+                fontSize: 16 + controllerGet.fontSizeObx.value),
           ),
           const SizedBox(height: 4),
           Text(
             title ?? '',
-            style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
+            style: AppStyle.bold.copyWith(
+                color: AppColor.black,
+                fontSize: 16 + controllerGet.fontSizeObx.value),
           )
         ],
       ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,6 +16,7 @@ class LinkAddvertisingScreen extends StatefulWidget {
 }
 
 class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
+  final controllerGet = Get.put(SettingFontSize());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +26,9 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
         elevation: 1,
         centerTitle: true,
         title: Text('제휴 및 광고 문의',
-            style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
+            style: AppStyle.bold.copyWith(
+                fontSize: 16 + controllerGet.fontSizeObx.value,
+                color: AppColor.black)),
         leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
@@ -84,26 +89,37 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                   _buidItem(
                       callback: () {},
                       title: '고객센터',
-                      widget: Text(
-                        '1833-8590 / abee@abee.co.kr',
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.black, fontSize: 12),
+                      widget: SizedBox(
+                        width: MediaQuery.of(context).size.width - 150,
+                        child: Text(
+                          '1833-8590 / abee@abee.co.kr',
+                          style: AppStyle.bold.copyWith(
+                              color: AppColor.black,
+                              fontSize: 12 + controllerGet.fontSizeObx.value),
+                        ),
                       )),
                   _buidItem(
                       callback: () {},
                       title: '업무시간',
-                      widget: RichText(
-                          text: TextSpan(
-                              text: '09:00 ~ 18:00',
-                              style: AppStyle.bold.copyWith(
-                                  color: AppColor.black, fontSize: 12),
-                              children: [
-                            TextSpan(
-                              text: '(점심시간 : 12:00 ~ 13:00)',
-                              style: AppStyle.bold.copyWith(
-                                  color: AppColor.grey5D, fontSize: 10),
-                            )
-                          ]))),
+                      widget: SizedBox(
+                        width: MediaQuery.of(context).size.width - 150,
+                        child: RichText(
+                            text: TextSpan(
+                                text: '09:00 ~ 18:00',
+                                style: AppStyle.bold.copyWith(
+                                    color: AppColor.black,
+                                    fontSize:
+                                        12 + controllerGet.fontSizeObx.value),
+                                children: [
+                              TextSpan(
+                                text: '(점심시간 : 12:00 ~ 13:00)',
+                                style: AppStyle.bold.copyWith(
+                                    color: AppColor.grey5D,
+                                    fontSize:
+                                        10 + controllerGet.fontSizeObx.value),
+                              )
+                            ])),
+                      )),
                 ],
               ),
             ),
@@ -121,8 +137,9 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                     color: AppColor.yellow),
                 child: Text(
                   '제휴 및 광고 문의하기',
-                  style: AppStyle.bold
-                      .copyWith(color: AppColor.black, fontSize: 16),
+                  style: AppStyle.bold.copyWith(
+                      color: AppColor.black,
+                      fontSize: 16 + controllerGet.fontSizeObx.value),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -173,8 +190,9 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
           children: [
             Text(
               title ?? '',
-              style:
-                  AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
+              style: AppStyle.bold.copyWith(
+                  color: AppColor.black,
+                  fontSize: 14 + controllerGet.fontSizeObx.value),
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),

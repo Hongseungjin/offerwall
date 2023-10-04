@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
@@ -12,6 +13,7 @@ import 'package:sdk_eums/eum_app_offer_wall/screen/link_addvertising_module/link
 import 'package:sdk_eums/eum_app_offer_wall/screen/notifi_module/notifi_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/request_module/request_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/setting_fontsize/setting_fonesize_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/setting_module/setting_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/using_term_module/using_term_screen.dart';
@@ -20,6 +22,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/custom_animation_click.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/rx_bus.dart';
@@ -38,6 +41,7 @@ class _MyPageState extends State<MyPage> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   dynamic dataUser;
   LocalStore? localStore = LocalStoreService();
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
@@ -108,7 +112,6 @@ class _MyPageState extends State<MyPage> {
   }
 
   _buildContent(BuildContext context) {
-    print("dataUser$dataUser");
     return BlocBuilder<MyPageBloc, MyPageState>(
       builder: (context, state) {
         return Scaffold(
@@ -128,7 +131,9 @@ class _MyPageState extends State<MyPage> {
             ),
             title: Text(
               '설정',
-              style: AppStyle.bold.copyWith(color: Colors.black),
+              style: AppStyle.bold.copyWith(
+                  color: Colors.black,
+                  fontSize: 18 + controllerGet.fontSizeObx.value),
             ),
           ),
           body: SingleChildScrollView(
@@ -147,7 +152,8 @@ class _MyPageState extends State<MyPage> {
                       const SizedBox(width: 20),
                       Text(
                         dataUser != null ? dataUser['memId'] : '',
-                        style: AppStyle.bold,
+                        style: AppStyle.bold.copyWith(
+                            fontSize: 18 + controllerGet.fontSizeObx.value),
                       ),
                     ],
                   ),
@@ -184,7 +190,8 @@ class _MyPageState extends State<MyPage> {
                               ? Constants.formatMoney(dataUser['memPoint'] ?? 0,
                                   suffix: 'P')
                               : '',
-                          style: AppStyle.bold,
+                          style: AppStyle.bold.copyWith(
+                              fontSize: 14 + controllerGet.fontSizeObx.value),
                         ),
                         const Spacer(),
                         const Icon(
@@ -196,7 +203,8 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
                 // _buildUIBannerImage(dataBanner: state.listBanner),
-                _buildItem()
+                _buildItem(),
+                const SizedBox(height: 16)
               ],
             ),
           ),
@@ -270,7 +278,8 @@ class _MyPageState extends State<MyPage> {
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
             child: Text(
               data[0]['area'],
-              style: AppStyle.bold,
+              style: AppStyle.bold
+                  .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
             )),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -331,6 +340,8 @@ class _MyPageState extends State<MyPage> {
                             //     ));
                             break;
                           case 9:
+                            Routing()
+                                .navigate(context, SettingFontSizeScreen());
                             print("asdlkasdaajsd");
                             break;
 
@@ -354,11 +365,15 @@ class _MyPageState extends State<MyPage> {
                         width: (MediaQuery.of(context).size.width - 45) / 2,
                         child: Row(
                           children: [
-                            Text(
-                              data[index]['subArea'],
-                              style: AppStyle.medium,
+                            Expanded(
+                              child: Text(
+                                data[index]['subArea'],
+                                maxLines: 2,
+                                style: AppStyle.medium.copyWith(
+                                    fontSize:
+                                        12 + controllerGet.fontSizeObx.value),
+                              ),
                             ),
-                            const Spacer(),
                             Image.asset(
                               data[index]['urlImage'],
                               package: "sdk_eums",

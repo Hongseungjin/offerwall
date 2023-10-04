@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -44,6 +46,7 @@ class _CustomWebViewState extends State<CustomWebView> {
   late final WebViewController _controller;
   bool isLoading = true;
   bool showButton = false;
+  final controllerGet = Get.put(SettingFontSize());
 
   String getProperHtml(String content) {
     String start1 = 'https:';
@@ -131,7 +134,9 @@ class _CustomWebViewState extends State<CustomWebView> {
       backgroundColor: AppColor.white,
       appBar: AppBar(
         backgroundColor: widget.color,
-        title: Text(widget.title, style: AppStyle.bold.copyWith(fontSize: 16)),
+        title: Text(widget.title,
+            style: AppStyle.bold
+                .copyWith(fontSize: 16 + controllerGet.fontSizeObx.value)),
         centerTitle: true,
         leading: InkWell(
           onTap: () {

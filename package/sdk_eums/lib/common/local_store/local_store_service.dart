@@ -194,4 +194,15 @@ class LocalStoreService extends LocalStore {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString("sizeDevice", jsonEncode(sizeHeight));
   }
+
+  @override
+  Future getSizeText() async {
+    return (await SharedPreferences.getInstance()).getString('SetText') ?? '0';
+  }
+
+  @override
+  Future setSizeText(double sizeHeight) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString('SetText', jsonEncode(sizeHeight));
+  }
 }

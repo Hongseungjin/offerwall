@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
@@ -32,6 +34,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
   String keySearch = '';
   bool checkSearch = false;
   TextEditingController searchCtrl = TextEditingController();
+  final controllerGet = Get.put(SettingFontSize());
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +105,9 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
         elevation: 1,
         centerTitle: true,
         title: Text(AppString.askedQuestion,
-            style: AppStyle.bold.copyWith(fontSize: 16, color: AppColor.black)),
+            style: AppStyle.bold.copyWith(
+                fontSize: 16 + controllerGet.fontSizeObx.value,
+                color: AppColor.black)),
         leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
@@ -226,6 +231,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                           hintText: '질문 키워드를 입력해 주세요',
                           border: InputBorder.none,
                           hintStyle: AppStyle.bold.copyWith(
+                              fontSize: 14 + controllerGet.fontSizeObx.value,
                               color: AppColor.color70.withOpacity(0.7))),
                     ),
                     Divider(),
@@ -243,12 +249,14 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                 children: [
                   Text(
                     '더 궁금한 점은 1:1문의하기를 통해 해결해 보세요.',
-                    style: AppStyle.bold
-                        .copyWith(fontSize: 14, color: HexColor('#666666')),
+                    style: AppStyle.bold.copyWith(
+                        fontSize: 14 + controllerGet.fontSizeObx.value,
+                        color: HexColor('#666666')),
                   ),
                   const SizedBox(height: 16),
                   InkWell(
                     onTap: () {
+                      FocusScope.of(context).unfocus();
                       Routing().navigate(context, RequestScreen());
                     },
                     child: Container(
@@ -260,8 +268,9 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                       child: Text(
                         '1:1 문의하기',
                         textAlign: TextAlign.center,
-                        style: AppStyle.bold
-                            .copyWith(color: AppColor.black, fontSize: 14),
+                        style: AppStyle.bold.copyWith(
+                            color: AppColor.black,
+                            fontSize: 14 + controllerGet.fontSizeObx.value),
                       ),
                     ),
                   )
@@ -278,6 +287,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
     return WidgetExpansionTitle(
       initiallyExpanded: data['isExpanded'],
       onExpansionChanged: (expanded) {
+        FocusScope.of(context).unfocus();
         setState(() {
           data['isExpanded'] = expanded;
         });
@@ -331,6 +341,8 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
 
               return null;
             },
+            textStyle: AppStyle.regular
+                .copyWith(fontSize: 12 + controllerGet.fontSizeObx.value),
           ),
         ),
         const SizedBox(height: 8),
@@ -353,7 +365,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
               BoxDecoration(shape: BoxShape.circle, color: HexColor('#fdd000')),
           child: Text(
             start1,
-            style: AppStyle.bold,
+            style: AppStyle.bold.copyWith(fontSize: 14),
           ),
         ),
         // Image.asset(Assets.question.path, package: "sdk_eums", height: 32),
@@ -362,7 +374,9 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
             child: Text(
               title,
               maxLines: 2,
-              style: AppStyle.bold.copyWith(color: AppColor.black),
+              style: AppStyle.bold.copyWith(
+                  color: AppColor.black,
+                  fontSize: 14 + controllerGet.fontSizeObx.value),
             ))
       ],
     );
