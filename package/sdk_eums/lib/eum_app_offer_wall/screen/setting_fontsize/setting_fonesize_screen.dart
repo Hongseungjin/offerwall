@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sdk_eums/common/local_store/local_store.dart';
+import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 // import 'package:syncfusion_flutter_charts/charts.dart';
@@ -15,15 +17,34 @@ class SettingFontSizeScreen extends StatefulWidget {
 class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
   final controller = Get.put(SettingFontSize());
 
-  final SfRangeValues _dataValues = const SfRangeValues(1, 5);
+  final SfRangeValues _dataValues = const SfRangeValues(1, 4);
+  LocalStore localStore = LocalStoreService();
 
   double _value = 1;
-  double _valueStart = 0;
-  double _valueEnd = 0;
   @override
   void initState() {
+    getSize();
     // TODO: implement initState
     super.initState();
+  }
+
+  getSize() async {
+    switch ((double.parse(await localStore.getSizeText())).toInt()) {
+      case 14:
+        _value = 1;
+        break;
+      case 16:
+        _value = 2;
+        break;
+      case 18:
+        _value = 3;
+        break;
+      case 20:
+        _value = 4;
+        break;
+      default:
+    }
+    setState(() {});
   }
 
   @override
@@ -40,39 +61,22 @@ class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
                 Text(
                   "마케팅 알림",
                   style: AppStyle.medium
-                      .copyWith(fontSize: 14 + controller.fontSizeObx!.value),
+                      .copyWith(fontSize: controller.fontSizeObx.value),
                 ),
                 SizedBox(height: 19),
                 SfSlider(
                   min: 1.0,
-                  max: 5.0,
+                  max: 4.0,
                   value: _value,
                   interval: 1,
                   stepSize: 1,
                   showTicks: true,
                   showLabels: true,
-                  // enableTooltip: true,
-                  // shouldAlwaysShowTooltip: true,
-                  onChangeStart: (value) {
-                    setState(() {
-                      _valueStart = value;
-                    });
-                  },
-                  onChangeEnd: (value) {
-                    setState(() {
-                      _valueEnd = value;
-                    });
-                  },
                   onChanged: (dynamic value) {
                     setState(() {
                       _value = value;
                     });
-
-                    if (_value < _valueStart) {
-                      controller.decreaseSize(_valueStart);
-                    } else {
-                      controller.increaseSize(_value);
-                    }
+                    controller.increaseSize(_value);
                   },
                 ),
               ],

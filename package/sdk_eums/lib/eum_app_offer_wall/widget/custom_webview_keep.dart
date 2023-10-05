@@ -127,7 +127,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
         title: Text(widget.title ?? '',
             style: AppStyle.bold.copyWith(
                 color: Colors.black,
-                fontSize: 18 + controllerGet.fontSizeObx.value)),
+                fontSize: 4 + controllerGet.fontSizeObx.value)),
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -189,7 +189,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
                         child: Text(
                           '포인트 적립하기',
                           style: AppStyle.medium.copyWith(
-                              fontSize: 14 + controllerGet.fontSizeObx.value,
+                              fontSize: controllerGet.fontSizeObx.value,
                               color:
                                   !showButton ? AppColor.grey : AppColor.white),
                         ),

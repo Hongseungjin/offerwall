@@ -153,7 +153,7 @@ class _StatusPointPageState extends State<StatusPointPage>
           title: Text('포인트 현황',
               style: AppStyle.bold.copyWith(
                   color: Colors.black,
-                  fontSize: 18 + controllerGet.fontSizeObx.value)),
+                  fontSize: 4 + controllerGet.fontSizeObx.value)),
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -183,13 +183,13 @@ class _StatusPointPageState extends State<StatusPointPage>
                   tabs: [
                     Text(
                       '포인트 적립 내역',
-                      style: AppStyle.regular.copyWith(
-                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular
+                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                     Text(
                       ' 포인트 전환',
-                      style: AppStyle.regular.copyWith(
-                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular
+                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                   ],
                 ),
@@ -205,7 +205,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                             '현재 보유 포인트',
                             style: AppStyle.medium.copyWith(
                                 color: HexColor('707070'),
-                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                                fontSize: controllerGet.fontSizeObx.value),
                           ),
                           Row(
                             children: [
@@ -219,8 +219,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                                         : 0,
                                     suffix: '원'),
                                 style: AppStyle.bold.copyWith(
-                                    fontSize:
-                                        26 + controllerGet.fontSizeObx.value),
+                                    fontSize: controllerGet.fontSizeObx.value),
                               ),
                             ],
                           )
@@ -234,8 +233,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                             color: HexColor('#fcc900')),
                         child: Text('소멸예정',
                             style: AppStyle.bold.copyWith(
-                                fontSize:
-                                    12 + controllerGet.fontSizeObx.value)),
+                                fontSize: controllerGet.fontSizeObx.value - 2)),
                       ),
                     ],
                   ),
@@ -287,7 +285,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                                 ? '총 누적 적립 포인트'
                                 : '현재까지 캐시로 전환된 포인트',
                             style: AppStyle.regular.copyWith(
-                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                                fontSize: controllerGet.fontSizeObx.value),
                             textAlign: TextAlign.center,
                           ),
                           Text(
@@ -298,7 +296,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                                   suffix: '원'),
                               style: AppStyle.bold.copyWith(
                                   fontSize:
-                                      22 + controllerGet.fontSizeObx.value)),
+                                      8 + controllerGet.fontSizeObx.value)),
                         ],
                       ),
                     );
@@ -348,7 +346,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                           textAlign: TextAlign.center,
                           style: AppStyle.bold.copyWith(
                               color: Colors.black,
-                              fontSize: 14 + controllerGet.fontSizeObx.value),
+                              fontSize: controllerGet.fontSizeObx.value),
                         )))
               ],
             );
@@ -380,7 +378,7 @@ class _StatusPointPageState extends State<StatusPointPage>
           Text(
             Constants.formatTimePoint(firstMonth.toString()),
             style: AppStyle.bold
-                .copyWith(fontSize: 16 + controllerGet.fontSizeObx.value),
+                .copyWith(fontSize: 2 + controllerGet.fontSizeObx.value),
           ),
           InkWell(
               onTap: () {
@@ -523,13 +521,13 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
               Text(
                 title ?? '',
                 style: AppStyle.medium
-                    .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
+                    .copyWith(fontSize: controllerGet.fontSizeObx.value),
               ),
               const SizedBox(height: 5),
               Text(
                 '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}',
                 style: AppStyle.regular.copyWith(
-                    fontSize: 12 + controllerGet.fontSizeObx.value,
+                    fontSize: controllerGet.fontSizeObx.value - 2,
                     color: HexColor('#707070')),
               )
 
@@ -539,8 +537,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
         ),
         Text(
           Constants.formatMoney(point ?? 0, suffix: 'P'),
-          style: AppStyle.bold
-              .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
+          style:
+              AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
         ),
       ],
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/bloc/report_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -10,6 +11,7 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
+import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 import '../../../common/events/events.dart';
@@ -40,6 +42,7 @@ class _ReportPageState extends State<ReportPage> {
   bool checkContent = false;
   int? indexReport;
   FToast fToast = FToast();
+  final controllerGet = Get.put(SettingFontSize());
   @override
   void initState() {
     fToast.init(context);
@@ -147,7 +150,9 @@ class _ReportPageState extends State<ReportPage> {
           ),
           title: Text(
             '신고하기',
-            style: AppStyle.bold.copyWith(fontSize: 18, color: Colors.black),
+            style: AppStyle.bold.copyWith(
+                fontSize: 4 + controllerGet.fontSizeObx.value,
+                color: Colors.black),
           ),
         ),
         body: SingleChildScrollView(
@@ -158,7 +163,8 @@ class _ReportPageState extends State<ReportPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   '신고할 광고 정보',
-                  style: AppStyle.bold,
+                  style: AppStyle.bold
+                      .copyWith(fontSize: controllerGet.fontSizeObx.value),
                 ),
               ),
               Padding(
@@ -184,7 +190,8 @@ class _ReportPageState extends State<ReportPage> {
                     Expanded(
                       child: Text(
                         widget.data['name'] ?? '',
-                        style: AppStyle.bold.copyWith(fontSize: 18),
+                        style: AppStyle.bold.copyWith(
+                            fontSize: 4 + controllerGet.fontSizeObx.value),
                       ),
                     )
                   ],
@@ -199,12 +206,15 @@ class _ReportPageState extends State<ReportPage> {
                 child: RichText(
                     text: TextSpan(
                         text: '신고 사유 선택',
-                        style: AppStyle.bold.copyWith(color: Colors.black),
+                        style: AppStyle.bold.copyWith(
+                            color: Colors.black,
+                            fontSize: controllerGet.fontSizeObx.value),
                         children: [
                       TextSpan(
                           text: '(하나만 선택 가능해요)',
                           style: AppStyle.medium.copyWith(
-                              fontSize: 12, color: HexColor('#888888')))
+                              fontSize: controllerGet.fontSizeObx.value - 2,
+                              color: HexColor('#888888')))
                     ])),
               ),
               const SizedBox(height: 12),
@@ -253,14 +263,17 @@ class _ReportPageState extends State<ReportPage> {
                                       color: valueSelected == listReprot[index]
                                           ? Colors.black
                                           : HexColor('#888888'),
-                                      fontSize: 16),
+                                      fontSize:
+                                          controllerGet.fontSizeObx.value + 2),
                                 ),
                                 index == 5
                                     ? Text(
                                         ' (직접 입력)',
                                         style: AppStyle.medium.copyWith(
                                             color: HexColor('#888888'),
-                                            fontSize: 16),
+                                            fontSize: 2 +
+                                                controllerGet
+                                                    .fontSizeObx.value),
                                       )
                                     : const SizedBox()
                               ]),
@@ -299,6 +312,7 @@ class _ReportPageState extends State<ReportPage> {
                                 hintText: '관련 내용이 아니에요',
                                 border: InputBorder.none,
                                 hintStyle: AppStyle.bold.copyWith(
+                                    fontSize: controllerGet.fontSizeObx.value,
                                     color: AppColor.color70.withOpacity(0.7))),
                           ),
                         ),
@@ -359,7 +373,8 @@ class _ReportPageState extends State<ReportPage> {
                   child: Text(
                     '신고하기',
                     textAlign: TextAlign.center,
-                    style: AppStyle.bold,
+                    style: AppStyle.bold
+                        .copyWith(fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
               )

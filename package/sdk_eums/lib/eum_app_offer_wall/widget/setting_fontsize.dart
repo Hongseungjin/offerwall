@@ -4,29 +4,45 @@ import 'package:sdk_eums/common/local_store/local_store_service.dart';
 
 class SettingFontSize extends GetxController {
   LocalStore localStore = LocalStoreService();
-  RxDouble fontSizeObx = RxDouble(0);
+  RxDouble fontSizeObx = RxDouble(14);
 
   initSetingFontSize(SettingFontSize controllerGet) async {
-    print("controllerGet.fontSizeObx.value${(await localStore.getSizeText())}");
-    controllerGet.increaseSize(double.parse(await localStore.getSizeText()));
+    double value = 1;
+    switch ((double.parse(await localStore.getSizeText())).toInt()) {
+      case 14:
+        value = 1;
+        break;
+      case 16:
+        value = 2;
+        break;
+      case 18:
+        value = 3;
+        break;
+      case 20:
+        value = 4;
+        break;
+      default:
+    }
+    controllerGet.increaseSize(value);
   }
 
-  increaseSize(double numberSizeInCrease) {
-    try {
-      print("fontSizeObx.value ${fontSizeObx.value}");
-      fontSizeObx.value += numberSizeInCrease;
-      print("fontSizeObx.value ${fontSizeObx.value}");
-      // localStore.setSizeText(fontSizeObx.value);
-    } catch (ex) {}
-  }
-
-  decreaseSize(double numberSizeInCrease) {
-    print("numberSizeInCrease ${numberSizeInCrease}");
-    try {
-      print("fontSizeObx.value12313 ${fontSizeObx.value}");
-      fontSizeObx.value -= numberSizeInCrease;
-      print("fontSizeObx.value222 ${fontSizeObx.value}");
-      // localStore.setSizeText(fontSizeObx.value);
-    } catch (ex) {}
+  increaseSize(num numberSizeInCrease) {
+    fontSizeObx.value = 14;
+    switch (numberSizeInCrease) {
+      case 1:
+        fontSizeObx.value = 14;
+        break;
+      case 2:
+        fontSizeObx.value += 2;
+        break;
+      case 3:
+        fontSizeObx.value += 4;
+        break;
+      case 4:
+        fontSizeObx.value += 6;
+        break;
+      default:
+    }
+    localStore.setSizeText(fontSizeObx.value);
   }
 }

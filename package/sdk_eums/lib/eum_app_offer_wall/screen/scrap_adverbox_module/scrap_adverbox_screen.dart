@@ -67,7 +67,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               centerTitle: true,
               title: Text('광고 스크랩',
                   style: AppStyle.bold.copyWith(
-                      fontSize: 16 + controllerGet.fontSizeObx.value,
+                      fontSize: 2 + controllerGet.fontSizeObx.value,
                       color: AppColor.black)),
               leading: InkWell(
                 onTap: () {
@@ -157,22 +157,28 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                 const SizedBox(height: 12),
                                                 Row(
                                                   children: [
-                                                    Image.asset(
-                                                        Assets.keep_adver.path,
-                                                        package: "sdk_eums",
-                                                        height: 40),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 0),
+                                                      child: Image.asset(
+                                                          Assets
+                                                              .keep_adver.path,
+                                                          package: "sdk_eums",
+                                                          height: 40),
+                                                    ),
                                                     const SizedBox(width: 10),
                                                     Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Container(
+                                                        SizedBox(
                                                           width: MediaQuery.of(
                                                                       context)
                                                                   .size
                                                                   .width /
-                                                              1.9,
+                                                              2,
                                                           child: Text(
                                                             state.dataScrapAdverbox[
                                                                         index]
@@ -181,7 +187,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                             style: AppStyle.bold.copyWith(
                                                                 color: AppColor
                                                                     .black,
-                                                                fontSize: 14 +
+                                                                fontSize:
                                                                     controllerGet
                                                                         .fontSizeObx
                                                                         .value),
@@ -189,19 +195,27 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                         ),
                                                         const SizedBox(
                                                             height: 2),
-                                                        Text(
-                                                          '스크랩 날짜 ${state.dataScrapAdverbox[index]['regist_date'] != null ? Constants.formatTimeDay(state.dataScrapAdverbox[index]['regist_date']) : ''} ',
-                                                          style: AppStyle.medium.copyWith(
-                                                              color: AppColor
-                                                                  .grey5D,
-                                                              fontSize: 10 +
-                                                                  controllerGet
-                                                                      .fontSizeObx
-                                                                      .value),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              2,
+                                                          child: Text(
+                                                            '스크랩 날짜 ${state.dataScrapAdverbox[index]['regist_date'] != null ? Constants.formatTimeDay(state.dataScrapAdverbox[index]['regist_date']) : ''} ',
+                                                            maxLines: 2,
+                                                            style: AppStyle.medium.copyWith(
+                                                                color: AppColor
+                                                                    .grey5D,
+                                                                fontSize: controllerGet
+                                                                        .fontSizeObx
+                                                                        .value -
+                                                                    4),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
-                                                    const Spacer(),
+                                                    // const Spacer(),
                                                     Container(
                                                       padding: const EdgeInsets
                                                               .symmetric(
@@ -217,7 +231,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                         '광고보기',
                                                         style: AppStyle.bold
                                                             .copyWith(
-                                                                fontSize: 14 +
+                                                                fontSize:
                                                                     controllerGet
                                                                         .fontSizeObx
                                                                         .value),

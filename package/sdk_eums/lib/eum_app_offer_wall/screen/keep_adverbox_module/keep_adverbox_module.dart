@@ -96,7 +96,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         centerTitle: true,
         title: Text('광고 보관함',
             style: AppStyle.bold.copyWith(
-                fontSize: 16 + controllerGet.fontSizeObx.value,
+                fontSize: 2 + controllerGet.fontSizeObx.value,
                 color: AppColor.black)),
         leading: InkWell(
           onTap: () {
@@ -231,16 +231,20 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                 horizontal: 16, vertical: 24),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  Assets.scrap_adver.path,
-                                  package: "sdk_eums",
-                                  height: 40,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Image.asset(
+                                    Assets.scrap_adver.path,
+                                    package: "sdk_eums",
+                                    height: 40,
+                                    width: 40,
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: MediaQuery.of(context).size.width /
                                           1.9,
                                       child: Text(
@@ -248,9 +252,8 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                         maxLines: 2,
                                         style: AppStyle.bold.copyWith(
                                             color: AppColor.black,
-                                            fontSize: 14 +
-                                                controllerGet
-                                                    .fontSizeObx.value),
+                                            fontSize: controllerGet
+                                                .fontSizeObx.value),
                                       ),
                                     ),
                                     const SizedBox(height: 4),
@@ -259,45 +262,40 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                             text: '남은 기간 ',
                                             style: AppStyle.regular.copyWith(
                                                 color: HexColor('#888888'),
-                                                fontSize: 12 +
-                                                    controllerGet
-                                                        .fontSizeObx.value),
+                                                fontSize: controllerGet
+                                                        .fontSizeObx.value -
+                                                    2),
                                             children: [
                                           TextSpan(
                                             text: ' 2',
                                             style: AppStyle.bold.copyWith(
                                                 color: HexColor('#888888'),
-                                                fontSize: 12 +
-                                                    controllerGet
-                                                        .fontSizeObx.value),
+                                                fontSize: controllerGet
+                                                        .fontSizeObx.value -
+                                                    2),
                                           ),
                                           TextSpan(
                                             text: ' 일',
                                             style: AppStyle.regular.copyWith(
                                                 color: HexColor('#888888'),
-                                                fontSize: 12 +
-                                                    controllerGet
-                                                        .fontSizeObx.value),
+                                                fontSize: controllerGet
+                                                        .fontSizeObx.value -
+                                                    2),
                                           )
                                         ])),
                                     const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '보관한 날짜',
-                                          maxLines: 2,
-                                          style: AppStyle.regular.copyWith(
-                                              color: HexColor('#888888'),
-                                              fontSize: 12),
-                                        ),
-                                        Text(
-                                          ' ${Constants.formatTimeNew(data[index]['regist_date'] ?? '')}',
-                                          maxLines: 2,
-                                          style: AppStyle.bold.copyWith(
-                                              color: HexColor('#888888'),
-                                              fontSize: 12),
-                                        )
-                                      ],
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width / 2,
+                                      child: Text(
+                                        '보관한 날짜 ${Constants.formatTimeNew(data[index]['regist_date'] ?? '')} ',
+                                        maxLines: 3,
+                                        style: AppStyle.medium.copyWith(
+                                            color: HexColor('#888888'),
+                                            fontSize: controllerGet
+                                                    .fontSizeObx.value -
+                                                2),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -311,7 +309,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                   child: Text(
                                     '광고보기',
                                     style: AppStyle.bold.copyWith(
-                                        fontSize: 14 +
+                                        fontSize:
                                             controllerGet.fontSizeObx.value),
                                   ),
                                 )

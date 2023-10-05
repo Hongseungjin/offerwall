@@ -136,7 +136,7 @@ class _CustomWebViewState extends State<CustomWebView> {
         backgroundColor: widget.color,
         title: Text(widget.title,
             style: AppStyle.bold
-                .copyWith(fontSize: 16 + controllerGet.fontSizeObx.value)),
+                .copyWith(fontSize: 2 + controllerGet.fontSizeObx.value)),
         centerTitle: true,
         leading: InkWell(
           onTap: () {

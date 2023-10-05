@@ -17,6 +17,7 @@ void main() {
     NotificationHandler().initializeFcmNotification();
 
     runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(),
       // home: DevicePreview(
       //   enabled: true,

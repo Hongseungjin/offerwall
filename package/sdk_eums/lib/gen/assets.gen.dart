@@ -183,6 +183,15 @@ class Assets {
   static const AssetGenImage note_text =
       AssetGenImage('assets/icons/note_text.png');
 
+  static const AssetGenImage banner1 =
+      AssetGenImage('assets/icons/banner1.png');
+  static const AssetGenImage banner2 =
+      AssetGenImage('assets/icons/banner2.png');
+  static const AssetGenImage banner3 =
+      AssetGenImage('assets/icons/banner3.png');
+  static const AssetGenImage banner4 =
+      AssetGenImage('assets/icons/banner4.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         logo,

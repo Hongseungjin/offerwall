@@ -16,6 +16,7 @@ import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/widget/custom_web_view_banner.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/instruct_app_module/instruct_app.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/my_page_module/my_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/scrap_adverbox_module/scrap_adverbox_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/status_point_page.dart';
@@ -196,7 +197,7 @@ class _HomePageState extends State<HomePage>
                       child: Text('리워드',
                           style: AppStyle.bold.copyWith(
                               color: AppColor.black,
-                              fontSize: 18 + controllerGet.fontSizeObx.value)),
+                              fontSize: 4 + controllerGet.fontSizeObx.value)),
                     ),
                   ],
                 ),
@@ -295,12 +296,12 @@ class _HomePageState extends State<HomePage>
                           Text(
                             '참여하고 리워드',
                             style: AppStyle.regular.copyWith(
-                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                                fontSize: controllerGet.fontSizeObx.value),
                           ),
                           Text(
                             '쇼핑하고 리워드',
                             style: AppStyle.regular.copyWith(
-                                fontSize: 14 + controllerGet.fontSizeObx.value),
+                                fontSize: controllerGet.fontSizeObx.value),
                           ),
                         ],
                       ),
@@ -366,6 +367,7 @@ class _HomePageState extends State<HomePage>
 
   _buildUIPoint({int? point}) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
           border: Border(
@@ -374,16 +376,19 @@ class _HomePageState extends State<HomePage>
               top: BorderSide(
                   color: HexColor('#888888').withOpacity(.2), width: 5))),
       child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: Wrap(
+          spacing: 12,
+          direction: Axis.horizontal,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
               '지금 획득 가능한 포인트',
               style: AppStyle.regular.copyWith(
                   color: HexColor('#888888'),
-                  fontSize: 14 + controllerGet.fontSizeObx.value),
+                  fontSize: controllerGet.fontSizeObx.value),
             ),
             Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset(Assets.icon_point_y.path,
                     package: "sdk_eums", height: 24),
@@ -391,7 +396,7 @@ class _HomePageState extends State<HomePage>
                 Text(
                   Constants.formatMoney(point, suffix: ''),
                   style: AppStyle.bold
-                      .copyWith(fontSize: 20 + controllerGet.fontSizeObx.value),
+                      .copyWith(fontSize: 6 + controllerGet.fontSizeObx.value),
                 )
               ],
             ),
@@ -412,12 +417,12 @@ class _HomePageState extends State<HomePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+          Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Text(
               '현재 적립된 포인트',
               style: AppStyle.regular.copyWith(
-                  fontSize: 14 + controllerGet.fontSizeObx.value,
+                  fontSize: controllerGet.fontSizeObx.value,
                   color: Colors.black),
             ),
           ),
@@ -451,7 +456,7 @@ class _HomePageState extends State<HomePage>
           const SizedBox(height: 8),
           WidgetAnimationClick(
             onTap: () {
-              Routing().navigate(context, UsingTermScreen());
+              Routing().navigate(context, InstructAppScreen());
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -464,7 +469,7 @@ class _HomePageState extends State<HomePage>
                     '서비스 이용 안내',
                     style: AppStyle.regular12.copyWith(
                         color: HexColor('#888888'),
-                        fontSize: 12 + controllerGet.fontSizeObx.value),
+                        fontSize: controllerGet.fontSizeObx.value - 2),
                   ),
                 ],
               ),
@@ -481,11 +486,15 @@ class _HomePageState extends State<HomePage>
             ),
             child: Row(
               children: [
-                Text(
-                  isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
-                  style: AppStyle.medium.copyWith(
-                      color: Colors.black,
-                      fontSize: 14 + controllerGet.fontSizeObx.value),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: Text(
+                    isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
+                    maxLines: 2,
+                    style: AppStyle.medium.copyWith(
+                        color: Colors.black,
+                        fontSize: controllerGet.fontSizeObx.value),
+                  ),
                 ),
                 const Spacer(),
                 WidgetAnimationClick(
@@ -592,7 +601,7 @@ class _HomePageState extends State<HomePage>
             title ?? '',
             style: AppStyle.regular12.copyWith(
                 color: Colors.black,
-                fontSize: 12 + controllerGet.fontSizeObx.value),
+                fontSize: controllerGet.fontSizeObx.value - 2),
           )
         ],
       ),
@@ -726,9 +735,7 @@ class _ListViewHomeState extends State<ListViewHome> {
           value ?? "",
           textAlign: TextAlign.center,
           style: AppStyle.bold.copyWith(
-              color: AppColor.black,
-              fontSize: 14 + controllerGet.fontSizeObx.value),
-          maxLines: 1,
+              color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
         ),
       );
     }).toList();
@@ -772,8 +779,8 @@ class _ListViewHomeState extends State<ListViewHome> {
                 children: [
                   Text(
                     '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개',
-                    style: AppStyle.regular.copyWith(
-                        fontSize: 14 + controllerGet.fontSizeObx.value),
+                    style: AppStyle.regular
+                        .copyWith(fontSize: controllerGet.fontSizeObx.value),
                   ),
                   const Spacer(),
                   SizedBox(
@@ -848,15 +855,14 @@ class _ListViewHomeState extends State<ListViewHome> {
             data['title'] ?? "",
             maxLines: 2,
             style: AppStyle.regular.copyWith(
-                fontSize: 14 + controllerGet.fontSizeObx.value,
-                color: Colors.black),
+                fontSize: controllerGet.fontSizeObx.value, color: Colors.black),
           ),
           const SizedBox(height: 4),
           Text(
             Constants.formatMoney(data['reward'], suffix: '원'),
             style: AppStyle.regular.copyWith(
                 decoration: TextDecoration.lineThrough,
-                fontSize: 14 + controllerGet.fontSizeObx.value,
+                fontSize: controllerGet.fontSizeObx.value,
                 color: HexColor('#888888')),
           ),
           const SizedBox(height: 4),
@@ -865,11 +871,11 @@ class _ListViewHomeState extends State<ListViewHome> {
               Text('60% ',
                   style: AppStyle.bold.copyWith(
                       color: HexColor('#ff7169'),
-                      fontSize: 16 + controllerGet.fontSizeObx.value)),
+                      fontSize: 2 + controllerGet.fontSizeObx.value)),
               Text(Constants.formatMoney(data['reward'], suffix: '원'),
                   style: AppStyle.bold.copyWith(
                       color: HexColor('#000000'),
-                      fontSize: 16 + controllerGet.fontSizeObx.value))
+                      fontSize: 2 + controllerGet.fontSizeObx.value))
             ],
           ),
           Container(
@@ -882,7 +888,7 @@ class _ListViewHomeState extends State<ListViewHome> {
               '+${Constants.formatMoney(data['reward'], suffix: '')}',
               style: AppStyle.bold.copyWith(
                   color: Colors.black,
-                  fontSize: 14 + controllerGet.fontSizeObx.value),
+                  fontSize: controllerGet.fontSizeObx.value),
             ),
           ),
           const SizedBox(height: 30),
@@ -924,7 +930,7 @@ class _ListViewHomeState extends State<ListViewHome> {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: CachedNetworkImage(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
@@ -939,27 +945,27 @@ class _ListViewHomeState extends State<ListViewHome> {
             ),
             const SizedBox(height: 16),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
                 data['title'] ?? "",
-                maxLines: 2,
+                // maxLines: 2,
                 style: AppStyle.bold.copyWith(
                     color: Colors.black,
-                    fontSize: 16 + controllerGet.fontSizeObx.value),
+                    fontSize: 2 + controllerGet.fontSizeObx.value),
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width) / 1.8 - 10,
                     child: Text(
                       title,
                       style: AppStyle.regular.copyWith(
                           color: HexColor('#666666'),
-                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                          fontSize: controllerGet.fontSizeObx.value),
                     ),
                   ),
                   const Spacer(),
@@ -971,9 +977,8 @@ class _ListViewHomeState extends State<ListViewHome> {
                         color: HexColor('#fdd000')),
                     child: Text(
                       '포인트받기',
-                      maxLines: 2,
-                      style: AppStyle.regular.copyWith(
-                          fontSize: 14 + controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular
+                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                   )
                 ],

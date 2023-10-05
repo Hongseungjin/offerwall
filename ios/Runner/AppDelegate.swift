@@ -1,9 +1,9 @@
-import UIKit
 import Flutter
+import UIKit
 import adlibrary
-import Firebase
+//import Firebase
 import UserNotifications
-import flutter_local_notifications
+//import flutter_local_notifications
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, AppAllOfferwallSDKListener{

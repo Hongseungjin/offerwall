@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
@@ -114,101 +115,103 @@ class _MyPageState extends State<MyPage> {
   _buildContent(BuildContext context) {
     return BlocBuilder<MyPageBloc, MyPageState>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColor.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            centerTitle: true,
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              ),
-            ),
-            title: Text(
-              '설정',
-              style: AppStyle.bold.copyWith(
-                  color: Colors.black,
-                  fontSize: 18 + controllerGet.fontSizeObx.value),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Image.asset(
-                        Assets.user.path,
-                        package: "sdk_eums",
-                        height: 50,
-                        width: 50,
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        dataUser != null ? dataUser['memId'] : '',
-                        style: AppStyle.bold.copyWith(
-                            fontSize: 18 + controllerGet.fontSizeObx.value),
-                      ),
-                    ],
-                  ),
-                ),
-                WidgetAnimationClick(
+        return Obx(() => Scaffold(
+              backgroundColor: AppColor.white,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.white,
+                centerTitle: true,
+                leading: InkWell(
                   onTap: () {
-                    Routing()
-                        .navigate(context, StatusPointPage(account: dataUser));
+                    Navigator.of(context).pop();
                   },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                        color: HexColor('#fdd000'),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            'P',
-                            style: AppStyle.bold.copyWith(color: Colors.black),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          dataUser != null
-                              ? Constants.formatMoney(dataUser['memPoint'] ?? 0,
-                                  suffix: 'P')
-                              : '',
-                          style: AppStyle.bold.copyWith(
-                              fontSize: 14 + controllerGet.fontSizeObx.value),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          size: 22,
-                        )
-                      ],
-                    ),
+                  child: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
                   ),
                 ),
-                // _buildUIBannerImage(dataBanner: state.listBanner),
-                _buildItem(),
-                const SizedBox(height: 16)
-              ],
-            ),
-          ),
-        );
+                title: Text(
+                  '설정',
+                  style: AppStyle.bold.copyWith(
+                      color: Colors.black,
+                      fontSize: 4 + controllerGet.fontSizeObx.value),
+                ),
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            Assets.user.path,
+                            package: "sdk_eums",
+                            height: 50,
+                            width: 50,
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            dataUser != null ? dataUser['memId'] : '',
+                            style: AppStyle.bold.copyWith(
+                                fontSize: 4 + controllerGet.fontSizeObx.value),
+                          ),
+                        ],
+                      ),
+                    ),
+                    WidgetAnimationClick(
+                      onTap: () {
+                        Routing().navigate(
+                            context, StatusPointPage(account: dataUser));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                            color: HexColor('#fdd000'),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                'P',
+                                style:
+                                    AppStyle.bold.copyWith(color: Colors.black),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              dataUser != null
+                                  ? Constants.formatMoney(
+                                      dataUser['memPoint'] ?? 0,
+                                      suffix: 'P')
+                                  : '',
+                              style: AppStyle.bold.copyWith(
+                                  fontSize: controllerGet.fontSizeObx.value),
+                            ),
+                            const Spacer(),
+                            const Icon(
+                              Icons.arrow_forward_ios_sharp,
+                              size: 22,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    // _buildUIBannerImage(dataBanner: state.listBanner),
+                    _buildItem(),
+                    const SizedBox(height: 16)
+                  ],
+                ),
+              ),
+            ));
       },
     );
   }
@@ -279,7 +282,7 @@ class _MyPageState extends State<MyPage> {
             child: Text(
               data[0]['area'],
               style: AppStyle.bold
-                  .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
+                  .copyWith(fontSize: controllerGet.fontSizeObx.value),
             )),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -371,7 +374,7 @@ class _MyPageState extends State<MyPage> {
                                 maxLines: 2,
                                 style: AppStyle.medium.copyWith(
                                     fontSize:
-                                        12 + controllerGet.fontSizeObx.value),
+                                        controllerGet.fontSizeObx.value - 2),
                               ),
                             ),
                             Image.asset(

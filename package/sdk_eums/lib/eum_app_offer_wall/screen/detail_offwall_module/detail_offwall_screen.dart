@@ -270,6 +270,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
   }
 
   Widget _buildContent(BuildContext context) {
+    print("controllerGet.fontSizeObx.value${controllerGet.fontSizeObx.value}");
     return Scaffold(
         key: globalKey,
         backgroundColor: AppColor.white,
@@ -279,7 +280,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
           centerTitle: true,
           title: Text(widget.title ?? '',
               style: AppStyle.bold.copyWith(
-                  fontSize: 16 + controllerGet.fontSizeObx.value,
+                  fontSize: 2 + controllerGet.fontSizeObx.value,
                   color: AppColor.black)),
           leading: InkWell(
             onTap: () {
@@ -331,7 +332,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                 maxLines: 1,
                                 style: AppStyle.bold.copyWith(
                                     fontSize:
-                                        18 + controllerGet.fontSizeObx.value),
+                                        4 + controllerGet.fontSizeObx.value),
                               ),
                               const SizedBox(height: 4),
                               Text(
@@ -342,7 +343,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                     suffix: 'P'),
                                 style: AppStyle.bold.copyWith(
                                     fontSize:
-                                        18 + controllerGet.fontSizeObx.value,
+                                        4 + controllerGet.fontSizeObx.value,
                                     color: HexColor('#f4a43b')),
                               )
                             ],
@@ -359,7 +360,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                           child: Text(
                             '적립 방법',
                             style: AppStyle.bold.copyWith(
-                                fontSize: 18 + controllerGet.fontSizeObx.value,
+                                fontSize: 4 + controllerGet.fontSizeObx.value,
                                 color: AppColor.black),
                           ),
                         ),
@@ -384,7 +385,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                                 '적립 방법',
                                 style: AppStyle.bold.copyWith(
                                     fontSize:
-                                        18 + controllerGet.fontSizeObx.value,
+                                        4 + controllerGet.fontSizeObx.value,
                                     color: AppColor.black),
                               ),
                               const SizedBox(height: 8),
@@ -442,8 +443,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                             child: Text(
                               '참여하고 포인트 받기',
                               style: AppStyle.bold.copyWith(
-                                  fontSize:
-                                      16 + controllerGet.fontSizeObx.value,
+                                  fontSize: 2 + controllerGet.fontSizeObx.value,
                                   color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),

@@ -64,8 +64,7 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
         title: Text(
           '서비스 이용약관',
           style: AppStyle.bold.copyWith(
-              color: AppColor.black,
-              fontSize: 14 + controllerGet.fontSizeObx.value),
+              color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
         ),
       ),
       body: dataUsingTerm != null
@@ -82,7 +81,7 @@ class _UsingTermScreenState extends State<UsingTermScreen> {
                     return null;
                   },
                   textStyle: AppStyle.regular
-                      .copyWith(fontSize: 14 + controllerGet.fontSizeObx.value),
+                      .copyWith(fontSize: controllerGet.fontSizeObx.value),
                 ),
               ),
             )

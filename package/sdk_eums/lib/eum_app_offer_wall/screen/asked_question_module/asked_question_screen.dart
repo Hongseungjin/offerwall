@@ -106,7 +106,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
         centerTitle: true,
         title: Text(AppString.askedQuestion,
             style: AppStyle.bold.copyWith(
-                fontSize: 16 + controllerGet.fontSizeObx.value,
+                fontSize: 2 + controllerGet.fontSizeObx.value,
                 color: AppColor.black)),
         leading: InkWell(
           onTap: () {
@@ -231,7 +231,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                           hintText: '질문 키워드를 입력해 주세요',
                           border: InputBorder.none,
                           hintStyle: AppStyle.bold.copyWith(
-                              fontSize: 14 + controllerGet.fontSizeObx.value,
+                              fontSize: controllerGet.fontSizeObx.value,
                               color: AppColor.color70.withOpacity(0.7))),
                     ),
                     Divider(),
@@ -250,7 +250,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                   Text(
                     '더 궁금한 점은 1:1문의하기를 통해 해결해 보세요.',
                     style: AppStyle.bold.copyWith(
-                        fontSize: 14 + controllerGet.fontSizeObx.value,
+                        fontSize: controllerGet.fontSizeObx.value,
                         color: HexColor('#666666')),
                   ),
                   const SizedBox(height: 16),
@@ -270,7 +270,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                         textAlign: TextAlign.center,
                         style: AppStyle.bold.copyWith(
                             color: AppColor.black,
-                            fontSize: 14 + controllerGet.fontSizeObx.value),
+                            fontSize: controllerGet.fontSizeObx.value),
                       ),
                     ),
                   )
@@ -342,7 +342,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
               return null;
             },
             textStyle: AppStyle.regular
-                .copyWith(fontSize: 12 + controllerGet.fontSizeObx.value),
+                .copyWith(fontSize: controllerGet.fontSizeObx.value - 2),
           ),
         ),
         const SizedBox(height: 8),
@@ -376,7 +376,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
               maxLines: 2,
               style: AppStyle.bold.copyWith(
                   color: AppColor.black,
-                  fontSize: 14 + controllerGet.fontSizeObx.value),
+                  fontSize: controllerGet.fontSizeObx.value),
             ))
       ],
     );

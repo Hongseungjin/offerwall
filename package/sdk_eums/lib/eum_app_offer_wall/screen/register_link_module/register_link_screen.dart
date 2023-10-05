@@ -185,21 +185,21 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: AppStyle.bold.copyWith(
                               color: AppColor.black,
-                              fontSize: 16 + controllerGet.fontSizeObx.value),
+                              fontSize: 2 + controllerGet.fontSizeObx.value),
                         ),
                       ),
                       Text(
                         '구독시 포인트 적립',
                         style: AppStyle.regular.copyWith(
                             color: AppColor.black,
-                            fontSize: 14 + controllerGet.fontSizeObx.value),
+                            fontSize: controllerGet.fontSizeObx.value),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         "+ ${Constants.formatMoney(widget.data['reward'] ?? 0, suffix: 'P')}",
                         style: AppStyle.bold.copyWith(
                             color: HexColor('#f4a43b'),
-                            fontSize: 18 + controllerGet.fontSizeObx.value),
+                            fontSize: 4 + controllerGet.fontSizeObx.value),
                       ),
                     ],
                   ),
@@ -219,8 +219,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Text('구독 참여 절차',
-                  style: AppStyle.bold.copyWith(
-                      fontSize: 14 + controllerGet.fontSizeObx.value)),
+                  style: AppStyle.bold
+                      .copyWith(fontSize: controllerGet.fontSizeObx.value)),
             ),
             Row(
               children: [
@@ -256,8 +256,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                                       textAlign: TextAlign.center,
                                       style: AppStyle.bold.copyWith(
                                           color: AppColor.black,
-                                          fontSize: 12 +
-                                              controllerGet.fontSizeObx.value),
+                                          fontSize:
+                                              controllerGet.fontSizeObx.value -
+                                                  2),
                                     ),
                                   ],
                                 ),
@@ -317,7 +318,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                       textAlign: TextAlign.center,
                       style: AppStyle.bold.copyWith(
                           color: AppColor.black,
-                          fontSize: 16 + controllerGet.fontSizeObx.value),
+                          fontSize: 2 + controllerGet.fontSizeObx.value),
                     ),
                   ),
                 ),
@@ -335,7 +336,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     '인천e음 유튜브 페이지에서 구독된 화면을 캡쳐해주세요.',
                     style: AppStyle.medium.copyWith(
                         color: AppColor.black,
-                        fontSize: 14 + controllerGet.fontSizeObx.value),
+                        fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
                 // const SizedBox(height: 4),
@@ -345,7 +346,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     '※ 아래의 예시와 같이 언론사 페이지에서 구독 상태가 보이도록 캡쳐해 주세요',
                     style: AppStyle.medium.copyWith(
                         color: HexColor('#ff0019'),
-                        fontSize: 12 + controllerGet.fontSizeObx.value),
+                        fontSize: controllerGet.fontSizeObx.value - 2),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -370,7 +371,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     '이미지가 업로드 완료 된 후, 지급받기 버튼을 눌러주세요. ',
                     style: AppStyle.medium.copyWith(
                         color: AppColor.black,
-                        fontSize: 14 + controllerGet.fontSizeObx.value),
+                        fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -400,7 +401,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                                   style: AppStyle.medium.copyWith(
                                       color: AppColor.black,
                                       fontSize:
-                                          14 + controllerGet.fontSizeObx.value),
+                                          controllerGet.fontSizeObx.value),
                                   overflow: TextOverflow.clip)),
                         ],
                       ),
@@ -503,14 +504,14 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
             step ?? '',
             style: AppStyle.bold.copyWith(
                 color: HexColor('#f4a43b'),
-                fontSize: 16 + controllerGet.fontSizeObx.value),
+                fontSize: 2 + controllerGet.fontSizeObx.value),
           ),
           const SizedBox(height: 4),
           Text(
             title ?? '',
             style: AppStyle.bold.copyWith(
                 color: AppColor.black,
-                fontSize: 16 + controllerGet.fontSizeObx.value),
+                fontSize: 2 + controllerGet.fontSizeObx.value),
           )
         ],
       ),

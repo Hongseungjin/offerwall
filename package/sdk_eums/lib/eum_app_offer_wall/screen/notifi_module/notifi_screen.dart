@@ -71,7 +71,7 @@ class _NotifiScreenState extends State<NotifiScreen> {
             centerTitle: true,
             title: Text('공지사항',
                 style: AppStyle.bold.copyWith(
-                    fontSize: 16 + controllerGet.fontSizeObx.value,
+                    fontSize: 2 + controllerGet.fontSizeObx.value,
                     color: AppColor.black)),
             leading: InkWell(
               onTap: () {
@@ -151,7 +151,7 @@ class _NotifiScreenState extends State<NotifiScreen> {
                     child: Text(
                       '공지',
                       style: AppStyle.bold.copyWith(
-                          fontSize: 12 + controllerGet.fontSizeObx.value,
+                          fontSize: controllerGet.fontSizeObx.value - 2,
                           color: AppColor.black),
                     ),
                   ),
@@ -159,17 +159,20 @@ class _NotifiScreenState extends State<NotifiScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${data['title']}',
-                        style: AppStyle.bold.copyWith(
-                            color: Colors.black,
-                            fontSize: 14 + controllerGet.fontSizeObx.value),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 140,
+                        child: Text(
+                          '${data['title']}',
+                          style: AppStyle.bold.copyWith(
+                              color: Colors.black,
+                              fontSize: 2 + controllerGet.fontSizeObx.value),
+                        ),
                       ),
                       Text(
                         Constants.formatTime(data['registDate']),
                         style: AppStyle.regular.copyWith(
                             color: HexColor('#888888'),
-                            fontSize: 12 + controllerGet.fontSizeObx.value),
+                            fontSize: controllerGet.fontSizeObx.value - 2),
                       )
                     ],
                   ),
@@ -212,7 +215,7 @@ class _NotifiScreenState extends State<NotifiScreen> {
               Text(
                 '적립 방법',
                 style: AppStyle.bold.copyWith(
-                    fontSize: 18 + controllerGet.fontSizeObx.value,
+                    fontSize: 4 + controllerGet.fontSizeObx.value,
                     color: AppColor.black),
               ),
               const SizedBox(height: 8),
@@ -240,6 +243,8 @@ class _NotifiScreenState extends State<NotifiScreen> {
 
         return null;
       },
+      textStyle:
+          AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
     );
   }
 

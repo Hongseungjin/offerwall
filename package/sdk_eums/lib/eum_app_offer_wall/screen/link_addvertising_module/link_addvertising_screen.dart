@@ -27,7 +27,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
         centerTitle: true,
         title: Text('제휴 및 광고 문의',
             style: AppStyle.bold.copyWith(
-                fontSize: 16 + controllerGet.fontSizeObx.value,
+                fontSize: 2 + controllerGet.fontSizeObx.value,
                 color: AppColor.black)),
         leading: InkWell(
           onTap: () {
@@ -95,7 +95,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                           '1833-8590 / abee@abee.co.kr',
                           style: AppStyle.bold.copyWith(
                               color: AppColor.black,
-                              fontSize: 12 + controllerGet.fontSizeObx.value),
+                              fontSize: controllerGet.fontSizeObx.value - 2),
                         ),
                       )),
                   _buidItem(
@@ -109,14 +109,14 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                                 style: AppStyle.bold.copyWith(
                                     color: AppColor.black,
                                     fontSize:
-                                        12 + controllerGet.fontSizeObx.value),
+                                        controllerGet.fontSizeObx.value - 2),
                                 children: [
                               TextSpan(
                                 text: '(점심시간 : 12:00 ~ 13:00)',
                                 style: AppStyle.bold.copyWith(
                                     color: AppColor.grey5D,
                                     fontSize:
-                                        10 + controllerGet.fontSizeObx.value),
+                                        controllerGet.fontSizeObx.value - 2),
                               )
                             ])),
                       )),
@@ -139,7 +139,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                   '제휴 및 광고 문의하기',
                   style: AppStyle.bold.copyWith(
                       color: AppColor.black,
-                      fontSize: 16 + controllerGet.fontSizeObx.value),
+                      fontSize: 2 + controllerGet.fontSizeObx.value),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -192,7 +192,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
               title ?? '',
               style: AppStyle.bold.copyWith(
                   color: AppColor.black,
-                  fontSize: 14 + controllerGet.fontSizeObx.value),
+                  fontSize: controllerGet.fontSizeObx.value),
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 6),
