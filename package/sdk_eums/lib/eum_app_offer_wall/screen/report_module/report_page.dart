@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/request_module/report_module/bloc/report_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/bloc/report_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
