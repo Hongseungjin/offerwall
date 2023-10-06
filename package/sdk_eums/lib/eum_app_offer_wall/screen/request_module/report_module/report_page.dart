@@ -4,8 +4,9 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
+import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/bloc/report_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/request_module/report_module/bloc/report_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -13,8 +14,6 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
-
-import '../../../common/events/events.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage(
