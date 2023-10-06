@@ -55,11 +55,11 @@ class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
             child: Column(
               children: [
                 Text(
-                  "마케팅 알림",
+                  "마케팅 알림${controller.fontSizeObx.value}",
                   style: AppStyle.medium.copyWith(fontSize: 14),
                 ),
                 Text(
-                  "마케팅 알림",
+                  "마케팅 알림$_value",
                   style: AppStyle.medium
                       .copyWith(fontSize: controller.fontSizeObx.value),
                 ),

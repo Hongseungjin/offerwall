@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Routing {
+class Routings {
   navigate<T>(BuildContext context, Widget screen,
       {bool replace = false,
       String? routeName,

@@ -298,7 +298,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                 _buildTilte('STEP 1   ', '아래의 버튼을 눌러 구독해주세요'),
                 InkWell(
                   onTap: () {
-                    Routing().navigate(
+                    Routings().navigate(
                         context,
                         CustomInappWebView(
                           urlLink: widget.data['api'],

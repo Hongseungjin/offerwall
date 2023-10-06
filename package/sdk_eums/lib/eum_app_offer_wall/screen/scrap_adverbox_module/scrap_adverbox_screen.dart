@@ -140,7 +140,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                               if (state.dataScrapAdverbox[index]
                                                       ['url_link'] !=
                                                   null) {
-                                                Routing().navigate(
+                                                Routings().navigate(
                                                     context,
                                                     DetailScrapScreen(
                                                       url: state

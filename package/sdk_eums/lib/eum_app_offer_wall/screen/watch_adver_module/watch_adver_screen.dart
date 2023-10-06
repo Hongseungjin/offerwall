@@ -192,7 +192,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
             },
             urlLink: jsonDecode(widget.data)['url_link'],
             onClose: () {
-              Routing().popToRoot(context);
+              Routings().popToRoot(context);
             },
           ),
         ),
@@ -202,7 +202,7 @@ class _WatchAdverScreenState extends State<WatchAdverScreen> {
       return InkWell(
         // behavior: HitTestBehavior.translucent,
         onTap: () {
-          Routing().popToRoot(context);
+          Routings().popToRoot(context);
           checkBack();
           // FlutterOverlayWindow.closeOverlay();
           // FlutterOverlayWindow.closeOverlay();

@@ -257,7 +257,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                   InkWell(
                     onTap: () {
                       FocusScope.of(context).unfocus();
-                      Routing().navigate(context, RequestScreen());
+                      Routings().navigate(context, RequestScreen());
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),

@@ -7,10 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/eums_app.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -61,13 +59,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         setState(() {
           dataEvent = event;
           tokenSdk = event['tokenSdk'] ?? '';
-          // deviceHeight = event['sizeDevice'] ?? 0;
+          deviceHeight = double.parse(event['sizeDevice'] ?? '0');
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
           checkSave = false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
         printWrapped('overlayListener $event');
+        printWrapped('overlayListener $deviceHeight');
       } catch (e) {
         print('errorrrrrr $e');
       }
@@ -88,7 +87,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         print('end ${call.method} ${call.arguments}');
         dy = call.arguments;
         // dy = 1900;
-        print("co vao day khongs");
 
         onVerticalDragEnd();
       }
@@ -133,7 +131,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                       },
                     ),
                   ],
-          
                   child: !!isToast
                       ? _buildWidgetToast()
                       : !!isWebView
@@ -160,22 +157,22 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         deviceWidth: deviceWidth,
         actions: Row(
           children: [
-            InkWell(
-                onTap: () {
-                  Routing().navigate(
-                      context,
-                      ReportPage(
-                        checkOverlay: true,
-                        paddingTop: 100,
-                        data: (jsonDecode(dataEvent['data'])),
-                        deleteAdver: true,
-                      ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.asset(Assets.report.path,
-                      package: "sdk_eums", height: 25),
-                )),
+            // InkWell(
+            //     onTap: () {
+            //       Routing().navigate(
+            //           context,
+            //           ReportPage(
+            //             checkOverlay: true,
+            //             paddingTop: 100,
+            //             data: (jsonDecode(dataEvent['data'])),
+            //             deleteAdver: true,
+            //           ));
+            //     },
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(10.0),
+            //       child: Image.asset(Assets.report.path,
+            //           package: "sdk_eums", height: 25),
+            //     )),
             // Container(
             //   decoration:
             //       BoxDecoration(borderRadius: BorderRadius.circular(24)),
@@ -277,7 +274,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     print('deviceWithdeviceWith $deviceHeight');
 
     print('upupupuasdasdpupu $dy');
-    if (dy != null && dyStart != null && dy! < (deviceWith / 7)
+    if (dy != null && dyStart != null && dy! < (deviceHeight / 7)
 
         ///300
         // dyStart!
@@ -291,7 +288,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       }
     }
 
-    if (dy != null && dyStart != null && dy! > (deviceWith - deviceWith / 7)
+    if (dy != null && dyStart != null && dy! > (deviceHeight - deviceHeight / 7)
         //  > dyStart!
         ) {
       print('downnnn$dataEvent');

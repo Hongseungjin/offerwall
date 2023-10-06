@@ -69,7 +69,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
       tabIndex = _tabController.index;
       if (tabIndex != tabPreviousIndex) {
         if (_tabController.index == 3) {
-          Routing().navigate(
+          Routings().navigate(
               context,
               ChargingStationScreen(
                 tab: tabPreviousIndex,
@@ -121,7 +121,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
     dynamic data = await localStore!.getDataShare();
     print(data);
     if (data != 'null') {
-      Routing().navigate(
+      Routings().navigate(
           context,
           WatchAdverScreen(
             data: jsonDecode(data),
@@ -442,7 +442,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                       children: [
                                         InkWell(
                                           onTap: () {
-                                            Routing().navigate(
+                                            Routings().navigate(
                                                 context,
                                                 EarnCashScreen(
                                                   account: stateAccount.account,
@@ -470,7 +470,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                           children: [
                                             _buildAdverBox(
                                                 callback: () {
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       KeepAdverboxScreen());
                                                 },
                                                 icon: Image.asset(
@@ -483,7 +483,7 @@ class _AccumulateMoneyScreenState extends State<AccumulateMoneyScreen>
                                             const SizedBox(width: 8),
                                             _buildAdverBox(
                                                 callback: () {
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       ScrapAdverBoxScreen());
                                                 },
                                                 icon: Image.asset(
@@ -880,7 +880,7 @@ class _ListViewAccumulateMoneyScreenState
     return InkWell(
       onTap: () {
         RxBus.post(ShowAction());
-        Routing().navigate(
+        Routings().navigate(
             widget.keyglobal.currentState!.context,
             DetailOffWallScreen(
               xId: data['idx'],

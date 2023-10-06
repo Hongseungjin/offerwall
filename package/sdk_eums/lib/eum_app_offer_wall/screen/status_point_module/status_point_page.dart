@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/instance_manager.dart';
-import 'package:jiffy/jiffy.dart';
+// import 'package:jiffy/jiffy.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/status_point_module/bloc/status_point_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
@@ -363,11 +363,11 @@ class _StatusPointPageState extends State<StatusPointPage>
           InkWell(
               onTap: () {
                 setState(() {
-                  firstMonth = DateTime.parse(
-                      Jiffy.parseFromDateTime(firstMonth)
-                          .startOf(Unit.month)
-                          .subtract(months: 1)
-                          .format(pattern: 'yyyy-MM-dd'));
+                  // firstMonth = DateTime.parse(
+                  //     Jiffy.parseFromDateTime(firstMonth)
+                  //         .startOf(Unit.month)
+                  //         .subtract(months: 1)
+                  //         .format(pattern: 'yyyy-MM-dd'));
 
                   _fetchData();
                 });
@@ -383,11 +383,11 @@ class _StatusPointPageState extends State<StatusPointPage>
           InkWell(
               onTap: () {
                 setState(() {
-                  firstMonth = DateTime.parse(
-                      Jiffy.parseFromDateTime(firstMonth)
-                          .startOf(Unit.month)
-                          .add(months: 1)
-                          .format(pattern: 'yyyy-MM-dd'));
+                  // firstMonth = DateTime.parse(
+                  //     Jiffy.parseFromDateTime(firstMonth)
+                  //         .startOf(Unit.month)
+                  //         .add(months: 1)
+                  //         .format(pattern: 'yyyy-MM-dd'));
                   _fetchData();
                 });
               },

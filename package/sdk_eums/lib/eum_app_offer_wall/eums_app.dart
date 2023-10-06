@@ -21,6 +21,7 @@ void printWrapped(String text) {
 
 showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
+    print("vao day");
     await FlutterOverlayWindow.showOverlay();
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
@@ -35,6 +36,7 @@ showOverlay(event) async {
         await FlutterOverlayWindow.closeOverlay();
       });
     } else {
+      print("vao day nhir 123123");
       LocalStoreService().setDataShare(dataShare: event);
       await FlutterOverlayWindow.showOverlay(
           enableDrag: true,
@@ -43,6 +45,7 @@ showOverlay(event) async {
           alignment: OverlayAlignment.center);
     }
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
+    event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
 }
@@ -183,6 +186,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
 
-    Routing().navigate(context, MyHomeScreen());
+    Routings().navigate(context, MyHomeScreen());
   }
 }

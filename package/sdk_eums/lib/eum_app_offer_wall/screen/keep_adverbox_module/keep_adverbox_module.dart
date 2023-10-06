@@ -211,7 +211,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                       children: List.generate(data.length, (index) {
                         return WidgetAnimationClick(
                           onTap: () {
-                            Routing().navigate(
+                            Routings().navigate(
                                 context,
                                 DetailKeepScreen(
                                   data: data[index],
@@ -508,7 +508,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
               title: widget.data['name'],
               report: InkWell(
                   onTap: () {
-                    Routing().navigate(
+                    Routings().navigate(
                         context,
                         ReportPage(
                           data: widget.data,

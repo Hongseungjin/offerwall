@@ -5,14 +5,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
+// import 'package:get/get_state_manager/get_state_manager.dart';
+// import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/common/routing.dart';
+// import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/home_module/widget/custom_web_view_banner.dart';
@@ -204,7 +205,7 @@ class _HomePageState extends State<HomePage>
                 actions: [
                   WidgetAnimationClick(
                     onTap: () {
-                      Routing().navigate(context, MyPage());
+                      Routings().navigate(context, MyPage());
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
@@ -232,28 +233,28 @@ class _HomePageState extends State<HomePage>
                         Center(
                           child: Wrap(
                             direction: Axis.horizontal,
-                            spacing: 20,
+                            // spacing: 20,
                             children: List.generate(
                                 uiIconList.length,
                                 (index) => _buildUiIcon(
                                     onTap: () {
                                       switch (index) {
                                         case 0:
-                                          Routing().navigate(
+                                          Routings().navigate(
                                               context,
                                               StatusPointPage(
                                                   account: state.account));
                                           break;
                                         case 1:
-                                          Routing().navigate(context,
+                                          Routings().navigate(context,
                                               const KeepAdverboxScreen());
                                           break;
                                         case 2:
-                                          Routing().navigate(context,
+                                          Routings().navigate(context,
                                               const ScrapAdverBoxScreen());
                                           break;
                                         case 3:
-                                          Routing().navigate(
+                                          Routings().navigate(
                                               context, UsingTermScreen());
                                           break;
                                         default:
@@ -428,7 +429,7 @@ class _HomePageState extends State<HomePage>
           ),
           WidgetAnimationClick(
             onTap: () {
-              Routing().navigate(context, StatusPointPage(account: accont));
+              Routings().navigate(context, StatusPointPage(account: accont));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -456,7 +457,7 @@ class _HomePageState extends State<HomePage>
           const SizedBox(height: 8),
           WidgetAnimationClick(
             onTap: () {
-              Routing().navigate(context, InstructAppScreen());
+              Routings().navigate(context, InstructAppScreen());
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -587,23 +588,27 @@ class _HomePageState extends State<HomePage>
   _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
     return WidgetAnimationClick(
       onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: HexColor('#888888').withOpacity(0.3)),
-            child: Image.asset(urlImage ?? '', package: "sdk_eums", height: 50),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title ?? '',
-            style: AppStyle.regular12.copyWith(
-                color: Colors.black,
-                fontSize: controllerGet.fontSizeObx.value - 2),
-          )
-        ],
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 4,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: HexColor('#888888').withOpacity(0.3)),
+              child:
+                  Image.asset(urlImage ?? '', package: "sdk_eums", height: 50),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              title ?? '',
+              style: AppStyle.regular12.copyWith(
+                  color: Colors.black,
+                  fontSize: controllerGet.fontSizeObx.value - 2),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -630,7 +635,7 @@ class _HomePageState extends State<HomePage>
                 builder: (BuildContext context) {
                   return WidgetAnimationClick(
                     onTap: () {
-                      Routing().navigate(
+                      Routings().navigate(
                           context,
                           CustomWebViewBanner(
                             urlLink: i['deep_link_url'],
@@ -808,7 +813,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                                     : _buildItemColum(
                                         data: state.listDataOfferWall[index]),
                                 onTap: () {
-                                  Routing().navigate(
+                                  Routings().navigate(
                                       context,
                                       DetailOffWallScreen(
                                         title: state.listDataOfferWall[index]

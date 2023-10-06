@@ -161,7 +161,7 @@ class _MyPageState extends State<MyPage> {
                     ),
                     WidgetAnimationClick(
                       onTap: () {
-                        Routing().navigate(
+                        Routings().navigate(
                             context, StatusPointPage(account: dataUser));
                       },
                       child: Container(
@@ -296,7 +296,7 @@ class _MyPageState extends State<MyPage> {
                       onTap: () {
                         switch (data[index]['id']) {
                           case 1:
-                            Routing().navigate(
+                            Routings().navigate(
                                 context,
                                 StatusPointPage(
                                   account: dataUser,
@@ -304,7 +304,7 @@ class _MyPageState extends State<MyPage> {
                                 ));
                             break;
                           case 2:
-                            Routing().navigate(
+                            Routings().navigate(
                                 context,
                                 StatusPointPage(
                                   account: dataUser,
@@ -312,25 +312,25 @@ class _MyPageState extends State<MyPage> {
                                 ));
                             break;
                           case 3:
-                            Routing()
+                            Routings()
                                 .navigate(context, const KeepAdverboxScreen());
                             break;
                           case 4:
-                            Routing()
+                            Routings()
                                 .navigate(context, const ScrapAdverBoxScreen());
                             break;
                           case 5:
-                            Routing().navigate(context, NotifiScreen());
+                            Routings().navigate(context, NotifiScreen());
                             break;
                           case 6:
-                            Routing().navigate(context, const RequestScreen());
+                            Routings().navigate(context, const RequestScreen());
                             break;
                           case 7:
-                            Routing()
+                            Routings()
                                 .navigate(context, const AskedQuestionScreen());
                             break;
                           case 8:
-                            Routing()
+                            Routings()
                                 .navigate(context, LinkAddvertisingScreen());
                             // Routing().navigate(
                             //     context,
@@ -343,17 +343,17 @@ class _MyPageState extends State<MyPage> {
                             //     ));
                             break;
                           case 9:
-                            Routing()
+                            Routings()
                                 .navigate(context, SettingFontSizeScreen());
                             print("asdlkasdaajsd");
                             break;
 
                           case 10:
                             print("asdsssslkajsd");
-                            Routing().navigate(context, UsingTermScreen());
+                            Routings().navigate(context, UsingTermScreen());
                             break;
                           case 11:
-                            Routing().navigate(context, const SettingScreen());
+                            Routings().navigate(context, const SettingScreen());
                             break;
 
                           default:

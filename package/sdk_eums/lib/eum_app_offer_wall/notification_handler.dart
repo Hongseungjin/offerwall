@@ -198,7 +198,7 @@ class NotificationHandler {
   // }
 
   onNavigateToMyEvent({dynamic data}) async {
-    Routing().navigate(
+    Routings().navigate(
         globalKeyMain.currentContext!,
         WatchAdverScreen(
           data: data['data'],

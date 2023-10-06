@@ -55,7 +55,7 @@ abstract class LocalStore {
 
   Future<dynamic> getSizeDevice();
 
-  Future setSizeDevice(double sizeHeight);
+  Future setSizeDevice(dynamic sizeHeight);
 
   Future<dynamic> getSizeText();
 

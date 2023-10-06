@@ -27,11 +27,11 @@ pod-install:
 	cd ios && rm -rf Pods && rm -rf build && rm -rf Podfile.lock && pod install && cd ..
 
 run:
-	fvm flutter run -d '03869992-A804-4C85-900D-221DF8A3BF52'
+	fvm flutter run -d 'R5CT90QNQBM'
 	#'00008101-00097DEE1A38001E'
 	#--no-sound-null-safety
 	#emulator-5554
-	#R5CT90QNQBM
+	#
 	#ce071717818b84fd0b
 	
 

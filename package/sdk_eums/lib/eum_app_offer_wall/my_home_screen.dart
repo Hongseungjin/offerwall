@@ -208,23 +208,23 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                                               });
                                               switch (index) {
                                                 case 0:
-                                                  Routing().navigate(
+                                                  Routings().navigate(
                                                       context, RequestScreen());
                                                   break;
                                                 case 1:
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       AskedQuestionScreen());
                                                   break;
                                                 case 2:
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       LinkAddvertisingScreen());
                                                   break;
                                                 case 3:
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       RewardGuideScreen());
                                                   break;
                                                 case 4:
-                                                  Routing().navigate(context,
+                                                  Routings().navigate(context,
                                                       UsingTermScreen());
                                                   break;
                                                 default:

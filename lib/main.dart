@@ -18,15 +18,16 @@ void main() {
 
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-      // home: DevicePreview(
-      //   enabled: true,
-      //   // tools: [
-      //   //   ...DevicePreview.defaultTools,
-      //   //   // const CustomPlugin(),
-      //   // ],
-      //   builder: (context) => const MyHomePage(),
-      // ),
+      // home: MyHomePage(),
+      home: DevicePreview(
+        // child: ,
+        enabled: false,
+        // tools: [
+        //   ...DevicePreview.defaultTools,
+        //   // const CustomPlugin(),
+        // ],
+        builder: (context) => const MyHomePage(),
+      ),
     ));
   });
 }
@@ -114,7 +115,8 @@ class _MyHomePageState extends State<MyHomePage>
             ],
             child: GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              child: const MaterialApp(
+              child: GetMaterialApp(
+                key: Get.key,
                 debugShowCheckedModeBanner: false,
                 home: AppMainScreen(),
               ),
@@ -138,10 +140,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   void initState() {
     localStore = LocalStoreService();
     super.initState();
-    getSizeDevice();
   }
-
-  getSizeDevice() {}
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +152,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
           InkWell(
             onTap: () async {
               await localStore?.setDataShare(dataShare: null);
+              // ignore: use_build_context_synchronously
               EumsAppOfferWallService.instance.openSdk(context,
                   memId: "abee997",
                   memGen: "w",
@@ -164,13 +164,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 padding: EdgeInsets.all(20),
                 child: const Text('go to sdk')),
           ),
-          InkWell(
-            onTap: () async {},
-            child: Container(
-                color: AppColor.blue1,
-                padding: EdgeInsets.all(20),
-                child: const Text('go to sdk')),
-          )
         ],
       ),
     );

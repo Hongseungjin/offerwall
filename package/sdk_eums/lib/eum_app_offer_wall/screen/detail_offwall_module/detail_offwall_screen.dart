@@ -406,27 +406,27 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen>
                               checkInstallApp();
                             } else if (widget.type == 'visit') {
                               print("visit?");
-                              Routing().navigate(
+                              Routings().navigate(
                                   context,
                                   VisitOfferWallScren(
                                     data: state.dataDetailOffWall,
                                     voidCallBack: _fetchData,
                                   ));
                             } else if (widget.type == 'join') {
-                              Routing().navigate(
+                              Routings().navigate(
                                   context,
                                   JoinOfferWallScreen(
                                     data: state.dataDetailOffWall,
                                     onCallBack: _joinOfferWall,
                                   ));
                             } else if (widget.type == 'shopping') {
-                              Routing().navigate(
+                              Routings().navigate(
                                   context,
                                   PurchaseOfferwallInternalScreen(
                                     data: state.dataDetailOffWall,
                                   ));
                             } else if (widget.type == 'subscribe') {
-                              Routing().navigate(
+                              Routings().navigate(
                                   context,
                                   RegisterLinkScreen(
                                     data: state.dataDetailOffWall,

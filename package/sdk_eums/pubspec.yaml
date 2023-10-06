@@ -41,8 +41,8 @@ dependencies:
   device_apps: ^2.2.0
   image_picker: ^0.8.6+4
   shared_preferences: ^2.0.13
-  syncfusion_flutter_sliders: ^23.1.39
-  syncfusion_flutter_charts: ^23.1.39
+  syncfusion_flutter_sliders: #^23.1.39
+  syncfusion_flutter_charts: #^23.1.39
   intl:
   flutter_easyloading: ^3.0.5
   rxdart: ^0.27.7
@@ -63,9 +63,9 @@ dependencies:
   disable_battery_optimization: ^1.1.0+1
   permission_handler: ^10.4.3
   cron: ^0.5.1
-  jiffy: ^6.2.1
+  # jiffy: ^6.2.1
   flutter_gif: ^0.0.4
-  # device_preview: ^1.1.0
+  device_preview: ^1.1.0
   geolocator:
 
   # flutter_time_picker_spinner: ^2.0.0
