@@ -34,8 +34,13 @@ android {
     compileSdkVersion 33
 
     compileOptions {
+         // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+        // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        // sourceCompatibility JavaVersion.VERSION_1_8
+        // targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -61,6 +66,7 @@ android {
     dependencies {
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
         testImplementation 'org.mockito:mockito-core:5.0.0'
+
     }
 
     testOptions {
@@ -115,5 +121,9 @@ android {
         implementation 'com.yanzhenjie:permission:1.1.2'
         androidTestImplementation 'androidx.test:runner:1.5.1'
         androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+        implementation 'androidx.window:window:1.0.0'
+        implementation 'androidx.window:window-java:1.0.0'
     }
 }

@@ -29,7 +29,7 @@ class LoggingInterceptor extends Interceptor {
     if (Constants.loggingInterceptorEnabled) {
       print(
           '--------------- Response (${_format(DateTime.now(), 'mm:ss')}) ---------------');
-      printWrapped('$response');
+      // printWrapped('$response');
       print('---------------------------------------');
     }
     return handler.next(response);

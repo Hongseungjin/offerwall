@@ -19,7 +19,7 @@ class HomeState extends Equatable {
 
   final ListAdverStatus listAdverStatus;
   final LoadmoreListAdverStatus loadmoreListAdverStatus;
-  final dynamic listDataOfferWall;
+  final List<Map<String, dynamic>>? listDataOfferWall;
   final dynamic account;
   final dynamic bannerList;
   final dynamic totalPoint;
@@ -28,7 +28,7 @@ class HomeState extends Equatable {
   HomeState copyWith(
       {ListAdverStatus? listAdverStatus,
       LoadmoreListAdverStatus? loadmoreListAdverStatus,
-      dynamic listDataOfferWall,
+      List<Map<String, dynamic>>? listDataOfferWall,
       GetPointStatus? getPointStatus,
       dynamic account,
       dynamic bannerList,
@@ -36,8 +36,7 @@ class HomeState extends Equatable {
     return HomeState(
         getPointStatus: getPointStatus ?? this.getPointStatus,
         listAdverStatus: listAdverStatus ?? this.listAdverStatus,
-        loadmoreListAdverStatus:
-            loadmoreListAdverStatus ?? this.loadmoreListAdverStatus,
+        loadmoreListAdverStatus: loadmoreListAdverStatus ?? this.loadmoreListAdverStatus,
         listDataOfferWall: listDataOfferWall ?? this.listDataOfferWall,
         account: account ?? this.account,
         totalPoint: totalPoint ?? this.totalPoint,
@@ -45,13 +44,5 @@ class HomeState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        listDataOfferWall,
-        listAdverStatus,
-        account,
-        loadmoreListAdverStatus,
-        bannerList,
-        totalPoint,
-        getPointStatus
-      ];
+  List<Object?> get props => [listDataOfferWall, listAdverStatus, account, loadmoreListAdverStatus, bannerList, totalPoint, getPointStatus];
 }

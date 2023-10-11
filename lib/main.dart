@@ -14,7 +14,7 @@ void main() {
   SdkEums.instant.init(onRun: () async {
     await Firebase.initializeApp();
 
-    NotificationHandler().initializeFcmNotification();
+    NotificationHandler.instant.initializeFcmNotification();
 
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -56,12 +56,10 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   LocalStore localStore = LocalStoreService();
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
-  double deviceHeight(BuildContext context) =>
-      MediaQuery.of(context).size.height;
+  double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
   @override
   void initState() {
     // checkOpenApp('initState');
@@ -87,21 +85,18 @@ class _MyHomePageState extends State<MyHomePage>
     setDeviceWidth();
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<LocalStore>(
-            create: (context) => LocalStoreService()),
+        RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
       ],
       child: MultiBlocProvider(
           providers: [
             BlocProvider<AuthenticationBloc>(
-              create: (context) =>
-                  AuthenticationBloc()..add(CheckSaveAccountLogged()),
+              create: (context) => AuthenticationBloc()..add(CheckSaveAccountLogged()),
             ),
           ],
           child: MultiBlocListener(
             listeners: [
               BlocListener<AuthenticationBloc, AuthenticationState>(
-                listenWhen: (previous, current) =>
-                    previous.logoutStatus != current.logoutStatus,
+                listenWhen: (previous, current) => previous.logoutStatus != current.logoutStatus,
                 listener: (context, state) {
                   if (state.logoutStatus == LogoutStatus.loading) {
                     return;
@@ -115,11 +110,12 @@ class _MyHomePageState extends State<MyHomePage>
             ],
             child: GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              child: GetMaterialApp(
-                key: Get.key,
-                debugShowCheckedModeBanner: false,
-                home: AppMainScreen(),
-              ),
+              child: const AppMainScreen(),
+              // child: GetMaterialApp(
+              //   key: Get.key,
+              //   debugShowCheckedModeBanner: false,
+              //   home: AppMainScreen(),
+              // ),
             ),
           )),
     );
@@ -153,16 +149,9 @@ class _AppMainScreenState extends State<AppMainScreen> {
             onTap: () async {
               await localStore?.setDataShare(dataShare: null);
               // ignore: use_build_context_synchronously
-              EumsAppOfferWallService.instance.openSdk(context,
-                  memId: "abee997",
-                  memGen: "w",
-                  memBirth: "2000-01-01",
-                  memRegion: "인천_서");
+              EumsAppOfferWallService.instance.openSdk(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서");
             },
-            child: Container(
-                color: AppColor.blue1,
-                padding: EdgeInsets.all(20),
-                child: const Text('go to sdk')),
+            child: Container(color: AppColor.blue1, padding: const EdgeInsets.all(20), child: const Text('go to sdk')),
           ),
         ],
       ),

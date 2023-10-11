@@ -9,7 +9,6 @@ import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
-import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
@@ -21,28 +20,19 @@ void printWrapped(String text) {
 
 showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
-    print("vao day");
-    await FlutterOverlayWindow.showOverlay();
+    await FlutterOverlayWindow.showOverlay(overlayTitle: event?['data']['title'], overlayContent: event?['data']['body'],);
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {
     if (event?['data']['isToast'] != null) {
-      await FlutterOverlayWindow.showOverlay(
-          height: 300,
-          width: WindowSize.matchParent,
-          alignment: OverlayAlignment.bottomCenter);
+      await FlutterOverlayWindow.showOverlay(height: 300, width: WindowSize.matchParent, alignment: OverlayAlignment.bottomCenter);
       Future.delayed(const Duration(seconds: 2), () async {
         await FlutterOverlayWindow.closeOverlay();
       });
     } else {
-      print("vao day nhir 123123");
       LocalStoreService().setDataShare(dataShare: event);
-      await FlutterOverlayWindow.showOverlay(
-          enableDrag: true,
-          height: 300,
-          width: 300,
-          alignment: OverlayAlignment.center);
+      await FlutterOverlayWindow.showOverlay(enableDrag: true, height: 300, width: 300, alignment: OverlayAlignment.center);
     }
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
@@ -72,10 +62,10 @@ closeOverlay() async {
 registerDeviceToken() async {
   try {
     CronCustom().initCron();
-    String? _token = await FirebaseMessaging.instance.getToken();
-    if (_token != null && _token.isNotEmpty) {
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (token != null && token.isNotEmpty) {
       // if(count < 50){
-      await EumsOfferWallServiceApi().createTokenNotifi(token: _token);
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
       // }
     }
   } catch (e) {
@@ -95,12 +85,14 @@ Future<void> onStart(ServiceInstance service) async {
     service.on('showOverlay').listen((event) async {
       if (Platform.isAndroid) {
         queue.add(() async => await jobQueue(event));
-        NotificationHandler().flutterLocalNotificationsPlugin.cancelAll();
+        // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
       } else {}
     });
 
     service.on('closeOverlay').listen((event) async {
       queue.add(() async => await closeOverlay());
+        // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+
     });
 
     service.on('stopService').listen((event) async {
@@ -120,22 +112,20 @@ Future<void> onStart(ServiceInstance service) async {
 }
 
 void startTimeDown() async {
-  Timer? _timer;
-  int _startTime = 300;
+  Timer? timer;
+  int startTime = 300;
 
-  _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-    if (_startTime == 0) {
-      _timer?.cancel();
+  timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (startTime == 0) {
+      timer.cancel();
     } else {
-      _startTime--;
+      startTime--;
 
-      if (_startTime == 0) {
-        _startTime = 300;
+      if (startTime == 0) {
+        startTime = 300;
         try {
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          await EumsOfferWallServiceApi()
-              .updateLocation(lat: position.latitude, log: position.longitude);
+          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
         } catch (ex) {}
       }
     }
@@ -153,30 +143,19 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 class EumsAppOfferWall extends EumsAppOfferWallService {
   LocalStore localStore = LocalStoreService();
   @override
-  Future openSdk(BuildContext context,
-      {String? memId,
-      String? memGen,
-      String? memRegion,
-      String? memBirth}) async {
+  Future openSdk(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     Size size = view.physicalSize;
     double height = size.height;
 
-    dynamic data = await EumsOfferWallService.instance.authConnect(
-        memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
+    dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     localStore.setAccessToken(data['token']);
     localStore.setSizeDevice(height);
-    if (await localStore.getAccessToken() != null) {
-      openAppSkd(context);
-    }
+    openAppSkd(context);
   }
 
   @override
-  openAppSkd(BuildContext context,
-      {String? memId,
-      String? memGen,
-      String? memRegion,
-      String? memBirth}) async {
+  openAppSkd(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
     await FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
@@ -186,6 +165,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
 
-    Routings().navigate(context, MyHomeScreen());
+    Routings().navigate(context, const MyHomeScreen());
   }
 }

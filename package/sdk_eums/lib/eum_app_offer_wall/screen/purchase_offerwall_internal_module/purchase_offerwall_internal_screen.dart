@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'bloc/purchase_offerwall_internal_bloc.dart';
 
+// ignore: must_be_immutable
 class PurchaseOfferwallInternalScreen extends StatefulWidget {
   PurchaseOfferwallInternalScreen({Key? key, this.data}) : super(key: key);
   dynamic data;

@@ -49,11 +49,10 @@ class CustomWebView2 extends StatefulWidget {
   State<CustomWebView2> createState() => _CustomWebView2State();
 }
 
-class _CustomWebView2State extends State<CustomWebView2>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
+class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObserver, TickerProviderStateMixin {
   late final WebViewController _controller;
   bool isLoading = true;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   FlutterGifController? gifController;
   late LinearTimerController timerController = LinearTimerController(this);
 
@@ -67,7 +66,7 @@ class _CustomWebView2State extends State<CustomWebView2>
     String start1 = 'https:';
     int startIndex1 = content.indexOf(start1);
     String iframeTag1 = content.substring(startIndex1 + 6);
-    content = iframeTag1.replaceAll("$iframeTag1", "http:${iframeTag1}");
+    content = iframeTag1.replaceAll(iframeTag1, "http:$iframeTag1");
     return content;
   }
 
@@ -103,10 +102,8 @@ class _CustomWebView2State extends State<CustomWebView2>
   }
 
   _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-            ScrollDirection.reverse ||
-        _scrollController.position.userScrollDirection ==
-            ScrollDirection.forward) {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse ||
+        _scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!isRunning) {
         isRunning = true;
         startTimeDown();
@@ -144,8 +141,7 @@ class _CustomWebView2State extends State<CustomWebView2>
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
+    final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
     controller
       ..setJavaScriptMode(JavaScriptMode.disabled)
       ..setBackgroundColor(const Color(0x00000000))
@@ -180,8 +176,7 @@ class _CustomWebView2State extends State<CustomWebView2>
       ..loadRequest(Uri.parse(getProperHtml(widget.urlLink ?? '')));
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
+      (controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
     }
     _controller = controller;
   }
@@ -199,140 +194,148 @@ class _CustomWebView2State extends State<CustomWebView2>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColor.white,
-      padding: EdgeInsets.only(top: widget.paddingTop),
-      child: Scaffold(
-        backgroundColor: AppColor.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: () {
-              widget.onClose();
-            },
-            child: Container(
-                padding: EdgeInsets.all(16),
-                child: Icon(Icons.arrow_back, color: Colors.black, size: 24)),
-          ),
-          title: Text(
-            widget.title ?? '',
-            style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18),
-          ),
-          actions: [widget.actions ?? const SizedBox()],
-        ),
-        body: Stack(
+    // return Container(
+    //   // color: AppColor.white,
+    //   // padding: EdgeInsets.only(top: widget.paddingTop),
+    //   child: );
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
           children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
+            Container(
+              padding: const EdgeInsets.only(top: kToolbarHeight, bottom: 0),
+              decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                      imageUrl: widget.urlLink,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(Assets.logo.path,
-                            package: "sdk_eums", height: 16);
-                      }),
-                  SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 50,
-                  )
+                  GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        widget.onClose();
+                      },
+                      child: Container(padding: const EdgeInsets.all(16), child: const Icon(Icons.arrow_back, color: Colors.black, size: 24))),
+                  Flexible(
+                    child: Text(
+                      widget.title ?? '',
+                      maxLines: 1,
+                      style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18),
+                    ),
+                  ),
+                  widget.actions ??
+                      const SizedBox(
+                        width: 32,
+                      )
                 ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Column(
+                  children: [
+                    CachedNetworkImage(
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.urlLink,
+                        placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                              color: Color(0xfffcc900),
+                            )),
+                        errorWidget: (context, url, error) {
+                          return Image.asset(Assets.logo.path, package: "sdk_eums", height: 16);
+                        }),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).padding.bottom + 50,
+                    // )
+                  ],
+                ),
               ),
             ),
             !widget.showMission
                 ? const SizedBox()
-                : Positioned(
-                    bottom: -10,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          top: 5,
-                          bottom: MediaQuery.of(context).padding.bottom + 10),
-                      width:
-                          // widget.deviceWidth > 0
-                          //     ? widget.deviceWidth
-                          //     :
-                          MediaQuery.of(context).size.width,
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          widget.bookmark ?? SizedBox(),
-                          // InkWell(
-                          //     onTap: widget.onSave,
-                          //     child: Image.asset(Assets.bookmark.path,
-                          //         package: "sdk_eums",
-                          //         height: 27,
-                          //         color: AppColor.black)),
-                          InkWell(
-                            onTap: !showButton ? null : widget.mission,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 10),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: !showButton
-                                      ? AppColor.grey.withOpacity(0.5)
-                                      : AppColor.red),
-                              child: Text(
-                                '포인트 적립하기',
-                                style: AppStyle.medium.copyWith(
-                                    color: !showButton
-                                        ? AppColor.grey
-                                        : AppColor.white),
-                              ),
+                : Container(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    width:
+                        // widget.deviceWidth > 0
+                        //     ? widget.deviceWidth
+                        //     :
+                        MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        widget.bookmark ?? const SizedBox(),
+                        // InkWell(
+                        //     onTap: widget.onSave,
+                        //     child: Image.asset(Assets.bookmark.path,
+                        //         package: "sdk_eums",
+                        //         height: 27,
+                        //         color: AppColor.black)),
+                        InkWell(
+                          onTap: !showButton ? null : widget.mission,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4), color: !showButton ? AppColor.grey.withOpacity(0.5) : AppColor.red),
+                            child: Text(
+                              '포인트 적립하기',
+                              style: AppStyle.medium.copyWith(color: !showButton ? AppColor.grey : AppColor.white),
                             ),
                           ),
-                          Stack(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                height: 50,
-                                width: 50,
-                                child: LinearTimer(
-                                  color: AppColor.yellow,
-                                  backgroundColor:
-                                      HexColor('#888888').withOpacity(0.3),
-                                  controller: timerController,
-                                  duration: const Duration(milliseconds: 14000),
-                                ),
+                        ),
+                        Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              height: 50,
+                              width: 50,
+                              child: LinearTimer(
+                                color: AppColor.yellow,
+                                backgroundColor: HexColor('#888888').withOpacity(0.3),
+                                controller: timerController,
+                                duration: const Duration(milliseconds: 14000),
                               ),
-                              Positioned(
-                                  right: 0,
-                                  left: 0,
-                                  top: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: GifImage(
-                                      height: 30,
-                                      width: 30,
-                                      fit: BoxFit.fill,
-                                      controller: gifController!,
-                                      image: AssetImage(
-                                        package: "sdk_eums",
-                                        Assets.coingif.path,
-                                      ),
+                            ),
+                            Positioned(
+                                right: 0,
+                                left: 0,
+                                top: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: GifImage(
+                                    height: 30,
+                                    width: 30,
+                                    fit: BoxFit.fill,
+                                    controller: gifController!,
+                                    image: AssetImage(
+                                      package: "sdk_eums",
+                                      Assets.coingif.path,
                                     ),
-                                  ))
-                            ],
-                          ),
-                          // Container(
-                          //     padding: const EdgeInsets.all(10),
-                          //     decoration: BoxDecoration(
-                          //         color: AppColor.grey.withOpacity(0.5),
-                          //         shape: BoxShape.circle),
-                          //     child: Text(
-                          //       _startTime.toString(),
-                          //       style: AppStyle.medium.copyWith(fontSize: 16),
-                          //     ))
-                        ],
-                      ),
-                    ))
+                                  ),
+                                ))
+                          ],
+                        ),
+                        // Container(
+                        //     padding: const EdgeInsets.all(10),
+                        //     decoration: BoxDecoration(
+                        //         color: AppColor.grey.withOpacity(0.5),
+                        //         shape: BoxShape.circle),
+                        //     child: Text(
+                        //       _startTime.toString(),
+                        //       style: AppStyle.medium.copyWith(fontSize: 16),
+                        //     ))
+                      ],
+                    ),
+                  )
           ],
         ),
       ),
     );
+  }
+
+  _buildButtonBack() {
+    Container(padding: const EdgeInsets.all(16), child: const Icon(Icons.arrow_back, color: Colors.black, size: 24));
   }
 }

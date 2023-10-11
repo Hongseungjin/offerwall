@@ -16,65 +16,66 @@ class DialogUtils {
     showDialog(
         context: context,
         builder: (buildContext) {
-          Future.delayed(Duration(seconds: 1), () {
-            Navigator.of(buildContext).pop(true);
-          });
+          ///TODO: handle test
+          // Future.delayed(Duration(seconds: 1), () {
+          //   Navigator.of(buildContext).pop(true);
+          // });
           return Dialog(
-            insetPadding: EdgeInsets.all(0),
+            insetPadding: const EdgeInsets.all(0),
             insetAnimationCurve: Curves.bounceIn,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Colors.black54,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          Assets.get_point.path,
-                          package: "sdk_eums",
-                          height: 200,
-                          width: 200,
-                        ),
-                        const SizedBox(height: 40),
-                        Text(
-                          '지금 획득 가능한 포인트',
-                          style: AppStyle.medium
-                              .copyWith(fontSize: 18, color: Colors.white),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              Constants.formatMoney(
-                                  data != null ? data['totalPointCanGet'] : 0,
-                                  suffix: ''),
-                              style: AppStyle.bold.copyWith(
-                                  color: HexColor('#fdd000'), fontSize: 40),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: HexColor('#fdd000'),
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    Navigator.of(buildContext).pop(true);
+                  },
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            Assets.get_point.path,
+                            package: "sdk_eums",
+                            height: 200,
+                            width: 200,
+                          ),
+                          const SizedBox(height: 40),
+                          Text(
+                            '지금 획득 가능한 포인트',
+                            style: AppStyle.medium.copyWith(fontSize: 18, color: Colors.white),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                Constants.formatMoney(data != null ? data['totalPointCanGet'] : 0, suffix: ''),
+                                style: AppStyle.bold.copyWith(color: HexColor('#fdd000'), fontSize: 40),
                               ),
-                              child: Text(
-                                'P',
-                                style: AppStyle.bold,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: HexColor('#fdd000'),
+                                ),
+                                child: Text(
+                                  'P',
+                                  style: AppStyle.bold.copyWith(fontSize: 20, fontWeight: FontWeight.w700),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -93,7 +94,7 @@ class DialogUtils {
         context: context,
         builder: (buildContext) {
           return Dialog(
-            insetPadding: EdgeInsets.all(0),
+            insetPadding: const EdgeInsets.all(0),
             insetAnimationCurve: Curves.bounceIn,
             backgroundColor: Colors.transparent,
             shape: RoundedRectangleBorder(
@@ -103,15 +104,11 @@ class DialogUtils {
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: Colors.transparent, borderRadius: BorderRadius.circular(8)),
                   child: Stack(
                     children: [
                       Center(
-                        child: Text('+ $data캐시',
-                            style: AppStyle.bold.copyWith(
-                                color: AppColor.orange4, fontSize: 24)),
+                        child: Text('+ $data캐시', style: AppStyle.bold.copyWith(color: AppColor.orange4, fontSize: 24)),
                       ),
                       Positioned(
                         top: 16,
@@ -123,8 +120,7 @@ class DialogUtils {
                               voidCallback();
                             }
                           },
-                          child: const Icon(Icons.close,
-                              color: AppColor.white, size: 24),
+                          child: const Icon(Icons.close, color: AppColor.white, size: 24),
                         ),
                       ),
                     ],
@@ -136,11 +132,7 @@ class DialogUtils {
         });
   }
 
-  static void showDialogRewardPoint(BuildContext context,
-      {dynamic data,
-      dynamic voidCallback,
-      bool checkImage = false,
-      dynamic point}) {
+  static void showDialogRewardPoint(BuildContext context, {dynamic data, dynamic voidCallback, bool checkImage = false, dynamic point}) {
     dynamic reward;
 
     switch (checkImage ? point : data['typePoint']) {
@@ -168,7 +160,7 @@ class DialogUtils {
         context: context,
         builder: (buildContext) {
           return Dialog(
-            insetPadding: EdgeInsets.all(16),
+            insetPadding: const EdgeInsets.all(16),
             insetAnimationCurve: Curves.bounceIn,
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -177,9 +169,7 @@ class DialogUtils {
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,17 +187,9 @@ class DialogUtils {
                         RichText(
                             text: TextSpan(
                                 text: '$reward포인트',
-                                style: AppStyle.medium.copyWith(
-                                    fontSize: 20, color: HexColor('#f4a43b')),
-                                children: [
-                              TextSpan(
-                                  text: '가',
-                                  style: AppStyle.medium.copyWith(
-                                      color: AppColor.black, fontSize: 20))
-                            ])),
-                        Text('적립되었습니다!',
-                            style: AppStyle.medium
-                                .copyWith(color: AppColor.black, fontSize: 20)),
+                                style: AppStyle.medium.copyWith(fontSize: 20, color: HexColor('#f4a43b')),
+                                children: [TextSpan(text: '가', style: AppStyle.medium.copyWith(color: AppColor.black, fontSize: 20))])),
+                        Text('적립되었습니다!', style: AppStyle.medium.copyWith(color: AppColor.black, fontSize: 20)),
                         // Center(
                         //   child: RichText(
                         //       text: TextSpan(
@@ -231,8 +213,7 @@ class DialogUtils {
                             }
                           },
                           child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                             width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
@@ -241,8 +222,7 @@ class DialogUtils {
                             ),
                             child: Text(
                               '확인',
-                              style: AppStyle.medium
-                                  .copyWith(color: AppColor.black),
+                              style: AppStyle.medium.copyWith(color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -257,11 +237,7 @@ class DialogUtils {
         });
   }
 
-  static void showDialogSucessPoint(BuildContext context,
-      {dynamic data,
-      dynamic voidCallback,
-      bool checkImage = false,
-      dynamic point}) {
+  static void showDialogSucessPoint(BuildContext context, {dynamic data, dynamic voidCallback, bool checkImage = false, dynamic point}) {
     dynamic reward;
 
     switch (checkImage ? point : data['typePoint']) {
@@ -288,7 +264,7 @@ class DialogUtils {
         context: context,
         builder: (buildContext) {
           return Dialog(
-            insetPadding: EdgeInsets.all(16),
+            insetPadding: const EdgeInsets.all(16),
             insetAnimationCurve: Curves.bounceIn,
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -297,9 +273,7 @@ class DialogUtils {
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -317,14 +291,8 @@ class DialogUtils {
                             RichText(
                                 text: TextSpan(
                                     text: '$reward포인트',
-                                    style: AppStyle.medium
-                                        .copyWith(color: AppColor.red5),
-                                    children: [
-                                  TextSpan(
-                                      text: ' 정상 적립 !',
-                                      style: AppStyle.medium
-                                          .copyWith(color: AppColor.black))
-                                ])),
+                                    style: AppStyle.medium.copyWith(color: AppColor.red5),
+                                    children: [TextSpan(text: ' 정상 적립 !', style: AppStyle.medium.copyWith(color: AppColor.black))])),
                             const SizedBox(width: 10),
                             Image.asset(
                               Assets.fireworkRight.path,
@@ -338,10 +306,8 @@ class DialogUtils {
                             width: MediaQuery.of(context).size.width,
                             height: 300,
                             fit: BoxFit.fill,
-                            imageUrl:
-                                "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_image'] : data['sponser_image']}",
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
+                            imageUrl: "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_image'] : data['sponser_image']}",
+                            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) {
                               return Image.asset(
                                 Assets.logo.path,
@@ -362,8 +328,7 @@ class DialogUtils {
                                   fit: BoxFit.fitWidth,
                                   imageUrl:
                                       "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_company_image'] : data['sponser_company_image']}",
-                                  placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator()),
+                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) {
                                     return Image.asset(
                                       Assets.logo.path,
@@ -376,8 +341,7 @@ class DialogUtils {
                             const SizedBox(width: 10),
                             Text(
                               '중소상공인의 광고를 후원해 주셨습니다.',
-                              style: AppStyle.medium
-                                  .copyWith(color: AppColor.black),
+                              style: AppStyle.medium.copyWith(color: AppColor.black),
                             ),
                           ],
                         ),
@@ -385,12 +349,10 @@ class DialogUtils {
                             width: MediaQuery.of(context).size.width,
                             height: 70,
                             fit: BoxFit.fill,
-                            imageUrl:
-                                "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['image'] : data['image']}",
+                            imageUrl: "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['image'] : data['image']}",
                             // Constants.baseUrlImage +
                             //     data['advertiseSponsor']['sponser_image'],
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
+                            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) {
                               return Image.asset(
                                 Assets.logo.path,
@@ -417,8 +379,7 @@ class DialogUtils {
                             ),
                             child: Text(
                               '확인',
-                              style: AppStyle.medium
-                                  .copyWith(color: AppColor.black),
+                              style: AppStyle.medium.copyWith(color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -433,11 +394,7 @@ class DialogUtils {
         });
   }
 
-  static void showDialogSucessPointAndroid(BuildContext context,
-      {dynamic data,
-      VoidCallback? voidCallback,
-      bool checkImage = false,
-      dynamic point}) {
+  static void showDialogSucessPointAndroid(BuildContext context, {dynamic data, VoidCallback? voidCallback, bool checkImage = false, dynamic point}) {
     dynamic reward;
 
     switch (checkImage ? point : data['typePoint']) {
@@ -464,7 +421,7 @@ class DialogUtils {
         context: context,
         builder: (buildContext) {
           return Dialog(
-            insetPadding: EdgeInsets.all(16),
+            insetPadding: const EdgeInsets.all(16),
             insetAnimationCurve: Curves.bounceIn,
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -473,9 +430,7 @@ class DialogUtils {
             child: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8)),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -493,14 +448,8 @@ class DialogUtils {
                             RichText(
                                 text: TextSpan(
                                     text: '$reward포인트',
-                                    style: AppStyle.medium
-                                        .copyWith(color: AppColor.red5),
-                                    children: [
-                                  TextSpan(
-                                      text: ' 정상 적립 !',
-                                      style: AppStyle.medium
-                                          .copyWith(color: AppColor.black))
-                                ])),
+                                    style: AppStyle.medium.copyWith(color: AppColor.red5),
+                                    children: [TextSpan(text: ' 정상 적립 !', style: AppStyle.medium.copyWith(color: AppColor.black))])),
                             const SizedBox(width: 10),
                             Image.asset(
                               Assets.fireworkRight.path,
@@ -514,10 +463,8 @@ class DialogUtils {
                             width: MediaQuery.of(context).size.width,
                             height: 300,
                             fit: BoxFit.cover,
-                            imageUrl:
-                                "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_image'] : data['sponser_image']}",
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
+                            imageUrl: "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_image'] : data['sponser_image']}",
+                            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) {
                               return Image.asset(
                                 Assets.logo.path,
@@ -538,8 +485,7 @@ class DialogUtils {
                                   fit: BoxFit.cover,
                                   imageUrl:
                                       "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['sponser_company_image'] : data['sponser_company_image']}",
-                                  placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator()),
+                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                                   errorWidget: (context, url, error) {
                                     return Image.asset(
                                       Assets.logo.path,
@@ -552,8 +498,7 @@ class DialogUtils {
                             const SizedBox(width: 10),
                             Text(
                               '중소상공인의 광고를 후원해 주셨습니다.',
-                              style: AppStyle.medium
-                                  .copyWith(color: AppColor.black),
+                              style: AppStyle.medium.copyWith(color: AppColor.black),
                             ),
                           ],
                         ),
@@ -561,10 +506,8 @@ class DialogUtils {
                             width: MediaQuery.of(context).size.width,
                             height: 70,
                             fit: BoxFit.cover,
-                            imageUrl:
-                                "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['image'] : data['image']}",
-                            placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator()),
+                            imageUrl: "${Constants.baseUrlImage}${!checkImage ? data['advertiseSponsor']['image'] : data['image']}",
+                            placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                             errorWidget: (context, url, error) {
                               return Image.asset(
                                 Assets.logo.path,
@@ -584,8 +527,7 @@ class DialogUtils {
                             ),
                             child: Text(
                               '확인',
-                              style: AppStyle.medium
-                                  .copyWith(color: AppColor.black),
+                              style: AppStyle.medium.copyWith(color: AppColor.black),
                               textAlign: TextAlign.center,
                             ),
                           ),

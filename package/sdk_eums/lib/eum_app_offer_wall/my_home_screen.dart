@@ -89,12 +89,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       settingBattery();
     }
 
-    NotificationHandler()
+    NotificationHandler.instant
         .didReceiveLocalNotificationStream
         .stream
         .listen((ReceivedNotification receivedNotification) async {});
 
-    NotificationHandler()
+    NotificationHandler.instant
         .selectNotificationStream
         .stream
         .listen((String? payload) async {});

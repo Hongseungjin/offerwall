@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/eum_app_offer_wall/eums_app.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
@@ -28,12 +27,9 @@ class TrueCallOverlay extends StatefulWidget {
   State<TrueCallOverlay> createState() => _TrueCallOverlayState();
 }
 
-class _TrueCallOverlayState extends State<TrueCallOverlay>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
-  final GlobalKey<State<StatefulWidget>> webViewKey =
-      GlobalKey<State<StatefulWidget>>();
+class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> webViewKey = GlobalKey<State<StatefulWidget>>();
   LocalStore localStore = LocalStoreService();
   dynamic dataEvent;
   bool isWebView = false;
@@ -44,7 +40,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   String? tokenSdk;
   double deviceWidth = 0;
   double deviceHeight = 0;
-  MethodChannel _backgroundChannel = MethodChannel("x-slayer/overlay");
+  final MethodChannel _backgroundChannel = const MethodChannel("x-slayer/overlay");
   int countAdvertisement = 0;
 
   @override
@@ -65,10 +61,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
           checkSave = false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
-        printWrapped('overlayListener $event');
-        printWrapped('overlayListener $deviceHeight');
+        // printWrapped('overlayListener $event');
+        // printWrapped('overlayListener $deviceHeight');
       } catch (e) {
-        print('errorrrrrr $e');
+        // print('errorrrrrr $e');
       }
     });
   }
@@ -80,11 +76,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
       await Firebase.initializeApp();
 
       if ('START_DRAG' == call.method) {
-        print('start ${call.method} ${call.arguments}');
+        // print('start ${call.method} ${call.arguments}');
         // dyStart = call.arguments;
         dyStart = call.arguments;
       } else if ('END_DRAG' == call.method) {
-        print('end ${call.method} ${call.arguments}');
+        // print('end ${call.method} ${call.arguments}');
         dy = call.arguments;
         // dy = 1900;
 
@@ -105,22 +101,17 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider<EumsOfferWallService>(
-                create: (context) => EumsOfferWallServiceApi())
-          ],
+          providers: [RepositoryProvider<EumsOfferWallService>(create: (context) => EumsOfferWallServiceApi())],
           child: MultiBlocProvider(
               providers: [
                 BlocProvider<AuthenticationBloc>(
-                  create: (context) =>
-                      AuthenticationBloc()..add(CheckSaveAccountLogged()),
+                  create: (context) => AuthenticationBloc()..add(CheckSaveAccountLogged()),
                 ),
               ],
               child: MultiBlocListener(
                   listeners: [
                     BlocListener<AuthenticationBloc, AuthenticationState>(
-                      listenWhen: (previous, current) =>
-                          previous.logoutStatus != current.logoutStatus,
+                      listenWhen: (previous, current) => previous.logoutStatus != current.logoutStatus,
                       listener: (context, state) {
                         if (state.logoutStatus == LogoutStatus.loading) {
                           return;
@@ -156,7 +147,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
         showMission: true,
         deviceWidth: deviceWidth,
         actions: Row(
-          children: [
+          children: const [
             // InkWell(
             //     onTap: () {
             //       Routing().navigate(
@@ -193,7 +184,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
             //         }),
             //   ),
             // ),
-            const SizedBox(
+            SizedBox(
               width: 20,
             )
           ],
@@ -208,13 +199,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
               });
               try {
                 if (checkSave) {
-                  TrueOverlauService().saveScrap(
-                      advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                      token: tokenSdk);
+                  TrueOverlauService().saveScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
                 } else {
-                  TrueOverlauService().deleteScrap(
-                      advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                      token: tokenSdk);
+                  TrueOverlauService().deleteScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
                 }
               } catch (e) {
                 print('e $e');
@@ -222,14 +209,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
               }
             },
             child: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: HexColor('#eeeeee')),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Image.asset(
-                  checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
-                  package: "sdk_eums",
-                  height: 18,
-                  color: AppColor.black),
+              child: Image.asset(checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "sdk_eums", height: 18, color: AppColor.black),
             )
             // checkSave
             //     ? Image.asset(Assets.saveKeep.path,
@@ -239,13 +221,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
             ),
         mission: () {
           if (dataEvent != null && dataEvent['data'] != null) {
-            DialogUtils.showDialogRewardPoint(context,
-                data: jsonDecode(dataEvent['data']), voidCallback: () async {
+            DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
               try {
                 TrueOverlauService().missionOfferWallOutside(
-                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-                    pointType: (jsonDecode(dataEvent['data']))['typePoint'],
-                    token: tokenSdk);
+                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
                 setState(() {
                   isWebView = false;
                   checkSave = false;
@@ -253,7 +232,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                 FlutterBackgroundService().invoke("closeOverlay");
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
-                print(e);
+                // print(e);
                 FlutterBackgroundService().invoke("closeOverlay");
               }
             });
@@ -270,16 +249,16 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
   }
 
   void onVerticalDragEnd() async {
-    double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
-    print('deviceWithdeviceWith $deviceHeight');
+    // double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
+    // print('deviceWithdeviceWith $deviceHeight');
 
-    print('upupupuasdasdpupu $dy');
+    // print('upupupuasdasdpupu $dy');
     if (dy != null && dyStart != null && dy! < (deviceHeight / 7)
 
         ///300
         // dyStart!
         ) {
-      print('upupupupupup$dataEvent');
+      // print('upupupupupup$dataEvent');
       if (dataEvent != null) {
         dataEvent['isWebView'] = true;
         FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
@@ -291,16 +270,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
     if (dy != null && dyStart != null && dy! > (deviceHeight - deviceHeight / 7)
         //  > dyStart!
         ) {
-      print('downnnn$dataEvent');
+      // print('downnnn$dataEvent');
       if (dataEvent != null) {
         try {
-          TrueOverlauService().saveKeep(
-              advertiseIdx: (jsonDecode(dataEvent['data']))['idx'],
-              token: tokenSdk);
+          TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
           dataEvent['isToast'] = true;
           FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
         } catch (e) {
-          print("errrrr$e");
+          // print("errrrr$e");
           FlutterBackgroundService().invoke("closeOverlay");
         }
       } else {
@@ -322,7 +299,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay>
                 // height: 10,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             )
           ],

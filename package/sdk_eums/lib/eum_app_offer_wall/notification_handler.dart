@@ -38,28 +38,26 @@ class ReceivedNotification {
 }
 
 class NotificationHandler {
-  final StreamController<ReceivedNotification>
-      didReceiveLocalNotificationStream =
-      StreamController<ReceivedNotification>.broadcast();
+  NotificationHandler._();
 
-  final StreamController<String?> selectNotificationStream =
-      StreamController<String?>.broadcast();
+  static NotificationHandler instant = NotificationHandler._();
+
+  final StreamController<ReceivedNotification> didReceiveLocalNotificationStream = StreamController<ReceivedNotification>.broadcast();
+
+  final StreamController<String?> selectNotificationStream = StreamController<String?>.broadcast();
 
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin =>
-      _flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin => _flutterLocalNotificationsPlugin;
   final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Notifications',
     description: 'This channel is used for important notifications.',
   );
 
-  final List<DarwinNotificationCategory> darwinNotificationCategories =
-      <DarwinNotificationCategory>[
+  final List<DarwinNotificationCategory> darwinNotificationCategories = <DarwinNotificationCategory>[
     DarwinNotificationCategory(
       darwinNotificationCategoryPlain,
       actions: <DarwinNotificationAction>[
@@ -85,17 +83,14 @@ class NotificationHandler {
   ];
 
   initializeFcmNotification() async {
-    var initializationSettingsAndroid =
-        const AndroidInitializationSettings('mipmap/ic_launcher');
+    var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
 
-    final DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings(
+    final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
       requestSoundPermission: false,
-      onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {
-        print("payloadpayloadpayloadpayloadpayload$payload");
+      onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
+        // print("payloadpayloadpayloadpayloadpayload$payload");
         didReceiveLocalNotificationStream.add(
           ReceivedNotification(
             id: id,
@@ -108,28 +103,21 @@ class NotificationHandler {
       notificationCategories: darwinNotificationCategories,
     );
 
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid,
-        iOS: initializationSettingsDarwin);
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
 
     if (Platform.isIOS) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
+      await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
             alert: true,
             badge: true,
             sound: true,
           );
     }
-
-    await flutterLocalNotificationsPlugin.initialize(
+    flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) async {
+      onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
         final String? payload = notificationResponse.payload;
         if (notificationResponse.payload != null) {
-          print(notificationResponse.actionId);
+          // print(notificationResponse.actionId);
           debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
           if (notificationResponse.actionId == navigationScreenId) {
             onNavigateToMyEvent(data: jsonDecode(payload ?? ''));
@@ -142,28 +130,35 @@ class NotificationHandler {
     try {
       await _fcm.requestPermission(alert: false);
     } catch (e) {}
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-            alert: true, badge: true, sound: true);
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
+    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
       categoryIdentifier: darwinNotificationCategoryPlain,
     );
-    const NotificationDetails notificationDetails = NotificationDetails(
-      iOS: iosNotificationDetails,
+    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      darwinNotificationCategoryPlain,
+      darwinNotificationCategoryPlain,
+      importance: Importance.max,
+      priority: Priority.high,
+      actions: <AndroidNotificationAction>[
+        AndroidNotificationAction(keepID, 'KEEP 하기'),
+        AndroidNotificationAction(
+          navigationScreenId,
+          '광고 시청하기',
+        ),
+      ],
     );
 
+    const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
+
     FirebaseMessaging.onMessage.listen(
-      (RemoteMessage message) {
-        print("co vao day khong123123 ${message.data}");
+      (RemoteMessage message) async {
         if (Platform.isAndroid) {
+          // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
           CountAdver().initCount();
-          FlutterBackgroundService()
-              .invoke("showOverlay", {'data': message.data});
+          FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
         }
-        flutterLocalNotificationsPlugin.show(0, '${message.data['title']}',
-            '${message.data['body']}', notificationDetails,
+        flutterLocalNotificationsPlugin.show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails,
             payload: jsonEncode(message.data));
       },
     );
@@ -219,19 +214,22 @@ class NotificationHandler {
 }
 
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) {
-  if (notificationResponse.actionId == keepID) {
-    final String? payload = notificationResponse.payload;
-    if (notificationResponse.payload != null) {
-      debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
-      if (notificationResponse.actionId == keepID) {
-        try {
-          EumsOfferWallServiceApi().saveKeep(
-              advertiseIdx:
-                  jsonDecode(jsonDecode(payload ?? '')['data'])['idx']);
-        } catch (ex) {
-          print('exexex$ex');
+void notificationTapBackground(NotificationResponse notificationResponse) async {
+  final String? payload = notificationResponse.payload;
+  if (notificationResponse.payload != null) {
+    debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
+
+    if (notificationResponse.actionId == keepID) {
+      try {
+        EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(jsonDecode(payload ?? '')['data'])['idx']);
+        if (Platform.isAndroid) {
+          bool isActive = await FlutterOverlayWindow.isActive();
+          if (isActive == true) {
+            await FlutterOverlayWindow.closeOverlay();
+          }
         }
+      } catch (ex) {
+        print('exexex$ex');
       }
     }
   }
@@ -248,8 +246,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("vao nhe ennnnn ");
-  const DarwinNotificationDetails iosNotificationDetails =
-      DarwinNotificationDetails(
+  const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
     categoryIdentifier: darwinNotificationCategoryPlain,
   );
   const NotificationDetails notificationDetails = NotificationDetails(
@@ -258,16 +255,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   // CronCustom().initCron();
   if (Platform.isAndroid) {
+    // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
     CountAdver().initCount();
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-  } else {
-    NotificationHandler().flutterLocalNotificationsPlugin.show(
-        0,
-        '${message.data['title']}',
-        '${message.data['body']}',
-        notificationDetails,
-        payload: jsonEncode(message.data));
   }
+  NotificationHandler.instant.flutterLocalNotificationsPlugin
+      .show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
 }
 
 class CountAdver {
@@ -282,7 +275,7 @@ class CountAdver {
     dataCount = await _localStore.getCountAdvertisement();
     countAdvertisement = dataCount['count'] ?? 0;
     isActive = await _localStore.getSaveAdver();
-    print("countAdvertisement${countAdvertisement} ${isActive}");
+    print("countAdvertisement$countAdvertisement $isActive");
 
     // 50
     if (countAdvertisement == 5) {
@@ -309,7 +302,7 @@ class CountAdver {
           'count': countAdvertisement,
           'date': Constants.formatTime(DateTime.now().toIso8601String()),
         };
-        print("datadata${data}");
+        print("datadata$data");
         _localStore.setCountAdvertisement(data);
       }
     }
@@ -324,7 +317,7 @@ class CountAdver {
       dateNow = Constants.formatTime(DateTime.now().toIso8601String());
       // print("countAdvertisement${countAdvertisement}");
     } catch (ex) {
-      print("exexexex${ex}");
+      print("exexexex$ex");
     }
 
     if (dateCount == dateNow) {

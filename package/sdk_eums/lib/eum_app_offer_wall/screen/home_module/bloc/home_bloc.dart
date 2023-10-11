@@ -16,15 +16,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
         _localStore = LocalStoreService(),
-        super(HomeState()) {
+        super(const HomeState()) {
     on<HomeEvent>(_onHomeToState);
   }
 
   final EumsOfferWallService _eumsOfferWallService;
   final LocalStore _localStore;
 
-  FutureOr<void> _onHomeToState(
-      HomeEvent event, Emitter<HomeState> emit) async {
+  FutureOr<void> _onHomeToState(HomeEvent event, Emitter<HomeState> emit) async {
     if (event is ListOfferWall) {
       await _mapListOfferWall(event, emit);
     }
@@ -43,8 +42,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(getPointStatus: GetPointStatus.loading));
     try {
       dynamic totalPoint = await _eumsOfferWallService.getTotalPoint();
-      emit(state.copyWith(
-          getPointStatus: GetPointStatus.success, totalPoint: totalPoint));
+      emit(state.copyWith(getPointStatus: GetPointStatus.success, totalPoint: totalPoint));
       print("useruser$totalPoint");
     } catch (ex) {
       emit(state.copyWith(getPointStatus: GetPointStatus.failure));
@@ -67,8 +65,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(listAdverStatus: ListAdverStatus.loading));
     try {
       dynamic banner = await _eumsOfferWallService.getBanner(type: event.type);
-      emit(state.copyWith(
-          listAdverStatus: ListAdverStatus.success, bannerList: banner));
+      emit(state.copyWith(listAdverStatus: ListAdverStatus.success, bannerList: banner));
     } catch (ex) {
       emit(state.copyWith(listAdverStatus: ListAdverStatus.failure));
     }
@@ -78,10 +75,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(listAdverStatus: ListAdverStatus.loading));
 
     try {
-      dynamic data = await _eumsOfferWallService.getListOfferWall(
-          category: event.category, limit: event.limit, filter: event.filter);
-      emit(state.copyWith(
-          listAdverStatus: ListAdverStatus.success, listDataOfferWall: data));
+      dynamic data = await _eumsOfferWallService.getListOfferWall(category: event.category, limit: event.limit, filter: event.filter);
+
+      final listMap = (data as List).map((e) => e as Map<String, dynamic>).toList();
+      emit(state.copyWith(listAdverStatus: ListAdverStatus.success, listDataOfferWall: listMap));
     } catch (ex) {
       emit(state.copyWith(listAdverStatus: ListAdverStatus.failure));
     }

@@ -44,15 +44,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   bool isdisable = false;
   LocalStore? localStore;
   final _currentPageNotifier = ValueNotifier<int>(0);
-  final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll =
-      ValueNotifier(GlobalKey());
+  final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll = ValueNotifier(GlobalKey());
   late TabController _tabController;
   String? filter;
   String? categary;
@@ -114,8 +111,7 @@ class _HomePageState extends State<HomePage>
             listener: _listenListAdver,
           ),
           BlocListener<HomeBloc, HomeState>(
-            listenWhen: (previous, current) =>
-                previous.getPointStatus != current.getPointStatus,
+            listenWhen: (previous, current) => previous.getPointStatus != current.getPointStatus,
             listener: _listenDataPoint,
           ),
         ],
@@ -195,22 +191,18 @@ class _HomePageState extends State<HomePage>
                     const SizedBox(width: 10),
                     Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 14),
-                      child: Text('리워드',
-                          style: AppStyle.bold.copyWith(
-                              color: AppColor.black,
-                              fontSize: 4 + controllerGet.fontSizeObx.value)),
+                      child: Text('리워드', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
                     ),
                   ],
                 ),
                 actions: [
                   WidgetAnimationClick(
                     onTap: () {
-                      Routings().navigate(context, MyPage());
+                      Routings().navigate(context, const MyPage());
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Image.asset(Assets.my_page.path,
-                          package: "sdk_eums", height: 24),
+                      child: Image.asset(Assets.my_page.path, package: "sdk_eums", height: 24),
                     ),
                   ),
                   const SizedBox(
@@ -218,18 +210,13 @@ class _HomePageState extends State<HomePage>
                   )
                 ],
               ),
-              key: globalKey,
+              // key: globalKey,
               body: CustomScrollCampaignDetail(
-                buildChildren: (BuildContext context,
-                    ValueNotifier<bool> showAppBar,
-                    ScrollController scrollController) {
+                buildChildren: (BuildContext context, ValueNotifier<bool> showAppBar, ScrollController scrollController) {
                   return [
                     CustomSliverList(
                       children: [
-                        _buildUIShowPoint(
-                            point: state.totalPoint != null
-                                ? state.totalPoint['userPoint']
-                                : 0),
+                        _buildUIShowPoint(point: state.totalPoint != null ? state.totalPoint['userPoint'] : 0),
                         Center(
                           child: Wrap(
                             direction: Axis.horizontal,
@@ -240,22 +227,16 @@ class _HomePageState extends State<HomePage>
                                     onTap: () {
                                       switch (index) {
                                         case 0:
-                                          Routings().navigate(
-                                              context,
-                                              StatusPointPage(
-                                                  account: state.account));
+                                          Routings().navigate(context, StatusPointPage(account: state.account));
                                           break;
                                         case 1:
-                                          Routings().navigate(context,
-                                              const KeepAdverboxScreen());
+                                          Routings().navigate(context, const KeepAdverboxScreen());
                                           break;
                                         case 2:
-                                          Routings().navigate(context,
-                                              const ScrapAdverBoxScreen());
+                                          Routings().navigate(context, const ScrapAdverBoxScreen());
                                           break;
                                         case 3:
-                                          Routings().navigate(
-                                              context, UsingTermScreen());
+                                          Routings().navigate(context, const UsingTermScreen());
                                           break;
                                         default:
                                       }
@@ -270,8 +251,7 @@ class _HomePageState extends State<HomePage>
                     ),
                     CustomSliverAppBar(
                       expandedHeight: 0,
-                      toolbarHeight:
-                          kToolbarHeight - MediaQuery.of(context).padding.top,
+                      toolbarHeight: kToolbarHeight - MediaQuery.of(context).padding.top,
                       header: TabBar(
                         onTap: (value) {
                           int index = value;
@@ -285,34 +265,27 @@ class _HomePageState extends State<HomePage>
                             _tabController.index = index;
                           });
                         },
-                        labelPadding:
-                            const EdgeInsets.only(bottom: 10, top: 10),
+                        labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
                         controller: _tabController,
                         indicatorColor: HexColor('#f4a43b'),
                         unselectedLabelColor: HexColor('#707070'),
                         labelColor: HexColor('#f4a43b'),
-                        labelStyle:
-                            AppStyle.bold.copyWith(color: HexColor('#707070')),
+                        labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
                         tabs: [
                           Text(
                             '참여하고 리워드',
-                            style: AppStyle.regular.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value),
+                            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                           ),
                           Text(
                             '쇼핑하고 리워드',
-                            style: AppStyle.regular.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value),
+                            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                           ),
                         ],
                       ),
                     ),
                     CustomSliverList(
                       children: [
-                        _buildUIPoint(
-                            point: state.totalPoint != null
-                                ? state.totalPoint['totalPointCanGet']
-                                : 0),
+                        _buildUIPoint(point: state.totalPoint != null ? state.totalPoint['totalPointCanGet'] : 0),
                         ListViewHome(
                           tab: _tabController.index,
                           filter: _filterMedia,
@@ -354,9 +327,7 @@ class _HomePageState extends State<HomePage>
 
   _filterMedia(String? value) {
     if (value != '최신순') {
-      dynamic media = (DATA_MEDIA
-          .where((element) => element['name'] == value)
-          .toList())[0]['media'];
+      dynamic media = (DATA_MEDIA.where((element) => element['name'] == value).toList())[0]['media'];
 
       filter = media;
     } else {
@@ -372,10 +343,8 @@ class _HomePageState extends State<HomePage>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
           border: Border(
-              bottom: BorderSide(
-                  color: HexColor('#888888').withOpacity(.2), width: 5),
-              top: BorderSide(
-                  color: HexColor('#888888').withOpacity(.2), width: 5))),
+              bottom: BorderSide(color: HexColor('#888888').withOpacity(.2), width: 5),
+              top: BorderSide(color: HexColor('#888888').withOpacity(.2), width: 5))),
       child: Center(
         child: Wrap(
           spacing: 12,
@@ -384,20 +353,16 @@ class _HomePageState extends State<HomePage>
           children: [
             Text(
               '지금 획득 가능한 포인트',
-              style: AppStyle.regular.copyWith(
-                  color: HexColor('#888888'),
-                  fontSize: controllerGet.fontSizeObx.value),
+              style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(Assets.icon_point_y.path,
-                    package: "sdk_eums", height: 24),
+                Image.asset(Assets.icon_point_y.path, package: "sdk_eums", height: 24),
                 const SizedBox(width: 6),
                 Text(
                   Constants.formatMoney(point, suffix: ''),
-                  style: AppStyle.bold
-                      .copyWith(fontSize: 6 + controllerGet.fontSizeObx.value),
+                  style: AppStyle.bold.copyWith(fontSize: 6 + controllerGet.fontSizeObx.value),
                 )
               ],
             ),
@@ -412,9 +377,7 @@ class _HomePageState extends State<HomePage>
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-          border: Border.all(color: HexColor('#e5e5e5')),
-          borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(border: Border.all(color: HexColor('#e5e5e5')), borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -422,9 +385,7 @@ class _HomePageState extends State<HomePage>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Text(
               '현재 적립된 포인트',
-              style: AppStyle.regular.copyWith(
-                  fontSize: controllerGet.fontSizeObx.value,
-                  color: Colors.black),
+              style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value, color: Colors.black),
             ),
           ),
           WidgetAnimationClick(
@@ -436,15 +397,10 @@ class _HomePageState extends State<HomePage>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(Assets.icon_point_y.path,
-                      package: "sdk_eums", height: 24),
+                  Image.asset(Assets.icon_point_y.path, package: "sdk_eums", height: 24),
                   const SizedBox(width: 12),
-                  Text(Constants.formatMoney(point, suffix: ''),
-                      style: AppStyle.bold
-                          .copyWith(fontSize: 30, color: Colors.black)),
-                  Text('P',
-                      style: AppStyle.bold
-                          .copyWith(fontSize: 18, color: Colors.black)),
+                  Text(Constants.formatMoney(point, suffix: ''), style: AppStyle.bold.copyWith(fontSize: 30, color: Colors.black)),
+                  Text('P', style: AppStyle.bold.copyWith(fontSize: 18, color: Colors.black)),
                   const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.black,
@@ -457,20 +413,17 @@ class _HomePageState extends State<HomePage>
           const SizedBox(height: 8),
           WidgetAnimationClick(
             onTap: () {
-              Routings().navigate(context, InstructAppScreen());
+              Routings().navigate(context, const InstructAppScreen());
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Image.asset(Assets.err_grey.path,
-                      package: "sdk_eums", height: 12),
+                  Image.asset(Assets.err_grey.path, package: "sdk_eums", height: 12),
                   const SizedBox(width: 4),
                   Text(
                     '서비스 이용 안내',
-                    style: AppStyle.regular12.copyWith(
-                        color: HexColor('#888888'),
-                        fontSize: controllerGet.fontSizeObx.value - 2),
+                    style: AppStyle.regular12.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
                   ),
                 ],
               ),
@@ -481,9 +434,7 @@ class _HomePageState extends State<HomePage>
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               color: HexColor('#f4f4f4'),
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12)),
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
             ),
             child: Row(
               children: [
@@ -492,9 +443,7 @@ class _HomePageState extends State<HomePage>
                   child: Text(
                     isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
                     maxLines: 2,
-                    style: AppStyle.medium.copyWith(
-                        color: Colors.black,
-                        fontSize: controllerGet.fontSizeObx.value),
+                    style: AppStyle.medium.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
                 const Spacer(),
@@ -505,41 +454,31 @@ class _HomePageState extends State<HomePage>
                     });
                     localStore?.setSaveAdver(isdisable);
                     if (isdisable) {
-                      String? token =
-                          await FirebaseMessaging.instance.getToken();
+                      String? token = await FirebaseMessaging.instance.getToken();
 
-                      await EumsOfferWallServiceApi()
-                          .unRegisterTokenNotifi(token: token);
+                      await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                       FlutterBackgroundService().invoke("stopService");
                     } else {
                       dynamic data = <String, dynamic>{
                         'count': 0,
-                        'date': Constants.formatTime(
-                            DateTime.now().toIso8601String()),
+                        'date': Constants.formatTime(DateTime.now().toIso8601String()),
                       };
                       localStore?.setCountAdvertisement(data);
-                      String? token =
-                          await FirebaseMessaging.instance.getToken();
-                      await EumsOfferWallServiceApi()
-                          .createTokenNotifi(token: token);
-                      bool isRunning =
-                          await FlutterBackgroundService().isRunning();
+                      String? token = await FirebaseMessaging.instance.getToken();
+                      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                      bool isRunning = await FlutterBackgroundService().isRunning();
                       if (!isRunning) {
                         FlutterBackgroundService().startService();
                       }
                     }
                   },
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                    padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                     width: 34,
                     decoration: BoxDecoration(
                         color: !isdisable ? AppColor.orange2 : AppColor.white,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                            color: !isdisable
-                                ? Colors.transparent
-                                : AppColor.color70)),
+                        border: Border.all(color: !isdisable ? Colors.transparent : AppColor.color70)),
                     child: Row(
                       children: [
                         isdisable
@@ -594,18 +533,13 @@ class _HomePageState extends State<HomePage>
           children: [
             Container(
               padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: HexColor('#888888').withOpacity(0.3)),
-              child:
-                  Image.asset(urlImage ?? '', package: "sdk_eums", height: 50),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
+              child: Image.asset(urlImage ?? '', package: "sdk_eums", height: 50),
             ),
             const SizedBox(height: 4),
             Text(
               title ?? '',
-              style: AppStyle.regular12.copyWith(
-                  color: Colors.black,
-                  fontSize: controllerGet.fontSizeObx.value - 2),
+              style: AppStyle.regular12.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value - 2),
             )
           ],
         ),
@@ -647,13 +581,10 @@ class _HomePageState extends State<HomePage>
                           height: 164,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.cover,
-                          imageUrl:
-                              'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
+                          imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+                          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) {
-                            return Image.asset(Assets.logo.path,
-                                package: "sdk_eums", width: 30, height: 30);
+                            return Image.asset(Assets.logo.path, package: "sdk_eums", width: 30, height: 30);
                           }),
                     ),
                   );
@@ -667,13 +598,8 @@ class _HomePageState extends State<HomePage>
           right: 16,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(.5),
-                borderRadius: BorderRadius.circular(12)),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                  '${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')
-            ]),
+            decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
           ),
         ),
       ],
@@ -682,14 +608,7 @@ class _HomePageState extends State<HomePage>
 }
 
 class ListViewHome extends StatefulWidget {
-  const ListViewHome(
-      {Key? key,
-      required this.tab,
-      this.fetchData,
-      this.fetchDataLoadMore,
-      this.scrollController,
-      this.filter})
-      : super(key: key);
+  const ListViewHome({Key? key, required this.tab, this.fetchData, this.fetchDataLoadMore, this.scrollController, this.filter}) : super(key: key);
 
   final int tab;
   final Function? fetchData;
@@ -702,8 +621,7 @@ class ListViewHome extends StatefulWidget {
 }
 
 class _ListViewHomeState extends State<ListViewHome> {
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController refreshController = RefreshController(initialRefresh: false);
 
   ScrollController? controller;
 
@@ -715,32 +633,29 @@ class _ListViewHomeState extends State<ListViewHome> {
     return _buildContent(context);
   }
 
-  void _onRefresh() async {
-    await Future.delayed(const Duration(seconds: 0));
-    refreshController.refreshCompleted();
-    setState(() {});
-    widget.fetchData!();
-  }
+  // void _onRefresh() async {
+  //   await Future.delayed(const Duration(seconds: 0));
+  //   refreshController.refreshCompleted();
+  //   setState(() {});
+  //   widget.fetchData!();
+  // }
 
-  void _onLoading() async {
-    await Future.delayed(const Duration(seconds: 0));
-    refreshController.loadComplete();
-    List<dynamic>? dataCampaign =
-        context.read<HomeBloc>().state.listDataOfferWall;
-    if (dataCampaign != null) {}
-  }
+  // void _onLoading() async {
+  //   await Future.delayed(const Duration(seconds: 0));
+  //   refreshController.loadComplete();
+  //   List<dynamic>? dataCampaign = context.read<HomeBloc>().state.listDataOfferWall;
+  //   if (dataCampaign != null) {}
+  // }
 
   Widget _buildDropDown(BuildContext context) {
     dynamic medias = DATA_MEDIA.map((item) => item['name']).toList();
-    List<DropdownMenuItem<String>> items =
-        medias.map<DropdownMenuItem<String>>((String? value) {
+    List<DropdownMenuItem<String>> items = medias.map<DropdownMenuItem<String>>((String? value) {
       return DropdownMenuItem<String>(
         value: value,
         child: Text(
           value ?? "",
           textAlign: TextAlign.center,
-          style: AppStyle.bold.copyWith(
-              color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
+          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
         ),
       );
     }).toList();
@@ -783,9 +698,8 @@ class _ListViewHomeState extends State<ListViewHome> {
               child: Row(
                 children: [
                   Text(
-                    '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall.length : 0} 개',
-                    style: AppStyle.regular
-                        .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                    '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall?.length : 0} 개',
+                    style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                   ),
                   const Spacer(),
                   SizedBox(
@@ -797,8 +711,7 @@ class _ListViewHomeState extends State<ListViewHome> {
               ),
             ),
             Container(
-              decoration:
-                  const BoxDecoration(color: AppColor.white, border: Border()),
+              decoration: const BoxDecoration(color: AppColor.white, border: Border()),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: state.listDataOfferWall != null
                   ? Wrap(
@@ -808,20 +721,15 @@ class _ListViewHomeState extends State<ListViewHome> {
                           state.listDataOfferWall?.length ?? 0,
                           (index) => WidgetAnimationClick(
                                 child: widget.tab == 0
-                                    ? _buildItemRow(
-                                        data: state.listDataOfferWall[index])
-                                    : _buildItemColum(
-                                        data: state.listDataOfferWall[index]),
+                                    ? _buildItemRow(data: state.listDataOfferWall?[index])
+                                    : _buildItemColum(data: state.listDataOfferWall?[index]),
                                 onTap: () {
                                   Routings().navigate(
                                       context,
                                       DetailOffWallScreen(
-                                        title: state.listDataOfferWall[index]
-                                            ['title'],
-                                        xId: state.listDataOfferWall[index]
-                                            ['idx'],
-                                        type: state.listDataOfferWall[index]
-                                            ['type'],
+                                        title: state.listDataOfferWall?[index]['title'],
+                                        xId: state.listDataOfferWall?[index]['idx'],
+                                        type: state.listDataOfferWall?[index]['type'],
                                       ));
                                 },
                               )),
@@ -848,52 +756,38 @@ class _ListViewHomeState extends State<ListViewHome> {
                 height: 200,
                 fit: BoxFit.cover,
                 imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) {
-                  return Image.asset(Assets.logo.path,
-                      package: "sdk_eums", width: 30, height: 30);
+                  return Image.asset(Assets.logo.path, package: "sdk_eums", width: 30, height: 30);
                 }),
           ),
           const SizedBox(height: 4),
           Text(
             data['title'] ?? "",
             maxLines: 2,
-            style: AppStyle.regular.copyWith(
-                fontSize: controllerGet.fontSizeObx.value, color: Colors.black),
+            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value, color: Colors.black),
           ),
           const SizedBox(height: 4),
           Text(
             Constants.formatMoney(data['reward'], suffix: '원'),
-            style: AppStyle.regular.copyWith(
-                decoration: TextDecoration.lineThrough,
-                fontSize: controllerGet.fontSizeObx.value,
-                color: HexColor('#888888')),
+            style: AppStyle.regular
+                .copyWith(decoration: TextDecoration.lineThrough, fontSize: controllerGet.fontSizeObx.value, color: HexColor('#888888')),
           ),
           const SizedBox(height: 4),
           Row(
             children: [
-              Text('60% ',
-                  style: AppStyle.bold.copyWith(
-                      color: HexColor('#ff7169'),
-                      fontSize: 2 + controllerGet.fontSizeObx.value)),
+              Text('60% ', style: AppStyle.bold.copyWith(color: HexColor('#ff7169'), fontSize: 2 + controllerGet.fontSizeObx.value)),
               Text(Constants.formatMoney(data['reward'], suffix: '원'),
-                  style: AppStyle.bold.copyWith(
-                      color: HexColor('#000000'),
-                      fontSize: 2 + controllerGet.fontSizeObx.value))
+                  style: AppStyle.bold.copyWith(color: HexColor('#000000'), fontSize: 2 + controllerGet.fontSizeObx.value))
             ],
           ),
           Container(
             margin: const EdgeInsets.only(top: 6),
             padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                color: HexColor('#fdd000'),
-                borderRadius: BorderRadius.circular(5)),
+            decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(5)),
             child: Text(
               '+${Constants.formatMoney(data['reward'], suffix: '')}',
-              style: AppStyle.bold.copyWith(
-                  color: Colors.black,
-                  fontSize: controllerGet.fontSizeObx.value),
+              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
             ),
           ),
           const SizedBox(height: 30),
@@ -902,24 +796,23 @@ class _ListViewHomeState extends State<ListViewHome> {
     );
   }
 
-  _buildItemRow({dynamic data}) {
+  _buildItemRow({Map<String, dynamic>? data}) {
     String title = '';
-    switch (data['type']) {
+    switch (data?['type']) {
       case 'install':
-        title = '설치하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        title = '설치하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
         break;
       case 'visit':
-        title = '방문하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        title = '방문하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
         break;
       case 'join':
-        title = '가입하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        title = '가입하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
         break;
       case 'shopping':
-        title = '구매하면${Constants.formatMoney(data['reward'], suffix: '')}적립';
+        title = '구매하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
         break;
       case 'subscribe':
-        title =
-            '구독/좋아요/팔로우 하면 ${Constants.formatMoney(data['reward'], suffix: '')}적립 ';
+        title = '구독/좋아요/팔로우 하면 ${Constants.formatMoney(data?['reward'], suffix: '')}적립 ';
         break;
       default:
     }
@@ -927,36 +820,29 @@ class _ListViewHomeState extends State<ListViewHome> {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.withOpacity(0.3)),
-            borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.3)), borderRadius: BorderRadius.circular(10)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: CachedNetworkImage(
                   width: MediaQuery.of(context).size.width,
                   height: 200,
                   fit: BoxFit.cover,
-                  imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
+                  imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) {
-                    return Image.asset(Assets.logo.path,
-                        package: "sdk_eums", width: 30, height: 30);
+                    return Image.asset(Assets.logo.path, package: "sdk_eums", width: 30, height: 30);
                   }),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                data['title'] ?? "",
+                data?['title'] ?? "",
                 // maxLines: 2,
-                style: AppStyle.bold.copyWith(
-                    color: Colors.black,
-                    fontSize: 2 + controllerGet.fontSizeObx.value),
+                style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 2 + controllerGet.fontSizeObx.value),
               ),
             ),
             Container(
@@ -968,22 +854,16 @@ class _ListViewHomeState extends State<ListViewHome> {
                     width: (MediaQuery.of(context).size.width) / 1.8 - 10,
                     child: Text(
                       title,
-                      style: AppStyle.regular.copyWith(
-                          color: HexColor('#666666'),
-                          fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(color: HexColor('#666666'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                   ),
                   const Spacer(),
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: HexColor('#fdd000')),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HexColor('#fdd000')),
                     child: Text(
                       '포인트받기',
-                      style: AppStyle.regular
-                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                   )
                 ],
