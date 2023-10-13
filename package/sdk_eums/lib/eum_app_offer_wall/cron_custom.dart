@@ -6,16 +6,16 @@ import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 class CronCustom {
   final cron = Cron();
   final LocalStore localStore = LocalStoreService();
-  initCron() async {
-    //// 3600
-    cron.schedule(Schedule.parse('*/5 * * * * *'), () async {
-      try {
-        // print("con cac${await LocalStoreService().getCountAdvertisement()}");
+  // initCron() async {
+  //   //// 3600
+  //   cron.schedule(Schedule.parse('*/5 * * * * *'), () async {
+  //     try {
+  //       // print("con cac${await LocalStoreService().getCountAdvertisement()}");
 
-        CountAdver().checkDate();
-      } catch (ex) {
-        print(ex);
-      }
-    });
-  }
+  //       CountAdver().checkDate();
+  //     } catch (ex) {
+  //       print(ex);
+  //     }
+  //   });
+  // }
 }

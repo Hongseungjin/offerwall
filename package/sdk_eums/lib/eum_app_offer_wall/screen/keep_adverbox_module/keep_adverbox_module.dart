@@ -31,10 +31,8 @@ class KeepAdverboxScreen extends StatefulWidget {
 }
 
 class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
+  RefreshController refreshController = RefreshController(initialRefresh: false);
   dynamic numberDay;
   final controllerGet = Get.put(SettingFontSize());
 
@@ -49,15 +47,13 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
       _onRefresh();
     });
 
-    RxBus.register<ShowDataAdver>(tag: Constants.showDataAdver)
-        .listen((event) {});
+    RxBus.register<ShowDataAdver>(tag: Constants.showDataAdver).listen((event) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<KeepAdverboxBloc>(
-      create: (context) =>
-          KeepAdverboxBloc()..add(KeepAdverbox(limit: Constants.LIMIT_DATA)),
+      create: (context) => KeepAdverboxBloc()..add(KeepAdverbox(limit: Constants.LIMIT_DATA)),
       child: BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
         listenWhen: (previous, current) => previous.status != current.status,
         listener: _listenFetchData,
@@ -94,16 +90,12 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         backgroundColor: AppColor.white,
         elevation: 1,
         centerTitle: true,
-        title: Text('광고 보관함',
-            style: AppStyle.bold.copyWith(
-                fontSize: 2 + controllerGet.fontSizeObx.value,
-                color: AppColor.black)),
+        title: Text('광고 보관함', style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black)),
         leading: InkWell(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: const Icon(Icons.arrow_back_ios_outlined,
-              color: AppColor.dark, size: 25),
+          child: const Icon(Icons.arrow_back_ios_outlined, color: AppColor.dark, size: 25),
         ),
       ),
       body: SmartRefresher(
@@ -112,11 +104,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         onLoading: _onLoading,
         header: CustomHeader(
           builder: (BuildContext context, RefreshStatus? mode) {
-            return const Center(
-                child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.transparent)));
+            return const Center(child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.transparent)));
           },
         ),
         footer: CustomFooter(
@@ -126,10 +114,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                     child: Column(
                     children: const [
                       Text(' '),
-                      CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.black)),
+                      CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                     ],
                   ))
                 : Container();
@@ -140,7 +125,6 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 16),
               // Container(
               //   padding:
               //       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -205,31 +189,33 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                 package: "sdk_eums",
                 // height: 40,
               ),
-              const Divider(),
+              Container(
+                height: 5,
+                width: MediaQuery.of(context).size.width,
+                color: const Color(0xfff4f4f4),
+              ),
+              // const Divider(),
               data != null
                   ? Wrap(
                       children: List.generate(data.length, (index) {
-                        return WidgetAnimationClick(
-                          onTap: () {
-                            Routings().navigate(
-                                context,
-                                DetailKeepScreen(
-                                  data: data[index],
-                                  // urlImage: data[index][''],
-                                  // url: data[index]['url_link'],
-                                  // id: data[index]['advertiseIdx'],
-                                  // idx: data[index]['idx'],
-                                  // typePoint: data[index]['typePoint'],
-                                ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: HexColor('#f4f4f4')))),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 24),
+                        return Container(
+                          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: HexColor('#f4f4f4')))),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                          child: WidgetAnimationClick(
+                            onTap: () {
+                              Routings().navigate(
+                                  context,
+                                  DetailKeepScreen(
+                                    data: data[index],
+                                    // urlImage: data[index][''],
+                                    // url: data[index]['url_link'],
+                                    // id: data[index]['advertiseIdx'],
+                                    // idx: data[index]['idx'],
+                                    // typePoint: data[index]['typePoint'],
+                                  ));
+                            },
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
@@ -241,76 +227,63 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          1.9,
-                                      child: Text(
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
                                         '${data[index]['name'] ?? ''}',
-                                        maxLines: 2,
-                                        style: AppStyle.bold.copyWith(
-                                            color: AppColor.black,
-                                            fontSize: controllerGet
-                                                .fontSizeObx.value),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
                                       ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    RichText(
-                                        text: TextSpan(
-                                            text: '남은 기간 ',
-                                            style: AppStyle.regular.copyWith(
-                                                color: HexColor('#888888'),
-                                                fontSize: controllerGet
-                                                        .fontSizeObx.value -
-                                                    2),
-                                            children: [
-                                          TextSpan(
-                                            text: ' 2',
-                                            style: AppStyle.bold.copyWith(
-                                                color: HexColor('#888888'),
-                                                fontSize: controllerGet
-                                                        .fontSizeObx.value -
-                                                    2),
-                                          ),
-                                          TextSpan(
-                                            text: ' 일',
-                                            style: AppStyle.regular.copyWith(
-                                                color: HexColor('#888888'),
-                                                fontSize: controllerGet
-                                                        .fontSizeObx.value -
-                                                    2),
-                                          )
-                                        ])),
-                                    const SizedBox(height: 4),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width / 2,
-                                      child: Text(
+                                      const SizedBox(height: 4),
+                                      RichText(
+                                          text: TextSpan(
+                                              text: '남은 기간 ',
+                                              style: AppStyle.regular
+                                                  .copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
+                                              children: [
+                                            TextSpan(
+                                              text: ' 2',
+                                              style:
+                                                  AppStyle.bold.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
+                                            ),
+                                            TextSpan(
+                                              text: ' 일',
+                                              style: AppStyle.regular
+                                                  .copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
+                                            )
+                                          ])),
+                                      const SizedBox(height: 4),
+                                      Text(
                                         '보관한 날짜 ${Constants.formatTimeNew(data[index]['regist_date'] ?? '')} ',
                                         maxLines: 3,
-                                        style: AppStyle.medium.copyWith(
-                                            color: HexColor('#888888'),
-                                            fontSize: controllerGet
-                                                    .fontSizeObx.value -
-                                                2),
+                                        style: AppStyle.medium.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                                const Spacer(),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 6),
-                                  decoration: BoxDecoration(
-                                      color: HexColor('#fdd000'),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Text(
-                                    '광고보기',
-                                    style: AppStyle.bold.copyWith(
-                                        fontSize:
-                                            controllerGet.fontSizeObx.value),
+                                WidgetAnimationClick(
+                                  onTap: () {
+                                    Routings().navigate(
+                                        context,
+                                        DetailKeepScreen(
+                                          data: data[index],
+                                          // urlImage: data[index][''],
+                                          // url: data[index]['url_link'],
+                                          // id: data[index]['advertiseIdx'],
+                                          // idx: data[index]['idx'],
+                                          // typePoint: data[index]['typePoint'],
+                                        ));
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                                    decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(5)),
+                                    child: Text(
+                                      '광고보기',
+                                      style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                                    ),
                                   ),
                                 )
                               ],
@@ -330,11 +303,8 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
   int getDayLeft(String? dateTo) {
     if (dateTo != null && dateTo.isNotEmpty) {
       DateTime parseDtFrom = DateTime.parse(dateTo).toLocal();
-      DateTime parseDtTo =
-          DateTime.parse(dateTo).toLocal().add(Duration(days: 2));
-      return parseDtTo.difference(parseDtFrom).inDays > 1
-          ? parseDtTo.difference(parseDtFrom).inDays
-          : parseDtTo.day - parseDtFrom.day;
+      DateTime parseDtTo = DateTime.parse(dateTo).toLocal().add(const Duration(days: 2));
+      return parseDtTo.difference(parseDtFrom).inDays > 1 ? parseDtTo.difference(parseDtFrom).inDays : parseDtTo.day - parseDtFrom.day;
     } else {
       return -1;
     }
@@ -347,22 +317,15 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
   }
 
   _fetchData() async {
-    globalKey.currentContext
-        ?.read<KeepAdverboxBloc>()
-        .add(KeepAdverbox(limit: Constants.LIMIT_DATA));
+    globalKey.currentContext?.read<KeepAdverboxBloc>().add(KeepAdverbox(limit: Constants.LIMIT_DATA));
   }
 
   void _onLoading() async {
     await Future.delayed(const Duration(seconds: 0));
     refreshController.loadComplete();
-    List<dynamic>? dataKeep = globalKey.currentContext
-        ?.read<KeepAdverboxBloc>()
-        .state
-        .dataKeepAdverbox;
+    List<dynamic>? dataKeep = globalKey.currentContext?.read<KeepAdverboxBloc>().state.dataKeepAdverbox;
     if (dataKeep != null) {
-      globalKey.currentContext?.read<KeepAdverboxBloc>().add(
-          LoadMoreKeepAdverbox(
-              limit: Constants.LIMIT_DATA, offset: dataKeep.length));
+      globalKey.currentContext?.read<KeepAdverboxBloc>().add(LoadMoreKeepAdverbox(limit: Constants.LIMIT_DATA, offset: dataKeep.length));
     }
   }
 }
@@ -377,8 +340,7 @@ class DetailKeepScreen extends StatefulWidget {
 }
 
 class _DetailKeepScreenState extends State<DetailKeepScreen> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   FToast fToast = FToast();
 
   final _controller = ScrollController();
@@ -410,23 +372,19 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
           ..add(GetAdvertiseSponsor()),
         child: MultiBlocListener(listeners: [
           BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
-            listenWhen: (previous, current) =>
-                previous.deleteKeepStatus != current.deleteKeepStatus,
+            listenWhen: (previous, current) => previous.deleteKeepStatus != current.deleteKeepStatus,
             listener: _listenFetchData,
           ),
           BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
-            listenWhen: (previous, current) =>
-                previous.adverKeepStatus != current.adverKeepStatus,
+            listenWhen: (previous, current) => previous.adverKeepStatus != current.adverKeepStatus,
             listener: _listenPointFetchData,
           ),
           BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
-            listenWhen: (previous, current) =>
-                previous.saveKeepStatus != current.saveKeepStatus,
+            listenWhen: (previous, current) => previous.saveKeepStatus != current.saveKeepStatus,
             listener: _listenSaveKeep,
           ),
           BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
-            listenWhen: (previous, current) =>
-                previous.saveScrapStatus != current.saveScrapStatus,
+            listenWhen: (previous, current) => previous.saveScrapStatus != current.saveScrapStatus,
             listener: _listenSaveScrap,
           ),
         ], child: _buildContent(context)));
@@ -507,18 +465,22 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
               uriImage: widget.data[''],
               title: widget.data['name'],
               report: InkWell(
-                  onTap: () {
-                    Routings().navigate(
+                  onTap: () async {
+                    final result = await Routings().navigate(
                         context,
                         ReportPage(
                           data: widget.data,
                           deleteAdver: true,
                         ));
+
+                    if (result == true) {
+                      // ignore: use_build_context_synchronously
+                      AppAlert.showSuccess(context, fToast, "Success");
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(Assets.report.path,
-                        package: "sdk_eums", height: 16),
+                    child: Image.asset(Assets.report.path, package: "sdk_eums", height: 16),
                   )),
               bookmark: InkWell(
                 onTap: () {
@@ -526,38 +488,25 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                     checkSave = !checkSave;
                   });
                   if (!checkSave) {
-                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(
-                        SaveScrap(advertise_idx: widget.data['advertiseIdx']));
+                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(SaveScrap(advertise_idx: widget.data['advertiseIdx']));
                   } else {
-                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(
-                        DeleteScrap(
-                            advertise_idx: widget.data['advertiseIdx']));
+                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(DeleteScrap(advertise_idx: widget.data['advertiseIdx']));
                   }
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: HexColor('#eeeeee')),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: Image.asset(
-                      checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path,
-                      package: "sdk_eums",
-                      height: 18,
-                      color: AppColor.black),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child:
+                      Image.asset(checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "sdk_eums", height: 18, color: AppColor.black),
                 ),
               ),
               mission: () {
-                DialogUtils.showDialogRewardPoint(context,
-                    checkImage: true,
-                    point: widget.data['typePoint'],
-                    data: (state.dataAdvertiseSponsor), voidCallback: () {
-                  context
-                      .read<KeepAdverboxBloc>()
-                      .add(DeleteKeep(id: widget.data['advertiseIdx']));
-                  globalKey.currentContext?.read<KeepAdverboxBloc>().add(
-                      EarnPoin(
-                          advertise_idx: widget.data['advertiseIdx'],
-                          pointType: widget.data['typePoint']));
+                DialogUtils.showDialogRewardPoint(context, checkImage: true, point: widget.data['typePoint'], data: (state.dataAdvertiseSponsor),
+                    voidCallback: () {
+                  context.read<KeepAdverboxBloc>().add(DeleteKeep(id: widget.data['advertiseIdx']));
+                  globalKey.currentContext
+                      ?.read<KeepAdverboxBloc>()
+                      .add(EarnPoin(advertise_idx: widget.data['advertiseIdx'], pointType: widget.data['typePoint']));
                 });
               },
             );

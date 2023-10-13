@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
@@ -28,8 +27,7 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   bool checkToken = false;
   bool checkTime = false;
 
@@ -69,13 +67,11 @@ class _SettingScreenState extends State<SettingScreen> {
       child: MultiBlocListener(
         listeners: [
           BlocListener<SettingBloc, SettingState>(
-            listenWhen: (previous, current) =>
-                previous.settingStatus != current.settingStatus,
+            listenWhen: (previous, current) => previous.settingStatus != current.settingStatus,
             listener: _listenSettingTime,
           ),
           BlocListener<SettingBloc, SettingState>(
-            listenWhen: (previous, current) =>
-                previous.updateSettingStatus != current.updateSettingStatus,
+            listenWhen: (previous, current) => previous.updateSettingStatus != current.updateSettingStatus,
             listener: _listenUpdateSettingStatus,
           ),
         ],
@@ -114,13 +110,9 @@ class _SettingScreenState extends State<SettingScreen> {
     return BlocBuilder<SettingBloc, SettingState>(
       builder: (context, state) {
         try {
-          startDate = state.dataSetting != null
-              ? DateTime.tryParse(state.dataSetting['startTimeCron'])
-              : DateTime.now();
+          startDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['startTimeCron']) : DateTime.now();
 
-          endDate = state.dataSetting != null
-              ? DateTime.tryParse(state.dataSetting['endTimeCron'])
-              : DateTime.now();
+          endDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['endTimeCron']) : DateTime.now();
         } catch (ex) {}
 
         return Scaffold(
@@ -141,9 +133,7 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             title: Text(
               '설정',
-              style: AppStyle.bold.copyWith(
-                  color: Colors.black,
-                  fontSize: 4 + controllerGet.fontSizeObx.value),
+              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value),
             ),
           ),
           body: Column(
@@ -156,9 +146,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     Text(
                       '마케팅 알림',
-                      style: AppStyle.regular.copyWith(
-                          color: HexColor('#888888'),
-                          fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 15),
                     InkWell(
@@ -168,32 +156,26 @@ class _SettingScreenState extends State<SettingScreen> {
                           localStore?.setSaveAdver(checkToken);
                         });
                         if (checkToken) {
-                          String? token =
-                              await FirebaseMessaging.instance.getToken();
+                          String? token = await FirebaseMessaging.instance.getToken();
 
-                          await EumsOfferWallServiceApi()
-                              .unRegisterTokenNotifi(token: token);
+                          await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                           FlutterBackgroundService().invoke("stopService");
                         } else {
-                          dynamic data = <String, dynamic>{
-                            'count': 0,
-                            'date': Constants.formatTime(
-                                DateTime.now().toIso8601String()),
-                          };
-                          localStore?.setCountAdvertisement(data);
-                          String? token =
-                              await FirebaseMessaging.instance.getToken();
-                          await EumsOfferWallServiceApi()
-                              .createTokenNotifi(token: token);
-                          bool isRunning =
-                              await FlutterBackgroundService().isRunning();
+                          // dynamic data = <String, dynamic>{
+                          //   'count': 0,
+                          //   'date': Constants.formatTime(
+                          //       DateTime.now().toIso8601String()),
+                          // };
+                          // localStore?.setCountAdvertisement(data);
+                          String? token = await FirebaseMessaging.instance.getToken();
+                          await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                          bool isRunning = await FlutterBackgroundService().isRunning();
                           if (!isRunning) {
                             FlutterBackgroundService().startService();
                           }
                         }
                       },
-                      child: _buildCheckSetting(
-                          checkSetting: !checkToken, title: '벌 광고 활성화'),
+                      child: _buildCheckSetting(checkSetting: !checkToken, title: '벌 광고 활성화'),
                     ),
                     const SizedBox(height: 30),
                     InkWell(
@@ -202,18 +184,14 @@ class _SettingScreenState extends State<SettingScreen> {
                           checkTime = !checkTime;
                           localStore?.setBoolTime(checkTime);
                         });
-                        globalKey.currentContext?.read<SettingBloc>().add(
-                            EnableOrDisbleSetting(enableOrDisble: checkTime));
+                        globalKey.currentContext?.read<SettingBloc>().add(EnableOrDisbleSetting(enableOrDisble: checkTime));
                       },
-                      child: _buildCheckSetting(
-                          checkSetting: checkTime, title: '광고 시간대 설정'),
+                      child: _buildCheckSetting(checkSetting: checkTime, title: '광고 시간대 설정'),
                     ),
                     const SizedBox(height: 7),
                     Text(
                       '벌 광고를 받지 않을 시간을 설정합니다.',
-                      style: AppStyle.regular.copyWith(
-                          color: HexColor('#888888'),
-                          fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 20),
                     if (checkTime) ...{
@@ -246,15 +224,11 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     Row(
                       children: [
-                        Text('정보 수신 동의',
-                            style: AppStyle.bold.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value)),
+                        Text('정보 수신 동의', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
                         const Spacer(),
                         Text(
                           '동의',
-                          style: AppStyle.bold.copyWith(
-                              color: HexColor('#f4a43b'),
-                              fontSize: controllerGet.fontSizeObx.value),
+                          style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
                         ),
                         const Icon(
                           Icons.arrow_forward_ios_outlined,
@@ -263,30 +237,21 @@ class _SettingScreenState extends State<SettingScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text('2018/07/29',
-                        style: AppStyle.regular.copyWith(
-                            color: HexColor('#888888'),
-                            fontSize: controllerGet.fontSizeObx.value)),
+                    Text('2018/07/29', style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
                     const SizedBox(height: 31),
                     Row(
                       children: [
-                        Text('버전정보',
-                            style: AppStyle.bold.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value)),
+                        Text('버전정보', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
                         const Spacer(),
                         Text(
                           '최신 버전을 사용 중입니다.',
-                          style: AppStyle.bold.copyWith(
-                              color: HexColor('#f4a43b'),
-                              fontSize: controllerGet.fontSizeObx.value),
+                          style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text('Ver ${version ?? ''}',
-                        style: AppStyle.regular.copyWith(
-                            color: HexColor('#888888'),
-                            fontSize: controllerGet.fontSizeObx.value)),
+                        style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
                   ],
                 ),
               ),
@@ -336,21 +301,16 @@ class _SettingScreenState extends State<SettingScreen> {
                     default:
                   }
                   setState(() {});
-                  createOrUpdateSettingTime(
-                      startTime: startDate, endTime: endDate);
+                  createOrUpdateSettingTime(startTime: startDate, endTime: endDate);
                 });
           },
-          child: dateNumber == 1
-              ? _buildViewDate(dateTime: startDate, title: title)
-              : _buildViewDate(dateTime: endDate, title: title))
+          child: dateNumber == 1 ? _buildViewDate(dateTime: startDate, title: title) : _buildViewDate(dateTime: endDate, title: title))
     ]);
   }
 
   createOrUpdateSettingTime({DateTime? startTime, DateTime? endTime}) {
     try {
-      globalKey.currentContext
-          ?.read<SettingBloc>()
-          .add(SettingTime(startTime: startTime, endTime: endTime));
+      globalKey.currentContext?.read<SettingBloc>().add(SettingTime(startTime: startTime, endTime: endTime));
     } catch (ex) {}
   }
 
@@ -360,9 +320,7 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Text(
           title ?? "",
-          style: AppStyle.regular.copyWith(
-              color: HexColor('#888888'),
-              fontSize: controllerGet.fontSizeObx.value),
+          style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
         ),
         const SizedBox(height: 8),
         SizedBox(
@@ -370,10 +328,9 @@ class _SettingScreenState extends State<SettingScreen> {
           child: Row(
             children: [
               Text(
-                '${dateTime!.hour < 10 ? 'AM' : 'PM'} '
-                '${dateTime.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}',
-                style: AppStyle.regular
-                    .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                // '${dateTime!.hour < 10 ? 'AM' : 'PM'} '
+                '${dateTime!.hour < 10 ? '0${dateTime.hour}' : dateTime.hour}:${dateTime.minute < 10 ? '0${dateTime.minute}' : dateTime.minute}',
+                style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
               ),
               const Spacer(),
               const Icon(Icons.keyboard_arrow_down_outlined)
@@ -396,42 +353,39 @@ class _SettingScreenState extends State<SettingScreen> {
           child: Material(
             color: Colors.transparent,
             child: Container(
-              height: 300,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    height: 220,
+                  SizedBox(
+                    height: 150,
                     child: CupertinoDatePicker(
                       initialDateTime: dateTime,
                       mode: CupertinoDatePickerMode.time,
-                      use24hFormat: false,
+                      use24hFormat: true,
                       onDateTimeChanged: (DateTime newTime) {
                         setState(() => dateTime = newTime);
                       },
                     ),
                   ),
-                  const Spacer(),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   InkWell(
                       onTap: () {
                         callBack!(dateTime);
                         Navigator.of(context).pop();
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: HexColor('#fdd000')),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: HexColor('#fdd000')),
                         child: Text(
                           '확인',
-                          style: AppStyle.bold.copyWith(
-                              fontSize: controllerGet.fontSizeObx.value),
+                          style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                           textAlign: TextAlign.center,
                         ),
                       ))
@@ -450,16 +404,13 @@ class _SettingScreenState extends State<SettingScreen> {
       children: [
         Text(
           title ?? '',
-          style:
-              AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
+          style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
         ),
         const Spacer(),
         Container(
           width: 55,
           padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: !checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: !checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
           child: Row(
             children: [
               !checkSetting

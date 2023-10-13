@@ -12,7 +12,7 @@ class LocalStoreService extends LocalStore {
   static const SAVE_DATA_SHARE = 'SAVE_DATA_SHARE';
   static const SAVE_DEVICE_TOKEN = 'SAVE_DEVICE_TOKEN';
   static const DEVICE_WIDTH = 'DEVICE_WIDTH';
-  static const COUNT_ADVER = 'COUNT_ADVER';
+  // static const COUNT_ADVER = 'COUNT_ADVER';
   static const dataUser = 'dataUser';
 
   @override
@@ -144,17 +144,17 @@ class LocalStoreService extends LocalStore {
     await preferences.setString(DEVICE_WIDTH, jsonEncode(width));
   }
 
-  @override
-  Future getCountAdvertisement() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    return jsonDecode(preferences.getString(COUNT_ADVER) ?? '{}');
-  }
+  // @override
+  // Future getCountAdvertisement() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   return jsonDecode(preferences.getString(COUNT_ADVER) ?? '{}');
+  // }
 
-  @override
-  Future setCountAdvertisement(dynamic data) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setString(COUNT_ADVER, jsonEncode(data));
-  }
+  // @override
+  // Future setCountAdvertisement(dynamic data) async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   await preferences.setString(COUNT_ADVER, jsonEncode(data));
+  // }
 
   @override
   Future getDataUser() async {

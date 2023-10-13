@@ -27,10 +27,8 @@ class ScrapAdverBoxScreen extends StatefulWidget {
 }
 
 class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
+  RefreshController refreshController = RefreshController(initialRefresh: false);
   final controllerGet = Get.put(SettingFontSize());
 
   String allMedia = '날짜 오름차순';
@@ -53,8 +51,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ScrapAdverboxBloc>(
-      create: (context) =>
-          ScrapAdverboxBloc()..add(ScrapAdverbox(limit: Constants.LIMIT_DATA)),
+      create: (context) => ScrapAdverboxBloc()..add(ScrapAdverbox(limit: Constants.LIMIT_DATA)),
       child: BlocListener<ScrapAdverboxBloc, ScrapAdverboxState>(
           listenWhen: (previous, current) => previous.status != current.status,
           listener: _listenFetchData,
@@ -65,16 +62,12 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               backgroundColor: AppColor.white,
               elevation: 1,
               centerTitle: true,
-              title: Text('광고 스크랩',
-                  style: AppStyle.bold.copyWith(
-                      fontSize: 2 + controllerGet.fontSizeObx.value,
-                      color: AppColor.black)),
+              title: Text('광고 스크랩', style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black)),
               leading: InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: const Icon(Icons.arrow_back_ios_outlined,
-                    color: AppColor.dark, size: 25),
+                child: const Icon(Icons.arrow_back_ios_outlined, color: AppColor.dark, size: 25),
               ),
             ),
             body: SmartRefresher(
@@ -84,10 +77,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               header: CustomHeader(
                 builder: (BuildContext context, RefreshStatus? mode) {
                   return const Center(
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.transparent)));
+                      child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.transparent)));
                 },
               ),
               footer: CustomFooter(
@@ -97,10 +87,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                           child: Column(
                           children: const [
                             Text(' '),
-                            CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.black)),
+                            CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                           ],
                         ))
                       : Container();
@@ -111,144 +98,101 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               child: BlocBuilder<ScrapAdverboxBloc, ScrapAdverboxState>(
                 builder: (context, state) {
                   return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16),
-                          Image.asset(
-                            Assets.scrap_banner.path,
-                            package: "sdk_eums",
-                          ),
-                          const SizedBox(height: 16),
-                          // Container(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                          //   decoration: BoxDecoration(
-                          //     border: Border.all(
-                          //         color: AppColor.grey5D.withOpacity(0.4)),
-                          //     borderRadius: BorderRadius.circular(8),
-                          //   ),
-                          //   child: _buildDropDown(context),
-                          // ),
-                          // const SizedBox(height: 16),
-                          state.dataScrapAdverbox != null
-                              ? Wrap(
-                                  children: List.generate(
-                                      state.dataScrapAdverbox.length,
-                                      (index) => WidgetAnimationClick(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          Assets.scrap_banner.path,
+                          package: "sdk_eums",
+                        ),
+                        Container(
+                          height: 5,
+                          width: MediaQuery.of(context).size.width,
+                          color: const Color(0xfff4f4f4),
+                        ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //         color: AppColor.grey5D.withOpacity(0.4)),
+                        //     borderRadius: BorderRadius.circular(8),
+                        //   ),
+                        //   child: _buildDropDown(context),
+                        // ),
+                        // const SizedBox(height: 16),
+                        state.dataScrapAdverbox != null
+                            ? Wrap(
+                                children: List.generate(
+                                    state.dataScrapAdverbox.length,
+                                    (index) => Container(
+                                          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                                          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: HexColor('#f4f4f4')))),
+                                          child: WidgetAnimationClick(
                                             onTap: () {
-                                              if (state.dataScrapAdverbox[index]
-                                                      ['url_link'] !=
-                                                  null) {
+                                              if (state.dataScrapAdverbox[index]['url_link'] != null) {
                                                 Routings().navigate(
                                                     context,
                                                     DetailScrapScreen(
-                                                      url: state
-                                                              .dataScrapAdverbox[
-                                                          index]['url_link'],
-                                                      adIdx: state
-                                                              .dataScrapAdverbox[
-                                                          index]['advertiseIdx'],
+                                                      url: state.dataScrapAdverbox[index]['url_link'],
+                                                      adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
                                                     ));
                                               }
                                             },
-                                            child: Column(
+                                            child: Row(
                                               children: [
-                                                const SizedBox(height: 12),
-                                                Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 0),
-                                                      child: Image.asset(
-                                                          Assets
-                                                              .keep_adver.path,
-                                                          package: "sdk_eums",
-                                                          height: 40),
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              2,
-                                                          child: Text(
-                                                            state.dataScrapAdverbox[
-                                                                        index]
-                                                                    ['name'] ??
-                                                                '',
-                                                            style: AppStyle.bold.copyWith(
-                                                                color: AppColor
-                                                                    .black,
-                                                                fontSize:
-                                                                    controllerGet
-                                                                        .fontSizeObx
-                                                                        .value),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 2),
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              2,
-                                                          child: Text(
-                                                            '스크랩 날짜 ${state.dataScrapAdverbox[index]['regist_date'] != null ? Constants.formatTimeDay(state.dataScrapAdverbox[index]['regist_date']) : ''} ',
-                                                            maxLines: 2,
-                                                            style: AppStyle.medium.copyWith(
-                                                                color: AppColor
-                                                                    .grey5D,
-                                                                fontSize: controllerGet
-                                                                        .fontSizeObx
-                                                                        .value -
-                                                                    4),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    // const Spacer(),
-                                                    Container(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 6,
-                                                          vertical: 6),
-                                                      decoration: BoxDecoration(
-                                                          color: HexColor(
-                                                              '#fdd000'),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                      child: Text(
-                                                        '광고보기',
-                                                        style: AppStyle.bold
-                                                            .copyWith(
-                                                                fontSize:
-                                                                    controllerGet
-                                                                        .fontSizeObx
-                                                                        .value),
-                                                      ),
-                                                    )
-                                                  ],
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 0),
+                                                  child: Image.asset(Assets.keep_adver.path, package: "sdk_eums", height: 40),
                                                 ),
-                                                const SizedBox(height: 8),
-                                                const Divider(),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        state.dataScrapAdverbox[index]['name'] ?? '',
+                                                        style:
+                                                            AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                        '스크랩 날짜 ${state.dataScrapAdverbox[index]['regist_date'] != null ? Constants.formatTimeDay(state.dataScrapAdverbox[index]['regist_date']) : ''} ',
+                                                        maxLines: 2,
+                                                        style: AppStyle.medium
+                                                            .copyWith(color: AppColor.grey5D, fontSize: controllerGet.fontSizeObx.value - 4),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                // const Spacer(),
+                                                WidgetAnimationClick(
+                                                  onTap: () {
+                                                    if (state.dataScrapAdverbox[index]['url_link'] != null) {
+                                                      Routings().navigate(
+                                                          context,
+                                                          DetailScrapScreen(
+                                                            url: state.dataScrapAdverbox[index]['url_link'],
+                                                            adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                          ));
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(left: 16),
+                                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                                                    decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(5)),
+                                                    child: Text(
+                                                      '광고보기',
+                                                      style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                                                    ),
+                                                  ),
+                                                )
                                               ],
                                             ),
-                                          )),
-                                )
-                              : const SizedBox(),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                                          ),
+                                        )),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(height: 16),
+                      ],
                     ),
                   );
                 },
@@ -260,8 +204,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
 
   Widget _buildDropDown(BuildContext context) {
     dynamic medias = SCRAP_MEDIA.map((item) => item['name']).toList();
-    List<DropdownMenuItem<String>> items =
-        medias.map<DropdownMenuItem<String>>((String? value) {
+    List<DropdownMenuItem<String>> items = medias.map<DropdownMenuItem<String>>((String? value) {
       return DropdownMenuItem<String>(
         value: value,
         child: Text(
@@ -322,9 +265,7 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
 
   _filterMedia(value) {
     if (value != '날짜 오름차순') {
-      dynamic media = (SCRAP_MEDIA
-          .where((element) => element['name'] == value)
-          .toList())[0]['media'];
+      dynamic media = (SCRAP_MEDIA.where((element) => element['name'] == value).toList())[0]['media'];
 
       dataSort = value;
     } else {
@@ -335,22 +276,15 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
   }
 
   _fetchData() async {
-    globalKey.currentContext
-        ?.read<ScrapAdverboxBloc>()
-        .add(ScrapAdverbox(limit: Constants.LIMIT_DATA, sort: dataSort));
+    globalKey.currentContext?.read<ScrapAdverboxBloc>().add(ScrapAdverbox(limit: Constants.LIMIT_DATA, sort: dataSort));
   }
 
   void _onLoading() async {
     await Future.delayed(const Duration(seconds: 0));
     refreshController.loadComplete();
-    List<dynamic>? dataKeep = globalKey.currentContext
-        ?.read<ScrapAdverboxBloc>()
-        .state
-        .dataScrapAdverbox;
+    List<dynamic>? dataKeep = globalKey.currentContext?.read<ScrapAdverboxBloc>().state.dataScrapAdverbox;
     if (dataKeep != null) {
-      globalKey.currentContext?.read<ScrapAdverboxBloc>().add(
-          LoadMoreScrapAdverbox(
-              limit: Constants.LIMIT_DATA, offset: dataKeep.length));
+      globalKey.currentContext?.read<ScrapAdverboxBloc>().add(LoadMoreScrapAdverbox(limit: Constants.LIMIT_DATA, offset: dataKeep.length));
     }
   }
 }
@@ -366,8 +300,7 @@ class DetailScrapScreen extends StatefulWidget {
 }
 
 class _DetailScrapScreenState extends State<DetailScrapScreen> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   FToast fToast = FToast();
 
   @override
@@ -380,12 +313,9 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ScrapAdverboxBloc>(
-        create: (context) => ScrapAdverboxBloc()
-          ..add(ScrapAdverbox(limit: Constants.LIMIT_DATA)),
+        create: (context) => ScrapAdverboxBloc()..add(ScrapAdverbox(limit: Constants.LIMIT_DATA)),
         child: BlocListener<ScrapAdverboxBloc, ScrapAdverboxState>(
-          listenWhen: (previous, current) =>
-              previous.deleteScrapAdverboxStatus !=
-              current.deleteScrapAdverboxStatus,
+          listenWhen: (previous, current) => previous.deleteScrapAdverboxStatus != current.deleteScrapAdverboxStatus,
           listener: _listenFetchData,
           child: Scaffold(
             key: globalKey,
@@ -398,16 +328,13 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
               colorIconBack: AppColor.white,
               actions: InkWell(
                 onTap: () {
-                  globalKey.currentContext
-                      ?.read<ScrapAdverboxBloc>()
-                      .add(DeleteScrapdverbox(
+                  globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(
                         id: widget.adIdx,
                       ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(17.0),
-                  child: Image.asset(Assets.bookmark.path,
-                      package: "sdk_eums", height: 25),
+                  child: Image.asset(Assets.bookmark.path, package: "sdk_eums", height: 25),
                 ),
               ),
             ),
@@ -419,7 +346,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
     String start1 = 'https:';
     int startIndex1 = content.indexOf(start1);
     String iframeTag1 = content.substring(startIndex1 + 6);
-    content = iframeTag1.replaceAll("$iframeTag1", "http:${iframeTag1}");
+    content = iframeTag1.replaceAll(iframeTag1, "http:$iframeTag1");
     return content;
   }
 

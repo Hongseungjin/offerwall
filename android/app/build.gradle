@@ -90,12 +90,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation(name: 'ohcCharge', ext: 'aar')
-    implementation(name: 'ive-offerwall-sdk-1.3.2', ext: 'aar')
-    implementation files('libs/libAppAllOfferwallSDK_410.jar')
-    implementation 'com.yanzhenjie:permission:1.1.2'
+    // implementation(name: 'ohcCharge', ext: 'aar')
+    // implementation(name: 'ive-offerwall-sdk-1.3.2', ext: 'aar')
+//     implementation files('libs/libAppAllOfferwallSDK_410.jar')
+    // implementation 'com.yanzhenjie:permission:1.1.2'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'com.android.support:multidex:1.0.3'
-    implementation platform('com.google.firebase:firebase-bom:32.1.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // implementation platform('com.google.firebase:firebase-bom:32.1.1')
+    // implementation 'com.google.firebase:firebase-analytics-ktx'
 }

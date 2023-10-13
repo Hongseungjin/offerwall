@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -56,10 +54,10 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
   FlutterGifController? gifController;
   late LinearTimerController timerController = LinearTimerController(this);
 
-  Timer? _timeDown;
-  int _startTime = 15;
-  Timer? timer5s;
-  bool showButton = false;
+  // Timer? _timeDown;
+  // int _startTime = 15;
+  // Timer? timer5s;
+  ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
 
   String getProperHtml(String content) {
@@ -70,60 +68,61 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
     return content;
   }
 
-  void startTimeDown() {
-    _timeDown?.cancel();
-    _timeDown = Timer.periodic(const Duration(seconds: 1), (timer) {
-      timerController.start();
-      if (_startTime == 0) {
-        _timeDown?.cancel();
-      } else {
-        setState(() {
-          _startTime--;
-        });
-        if (_startTime == 0) {
-          setState(() {
-            showButton = true;
-            gifController?.stop();
-            _timeDown?.cancel();
-          });
-        }
-      }
-    });
-  }
+  // void startTimeDown() {
+  //   _timeDown?.cancel();
+  //   _timeDown = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     timerController.start();
+  //     if (_startTime == 0) {
+  //       _timeDown?.cancel();
+  //     } else {
+  //       setState(() {
+  //         _startTime--;
+  //       });
+  //       if (_startTime == 0) {
+  //         showButton.value = true;
+  //         gifController?.stop();
+  //         _timeDown?.cancel();
+  //       }
+  //     }
+  //   });
+  // }
 
-  start5s() {
-    timer5s?.cancel();
-    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-      _timeDown?.cancel();
-      isRunning = false;
-      timerController.stop();
-      setState(() {});
-    });
-  }
+  // start5s() {
+  //   timer5s?.cancel();
+  //   timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+  //     _timeDown?.cancel();
+  //     isRunning = false;
+  //     timerController.stop();
+  //     setState(() {});
+  //   });
+  // }
 
   _scrollListener() {
     if (_scrollController.position.userScrollDirection == ScrollDirection.reverse ||
         _scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!isRunning) {
         isRunning = true;
-        startTimeDown();
+        // startTimeDown();
       }
-      start5s();
+      // start5s();
     }
   }
 
   @override
   void initState() {
-    gifController = FlutterGifController(vsync: this);
+    try {
+      gifController = FlutterGifController(vsync: this);
+    } catch (e) {}
     // TODO: implement initState
     if (widget.showMission) {
-      startTimeDown();
-      start5s();
+      // startTimeDown();
+      // start5s();
     }
     super.initState();
     _scrollController.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      timerController.start();
       gifController?.repeat(
         min: 0,
         max: 53,
@@ -185,8 +184,8 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
 
   @override
   void dispose() {
-    _timeDown?.cancel();
-    timer5s?.cancel();
+    // _timeDown?.cancel();
+    // timer5s?.cancel();
     _scrollController.dispose();
     // TODO: implement dispose
     super.dispose();
@@ -220,6 +219,7 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
                     child: Text(
                       widget.title ?? '',
                       maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 18),
                     ),
                   ),
@@ -239,10 +239,13 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
                         width: MediaQuery.of(context).size.width,
                         fit: BoxFit.cover,
                         imageUrl: widget.urlLink,
-                        placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(
-                              color: Color(0xfffcc900),
-                            )),
+                        placeholder: (context, url) => const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Center(
+                                  child: CircularProgressIndicator(
+                                color: Color(0xfffcc900),
+                              )),
+                            ),
                         errorWidget: (context, url, error) {
                           return Image.asset(Assets.logo.path, package: "sdk_eums", height: 16);
                         }),
@@ -273,15 +276,18 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
                         //         package: "sdk_eums",
                         //         height: 27,
                         //         color: AppColor.black)),
-                        InkWell(
-                          onTap: !showButton ? null : widget.mission,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4), color: !showButton ? AppColor.grey.withOpacity(0.5) : AppColor.red),
-                            child: Text(
-                              '포인트 적립하기',
-                              style: AppStyle.medium.copyWith(color: !showButton ? AppColor.grey : AppColor.white),
+                        ValueListenableBuilder(
+                          valueListenable: showButton,
+                          builder: (context, value, child) => InkWell(
+                            onTap: !showButton.value ? null : widget.mission,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4), color: !showButton.value ? AppColor.grey.withOpacity(0.5) : AppColor.red),
+                              child: Text(
+                                '포인트 적립하기',
+                                style: AppStyle.medium.copyWith(color: !showButton.value ? AppColor.grey : AppColor.white),
+                              ),
                             ),
                           ),
                         ),
@@ -295,7 +301,11 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
                                 color: AppColor.yellow,
                                 backgroundColor: HexColor('#888888').withOpacity(0.3),
                                 controller: timerController,
-                                duration: const Duration(milliseconds: 14000),
+                                duration: const Duration(seconds: 15),
+                                onTimerEnd: () {
+                                  showButton.value = true;
+                                  // gifController?.stop();
+                                },
                               ),
                             ),
                             Positioned(
@@ -335,7 +345,7 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
     );
   }
 
-  _buildButtonBack() {
-    Container(padding: const EdgeInsets.all(16), child: const Icon(Icons.arrow_back, color: Colors.black, size: 24));
-  }
+  // _buildButtonBack() {
+  //   Container(padding: const EdgeInsets.all(16), child: const Icon(Icons.arrow_back, color: Colors.black, size: 24));
+  // }
 }

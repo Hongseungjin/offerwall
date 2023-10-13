@@ -29,6 +29,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.flutter_overlay_window.R;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,7 +60,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
     private Handler mAnimationHandler = new Handler();
-    private float lastX, lastY;
+    private float lastX, lastY, height, width;
     private int lastYPosition;
     private boolean dragging;
     private static final float MAXIMUM_OPACITY_ALLOWED_FOR_S_AND_HIGHER = 0.8f;
@@ -288,6 +290,9 @@ public class OverlayService extends Service implements View.OnTouchListener {
                     dragging = false;
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
+                    height = windowManager.getDefaultDisplay().getHeight();
+                    width = windowManager.getDefaultDisplay().getWidth();
                     flutterChannel.invokeMethod("START_DRAG", lastY);
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -300,13 +305,18 @@ public class OverlayService extends Service implements View.OnTouchListener {
                     lastY = event.getRawY();
                     int xx = params.x + (int) dx;
                     int yy = params.y + (int) dy;
+
                     params.x = xx;
                     params.y = yy;
                     windowManager.updateViewLayout(flutterView, params);
                     dragging = true;
                     break;
                 case MotionEvent.ACTION_UP:
-                    flutterChannel.invokeMethod("END_DRAG", lastY);
+                    Map<String, Object> myMap = new HashMap<>();
+                    myMap.put("lastY", lastY);
+                    myMap.put("height", height);
+                    myMap.put("width", width);
+                    flutterChannel.invokeMethod("END_DRAG", myMap);
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     lastYPosition = params.y;

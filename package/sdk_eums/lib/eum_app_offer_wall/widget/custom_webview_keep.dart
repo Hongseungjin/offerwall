@@ -19,65 +19,57 @@ class CustomWebViewKeep extends StatefulWidget {
   final Widget? report;
   final Function()? mission;
   final String? title;
-  const CustomWebViewKeep(
-      {Key? key,
-      this.urlLink,
-      this.title,
-      this.bookmark,
-      this.mission,
-      this.report,
-      this.uriImage})
-      : super(key: key);
+  const CustomWebViewKeep({Key? key, this.urlLink, this.title, this.bookmark, this.mission, this.report, this.uriImage}) : super(key: key);
 
   @override
   State<CustomWebViewKeep> createState() => _CustomWebViewKeepState();
 }
 
-class _CustomWebViewKeepState extends State<CustomWebViewKeep>
-    with WidgetsBindingObserver, TickerProviderStateMixin {
-  ScrollController _scrollController = ScrollController();
+class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindingObserver, TickerProviderStateMixin {
+  final ScrollController _scrollController = ScrollController();
   FlutterGifController? gifController;
 
   Timer? _timer;
-  int _startTime = 15;
+  final int _startTime = 15;
   Timer? timer5s;
-  bool showButton = false;
+  ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
   final controllerGet = Get.put(SettingFontSize());
   late LinearTimerController timerController = LinearTimerController(this);
 
-  void startTimeDown() {
-    _timer?.cancel();
+  // void startTimeDown() {
+  //   _timer?.cancel();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      timerController.start();
-      if (_startTime == 0) {
-        _timer?.cancel();
-      } else {
-        setState(() {
-          _startTime--;
-        });
-        if (_startTime == 0) {
-          setState(() {
-            showButton = true;
-            gifController?.stop();
-            _timer?.cancel();
-          });
-        }
-      }
-    });
-  }
+  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     timerController.start();
+  //     if (_startTime == 0) {
+  //       _timer?.cancel();
+  //     } else {
+  //       setState(() {
+  //         _startTime--;
+  //       });
+  //       if (_startTime == 0) {
+  //         setState(() {
+  //           showButton = true;
+  //           gifController?.stop();
+  //           _timer?.cancel();
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
     gifController = FlutterGifController(vsync: this);
     // TODO: implement initState
     super.initState();
-    startTimeDown();
-    start5s();
+    // startTimeDown();
+    // start5s();
     // gifController?.animateTo(52, duration: Duration(seconds: 1));
     _scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      timerController.start();
       gifController?.repeat(
         min: 0,
         max: 53,
@@ -89,32 +81,31 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
   @override
   void dispose() {
     _scrollController.dispose();
-    timer5s?.cancel();
-    _timer?.cancel();
+    timerController.dispose();
+    // timer5s?.cancel();
+    // _timer?.cancel();
     super.dispose();
   }
 
-  start5s() {
-    timer5s?.cancel();
-    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-      _timer?.cancel();
-      isRunning = false;
-      timerController.stop();
-      setState(() {});
-    });
-  }
+  // start5s() {
+  //   timer5s?.cancel();
+  //   timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+  //     _timer?.cancel();
+  //     isRunning = false;
+  //     timerController.stop();
+  //     setState(() {});
+  //   });
+  // }
 
   _scrollListener() {
-    if (_scrollController.position.userScrollDirection ==
-            ScrollDirection.reverse ||
-        _scrollController.position.userScrollDirection ==
-            ScrollDirection.forward) {
+    if (_scrollController.position.userScrollDirection == ScrollDirection.reverse ||
+        _scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!isRunning) {
         isRunning = true;
-        startTimeDown();
+        // startTimeDown();
         // controller?.forward(from: _startTime.toDouble());
       }
-      start5s();
+      // start5s();
     }
   }
 
@@ -124,10 +115,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
       appBar: AppBar(
         backgroundColor: AppColor.white,
         centerTitle: true,
-        title: Text(widget.title ?? '',
-            style: AppStyle.bold.copyWith(
-                color: Colors.black,
-                fontSize: 4 + controllerGet.fontSizeObx.value)),
+        title: Text(widget.title ?? '', style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
@@ -137,109 +125,100 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep>
             color: AppColor.black,
           ),
         ),
-        actions: [widget.report ?? SizedBox()],
+        actions: [widget.report ?? const SizedBox()],
       ),
-      body: Stack(
+      body: Column(
         children: [
-          NotificationListener(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                      imageUrl: widget.urlLink,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(Assets.logo.path,
-                            package: "sdk_eums", height: 16);
-                      }),
-                  SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 70,
-                  )
-                ],
+          Expanded(
+            child: NotificationListener(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.vertical,
+                child: CachedNetworkImage(
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                    imageUrl: widget.urlLink ?? '',
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) {
+                      return Image.asset(Assets.logo.path, package: "sdk_eums", height: 100);
+                    }),
               ),
             ),
           ),
-          Positioned(
-              bottom: 0,
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: 10,
-                    bottom: MediaQuery.of(context).padding.bottom + 20),
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    widget.bookmark ?? SizedBox(),
-                    InkWell(
-                      onTap: !showButton ? null : widget.mission,
+          Container(
+            padding: EdgeInsets.only(top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                widget.bookmark ?? const SizedBox(),
+                ValueListenableBuilder(
+                  valueListenable: showButton,
+                  builder: (context, value, child) {
+                    return InkWell(
+                      onTap: !showButton.value ? null : widget.mission,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: !showButton
-                                ? HexColor('#cccccc')
-                                : AppColor.red),
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        decoration:
+                            BoxDecoration(borderRadius: BorderRadius.circular(4), color: !showButton.value ? HexColor('#cccccc') : AppColor.red),
                         child: Text(
                           '포인트 적립하기',
-                          style: AppStyle.medium.copyWith(
-                              fontSize: controllerGet.fontSizeObx.value,
-                              color:
-                                  !showButton ? AppColor.grey : AppColor.white),
+                          style: AppStyle.medium
+                              .copyWith(fontSize: controllerGet.fontSizeObx.value, color: !showButton.value ? AppColor.grey : AppColor.white),
                         ),
                       ),
+                    );
+                  },
+                ),
+                Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      height: 50,
+                      width: 50,
+                      child: LinearTimer(
+                        color: AppColor.yellow,
+                        backgroundColor: HexColor('#888888').withOpacity(0.3),
+                        controller: timerController,
+                        duration: const Duration(seconds: 15),
+                        onTimerEnd: () {
+                          showButton.value = true;
+                          // gifController?.stop();
+                        },
+                      ),
                     ),
-                    Stack(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(4),
-                          height: 50,
-                          width: 50,
-                          child: LinearTimer(
-                            color: AppColor.yellow,
-                            backgroundColor:
-                                HexColor('#888888').withOpacity(0.3),
-                            controller: timerController,
-                            duration: const Duration(milliseconds: 14000),
+                    Positioned(
+                        right: 0,
+                        left: 0,
+                        top: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: GifImage(
+                            height: 30,
+                            width: 30,
+                            fit: BoxFit.fill,
+                            controller: gifController!,
+                            image: AssetImage(
+                              package: "sdk_eums",
+                              Assets.coingif.path,
+                            ),
                           ),
-                        ),
-                        Positioned(
-                            right: 0,
-                            left: 0,
-                            top: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: GifImage(
-                                height: 30,
-                                width: 30,
-                                fit: BoxFit.fill,
-                                controller: gifController!,
-                                image: AssetImage(
-                                  package: "sdk_eums",
-                                  Assets.coingif.path,
-                                ),
-                              ),
-                            ))
-                      ],
-                    ),
-                    // Container(
-                    //     padding: const EdgeInsets.all(10),
-                    //     decoration: BoxDecoration(
-                    //         color: AppColor.grey.withOpacity(0.5),
-                    //         shape: BoxShape.circle),
-                    //     child: Text(
-                    //       _startTime.toString(),
-                    //       style: AppStyle.medium.copyWith(fontSize: 16),
-                    //     ))
+                        ))
                   ],
                 ),
-              ))
+                // Container(
+                //     padding: const EdgeInsets.all(10),
+                //     decoration: BoxDecoration(
+                //         color: AppColor.grey.withOpacity(0.5),
+                //         shape: BoxShape.circle),
+                //     child: Text(
+                //       _startTime.toString(),
+                //       style: AppStyle.medium.copyWith(fontSize: 16),
+                //     ))
+              ],
+            ),
+          )
         ],
       ),
     );

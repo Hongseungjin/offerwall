@@ -463,7 +463,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         'count': 0,
                         'date': Constants.formatTime(DateTime.now().toIso8601String()),
                       };
-                      localStore?.setCountAdvertisement(data);
+                      // localStore?.setCountAdvertisement(data);
                       String? token = await FirebaseMessaging.instance.getToken();
                       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
                       bool isRunning = await FlutterBackgroundService().isRunning();
@@ -551,7 +551,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Stack(
       children: [
         SizedBox(
-          height: 164,
+          // height: 164,
           width: MediaQuery.of(context).size.width,
           child: CarouselSlider(
             options: CarouselOptions(
@@ -578,7 +578,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: CachedNetworkImage(
-                          height: 164,
+                          // height: 164,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.cover,
                           imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
@@ -828,7 +828,8 @@ class _ListViewHomeState extends State<ListViewHome> {
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: CachedNetworkImage(
                   width: MediaQuery.of(context).size.width,
-                  height: 200,
+                  height: MediaQuery.of(context).size.width / 2,
+                  // height: 200,
                   fit: BoxFit.cover,
                   imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
                   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),

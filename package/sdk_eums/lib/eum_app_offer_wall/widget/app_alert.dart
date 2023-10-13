@@ -5,10 +5,11 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appStyle.dart';
 
 class AppAlert {
   static void showSuccess(BuildContext context, FToast fToast, String message) {
+
     fToast.showToast(
         child: Container(
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(
@@ -16,53 +17,47 @@ class AppAlert {
                     color: Colors.green,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                         blurRadius: 4,
                         spreadRadius: 0,
                         color: Colors.black.withOpacity(0.25),
                       )
                     ],
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.verified_user_outlined, color: Colors.white),
-                      SizedBox(width: 5),
-                      Expanded(
-                          child: Text(message,
-                              style: AppStyle.bold16
-                                  .copyWith(color: AppColor.white))),
+                      const Icon(Icons.verified_user_outlined, color: Colors.white),
+                      const SizedBox(width: 5),
+                      Expanded(child: Text(message, style: AppStyle.bold16.copyWith(color: AppColor.white))),
                     ],
                   )),
             )),
-        toastDuration: Duration(milliseconds: 2000),
+        toastDuration: const Duration(milliseconds: 2000),
         positionedToastBuilder: (context, child) {
           return Positioned(
-            child: child,
             top: MediaQuery.of(context).padding.top + 15,
             left: 0,
+            child: child,
           );
         });
   }
 
-  static void showError(BuildContext context, FToast fToast, String message,
-      {bool checkOver = false}) {
+  static void showError(BuildContext context, FToast fToast, String message, {bool checkOver = false}) {
     fToast.showToast(
         child: Container(
             width: MediaQuery.of(context).size.width,
-            padding: checkOver
-                ? EdgeInsets.only(top: 100)
-                : EdgeInsets.symmetric(horizontal: 10),
+            padding: checkOver ? const EdgeInsets.only(top: 100) : const EdgeInsets.symmetric(horizontal: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                   decoration: BoxDecoration(
                     color: Colors.red,
                     boxShadow: [
                       BoxShadow(
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                         blurRadius: 4,
                         spreadRadius: 0,
                         color: Colors.black.withOpacity(0.25),
@@ -72,21 +67,18 @@ class AppAlert {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.error_outline, color: Colors.white),
-                      SizedBox(width: 5),
-                      Expanded(
-                          child: Text(message,
-                              style: AppStyle.bold16
-                                  .copyWith(color: AppColor.white))),
+                      const Icon(Icons.error_outline, color: Colors.white),
+                      const SizedBox(width: 5),
+                      Expanded(child: Text(message, style: AppStyle.bold16.copyWith(color: AppColor.white))),
                     ],
                   )),
             )),
-        toastDuration: Duration(seconds: 2),
+        toastDuration: const Duration(seconds: 2),
         positionedToastBuilder: (context, child) {
           return Positioned(
-            child: child,
             top: MediaQuery.of(context).padding.top + 15,
             left: 0,
+            child: child,
           );
         });
   }

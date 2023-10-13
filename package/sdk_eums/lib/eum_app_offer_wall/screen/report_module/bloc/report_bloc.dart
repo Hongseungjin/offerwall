@@ -12,14 +12,13 @@ part 'report_state.dart';
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
   ReportBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        super(ReportState()) {
+        super(const ReportState()) {
     on<ReportEvent>(_onReportToState);
   }
 
   final EumsOfferWallService _eumsOfferWallService;
 
-  FutureOr<void> _onReportToState(
-      ReportEvent event, Emitter<ReportState> emit) async {
+  FutureOr<void> _onReportToState(ReportEvent event, Emitter<ReportState> emit) async {
     if (event is ReportAdver) {
       await _mapReportToState(event, emit);
     }
@@ -43,8 +42,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
   _mapReportToState(ReportAdver event, emit) async {
     emit(state.copyWith(reportStatus: ReportStatus.loading));
     try {
-      await _eumsOfferWallService.reportAdver(
-          adsIdx: event.idx, reason: event.reason, type: event.type);
+      await _eumsOfferWallService.reportAdver(adsIdx: event.idx, reason: event.reason ?? '', type: event.type);
       emit(state.copyWith(
         reportStatus: ReportStatus.success,
       ));

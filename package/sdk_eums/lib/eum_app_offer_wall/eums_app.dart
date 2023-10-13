@@ -8,7 +8,7 @@ import 'package:queue/queue.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/routing.dart';
-import 'package:sdk_eums/eum_app_offer_wall/cron_custom.dart';
+import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
@@ -20,7 +20,10 @@ void printWrapped(String text) {
 
 showOverlay(event) async {
   if (event?['data'] != null && event?['data']['isWebView'] != null) {
-    await FlutterOverlayWindow.showOverlay(overlayTitle: event?['data']['title'], overlayContent: event?['data']['body'],);
+    await FlutterOverlayWindow.showOverlay(
+      overlayTitle: event?['data']['title'],
+      overlayContent: event?['data']['body'],
+    );
     event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
     event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
@@ -61,7 +64,7 @@ closeOverlay() async {
 
 registerDeviceToken() async {
   try {
-    CronCustom().initCron();
+    // CronCustom().initCron();
     String? token = await FirebaseMessaging.instance.getToken();
     if (token != null && token.isNotEmpty) {
       // if(count < 50){
@@ -90,9 +93,8 @@ Future<void> onStart(ServiceInstance service) async {
     });
 
     service.on('closeOverlay').listen((event) async {
+      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
       queue.add(() async => await closeOverlay());
-        // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-
     });
 
     service.on('stopService').listen((event) async {

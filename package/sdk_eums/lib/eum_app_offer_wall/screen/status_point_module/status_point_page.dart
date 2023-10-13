@@ -15,8 +15,7 @@ import '../../../common/constants.dart';
 enum Units { MILLISECOND, SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR }
 
 class StatusPointPage extends StatefulWidget {
-  const StatusPointPage({Key? key, this.account, this.tabCount})
-      : super(key: key);
+  const StatusPointPage({Key? key, this.account, this.tabCount}) : super(key: key);
   final dynamic account;
   final int? tabCount;
 
@@ -24,10 +23,8 @@ class StatusPointPage extends StatefulWidget {
   State<StatusPointPage> createState() => _StatusPointPageState();
 }
 
-class _StatusPointPageState extends State<StatusPointPage>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   late TabController _tabController;
 
   DateTime firstMonth = DateTime.now();
@@ -64,21 +61,16 @@ class _StatusPointPageState extends State<StatusPointPage>
     return BlocProvider<StatusPointBloc>(
       create: (context) => StatusPointBloc()
         ..add(GetPoint())
-        ..add(ListPoint(
-            limit: 10, month: firstMonth.month, year: firstMonth.year))
-        ..add(PointOutsideAdvertisinglList(
-            month: firstMonth.month, year: firstMonth.year)),
+        ..add(ListPoint(limit: 10, month: firstMonth.month, year: firstMonth.year))
+        ..add(PointOutsideAdvertisinglList(month: firstMonth.month, year: firstMonth.year)),
       child: MultiBlocListener(
         listeners: [
           BlocListener<StatusPointBloc, StatusPointState>(
-            listenWhen: (previous, current) =>
-                previous.loadListPointStatus != current.loadListPointStatus,
+            listenWhen: (previous, current) => previous.loadListPointStatus != current.loadListPointStatus,
             listener: _listenFetchDataLoadMore,
           ),
           BlocListener<StatusPointBloc, StatusPointState>(
-            listenWhen: (previous, current) =>
-                previous.loadMoreListPointStatus !=
-                current.loadMoreListPointStatus,
+            listenWhen: (previous, current) => previous.loadMoreListPointStatus != current.loadMoreListPointStatus,
             listener: _listenFetchData,
           ),
         ],
@@ -119,12 +111,9 @@ class _StatusPointPageState extends State<StatusPointPage>
     await Future.delayed(const Duration(seconds: 0));
 
     if (_tabController.index == 0) {
-      globalKey.currentContext?.read<StatusPointBloc>().add(
-          ListPoint(limit: 10, month: firstMonth.month, year: firstMonth.year));
+      globalKey.currentContext?.read<StatusPointBloc>().add(ListPoint(limit: 10, month: firstMonth.month, year: firstMonth.year));
     } else {
-      globalKey.currentContext?.read<StatusPointBloc>().add(
-          PointOutsideAdvertisinglList(
-              month: firstMonth.month, year: firstMonth.year));
+      globalKey.currentContext?.read<StatusPointBloc>().add(PointOutsideAdvertisinglList(month: firstMonth.month, year: firstMonth.year));
     }
   }
 
@@ -134,11 +123,9 @@ class _StatusPointPageState extends State<StatusPointPage>
     await Future.delayed(const Duration(seconds: 0));
 
     if (_tabController.index == 0) {
-      globalKey.currentContext?.read<StatusPointBloc>().add(LoadMoreListPoint(
-          limit: 10,
-          offset: offset,
-          month: firstMonth.month,
-          year: firstMonth.year));
+      globalKey.currentContext
+          ?.read<StatusPointBloc>()
+          .add(LoadMoreListPoint(limit: 10, offset: offset, month: firstMonth.month, year: firstMonth.year));
     }
   }
 
@@ -150,10 +137,7 @@ class _StatusPointPageState extends State<StatusPointPage>
           elevation: 0.0,
           backgroundColor: Colors.white,
           centerTitle: true,
-          title: Text('포인트 현황',
-              style: AppStyle.bold.copyWith(
-                  color: Colors.black,
-                  fontSize: 4 + controllerGet.fontSizeObx.value)),
+          title: Text('포인트 현황', style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
           leading: InkWell(
             onTap: () {
               Navigator.of(context).pop();
@@ -178,24 +162,20 @@ class _StatusPointPageState extends State<StatusPointPage>
                   indicatorColor: HexColor('#f4a43b'),
                   unselectedLabelColor: HexColor('#707070'),
                   labelColor: HexColor('#f4a43b'),
-                  labelStyle:
-                      AppStyle.bold.copyWith(color: HexColor('#707070')),
+                  labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
                   tabs: [
                     Text(
                       '포인트 적립 내역',
-                      style: AppStyle.regular
-                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                     Text(
                       ' 포인트 전환',
-                      style: AppStyle.regular
-                          .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                      style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                     ),
                   ],
                 ),
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                   child: Row(
                     children: [
                       Column(
@@ -203,23 +183,15 @@ class _StatusPointPageState extends State<StatusPointPage>
                         children: [
                           Text(
                             '현재 보유 포인트',
-                            style: AppStyle.medium.copyWith(
-                                color: HexColor('707070'),
-                                fontSize: controllerGet.fontSizeObx.value),
+                            style: AppStyle.medium.copyWith(color: HexColor('707070'), fontSize: controllerGet.fontSizeObx.value),
                           ),
                           Row(
                             children: [
-                              Image.asset(Assets.icon_point_y.path,
-                                  package: "sdk_eums", height: 24),
+                              Image.asset(Assets.icon_point_y.path, package: "sdk_eums", height: 24),
                               const SizedBox(width: 8),
                               Text(
-                                Constants.formatMoney(
-                                    state.dataTotalPoint != null
-                                        ? state.dataTotalPoint['totalPoint']
-                                        : 0,
-                                    suffix: '원'),
-                                style: AppStyle.bold.copyWith(
-                                    fontSize: controllerGet.fontSizeObx.value),
+                                Constants.formatMoney(state.dataTotalPoint != null ? state.dataTotalPoint['totalPoint'] : 0, suffix: '원'),
+                                style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                               ),
                             ],
                           )
@@ -228,12 +200,8 @@ class _StatusPointPageState extends State<StatusPointPage>
                       const Spacer(),
                       Container(
                         padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: HexColor('#fcc900')),
-                        child: Text('소멸예정',
-                            style: AppStyle.bold.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value - 2)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HexColor('#fcc900')),
+                        child: Text('소멸예정', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value - 2)),
                       ),
                     ],
                   ),
@@ -246,57 +214,35 @@ class _StatusPointPageState extends State<StatusPointPage>
                     totalPointOfferWall = 0;
                     try {
                       if (_tabController.index == 0) {
-                        if (state.dataPoint != null &&
-                            state.dataPoint.length > 0) {
+                        if (state.dataPoint != null && state.dataPoint.length > 0) {
                           for (int i = 0; i < state.dataPoint.length; i++) {
-                            totalPointEum = totalPointEum +
-                                state.dataPoint[i]['user_point'];
+                            totalPointEum = totalPointEum + state.dataPoint[i]['user_point'];
                           }
                         }
                       } else {
-                        if (state.dataPointOutsideAdvertising != null &&
-                            state.dataPointOutsideAdvertising.length > 0) {
-                          for (int i = 0;
-                              i < state.dataPointOutsideAdvertising.length;
-                              i++) {
-                            totalPointOfferWall = totalPointOfferWall +
-                                int.parse(state.dataPointOutsideAdvertising[i]
-                                        ['point']
-                                    .toString());
+                        if (state.dataPointOutsideAdvertising != null && state.dataPointOutsideAdvertising.length > 0) {
+                          for (int i = 0; i < state.dataPointOutsideAdvertising.length; i++) {
+                            totalPointOfferWall = totalPointOfferWall + int.parse(state.dataPointOutsideAdvertising[i]['point'].toString());
                           }
                         }
                       }
                     } catch (ex) {}
 
                     return Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 15),
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: _tabController.index == 0
-                              ? HexColor('#f4f4f4')
-                              : HexColor('#fdde4c')),
+                          borderRadius: BorderRadius.circular(12), color: _tabController.index == 0 ? HexColor('#f4f4f4') : HexColor('#fdde4c')),
                       child: Column(
                         children: [
                           Text(
-                            _tabController.index == 0
-                                ? '총 누적 적립 포인트'
-                                : '현재까지 캐시로 전환된 포인트',
-                            style: AppStyle.regular.copyWith(
-                                fontSize: controllerGet.fontSizeObx.value),
+                            _tabController.index == 0 ? '총 누적 적립 포인트' : '현재까지 캐시로 전환된 포인트',
+                            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                             textAlign: TextAlign.center,
                           ),
-                          Text(
-                              Constants.formatMoney(
-                                  _tabController.index == 0
-                                      ? state.totalPoint ?? 0
-                                      : totalPointOfferWall,
-                                  suffix: '원'),
-                              style: AppStyle.bold.copyWith(
-                                  fontSize:
-                                      8 + controllerGet.fontSizeObx.value)),
+                          Text(Constants.formatMoney(_tabController.index == 0 ? state.totalPoint ?? 0 : totalPointOfferWall, suffix: '원'),
+                              style: AppStyle.bold.copyWith(fontSize: 8 + controllerGet.fontSizeObx.value)),
                         ],
                       ),
                     );
@@ -305,10 +251,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                 Expanded(
                   child: Container(
                     decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24))),
+                        color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24))),
                     child: TabBarView(controller: _tabController, children: [
                       ListViewPointPage(
                         tab: _tabController.index,
@@ -325,28 +268,19 @@ class _StatusPointPageState extends State<StatusPointPage>
                 ),
                 InkWell(
                     onTap: () {
-                      dynamic offerset = globalKey.currentContext
-                          ?.read<StatusPointBloc>()
-                          .state
-                          .dataPoint
-                          .length;
+                      dynamic offerset = globalKey.currentContext?.read<StatusPointBloc>().state.dataPoint.length;
                       _onLoading(offerset);
                     },
                     child: Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: HexColor('#e5e5e5'))),
+                            color: Colors.white, borderRadius: BorderRadius.circular(8), border: Border.all(color: HexColor('#e5e5e5'))),
                         child: Text(
                           "더보기",
                           textAlign: TextAlign.center,
-                          style: AppStyle.bold.copyWith(
-                              color: Colors.black,
-                              fontSize: controllerGet.fontSizeObx.value),
+                          style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
                         )))
               ],
             );
@@ -368,6 +302,7 @@ class _StatusPointPageState extends State<StatusPointPage>
                   //         .startOf(Unit.month)
                   //         .subtract(months: 1)
                   //         .format(pattern: 'yyyy-MM-dd'));
+                  firstMonth = DateTime(firstMonth.year, firstMonth.month - 1, firstMonth.day);
 
                   _fetchData();
                 });
@@ -377,19 +312,22 @@ class _StatusPointPageState extends State<StatusPointPage>
               )),
           Text(
             Constants.formatTimePoint(firstMonth.toString()),
-            style: AppStyle.bold
-                .copyWith(fontSize: 2 + controllerGet.fontSizeObx.value),
+            style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value),
           ),
           InkWell(
               onTap: () {
-                setState(() {
-                  // firstMonth = DateTime.parse(
-                  //     Jiffy.parseFromDateTime(firstMonth)
-                  //         .startOf(Unit.month)
-                  //         .add(months: 1)
-                  //         .format(pattern: 'yyyy-MM-dd'));
-                  _fetchData();
-                });
+                if (firstMonth.year <= DateTime.now().year && firstMonth.month < DateTime.now().month) {
+                  setState(() {
+                    // firstMonth = DateTime.parse(
+                    //     Jiffy.parseFromDateTime(firstMonth)
+                    //         .startOf(Unit.month)
+                    //         .add(months: 1)
+                    //         .format(pattern: 'yyyy-MM-dd'));
+
+                    firstMonth = DateTime(firstMonth.year, firstMonth.month + 1, firstMonth.day);
+                    _fetchData();
+                  });
+                }
               },
               child: const Icon(
                 Icons.arrow_forward_ios_rounded,
@@ -401,7 +339,7 @@ class _StatusPointPageState extends State<StatusPointPage>
 }
 
 class ListViewPointPage extends StatefulWidget {
-  ListViewPointPage({
+  const ListViewPointPage({
     Key? key,
     this.tab,
     this.fetchData,
@@ -417,8 +355,7 @@ class ListViewPointPage extends StatefulWidget {
 }
 
 class _ListViewPointPageState extends State<ListViewPointPage> {
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  RefreshController refreshController = RefreshController(initialRefresh: false);
   final controllerGet = Get.put(SettingFontSize());
   @override
   Widget build(BuildContext context) {
@@ -435,10 +372,9 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
   void _onLoading() async {
     await Future.delayed(const Duration(seconds: 0));
     refreshController.loadComplete();
-    print('cos vao day k');
-    List<dynamic>? dataCampaign =
-        context.read<StatusPointBloc>().state.dataPoint;
-    print('cos vao day k$dataCampaign');
+    // print('cos vao day k');
+    List<dynamic>? dataCampaign = context.read<StatusPointBloc>().state.dataPoint;
+    // print('cos vao day k$dataCampaign');
     if (dataCampaign != null) {
       widget.fetchDataLoadMore!(dataCampaign.length);
     }
@@ -457,11 +393,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
                   child: SingleChildScrollView(
                     child: Wrap(
                       runSpacing: 20,
-                      children: List.generate(
-                          widget.tab == 0
-                              ? state.dataPoint?.length ?? 0
-                              : state.dataPointOutsideAdvertising?.length ?? 0,
-                          (index) {
+                      children:
+                          List.generate(widget.tab == 0 ? state.dataPoint?.length ?? 0 : state.dataPointOutsideAdvertising?.length ?? 0, (index) {
                         String? title;
                         String? date;
                         int? point;
@@ -471,31 +404,27 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
                               ? state.dataPoint[index]['advertise'] != null
                                   ? state.dataPoint[index]['advertise']['name']
                                   : ''
-                              : state.dataPointOutsideAdvertising[index]
-                                  ['reason'];
+                              : state.dataPointOutsideAdvertising[index]['reason'];
 
                           date = widget.tab == 0
                               ? state.dataPoint[index] != null
                                   ? state.dataPoint[index]['regist_date']
                                   : ''
-                              : state.dataPointOutsideAdvertising[index]
-                                  ['regist_date'];
+                              : state.dataPointOutsideAdvertising[index]['regist_date'];
 
                           point = widget.tab == 0
                               ? state.dataPoint[index] != null
                                   ? state.dataPoint[index]['user_point']
                                   : ''
-                              : state.dataPointOutsideAdvertising[index]
-                                  ['point'];
+                              : state.dataPointOutsideAdvertising[index]['point'];
                         } catch (ex) {}
 
-                        return _buildItem(
-                            title: title, date: date, point: point);
+                        return _buildItem(title: title, date: date, point: point);
                       }),
                     ),
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
         );
       },
     );
@@ -506,11 +435,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
       children: [
         Container(
           padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: HexColor('#888888').withOpacity(0.3)),
-          child: Image.asset(Assets.icon_point.path,
-              package: "sdk_eums", height: 25),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
+          child: Image.asset(Assets.icon_point.path, package: "sdk_eums", height: 25),
         ),
         const SizedBox(width: 5),
         Expanded(
@@ -520,15 +446,12 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
             children: [
               Text(
                 title ?? '',
-                style: AppStyle.medium
-                    .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                style: AppStyle.medium.copyWith(fontSize: controllerGet.fontSizeObx.value),
               ),
               const SizedBox(height: 5),
               Text(
                 '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}',
-                style: AppStyle.regular.copyWith(
-                    fontSize: controllerGet.fontSizeObx.value - 2,
-                    color: HexColor('#707070')),
+                style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value - 2, color: HexColor('#707070')),
               )
 
               ///  오퍼월 광고
@@ -537,8 +460,7 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
         ),
         Text(
           Constants.formatMoney(point ?? 0, suffix: 'P'),
-          style:
-              AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
+          style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
         ),
       ],
     );

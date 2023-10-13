@@ -7,7 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
+import 'package:sdk_eums/common/routing.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
+import 'package:sdk_eums/eum_app_offer_wall/screen/report_module/report_page.dart';
 import 'package:sdk_eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -42,11 +44,12 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   double deviceHeight = 0;
   final MethodChannel _backgroundChannel = const MethodChannel("x-slayer/overlay");
   int countAdvertisement = 0;
+  double heightScreen = 0.0;
 
   @override
   void initState() {
     // TODO: implement initState
-    print('inittt overlay');
+    // print('inittt overlay');
     initCallbackDrag();
     super.initState();
     WidgetsBinding.instance.addObserver(this);
@@ -75,14 +78,19 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
       await Firebase.initializeApp();
 
-      if ('START_DRAG' == call.method) {
-        // print('start ${call.method} ${call.arguments}');
-        // dyStart = call.arguments;
-        dyStart = call.arguments;
-      } else if ('END_DRAG' == call.method) {
+      // if ('START_DRAG' == call.method) {
+      //   // print('start ${call.method} ${call.arguments}');
+      //   // dyStart = call.arguments;
+      //   debugPrint("xxxx->>> START_DRAG");
+
+      //   dyStart = call.arguments;
+      // } else
+      if ('END_DRAG' == call.method) {
+        heightScreen = call.arguments['height'];
         // print('end ${call.method} ${call.arguments}');
-        dy = call.arguments;
+        dy = call.arguments['lastY'];
         // dy = 1900;
+        debugPrint("xxxx->>> END_DRAG $dy - $heightScreen");
 
         onVerticalDragEnd();
       }
@@ -98,6 +106,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
+    heightScreen = MediaQuery.of(context).size.height;
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(
@@ -147,46 +156,41 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         showMission: true,
         deviceWidth: deviceWidth,
         actions: Row(
-          children: const [
-            // InkWell(
-            //     onTap: () {
-            //       Routing().navigate(
-            //           context,
-            //           ReportPage(
-            //             checkOverlay: true,
-            //             paddingTop: 100,
-            //             data: (jsonDecode(dataEvent['data'])),
-            //             deleteAdver: true,
-            //           ));
-            //     },
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(10.0),
-            //       child: Image.asset(Assets.report.path,
-            //           package: "sdk_eums", height: 25),
-            //     )),
+          children: [
+            InkWell(
+                onTap: () async {
+                  final result = await Routings().navigate(
+                      context,
+                      ReportPage(
+                        checkOverlay: true,
+                        paddingTop: kToolbarHeight,
+                        data: (jsonDecode(dataEvent['data'])),
+                        deleteAdver: true,
+                      ));
+                  // if (result == true) {
+                  //   // ignore: use_build_context_synchronously
+                  //   AppAlert.showSuccess("Success");
+                  // }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 16),
+                  child: Image.asset(Assets.report.path, package: "sdk_eums", height: 30),
+                )),
             // Container(
-            //   decoration:
-            //       BoxDecoration(borderRadius: BorderRadius.circular(24)),
-            //   padding: EdgeInsets.symmetric(vertical: 5),
+            //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+            //   padding: const EdgeInsets.symmetric(vertical: 5),
             //   child: ClipRRect(
             //     borderRadius: BorderRadius.circular(12),
             //     child: CachedNetworkImage(
             //         width: MediaQuery.of(context).size.width - 64,
             //         fit: BoxFit.cover,
-            //         imageUrl: Constants.baseUrlImage +
-            //             (jsonDecode(dataEvent['data']))['advertiseSponsor']
-            //                 ['image'],
-            //         placeholder: (context, url) =>
-            //             const Center(child: CircularProgressIndicator()),
+            //         imageUrl: Constants.baseUrlImage + (jsonDecode(dataEvent['data']))['advertiseSponsor']['image'],
+            //         placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
             //         errorWidget: (context, url, error) {
-            //           return Image.asset(Assets.logo.path,
-            //               package: "sdk_eums", height: 16);
+            //           return Image.asset(Assets.logo.path, package: "sdk_eums", height: 16);
             //         }),
             //   ),
             // ),
-            SizedBox(
-              width: 20,
-            )
           ],
         ),
         onClose: () async {
@@ -249,39 +253,59 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   }
 
   void onVerticalDragEnd() async {
-    // double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
-    // print('deviceWithdeviceWith $deviceHeight');
+    // // double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
+    // // print('deviceWithdeviceWith $deviceHeight');
 
-    // print('upupupuasdasdpupu $dy');
-    if (dy != null && dyStart != null && dy! < (deviceHeight / 7)
+    // // print('upupupuasdasdpupu $dy');
+    // if (dy != null && dyStart != null && dy! < (deviceHeight / 7)
 
-        ///300
-        // dyStart!
-        ) {
-      // print('upupupupupup$dataEvent');
-      if (dataEvent != null) {
-        dataEvent['isWebView'] = true;
-        FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-      } else {
-        FlutterBackgroundService().invoke("closeOverlay");
-      }
-    }
+    //     ///300
+    //     // dyStart!
+    //     ) {
+    //   // print('upupupupupup$dataEvent');
+    //   if (dataEvent != null) {
+    //     dataEvent['isWebView'] = true;
+    //     FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+    //   } else {
+    //     FlutterBackgroundService().invoke("closeOverlay");
+    //   }
+    // }
 
-    if (dy != null && dyStart != null && dy! > (deviceHeight - deviceHeight / 7)
-        //  > dyStart!
-        ) {
-      // print('downnnn$dataEvent');
-      if (dataEvent != null) {
-        try {
-          TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
-          dataEvent['isToast'] = true;
+    // if (dy != null && dyStart != null && dy! > (deviceHeight - deviceHeight / 7)
+    //     //  > dyStart!
+    //     ) {
+    //   // print('downnnn$dataEvent');
+    //   if (dataEvent != null) {
+    //     try {
+    //       TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+    //       dataEvent['isToast'] = true;
+    //       FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+    //     } catch (e) {
+    //       // print("errrrr$e");
+    //       FlutterBackgroundService().invoke("closeOverlay");
+    //     }
+    //   } else {
+    //     FlutterBackgroundService().invoke("closeOverlay");
+    //   }
+    // }
+    // debugPrint("${heightScreen * .15}");
+    if (dy! > (heightScreen - heightScreen * .15)) {
+      // try {
+      //   TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+      //   dataEvent['isToast'] = true;
+      //   FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+      // } catch (e) {
+      // print("errrrr$e");
+      FlutterBackgroundService().invoke("closeOverlay");
+      // }
+    } else {
+      if (dy! < heightScreen * .2) {
+        if (dataEvent != null) {
+          dataEvent['isWebView'] = true;
           FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-        } catch (e) {
-          // print("errrrr$e");
+        } else {
           FlutterBackgroundService().invoke("closeOverlay");
         }
-      } else {
-        FlutterBackgroundService().invoke("closeOverlay");
       }
     }
   }

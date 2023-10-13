@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:sdk_eums/common/events/rx_events.dart';
 import 'package:sdk_eums/common/rx_bus.dart';
@@ -16,13 +17,7 @@ import 'package:sdk_eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:sdk_eums/gen/assets.gen.dart';
 
 class ReportPage extends StatefulWidget {
-  const ReportPage(
-      {Key? key,
-      this.data,
-      this.deleteAdver = false,
-      this.paddingTop = 0,
-      this.checkOverlay = false})
-      : super(key: key);
+  const ReportPage({Key? key, this.data, this.deleteAdver = false, this.paddingTop = 0, this.checkOverlay = false}) : super(key: key);
   final dynamic data;
   final bool deleteAdver;
   final double paddingTop;
@@ -33,8 +28,7 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
-  final GlobalKey<State<StatefulWidget>> globalKey =
-      GlobalKey<State<StatefulWidget>>();
+  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   late String valueSelected = '';
   TextEditingController contentCtrl = TextEditingController();
 
@@ -45,25 +39,20 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     fToast.init(context);
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(" widget.data${widget.data}");
+    // print(" widget.data${widget.data}");
     return BlocProvider<ReportBloc>(
       create: (context) => ReportBloc(),
       child: MultiBlocListener(
         listeners: [
           BlocListener<ReportBloc, ReportState>(
-              listenWhen: (previous, current) =>
-                  previous.reportStatus != current.reportStatus,
-              listener: _listenReport),
+              listenWhen: (previous, current) => previous.reportStatus != current.reportStatus, listener: _listenReport),
           BlocListener<ReportBloc, ReportState>(
-              listenWhen: (previous, current) =>
-                  previous.deleteKeepStatus != current.deleteKeepStatus,
-              listener: _listenDeleteKeep),
+              listenWhen: (previous, current) => previous.deleteKeepStatus != current.deleteKeepStatus, listener: _listenDeleteKeep),
         ],
         child: WillPopScope(
             onWillPop: () async {
@@ -76,54 +65,64 @@ class _ReportPageState extends State<ReportPage> {
 
   void _listenDeleteKeep(BuildContext context, ReportState state) {
     if (state.deleteKeepStatus == DeleteKeepStatus.loading) {
-      if (!widget.checkOverlay) {
-        LoadingDialog.instance.show();
-      }
+      // if (!widget.checkOverlay) {
+      // LoadingDialog.instance.show();
+      // }
       return;
     }
     if (state.deleteKeepStatus == DeleteKeepStatus.failure) {
-      if (!widget.checkOverlay) {
-        LoadingDialog.instance.hide();
-      }
+      // if (!widget.checkOverlay) {
+      // LoadingDialog.instance.hide();
+      // }
       return;
     }
     if (state.deleteKeepStatus == DeleteKeepStatus.success) {
       if (!widget.checkOverlay) {
         LoadingDialog.instance.hide();
       }
-      AppAlert.showSuccess(context, fToast, 'Success');
+      // AppAlert.showSuccess(context, fToast, 'Success');
+
       RxBus.post(RefreshDataKeep());
-      Navigator.pop(context);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      // if (widget.checkOverlay == false) {
+      //   Navigator.pop(context);
+      // }
     }
   }
 
   void _listenReport(BuildContext context, ReportState state) {
     if (state.reportStatus == ReportStatus.loading) {
-      if (!widget.checkOverlay) {
-        LoadingDialog.instance.show();
-      }
+      // if (!widget.checkOverlay) {
+      //   LoadingDialog.instance.show();
+      // }
+      LoadingDialog.instance.show();
 
       return;
     }
     if (state.reportStatus == ReportStatus.failure) {
-      AppAlert.showError(context, fToast, '이 광고를 신고했습니다');
       LoadingDialog.instance.hide();
-      if (!widget.checkOverlay) {
-        LoadingDialog.instance.hide();
-      }
+
+      AppAlert.showError(context, fToast, '이 광고를 신고했습니다');
+      // if (widget.checkOverlay) {
+      //   LoadingDialog.instance.hide();
+      // }
       return;
     }
     if (state.reportStatus == ReportStatus.success) {
-      if (!widget.checkOverlay) {
-        LoadingDialog.instance.hide();
-        FlutterBackgroundService().invoke("closeOverlay");
+      Navigator.pop(context, true);
+      if (widget.checkOverlay == false) {
+        Navigator.pop(context);
       }
       if (widget.deleteAdver) {
-        globalKey.currentContext?.read<ReportBloc>().add(DeleteKeep(
-            advertise_idx: widget.checkOverlay
-                ? widget.data['idx']
-                : widget.data['advertiseIdx']));
+        globalKey.currentContext
+            ?.read<ReportBloc>()
+            .add(DeleteKeep(advertise_idx: widget.checkOverlay ? widget.data['idx'] : widget.data['advertiseIdx']));
+      }
+      if (widget.checkOverlay) {
+        // LoadingDialog.instance.hide();
+        FlutterBackgroundService().invoke("closeOverlay");
+      } else {
+        AppAlert.showSuccess(context, fToast, 'Success');
       }
     }
   }
@@ -149,9 +148,7 @@ class _ReportPageState extends State<ReportPage> {
           ),
           title: Text(
             '신고하기',
-            style: AppStyle.bold.copyWith(
-                fontSize: 4 + controllerGet.fontSizeObx.value,
-                color: Colors.black),
+            style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: Colors.black),
           ),
         ),
         body: SingleChildScrollView(
@@ -162,13 +159,11 @@ class _ReportPageState extends State<ReportPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   '신고할 광고 정보',
-                  style: AppStyle.bold
-                      .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                  style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Row(
                   children: [
                     ClipRRect(
@@ -178,19 +173,16 @@ class _ReportPageState extends State<ReportPage> {
                           height: 60,
                           fit: BoxFit.fitWidth,
                           imageUrl: widget.data['url_link'],
-                          placeholder: (context, url) =>
-                              const Center(child: CircularProgressIndicator()),
+                          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) {
-                            return Image.asset(Assets.logo.path,
-                                package: "sdk_eums", height: 16);
+                            return Image.asset(Assets.logo.path, package: "sdk_eums", height: 16);
                           }),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
                         widget.data['name'] ?? '',
-                        style: AppStyle.bold.copyWith(
-                            fontSize: 4 + controllerGet.fontSizeObx.value),
+                        style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value),
                       ),
                     )
                   ],
@@ -205,15 +197,11 @@ class _ReportPageState extends State<ReportPage> {
                 child: RichText(
                     text: TextSpan(
                         text: '신고 사유 선택',
-                        style: AppStyle.bold.copyWith(
-                            color: Colors.black,
-                            fontSize: controllerGet.fontSizeObx.value),
+                        style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
                         children: [
                       TextSpan(
                           text: '(하나만 선택 가능해요)',
-                          style: AppStyle.medium.copyWith(
-                              fontSize: controllerGet.fontSizeObx.value - 2,
-                              color: HexColor('#888888')))
+                          style: AppStyle.medium.copyWith(fontSize: controllerGet.fontSizeObx.value - 2, color: HexColor('#888888')))
                     ])),
               ),
               const SizedBox(height: 12),
@@ -228,54 +216,36 @@ class _ReportPageState extends State<ReportPage> {
                     },
                     child: Container(
                       color: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                       child: Row(
                         children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color:
-                                              valueSelected == listReprot[index]
-                                                  ? Colors.amber
-                                                  : HexColor('#888888'))),
-                                  child: Container(
-                                    height: 10,
-                                    width: 10,
-                                    decoration: BoxDecoration(
-                                        color:
-                                            valueSelected == listReprot[index]
-                                                ? Colors.amber
-                                                : Colors.transparent,
-                                        shape: BoxShape.circle),
-                                  ),
-                                ),
-                                const SizedBox(width: 15),
-                                Text(
-                                  listReprot[index],
-                                  style: AppStyle.medium.copyWith(
-                                      color: valueSelected == listReprot[index]
-                                          ? Colors.black
-                                          : HexColor('#888888'),
-                                      fontSize:
-                                          controllerGet.fontSizeObx.value + 2),
-                                ),
-                                index == 5
-                                    ? Text(
-                                        ' (직접 입력)',
-                                        style: AppStyle.medium.copyWith(
-                                            color: HexColor('#888888'),
-                                            fontSize: 2 +
-                                                controllerGet
-                                                    .fontSizeObx.value),
-                                      )
-                                    : const SizedBox()
-                              ]),
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                            Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: valueSelected == listReprot[index] ? Colors.amber : HexColor('#888888'))),
+                              child: Container(
+                                height: 10,
+                                width: 10,
+                                decoration: BoxDecoration(
+                                    color: valueSelected == listReprot[index] ? Colors.amber : Colors.transparent, shape: BoxShape.circle),
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Text(
+                              listReprot[index],
+                              style: AppStyle.medium.copyWith(
+                                  color: valueSelected == listReprot[index] ? Colors.black : HexColor('#888888'),
+                                  fontSize: controllerGet.fontSizeObx.value + 2),
+                            ),
+                            index == 5
+                                ? Text(
+                                    ' (직접 입력)',
+                                    style: AppStyle.medium.copyWith(color: HexColor('#888888'), fontSize: 2 + controllerGet.fontSizeObx.value),
+                                  )
+                                : const SizedBox()
+                          ]),
                         ],
                       ),
                     ),
@@ -290,8 +260,7 @@ class _ReportPageState extends State<ReportPage> {
                           decoration: BoxDecoration(
                               color: AppColor.white,
                               borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                  color: AppColor.color70.withOpacity(0.7))),
+                              border: Border.all(color: AppColor.color70.withOpacity(0.7))),
                           child: TextFormField(
                             controller: contentCtrl,
                             onChanged: (value) {
@@ -306,13 +275,11 @@ class _ReportPageState extends State<ReportPage> {
                             },
                             maxLines: 5,
                             decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 10),
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                                 hintText: '관련 내용이 아니에요',
                                 border: InputBorder.none,
-                                hintStyle: AppStyle.bold.copyWith(
-                                    fontSize: controllerGet.fontSizeObx.value,
-                                    color: AppColor.color70.withOpacity(0.7))),
+                                hintStyle:
+                                    AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value, color: AppColor.color70.withOpacity(0.7))),
                           ),
                         ),
                         !checkContent
@@ -329,10 +296,7 @@ class _ReportPageState extends State<ReportPage> {
                                   },
                                   child: Container(
                                       padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                          color: HexColor('#888888')
-                                              .withOpacity(0.3),
-                                          shape: BoxShape.circle),
+                                      decoration: BoxDecoration(color: HexColor('#888888').withOpacity(0.3), shape: BoxShape.circle),
                                       child: const Icon(
                                         Icons.close,
                                         size: 15,
@@ -360,20 +324,16 @@ class _ReportPageState extends State<ReportPage> {
                   }
                 },
                 child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: valueSelected == listReprot[indexReport ?? 0]
-                          ? Colors.amber
-                          : HexColor('#888888')),
+                      color: valueSelected == listReprot[indexReport ?? 0] ? Colors.amber : HexColor('#888888')),
                   child: Text(
                     '신고하기',
                     textAlign: TextAlign.center,
-                    style: AppStyle.bold
-                        .copyWith(fontSize: controllerGet.fontSizeObx.value),
+                    style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
               )
@@ -385,22 +345,12 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   confimReport({dynamic reason}) {
-    globalKey.currentContext?.read<ReportBloc>().add(ReportAdver(
-        idx: widget.checkOverlay
-            ? widget.data['idx']
-            : widget.data['advertiseIdx'],
-        reason: reason,
-        type: 'advertise'
-        //advertise, offerWall
-        ));
+    globalKey.currentContext
+        ?.read<ReportBloc>()
+        .add(ReportAdver(idx: widget.checkOverlay ? widget.data['idx'] : widget.data['advertiseIdx'], reason: reason, type: 'advertise'
+            //advertise, offerWall
+            ));
   }
 }
 
-List<String> listReprot = [
-  '비방, 욕설이 포함됨',
-  '음란, 도박 등 불법성',
-  '청소년 유해 매체',
-  '도배성 컨텐츠',
-  '저작권 등 지적 재산권 침해',
-  '기타'
-];
+List<String> listReprot = ['비방, 욕설이 포함됨', '음란, 도박 등 불법성', '청소년 유해 매체', '도배성 컨텐츠', '저작권 등 지적 재산권 침해', '기타'];

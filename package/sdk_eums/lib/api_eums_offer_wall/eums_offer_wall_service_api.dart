@@ -13,17 +13,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   LocalStore localStore = LocalStoreService();
 
   @override
-  Future authConnect(
-      {String? memId,
-      String? memGen,
-      String? memRegion,
-      String? memBirth}) async {
-    dynamic data = <String, dynamic>{
-      "memId": memId,
-      "memGen": memGen,
-      "memRegion": memRegion,
-      "memBirth": memBirth
-    };
+  Future authConnect({String? memId, String? memGen, String? memRegion, String? memBirth}) async {
+    dynamic data = <String, dynamic>{"memId": memId, "memGen": memGen, "memRegion": memRegion, "memBirth": memBirth};
     localStore.setLoggedAccount(data);
     Response result = await api.post('auth/connect', data: data);
     return result.data;
@@ -50,15 +41,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future createInquire(
-      {type,
-      content,
-      deviceManufacturer,
-      deviceModelName,
-      deviceOsVersion,
-      deviceSdkVersion,
-      title,
-      deviceAppVersion}) async {
+  Future createInquire({type, content, deviceManufacturer, deviceModelName, deviceOsVersion, deviceSdkVersion, title, deviceAppVersion}) async {
     dynamic data = <String, dynamic>{
       "type_fl": type,
       "contents": content,
@@ -119,8 +102,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
       params['offset'] = offset;
     }
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
-    Response result = await api.get('advertises/get-keep-advertise',
-        queryParameters: dataParams);
+    Response result = await api.get('advertises/get-keep-advertise', queryParameters: dataParams);
     return result.data['data'];
   }
 
@@ -159,8 +141,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     }
 
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
-    Response result = await api.get('advertises/get-scrap-advertise',
-        queryParameters: dataParams);
+    Response result = await api.get('advertises/get-scrap-advertise', queryParameters: dataParams);
     return result.data['data'];
   }
 
@@ -188,8 +169,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     params['year'] = year;
 
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
-    Response result =
-        await api.get('offerwall-log', queryParameters: dataParams);
+    Response result = await api.get('offerwall-log', queryParameters: dataParams);
     return result.data;
   }
 
@@ -236,10 +216,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   @override
   Future missionOfferWallOutside({advertiseIdx, pointType}) async {
     // bên ngoài
-    dynamic data = <String, dynamic>{
-      "advertise_idx": advertiseIdx,
-      "pointType": pointType
-    };
+    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, "pointType": pointType};
     await api.post('point/advertises/mission-complete', data: data);
     return;
   }
@@ -267,8 +244,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
             ))
         .toList();
 
-    FormData formData =
-        FormData.fromMap({"image": await Future.wait(multiFiles)});
+    FormData formData = FormData.fromMap({"image": await Future.wait(multiFiles)});
     Response result = await api.post('upload', data: formData);
     return result.data;
   }
@@ -297,12 +273,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future reportAdver({adsIdx, reason, type}) async {
-    dynamic data = <String, dynamic>{
-      "adsIdx": adsIdx,
-      "reason": reason,
-      "type": type
-    };
+  Future reportAdver({required int adsIdx, required String reason, dynamic type}) async {
+    dynamic data = <String, dynamic>{"adsIdx": adsIdx, "reason": reason, "type": type};
     await api.post('report-ads', data: data);
   }
 

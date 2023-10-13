@@ -51,8 +51,7 @@ class LinearTimerController {
   /// }
   /// ```
   LinearTimerController(TickerProvider tickerProvider) {
-    _controller = AnimationController(
-        lowerBound: 0, upperBound: 1, vsync: tickerProvider);
+    _controller = AnimationController(lowerBound: 0, upperBound: 1, vsync: tickerProvider);
 
     _controller
       ..addListener(() {
@@ -153,9 +152,7 @@ class LinearTimer extends StatefulWidget {
   State<LinearTimer> createState() => _LinearTimerState();
 }
 
-class _LinearTimerState extends State<LinearTimer>
-    with SingleTickerProviderStateMixin
-    implements _Subscriber {
+class _LinearTimerState extends State<LinearTimer> with SingleTickerProviderStateMixin implements _Subscriber {
   late LinearTimerController _timerController;
 
   @override
@@ -193,8 +190,7 @@ class _LinearTimerState extends State<LinearTimer>
   Widget build(BuildContext context) {
     // The easy part: generating the progress indicator, by setting the value in the controller and the settings
     return CircularProgressIndicator(
-      value:
-          widget.forward ? _timerController.value : 1 - _timerController.value,
+      value: widget.forward ? _timerController.value : 1 - _timerController.value,
       backgroundColor: widget.backgroundColor,
       color: widget.color,
       // minHeight: widget.minHeight,

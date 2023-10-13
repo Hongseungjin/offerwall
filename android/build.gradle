@@ -17,6 +17,7 @@ allprojects {
         google()
         mavenCentral()
         flatDir {
+            dirs project(':sdk_eums').file('libs')
             dirs 'libs'
         }
         // maven {

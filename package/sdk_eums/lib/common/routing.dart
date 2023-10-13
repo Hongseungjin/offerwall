@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Routings {
-  navigate<T>(BuildContext context, Widget screen,
+ Future<dynamic> navigate<T>(BuildContext context, Widget screen,
       {bool replace = false,
       String? routeName,
       bool isAnimated = false,

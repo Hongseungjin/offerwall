@@ -28,8 +28,8 @@ import kr.ive.offerwall_sdk.IveOfferwall
 
 
 /** SdkEumsPlugin */
-class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
-//    AppAllOfferwallSDK.AppAllOfferwallSDKListener
+class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
+    AppAllOfferwallSDK.AppAllOfferwallSDKListener
 {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -38,7 +38,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
   private lateinit var channel : MethodChannel
   private lateinit var context: Context
   private lateinit var activity:Activity
-    private lateinit var myIdUser: String
+  private lateinit var myIdUser: String
 
 
 
@@ -49,33 +49,33 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware
     context = flutterPluginBinding.applicationContext
   }
 
-//    override fun AppAllOfferwallSDKCallback(p0: Int) {
-//        when (p0) {
-//            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
-//                this.activity,
-//                "성공",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//
-//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
-//                this.activity,
-//                "잘못 된 유저아이디입니다.",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//
-//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
-//                this.activity,
-//                "오퍼월 KEY를 확인해주세요.",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//
-//            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
-//                this.activity,
-//                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
-//    }
+    override fun AppAllOfferwallSDKCallback(p0: Int) {
+        when (p0) {
+            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
+                this.activity,
+                "성공",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
+                this.activity,
+                "잘못 된 유저아이디입니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
+                this.activity,
+                "오퍼월 KEY를 확인해주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
+                this.activity,
+                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     private fun checkPermission(){
         AndPermission.with(activity).requestCode(300).permission(

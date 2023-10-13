@@ -1,19 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sdk_eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:sdk_eums/common/const/values.dart';
-import 'package:sdk_eums/common/constants.dart';
 import 'package:sdk_eums/common/local_store/local_store.dart';
 import 'package:sdk_eums/common/local_store/local_store_service.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
-
-import '../common/routing.dart';
-import 'screen/watch_adver_module/watch_adver_screen.dart';
 
 const String keepID = 'id_1';
 
@@ -39,6 +33,7 @@ class ReceivedNotification {
 
 class NotificationHandler {
   NotificationHandler._();
+  NotificationHandler();
 
   static NotificationHandler instant = NotificationHandler._();
 
@@ -48,13 +43,12 @@ class NotificationHandler {
 
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  // final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin => _flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
-    'high_importance_channel',
-    'High Importance Notifications',
-    description: 'This channel is used for important notifications.',
+    darwinNotificationCategoryPlain,
+    darwinNotificationCategoryPlain,
   );
 
   final List<DarwinNotificationCategory> darwinNotificationCategories = <DarwinNotificationCategory>[
@@ -82,7 +76,7 @@ class NotificationHandler {
     )
   ];
 
-  initializeFcmNotification() async {
+  Future initializeFcmNotification() async {
     var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
 
     final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
@@ -105,24 +99,21 @@ class NotificationHandler {
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
 
-    if (Platform.isIOS) {
-      await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
-    }
+    // if (Platform.isIOS) {
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(_channel);
+    // }
+
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
-        final String? payload = notificationResponse.payload;
-        if (notificationResponse.payload != null) {
-          // print(notificationResponse.actionId);
-          debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
-          if (notificationResponse.actionId == navigationScreenId) {
-            onNavigateToMyEvent(data: jsonDecode(payload ?? ''));
-          }
-        }
+        await eventOpenNotification(notificationResponse);
       },
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
@@ -148,8 +139,7 @@ class NotificationHandler {
         ),
       ],
     );
-
-    const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
+    NotificationDetails notificationDetails = const NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
@@ -166,8 +156,56 @@ class NotificationHandler {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) async {},
+      (RemoteMessage message) async {
+        // final data = message.data;
+        // data['isWebView'] = true;
+        // FlutterBackgroundService().invoke("showOverlay", {'data': data});
+      },
     );
+  }
+
+  Future<void> eventOpenNotification(NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      final dataMessage = jsonDecode(payload ?? '');
+      switch (notificationResponse.actionId) {
+        // case navigationScreenId:
+        //   // onNavigateToMyEvent(data: jsonDecode(payload ?? ''));
+        //   Routings().navigate(
+        //       globalKeyMain.currentContext!,
+        //       WatchAdverScreen(
+        //         data: dataMessage['data'],
+        //       ));
+        //   break;
+        case keepID:
+          try {
+            EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(dataMessage['data'])['idx']);
+            if (Platform.isAndroid) {
+              bool isActive = await FlutterOverlayWindow.isActive();
+              if (isActive == true) {
+                await FlutterOverlayWindow.closeOverlay();
+              }
+            }
+          } catch (ex) {
+            // print('exexex$ex');
+          }
+          break;
+        case navigationScreenId:
+        default:
+          if (dataMessage != null) {
+            dataMessage['isWebView'] = true;
+            FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+          } else {
+            FlutterBackgroundService().invoke("closeOverlay");
+          }
+          // Routings().navigate(
+          //     globalKeyMain.currentContext!,
+          //     WatchAdverScreen(
+          //       data: dataMessage['data'],
+          //     ));
+          break;
+      }
+    }
   }
 
   // onSelectNotification(NotificationResponse notificationResponse) async {
@@ -192,13 +230,13 @@ class NotificationHandler {
   //   }
   // }
 
-  onNavigateToMyEvent({dynamic data}) async {
-    Routings().navigate(
-        globalKeyMain.currentContext!,
-        WatchAdverScreen(
-          data: data['data'],
-        ));
-  }
+  // onNavigateToMyEvent({dynamic data}) async {
+  //   Routings().navigate(
+  //       globalKeyMain.currentContext!,
+  //       WatchAdverScreen(
+  //         data: data['data'],
+  //       ));
+  // }
 
   getToken() async {
     String? token;
@@ -208,50 +246,88 @@ class NotificationHandler {
       token = await _fcm.getToken();
     }
     LocalStoreService().setDeviceToken(token);
-    print('deviceTokenInit $token');
+    // print('deviceTokenInit $token');
     return token;
   }
 }
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) async {
-  final String? payload = notificationResponse.payload;
-  if (notificationResponse.payload != null) {
-    debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
-
-    if (notificationResponse.actionId == keepID) {
-      try {
-        EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(jsonDecode(payload ?? '')['data'])['idx']);
-        if (Platform.isAndroid) {
-          bool isActive = await FlutterOverlayWindow.isActive();
-          if (isActive == true) {
-            await FlutterOverlayWindow.closeOverlay();
-          }
-        }
-      } catch (ex) {
-        print('exexex$ex');
-      }
-    }
-  }
-  // print('notification(${notificationResponse.id}) action tapped: '
-  //     '${notificationResponse.actionId} with'
-  //     ' payload: ${notificationResponse.payload}');
-  // if (notificationResponse.input?.isNotEmpty ?? false) {
-  //   // ignore: avoid_print
-  //   print(
-  //       'notification action tapped with input: ${notificationResponse.input}');
+  await Firebase.initializeApp();
+  NotificationHandler.instant.eventOpenNotification(notificationResponse);
+  // final String? payload = notificationResponse.payload;
+  // if (notificationResponse.payload != null) {
+  //   // debugPrint('notification payload: ${jsonDecode(payload ?? '')}');
+  //   final dataMessage = jsonDecode(payload ?? '');
+  //   switch (notificationResponse.actionId) {
+  //     case keepID:
+  //       try {
+  //         EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(dataMessage['data'])['idx']);
+  //         if (Platform.isAndroid) {
+  //           bool isActive = await FlutterOverlayWindow.isActive();
+  //           if (isActive == true) {
+  //             await FlutterOverlayWindow.closeOverlay();
+  //           }
+  //         }
+  //         // ignore: empty_catches
+  //       } catch (ex) {}
+  //       break;
+  //     case navigationScreenId:
+  //     default:
+  //       if (dataMessage != null) {
+  //         dataMessage['isWebView'] = true;
+  //         FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+  //       } else {
+  //         FlutterBackgroundService().invoke("closeOverlay");
+  //       }
+  //       break;
+  //   }
+  //   // if (notificationResponse.actionId == keepID) {
+  //   //   try {
+  //   //     EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(jsonDecode(payload ?? '')['data'])['idx']);
+  //   //     if (Platform.isAndroid) {
+  //   //       bool isActive = await FlutterOverlayWindow.isActive();
+  //   //       if (isActive == true) {
+  //   //         await FlutterOverlayWindow.closeOverlay();
+  //   //       }
+  //   //     }
+  //   //   } catch (ex) {
+  //   //     print('exexex$ex');
+  //   //   }
+  //   // }
   // }
+  // // print('notification(${notificationResponse.id}) action tapped: '
+  // //     '${notificationResponse.actionId} with'
+  // //     ' payload: ${notificationResponse.payload}');
+  // // if (notificationResponse.input?.isNotEmpty ?? false) {
+  // //   // ignore: avoid_print
+  // //   print(
+  // //       'notification action tapped with input: ${notificationResponse.input}');
+  // // }
 }
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("vao nhe ennnnn ");
+  await Firebase.initializeApp();
+  // NotificationHandler.instant.initializeFcmNotification();
+  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+    darwinNotificationCategoryPlain,
+    darwinNotificationCategoryPlain,
+    importance: Importance.max,
+    priority: Priority.high,
+    actions: <AndroidNotificationAction>[
+      AndroidNotificationAction(keepID, 'KEEP 하기'),
+      AndroidNotificationAction(
+        navigationScreenId,
+        '광고 시청하기',
+      ),
+    ],
+  );
+
   const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
     categoryIdentifier: darwinNotificationCategoryPlain,
   );
-  const NotificationDetails notificationDetails = NotificationDetails(
-    iOS: iosNotificationDetails,
-  );
+  const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
   // CronCustom().initCron();
   if (Platform.isAndroid) {
@@ -260,81 +336,81 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
   }
   NotificationHandler.instant.flutterLocalNotificationsPlugin
-      .show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
+      .show(Random().nextInt(100), '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
 }
 
 class CountAdver {
   final LocalStore _localStore = LocalStoreService();
-  var countAdvertisement = 0;
-  dynamic dataCount;
+  // var countAdvertisement = 0;
+  // dynamic dataCount;
   String dateCount = '';
   String dateNow = '';
   bool isActive = false;
   initCount() async {
     await Firebase.initializeApp();
-    dataCount = await _localStore.getCountAdvertisement();
-    countAdvertisement = dataCount['count'] ?? 0;
-    isActive = await _localStore.getSaveAdver();
-    print("countAdvertisement$countAdvertisement $isActive");
+    // dataCount = await _localStore.getCountAdvertisement();
+    // countAdvertisement = dataCount['count'] ?? 0;
+    // isActive = await _localStore.getSaveAdver();
+    // print("countAdvertisement$countAdvertisement $isActive");
 
     // 50
-    if (countAdvertisement == 5) {
-      print("remove tokem");
+    // if (countAdvertisement == 5) {
+    //   print("remove tokem");
 
-      String? token = await FirebaseMessaging.instance.getToken();
-      if (token != null && token.isNotEmpty) {
-        FlutterBackgroundService().invoke("stopService");
-        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-        _localStore.setSaveAdver(true);
-      }
-    }
+    //   String? token = await FirebaseMessaging.instance.getToken();
+    //   if (token != null && token.isNotEmpty) {
+    //     FlutterBackgroundService().invoke("stopService");
+    //     await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+    //     _localStore.setSaveAdver(true);
+    //   }
+    // }
 
-    if (dataCount == '{}') {
-      dynamic data = <String, dynamic>{
-        'count': 1,
-        'date': Constants.formatTime(DateTime.now().toIso8601String()),
-      };
-      _localStore.setCountAdvertisement(data);
-    } else {
-      if (!isActive) {
-        countAdvertisement++;
-        dynamic data = <String, dynamic>{
-          'count': countAdvertisement,
-          'date': Constants.formatTime(DateTime.now().toIso8601String()),
-        };
-        print("datadata$data");
-        _localStore.setCountAdvertisement(data);
-      }
-    }
+    // if (dataCount == '{}') {
+    //   dynamic data = <String, dynamic>{
+    //     'count': 1,
+    //     'date': Constants.formatTime(DateTime.now().toIso8601String()),
+    //   };
+    //   _localStore.setCountAdvertisement(data);
+    // } else {
+    //   if (!isActive) {
+    //     countAdvertisement++;
+    //     dynamic data = <String, dynamic>{
+    //       'count': countAdvertisement,
+    //       'date': Constants.formatTime(DateTime.now().toIso8601String()),
+    //     };
+    //     print("datadata$data");
+    //     _localStore.setCountAdvertisement(data);
+    //   }
+    // }
   }
 
-  checkDate() async {
-    await Firebase.initializeApp();
-    try {
-      dataCount = await _localStore.getCountAdvertisement();
-      dateCount = dataCount['date'] ?? '';
-      countAdvertisement = dataCount['count'] ?? 0;
-      dateNow = Constants.formatTime(DateTime.now().toIso8601String());
-      // print("countAdvertisement${countAdvertisement}");
-    } catch (ex) {
-      print("exexexex$ex");
-    }
+  // checkDate() async {
+  //   await Firebase.initializeApp();
+  //   // try {
+  //   //   dataCount = await _localStore.getCountAdvertisement();
+  //   //   dateCount = dataCount['date'] ?? '';
+  //   //   countAdvertisement = dataCount['count'] ?? 0;
+  //   //   dateNow = Constants.formatTime(DateTime.now().toIso8601String());
+  //   //   // print("countAdvertisement${countAdvertisement}");
+  //   // } catch (ex) {
+  //   //   print("exexexex$ex");
+  //   // }
 
-    if (dateCount == dateNow) {
-      /// ngày hiện tại
-      if (countAdvertisement < 50) {}
-    } else {
-      // ngày tiếp theo
-      dynamic data = <String, dynamic>{
-        'count': 0,
-        'date': Constants.formatTime(DateTime.now().toIso8601String()),
-      };
-      String? token = await FirebaseMessaging.instance.getToken();
-      if (token != null && token.isNotEmpty) {
-        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-        _localStore.setSaveAdver(false);
-      }
-      _localStore.setCountAdvertisement(data);
-    }
-  }
+  //   // if (dateCount == dateNow) {
+  //   //   /// ngày hiện tại
+  //   //   if (countAdvertisement < 50) {}
+  //   // } else {
+  //   //   // ngày tiếp theo
+  //   //   dynamic data = <String, dynamic>{
+  //   //     'count': 0,
+  //   //     'date': Constants.formatTime(DateTime.now().toIso8601String()),
+  //   //   };
+  //   //   String? token = await FirebaseMessaging.instance.getToken();
+  //   //   if (token != null && token.isNotEmpty) {
+  //   //     await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+  //   //     _localStore.setSaveAdver(false);
+  //   //   }
+  //   //   _localStore.setCountAdvertisement(data);
+  //   // }
+  // }
 }

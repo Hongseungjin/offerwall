@@ -11,25 +11,26 @@ import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:sdk_eums/sdk_eums_library.dart';
 
 void main() {
-  SdkEums.instant.init(onRun: () async {
-    await Firebase.initializeApp();
+  // SdkEums.instant.init(onRun: () async {
+  //   await Firebase.initializeApp();
 
-    NotificationHandler.instant.initializeFcmNotification();
+  //   NotificationHandler.instant.initializeFcmNotification();
 
-    runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // home: MyHomePage(),
-      home: DevicePreview(
-        // child: ,
-        enabled: false,
-        // tools: [
-        //   ...DevicePreview.defaultTools,
-        //   // const CustomPlugin(),
-        // ],
-        builder: (context) => const MyHomePage(),
-      ),
-    ));
-  });
+  //   runApp(MaterialApp(
+  //     debugShowCheckedModeBanner: false,
+  //     // home: MyHomePage(),
+  //     home: DevicePreview(
+  //       // child: ,
+  //       enabled: false,
+  //       // tools: [
+  //       //   ...DevicePreview.defaultTools,
+  //       //   // const CustomPlugin(),
+  //       // ],
+  //       builder: (context) => const MyHomePage(),
+  //     ),
+  //   ));
+  // });
+  SdkEums.instant.initMaterial(home: const MyHomePage());
 }
 
 @pragma("vm:entry-point")
@@ -40,11 +41,37 @@ void overlayMain() {
   ));
 
   runApp(
-    const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: TrueCallOverlay(),
-    ),
+    const MyAppOverlay(),
   );
+}
+
+class MyAppOverlay extends StatefulWidget {
+  const MyAppOverlay({super.key});
+
+  @override
+  State<MyAppOverlay> createState() => _MyAppOverlayState();
+}
+
+class _MyAppOverlayState extends State<MyAppOverlay> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      key: globalKeyMainOverlay,
+      debugShowCheckedModeBanner: false,
+      // home: const TrueCallOverlay(),
+      routes: {
+        '/': (context) => const TrueCallOverlay(),
+      },
+      builder: (context, child) {
+        return Overlay(
+          initialEntries: [
+            OverlayEntry(
+                builder: (context) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: child ?? const SizedBox())),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class MyHomePage extends StatefulWidget {
