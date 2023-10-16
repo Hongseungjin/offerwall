@@ -24,10 +24,10 @@ dependencies:
   flutter_overlay_window:
     path: package/flutter_overlay_window-0.4.3
 
-  sdk_eums_c:
-    path: ../sdk_eums_c
-  sdk_eums:
-    path: ../sdk_eums
+  # sdk_eums_c:
+  #   path: ../sdk_eums_c
+  # sdk_eums:
+  #   path: ../sdk_eums
 
   package_info_plus: ^3.1.2
   device_info_plus: 8.0.0

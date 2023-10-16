@@ -42,19 +42,19 @@ class AdverModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['idx'] = this.idx;
-    data['category'] = this.category;
-    data['title'] = this.title;
-    data['suju'] = this.suju;
-    data['description'] = this.description;
-    data['thumbnail'] = this.thumbnail;
-    data['api'] = this.api;
-    data['precaution'] = this.precaution;
-    data['type'] = this.type;
-    data['price'] = this.price;
-    data['reward'] = this.reward;
-    data['regist_date'] = this.registDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['idx'] = idx;
+    data['category'] = category;
+    data['title'] = title;
+    data['suju'] = suju;
+    data['description'] = description;
+    data['thumbnail'] = thumbnail;
+    data['api'] = api;
+    data['precaution'] = precaution;
+    data['type'] = type;
+    data['price'] = price;
+    data['reward'] = reward;
+    data['regist_date'] = registDate;
     return data;
   }
 }
