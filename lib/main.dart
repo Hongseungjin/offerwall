@@ -2,13 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sdk_eums/common/const/values.dart';
-import 'package:sdk_eums/common/local_store/local_store.dart';
-import 'package:sdk_eums/common/local_store/local_store_service.dart';
-import 'package:sdk_eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:sdk_eums/eum_app_offer_wall/notification_handler.dart';
-import 'package:sdk_eums/eum_app_offer_wall/utils/appColor.dart';
-import 'package:sdk_eums/sdk_eums_library.dart';
+import 'package:eums/common/const/values.dart';
+import 'package:eums/common/local_store/local_store.dart';
+import 'package:eums/common/local_store/local_store_service.dart';
+import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
+import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:eums/eums_library.dart';
 
 void main() {
   // SdkEums.instant.init(onRun: () async {
@@ -30,7 +29,12 @@ void main() {
   //     ),
   //   ));
   // });
-  SdkEums.instant.initMaterial(home: const MyHomePage());
+  Eums.instant.initMaterial(home: const MyHomePage());
+
+  // runApp(const MaterialApp(
+  //   debugShowCheckedModeBanner: false,
+  //   home: MyHomePage(),
+  // ));
 }
 
 @pragma("vm:entry-point")
@@ -185,3 +189,17 @@ class _AppMainScreenState extends State<AppMainScreen> {
     );
   }
 }
+
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key});
+
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }

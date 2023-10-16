@@ -14,69 +14,69 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
 
-  # region Package UI
-  simple_shadow: ^0.3.1
-  # endregion
+  # # region Package UI
+  # simple_shadow: ^0.3.1
+  # # endregion
 
-  # region Package notification
-  firebase_messaging: ^14.6.3
-  flutter_local_notifications: ^15.1.0+1
-  firebase_core: ^2.14.0
+  # # region Package notification
+  # firebase_messaging: ^14.6.3
+  # flutter_local_notifications: ^15.1.0+1
+  # firebase_core: ^2.14.0
 
-  flutter_overlay_window:
-    path: package/flutter_overlay_window-0.4.3
+  # flutter_overlay_window:
+  #   path: package/flutter_overlay_window-0.4.3
 
   sdk_eums_c:
     path: ../sdk_eums_c
 
-  package_info_plus: ^3.1.2
-  device_info_plus: 8.0.0
-  flutter_inappwebview: ^5.7.2+3
-  url_launcher: ^6.1.10
-  queue: ^3.1.0+2
-  # endregion
+  # package_info_plus: ^3.1.2
+  # device_info_plus: 8.0.0
+  # flutter_inappwebview: ^5.7.2+3
+  # url_launcher: ^6.1.10
+  # queue: ^3.1.0+2
+  # # endregion
 
-  dio: ^5.0.3
-  carousel_slider: ^4.2.1
-  device_apps: ^2.2.0
-  image_picker: ^0.8.6+4
-  shared_preferences: ^2.0.13
-  syncfusion_flutter_sliders: #^23.1.39
-  syncfusion_flutter_charts: #^23.1.39
-  intl:
-  flutter_easyloading: ^3.0.5
-  rxdart: ^0.27.7
-  cached_network_image: ^3.2.0
-  webview_flutter: ^4.0.7
-  get: any
-  webview_flutter_android: ^3.7.1
-  webview_flutter_wkwebview: ^3.7.2
-  # webview_flutter_wkwebview: ^3.4.4
-  flutter_widget_from_html: ^0.9.0
-  fluttertoast: 8.1.1
-  pull_to_refresh: ^2.0.0
-  flutter_bloc: ^8.1.2
-  equatable: ^2.0.5
-  wakelock: ^0.6.2
-  flutter_background_service: ^3.0.1
-  devicelocale: ^0.6.0
-  disable_battery_optimization: ^1.1.0+1
-  permission_handler: ^10.4.3
-  cron: ^0.5.1
-  # jiffy: ^6.2.1
-  flutter_gif: ^0.0.4
-  device_preview: ^1.1.0
-  geolocator:
-  # flutter_time_picker_spinner: ^2.0.0
-  # awesome_notifications: ^0.0.6+10
-  # flutter_apns:
+  # dio: ^5.0.3
+  # carousel_slider: ^4.2.1
+  # device_apps: ^2.2.0
+  # image_picker: ^0.8.6+4
+  # shared_preferences: ^2.0.13
+  # syncfusion_flutter_sliders: #^23.1.39
+  # syncfusion_flutter_charts: #^23.1.39
+  # intl:
+  # flutter_easyloading: ^3.0.5
+  # rxdart: ^0.27.7
+  # cached_network_image: ^3.2.0
+  # webview_flutter: ^4.0.7
+  # get: any
+  # webview_flutter_android: ^3.7.1
+  # webview_flutter_wkwebview: ^3.7.2
+  # # webview_flutter_wkwebview: ^3.4.4
+  # flutter_widget_from_html: ^0.9.0
+  # fluttertoast: 8.1.1
+  # pull_to_refresh: ^2.0.0
+  # flutter_bloc: ^8.1.2
+  # equatable: ^2.0.5
+  # wakelock: ^0.6.2
+  # flutter_background_service: ^3.0.1
+  # devicelocale: ^0.6.0
+  # disable_battery_optimization: ^1.1.0+1
+  # permission_handler: ^10.4.3
+  # cron: ^0.5.1
+  # # jiffy: ^6.2.1
+  # flutter_gif: ^0.0.4
+  # device_preview: ^1.1.0
+  # geolocator:
+  # # flutter_time_picker_spinner: ^2.0.0
+  # # awesome_notifications: ^0.0.6+10
+  # # flutter_apns:
 
-  # restart_app: any
-  # flutter_overlay_window:
-  #   git:
-  #     url: https://github.com/Greenapp02/eums_sdk_app.git
-  #     path: flutter_overlay_window
-  # path: ../flutter_overlay_window
+  # # restart_app: any
+  # # flutter_overlay_window:
+  # #   git:
+  # #     url: https://github.com/Greenapp02/eums_sdk_app.git
+  # #     path: flutter_overlay_window
+  # # path: ../flutter_overlay_window
 
 dev_dependencies:
   flutter_test:
