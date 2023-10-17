@@ -223,9 +223,13 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
 
   @override
   Future saveKeep({advertiseIdx}) async {
-    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
-    await api.post('advertises/save-keep-advertise', data: data);
-    return;
+    try {
+      dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
+      final response = await api.post('advertises/save-keep-advertise', data: data);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   @override

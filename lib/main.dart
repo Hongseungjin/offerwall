@@ -40,9 +40,9 @@ void main() {
 @pragma("vm:entry-point")
 void overlayMain() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-    statusBarColor: Colors.transparent,
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+  //   statusBarColor: Colors.black,
+  // ));
 
   runApp(
     const MyAppOverlay(),
@@ -62,18 +62,18 @@ class _MyAppOverlayState extends State<MyAppOverlay> {
     return MaterialApp(
       key: globalKeyMainOverlay,
       debugShowCheckedModeBanner: false,
-      // home: const TrueCallOverlay(),
-      routes: {
-        '/': (context) => const TrueCallOverlay(),
-      },
-      builder: (context, child) {
-        return Overlay(
-          initialEntries: [
-            OverlayEntry(
-                builder: (context) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: child ?? const SizedBox())),
-          ],
-        );
-      },
+      home: const TrueCallOverlay(),
+      // routes: {
+      //   '/': (context) => const TrueCallOverlay(),
+      // },
+      // builder: (context, child) {
+      //   return Overlay(
+      //     initialEntries: [
+      //       OverlayEntry(
+      //           builder: (context) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: child ?? const SizedBox())),
+      //     ],
+      //   );
+      // },
     );
   }
 }

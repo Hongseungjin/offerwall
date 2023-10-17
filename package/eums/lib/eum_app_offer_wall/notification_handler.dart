@@ -13,6 +13,7 @@ const String keepID = 'id_1';
 
 const String navigationScreenId = 'id_2';
 
+const String notificationChannelId = 'eums_background';
 const String darwinNotificationCategoryPlain = 'EUMS_OFFERWALL';
 
 bool checkOnClick = false;
@@ -140,16 +141,19 @@ class NotificationHandler {
       ],
     );
     NotificationDetails notificationDetails = const NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
-
+    await FirebaseMessaging.instance.subscribeToTopic('eums');
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
-        if (Platform.isAndroid) {
-          // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-          CountAdver().initCount();
-          FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+        if (message.from == "/topics/eums") {
+          FlutterBackgroundService().invoke('locationCurrent');
+        } else {
+          if (Platform.isAndroid) {
+            CountAdver().initCount();
+            FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+          }
+          flutterLocalNotificationsPlugin.show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+              payload: jsonEncode(message.data));
         }
-        flutterLocalNotificationsPlugin.show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails,
-            payload: jsonEncode(message.data));
       },
     );
 
@@ -179,7 +183,7 @@ class NotificationHandler {
         //   break;
         case keepID:
           try {
-            EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(dataMessage['data'])['idx']);
+            await EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(dataMessage['data'])['idx']);
             if (Platform.isAndroid) {
               bool isActive = await FlutterOverlayWindow.isActive();
               if (isActive == true) {
@@ -309,34 +313,38 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // NotificationHandler.instant.initializeFcmNotification();
-  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-    darwinNotificationCategoryPlain,
-    darwinNotificationCategoryPlain,
-    importance: Importance.max,
-    priority: Priority.high,
-    actions: <AndroidNotificationAction>[
-      AndroidNotificationAction(keepID, 'KEEP 하기'),
-      AndroidNotificationAction(
-        navigationScreenId,
-        '광고 시청하기',
-      ),
-    ],
-  );
+  if (message.from == "/topics/eums") {
+    FlutterBackgroundService().invoke('locationCurrent');
+  } else {
+// NotificationHandler.instant.initializeFcmNotification();
+    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      darwinNotificationCategoryPlain,
+      darwinNotificationCategoryPlain,
+      importance: Importance.max,
+      priority: Priority.high,
+      actions: <AndroidNotificationAction>[
+        AndroidNotificationAction(keepID, 'KEEP 하기'),
+        AndroidNotificationAction(
+          navigationScreenId,
+          '광고 시청하기',
+        ),
+      ],
+    );
 
-  const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-    categoryIdentifier: darwinNotificationCategoryPlain,
-  );
-  const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
+    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+      categoryIdentifier: darwinNotificationCategoryPlain,
+    );
+    const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
-  // CronCustom().initCron();
-  if (Platform.isAndroid) {
-    // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-    CountAdver().initCount();
-    FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+    // CronCustom().initCron();
+    if (Platform.isAndroid) {
+      // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+      CountAdver().initCount();
+      FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+    }
+    NotificationHandler.instant.flutterLocalNotificationsPlugin
+        .show(Random().nextInt(100), '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
   }
-  NotificationHandler.instant.flutterLocalNotificationsPlugin
-      .show(Random().nextInt(100), '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
 }
 
 class CountAdver {

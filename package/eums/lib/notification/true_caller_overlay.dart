@@ -64,6 +64,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           checkSave = false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
+
         // printWrapped('overlayListener $event');
         // printWrapped('overlayListener $deviceHeight');
       } catch (e) {
@@ -106,6 +107,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     heightScreen = MediaQuery.of(context).size.height;
     return Material(
       color: Colors.transparent,
@@ -144,7 +146,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     try {
       url = (jsonDecode(dataEvent['data']))['url_link'];
     } catch (e) {
-      print(e);
+      // print(e);
       FlutterBackgroundService().invoke("closeOverlay");
     }
     return BlocProvider<WatchAdverBloc>(
@@ -203,9 +205,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
               });
               try {
                 if (checkSave) {
-                  TrueOverlauService().saveScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+                  TrueOverlayService().saveScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
                 } else {
-                  TrueOverlauService().deleteScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+                  TrueOverlayService().deleteScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
                 }
               } catch (e) {
                 print('e $e');
@@ -227,7 +229,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           if (dataEvent != null && dataEvent['data'] != null) {
             DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
               try {
-                TrueOverlauService().missionOfferWallOutside(
+                TrueOverlayService().missionOfferWallOutside(
                     advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
                 setState(() {
                   isWebView = false;
@@ -289,15 +291,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     //   }
     // }
     // debugPrint("${heightScreen * .15}");
-    if (dy! > (heightScreen - heightScreen * .15)) {
-      // try {
-      //   TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
-      //   dataEvent['isToast'] = true;
-      //   FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-      // } catch (e) {
-      // print("errrrr$e");
-      FlutterBackgroundService().invoke("closeOverlay");
-      // }
+    if (dy! > (heightScreen - heightScreen * .2)) {
+      try {
+        TrueOverlayService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+        FlutterBackgroundService().invoke("closeOverlay");
+        // ignore: empty_catches
+      } catch (e) {
+        debugPrint("error: $e");
+      }
     } else {
       if (dy! < heightScreen * .2) {
         if (dataEvent != null) {

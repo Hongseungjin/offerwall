@@ -200,12 +200,16 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.grey.shade500,
+      ),
       body: SafeArea(
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(top: kToolbarHeight, bottom: 0),
-              decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey)),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -232,28 +236,29 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
             ),
             Expanded(
               child: SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  children: [
-                    CachedNetworkImage(
-                        width: MediaQuery.of(context).size.width,
-                        fit: BoxFit.cover,
-                        imageUrl: widget.urlLink,
-                        placeholder: (context, url) => const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Center(
-                                  child: CircularProgressIndicator(
-                                color: Color(0xfffcc900),
-                              )),
-                            ),
-                        errorWidget: (context, url, error) {
-                          return Image.asset(Assets.logo.path, package: "eums", height: 16);
-                        }),
-                    // SizedBox(
-                    //   height: MediaQuery.of(context).padding.bottom + 50,
-                    // )
-                  ],
-                ),
+                // controller: _scrollController,
+                child: CachedNetworkImage(
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                    imageUrl: widget.urlLink,
+                    imageBuilder: (context, imageProvider) {
+                      if (timerController.value == 0) {
+                        timerController.start();
+                      }
+                      return Image(image: imageProvider);
+                    },
+                    progressIndicatorBuilder: (context, url, progress) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 30),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Color(0xfffcc900),
+                        )),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Image.asset(Assets.logo.path, package: "eums", height: 16);
+                    }),
               ),
             ),
             !widget.showMission

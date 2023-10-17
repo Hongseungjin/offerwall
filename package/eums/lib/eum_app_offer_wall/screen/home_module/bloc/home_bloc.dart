@@ -43,10 +43,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       dynamic totalPoint = await _eumsOfferWallService.getTotalPoint();
       emit(state.copyWith(getPointStatus: GetPointStatus.success, totalPoint: totalPoint));
-      print("useruser$totalPoint");
+      // print("useruser$totalPoint");
     } catch (ex) {
       emit(state.copyWith(getPointStatus: GetPointStatus.failure));
-      print("exexexex$ex");
+      // print("exexexex$ex");
     }
   }
 
@@ -54,10 +54,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       dynamic user = await _eumsOfferWallService.userInfo();
       emit(state.copyWith(account: user));
-      print("useruser$user");
+      // print("useruser$user");
       _localStore.setDataUser(user);
     } catch (ex) {
-      print("exexexex$ex");
+      // print("exexexex$ex");
     }
   }
 

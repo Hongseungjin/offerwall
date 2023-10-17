@@ -8,28 +8,28 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
+
 class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler
 //    AppAllOfferwallSDK.AppAllOfferwallSDKListener
 {
 
-    private var CHANNEL = "sdk_eums"
+    // private var CHANNEL = "sdk_eums"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
-
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-        val channel = MethodChannel(flutterEngine?.dartExecutor!!.binaryMessenger, CHANNEL)
-
-        channel.setMethodCallHandler { call, result ->
-            val data = call.arguments
-
-            if (call.arguments == "dataUser"){
-                println("myIdUser1231237618237 $data" )
-            }
-
-        }
+//        val channel = MethodChannel(flutterEngine?.dartExecutor!!.binaryMessenger, CHANNEL)
+//
+//        channel.setMethodCallHandler { call, result ->
+//            val data = call.arguments
+//
+//            if (call.arguments == "dataUser"){
+//                println("myIdUser1231237618237 $data" )
+//            }
+//
+//        }
     }
 
 

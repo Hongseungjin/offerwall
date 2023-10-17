@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -29,9 +27,9 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
   final ScrollController _scrollController = ScrollController();
   FlutterGifController? gifController;
 
-  Timer? _timer;
-  final int _startTime = 15;
-  Timer? timer5s;
+  // Timer? _timer;
+  // final int _startTime = 15;
+  // Timer? timer5s;
   ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
   final controllerGet = Get.put(SettingFontSize());
@@ -61,7 +59,10 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   @override
   void initState() {
-    gifController = FlutterGifController(vsync: this);
+    try {
+      gifController = FlutterGifController(vsync: this);
+      // ignore: empty_catches
+    } catch (e) {}
     // TODO: implement initState
     super.initState();
     // startTimeDown();
@@ -69,7 +70,7 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
     // gifController?.animateTo(52, duration: Duration(seconds: 1));
     _scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      timerController.start();
+      // timerController.start();
       gifController?.repeat(
         min: 0,
         max: 53,
@@ -138,7 +139,29 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
                     imageUrl: widget.urlLink ?? '',
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                    // placeholder: (context, url) => const Padding(
+                    //       padding: EdgeInsets.symmetric(vertical: 30),
+                    //       child: Center(
+                    //           child: CircularProgressIndicator(
+                    //         color: Color(0xfffcc900),
+                    //       )),
+                    //     ),
+
+                    imageBuilder: (context, imageProvider) {
+                      if (timerController.value == 0) {
+                        timerController.start();
+                      }
+                      return Image(image: imageProvider);
+                    },
+                    progressIndicatorBuilder: (context, url, progress) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 30),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Color(0xfffcc900),
+                        )),
+                      );
+                    },
                     errorWidget: (context, url, error) {
                       return Image.asset(Assets.logo.path, package: "eums", height: 100);
                     }),

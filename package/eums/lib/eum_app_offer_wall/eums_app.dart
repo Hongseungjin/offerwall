@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:queue/queue.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/local_store/local_store.dart';
@@ -78,7 +79,8 @@ registerDeviceToken() async {
 
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
-  print('onStart');
+  // print('onStart');
+  WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
 
   await Firebase.initializeApp();
@@ -107,32 +109,37 @@ Future<void> onStart(ServiceInstance service) async {
       }
       service.stopSelf();
     });
-    startTimeDown();
+
+    service.on('locationCurrent').listen((event) async {
+      if (await Permission.locationAlways.status == PermissionStatus.granted) {
+        // Either the permission was already granted before or the user just granted it.
+        // startTimeDown();
+        debugPrint("xxxx");
+        Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+        await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+      }
+    });
   } catch (e) {
     print(e);
   }
 }
 
-void startTimeDown() async {
-  Timer? timer;
-  int startTime = 300;
-
-  timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-    if (startTime == 0) {
-      timer.cancel();
-    } else {
-      startTime--;
-
-      if (startTime == 0) {
-        startTime = 300;
-        try {
-          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
-        } catch (ex) {}
-      }
-    }
-  });
-}
+// void startTimeDown() async {
+//   if (startLocationCurrent == false) {
+//     startLocationCurrent = true;
+//     Timer.periodic(const Duration(seconds: 180), (timer) async {
+//       try {
+//         debugPrint("xxxx");
+//         Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//         debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+//         await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+//       } catch (ex) {
+//         rethrow;
+//       }
+//     });
+//   }
+// }
 
 @pragma('vm:entry-point')
 Future<bool> onIosBackground(ServiceInstance service) async {
@@ -162,7 +169,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
-            autoStart: false,
+            autoStart: true,
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));

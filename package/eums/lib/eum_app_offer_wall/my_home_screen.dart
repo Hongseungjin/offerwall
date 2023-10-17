@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
+import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/instance_manager.dart';
-import 'package:eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
@@ -23,6 +22,7 @@ import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../common/local_store/local_store.dart';
 import '../common/routing.dart';
@@ -93,6 +93,18 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
   }
 
+  Future _checkPermissionLocationBackground() async {
+    if (await Permission.locationAlways.status != PermissionStatus.granted) {
+      Timer.periodic(const Duration(seconds: 2), (timer) async {
+        timer.cancel();
+        await Permission.locationAlways.request();
+        await _checkPermissionLocationBackground();
+      });
+    } else {
+      return;
+    }
+  }
+
   getBatteryOptimization() async {
     await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
     bool? isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
@@ -110,6 +122,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           }
         });
       }
+
+      _checkPermissionLocationBackground();
     }
   }
 
@@ -150,7 +164,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           child: Scaffold(
             body: Stack(
               children: [
-                MyHomePagePage2(),
+                const MyHomePagePage2(),
                 !showAction
                     ? const SizedBox()
                     : Positioned(
@@ -190,19 +204,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                                               });
                                               switch (index) {
                                                 case 0:
-                                                  Routings().navigate(context, RequestScreen());
+                                                  Routings().navigate(context, const RequestScreen());
                                                   break;
                                                 case 1:
-                                                  Routings().navigate(context, AskedQuestionScreen());
+                                                  Routings().navigate(context, const AskedQuestionScreen());
                                                   break;
                                                 case 2:
-                                                  Routings().navigate(context, LinkAddvertisingScreen());
+                                                  Routings().navigate(context, const LinkAddvertisingScreen());
                                                   break;
                                                 case 3:
-                                                  Routings().navigate(context, RewardGuideScreen());
+                                                  Routings().navigate(context, const RewardGuideScreen());
                                                   break;
                                                 case 4:
-                                                  Routings().navigate(context, UsingTermScreen());
+                                                  Routings().navigate(context, const UsingTermScreen());
                                                   break;
                                                 default:
                                               }

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eums/common/events/rx_events.dart';
+import 'package:eums/common/rx_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:get/get_state_manager/get_state_manager.dart';
@@ -56,7 +58,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   final ScrollController controller = ScrollController();
   int tabIndex = 0;
   int tabPreviousIndex = 0;
-  dynamic accont;
+  dynamic account;
+
+  bool firstShowDialogPoint = false;
 
   @override
   void initState() {
@@ -67,8 +71,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     _tabController.addListener(_onTabChange);
     checkPermission();
     controller.addListener(() {});
-
+    _registerEventBus();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _unregisterEventBus();
+    super.dispose();
+  }
+
+  Future<void> _registerEventBus() async {
+    RxBus.register<UpdateUser>().listen((event) {
+      _fetchData();
+    });
+  }
+
+  void _unregisterEventBus() {
+    RxBus.destroy();
   }
 
   checkPermission() async {
@@ -135,7 +155,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     }
     if (state.getPointStatus == GetPointStatus.success) {
       LoadingDialog.instance.hide();
-      if (state.totalPoint != null) {
+      if (state.totalPoint != null && firstShowDialogPoint == false) {
+        firstShowDialogPoint = true;
         DialogUtils.showDialogGetPoint(context, data: state.totalPoint);
       }
     }
@@ -161,151 +182,151 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         if (state.account != null) {
-          accont = state.account;
+          account = state.account;
         }
 
-        return Obx(() => Scaffold(
-              appBar: AppBar(
-                backgroundColor: AppColor.white,
-                leading: WidgetAnimationClick(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColor.black,
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppColor.white,
+            leading: WidgetAnimationClick(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColor.black,
+              ),
+            ),
+            centerTitle: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Image.asset(
+                    Assets.logo_eums.path,
+                    package: "eums",
+                    height: 20,
                   ),
                 ),
-                centerTitle: true,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                const SizedBox(width: 10),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 14),
+                  child: Text('리워드', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
+                ),
+              ],
+            ),
+            actions: [
+              WidgetAnimationClick(
+                onTap: () {
+                  Routings().navigate(context, const MyPage());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Image.asset(Assets.my_page.path, package: "eums", height: 24),
+                ),
+              ),
+              const SizedBox(
+                width: 25,
+              )
+            ],
+          ),
+          key: globalKey,
+          body: CustomScrollCampaignDetail(
+            buildChildren: (BuildContext context, ValueNotifier<bool> showAppBar, ScrollController scrollController) {
+              return [
+                CustomSliverList(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Image.asset(
-                        Assets.logo_eums.path,
-                        package: "eums",
-                        height: 20,
+                    _buildUIShowPoint(point: state.totalPoint != null ? state.totalPoint['userPoint'] : 0),
+                    Center(
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        // spacing: 20,
+                        children: List.generate(
+                            uiIconList.length,
+                            (index) => _buildUiIcon(
+                                onTap: () {
+                                  switch (index) {
+                                    case 0:
+                                      Routings().navigate(context, StatusPointPage(account: state.account));
+                                      break;
+                                    case 1:
+                                      Routings().navigate(context, const KeepAdverboxScreen());
+                                      break;
+                                    case 2:
+                                      Routings().navigate(context, const ScrapAdverBoxScreen());
+                                      break;
+                                    case 3:
+                                      Routings().navigate(context, const UsingTermScreen());
+                                      break;
+                                    default:
+                                  }
+                                },
+                                urlImage: uiIconList[index]['icon'],
+                                title: uiIconList[index]['title'])),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 14),
-                      child: Text('리워드', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
-                    ),
+                    const SizedBox(height: 20),
+                    _buildUIBannerImage(dataBanner: state.bannerList),
                   ],
                 ),
-                actions: [
-                  WidgetAnimationClick(
-                    onTap: () {
-                      Routings().navigate(context, const MyPage());
+                CustomSliverAppBar(
+                  expandedHeight: 0,
+                  toolbarHeight: kToolbarHeight - MediaQuery.of(context).padding.top,
+                  header: TabBar(
+                    onTap: (value) {
+                      int index = value;
+                      if (_tabController.index == 0) {
+                        categary = 'participation';
+                      } else {
+                        categary = 'mission';
+                      }
+                      _fetchData();
+                      setState(() {
+                        _tabController.index = index;
+                      });
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Image.asset(Assets.my_page.path, package: "eums", height: 24),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 25,
-                  )
-                ],
-              ),
-              // key: globalKey,
-              body: CustomScrollCampaignDetail(
-                buildChildren: (BuildContext context, ValueNotifier<bool> showAppBar, ScrollController scrollController) {
-                  return [
-                    CustomSliverList(
-                      children: [
-                        _buildUIShowPoint(point: state.totalPoint != null ? state.totalPoint['userPoint'] : 0),
-                        Center(
-                          child: Wrap(
-                            direction: Axis.horizontal,
-                            // spacing: 20,
-                            children: List.generate(
-                                uiIconList.length,
-                                (index) => _buildUiIcon(
-                                    onTap: () {
-                                      switch (index) {
-                                        case 0:
-                                          Routings().navigate(context, StatusPointPage(account: state.account));
-                                          break;
-                                        case 1:
-                                          Routings().navigate(context, const KeepAdverboxScreen());
-                                          break;
-                                        case 2:
-                                          Routings().navigate(context, const ScrapAdverBoxScreen());
-                                          break;
-                                        case 3:
-                                          Routings().navigate(context, const UsingTermScreen());
-                                          break;
-                                        default:
-                                      }
-                                    },
-                                    urlImage: uiIconList[index]['icon'],
-                                    title: uiIconList[index]['title'])),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        _buildUIBannerImage(dataBanner: state.bannerList),
-                      ],
-                    ),
-                    CustomSliverAppBar(
-                      expandedHeight: 0,
-                      toolbarHeight: kToolbarHeight - MediaQuery.of(context).padding.top,
-                      header: TabBar(
-                        onTap: (value) {
-                          int index = value;
-                          if (_tabController.index == 0) {
-                            categary = 'participation';
-                          } else {
-                            categary = 'mission';
-                          }
-                          _fetchData();
-                          setState(() {
-                            _tabController.index = index;
-                          });
-                        },
-                        labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
-                        controller: _tabController,
-                        indicatorColor: HexColor('#f4a43b'),
-                        unselectedLabelColor: HexColor('#707070'),
-                        labelColor: HexColor('#f4a43b'),
-                        labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
-                        tabs: [
-                          Text(
-                            '참여하고 리워드',
-                            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                          ),
-                          Text(
-                            '쇼핑하고 리워드',
-                            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                          ),
-                        ],
+                    labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
+                    controller: _tabController,
+                    indicatorColor: HexColor('#f4a43b'),
+                    unselectedLabelColor: HexColor('#707070'),
+                    labelColor: HexColor('#f4a43b'),
+                    labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
+                    tabs: [
+                      Text(
+                        '참여하고 리워드',
+                        style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                       ),
+                      Text(
+                        '쇼핑하고 리워드',
+                        style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                      ),
+                    ],
+                  ),
+                ),
+                CustomSliverList(
+                  children: [
+                    _buildUIPoint(point: state.totalPoint != null ? state.totalPoint['totalPointCanGet'] : 0),
+                    ListViewHome(
+                      tab: _tabController.index,
+                      filter: _filterMedia,
+                      scrollController: controller,
                     ),
-                    CustomSliverList(
-                      children: [
-                        _buildUIPoint(point: state.totalPoint != null ? state.totalPoint['totalPointCanGet'] : 0),
-                        ListViewHome(
-                          tab: _tabController.index,
-                          filter: _filterMedia,
-                          scrollController: controller,
-                        ),
-                        // ListViewHome(
-                        //   tab: _tabController.index,
-                        //   filter: _filterMedia,
-                        //   scrollController: controller,
-                        // )
-                      ],
-                    )
-                  ];
-                },
-                onRefresh: () {
-                  _fetchData();
-                },
-                scrollController: controller,
-              ),
-            ));
+                    // ListViewHome(
+                    //   tab: _tabController.index,
+                    //   filter: _filterMedia,
+                    //   scrollController: controller,
+                    // )
+                  ],
+                )
+              ];
+            },
+            onRefresh: () {
+              _fetchData();
+            },
+            scrollController: controller,
+          ),
+        );
       },
     );
   }
@@ -316,8 +337,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     } else {
       categary = 'mission';
     }
-    await Future.delayed(const Duration(seconds: 0));
-
+    await Future.delayed(const Duration(seconds: 1));
+    globalKey.currentContext?.read<HomeBloc>().add(GetTotalPoint());
     globalKey.currentContext?.read<HomeBloc>().add(ListOfferWall(
           limit: 10,
           filter: filter,
@@ -390,7 +411,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ),
           WidgetAnimationClick(
             onTap: () {
-              Routings().navigate(context, StatusPointPage(account: accont));
+              Routings().navigate(context, StatusPointPage(account: account));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

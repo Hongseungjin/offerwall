@@ -7,7 +7,7 @@ enum LoadmoreListAdverStatus { initial, loading, success, failure }
 enum GetPointStatus { initial, loading, success, failure }
 
 @immutable
-class HomeState extends Equatable {
+class HomeState {
   const HomeState(
       {this.listAdverStatus = ListAdverStatus.initial,
       this.loadmoreListAdverStatus = LoadmoreListAdverStatus.initial,
@@ -42,7 +42,4 @@ class HomeState extends Equatable {
         totalPoint: totalPoint ?? this.totalPoint,
         bannerList: bannerList ?? this.bannerList);
   }
-
-  @override
-  List<Object?> get props => [listDataOfferWall, listAdverStatus, account, loadmoreListAdverStatus, bannerList, totalPoint, getPointStatus];
 }
