@@ -141,7 +141,6 @@ class NotificationHandler {
       ],
     );
     NotificationDetails notificationDetails = const NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
-    await FirebaseMessaging.instance.subscribeToTopic('eums');
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
         if (message.from == "/topics/eums") {
@@ -244,11 +243,11 @@ class NotificationHandler {
 
   getToken() async {
     String? token;
-    if (Platform.isIOS) {
-      token = await _fcm.getAPNSToken();
-    } else {
+    // if (Platform.isIOS) {
+    //   token = await _fcm.getAPNSToken();
+    // } else {
       token = await _fcm.getToken();
-    }
+    // }
     LocalStoreService().setDeviceToken(token);
     // print('deviceTokenInit $token');
     return token;

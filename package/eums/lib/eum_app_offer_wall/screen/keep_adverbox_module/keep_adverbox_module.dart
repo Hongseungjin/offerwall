@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/common/constants.dart';
@@ -14,7 +14,6 @@ import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_webview_keep.dart';
@@ -341,14 +340,14 @@ class DetailKeepScreen extends StatefulWidget {
 
 class _DetailKeepScreenState extends State<DetailKeepScreen> {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
 
   final _controller = ScrollController();
   final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
-    fToast.init(context);
+    // fToast.init(context);
     // TODO: implement initStat
     super.initState();
 
@@ -415,7 +414,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
       RxBus.post(UpdateUser());
       RxBus.post(RefreshDataKeep());
       Navigator.pop(context);
-      AppAlert.showSuccess(context, fToast, "Success");
+      // AppAlert.showSuccess(context, fToast, "Success");
+      AppAlert.showSuccess("Success");
     }
   }
 
@@ -475,7 +475,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
 
                     if (result == true) {
                       // ignore: use_build_context_synchronously
-                      AppAlert.showSuccess(context, fToast, "Success");
+                      // AppAlert.showSuccess(context, fToast, "Success");
+                      AppAlert.showSuccess("Success");
                     }
                   },
                   child: Padding(

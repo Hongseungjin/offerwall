@@ -5,6 +5,7 @@ public class EumsPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "eums", binaryMessenger: registrar.messenger())
     let instance = EumsPlugin()
+
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

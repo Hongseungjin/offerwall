@@ -1,6 +1,6 @@
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/common/events/rx_events.dart';
@@ -10,7 +10,6 @@ import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_webview.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
@@ -301,11 +300,11 @@ class DetailScrapScreen extends StatefulWidget {
 
 class _DetailScrapScreenState extends State<DetailScrapScreen> {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
 
   @override
   void initState() {
-    fToast.init(context);
+    // fToast.init(context);
     // TODO: implement initState
     super.initState();
   }
@@ -363,7 +362,8 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
       RxBus.post(RefreshDataScrap());
       // EasyLoading.dismiss();
       Navigator.pop(context);
-      AppAlert.showSuccess(context, fToast, "Success");
+      // AppAlert.showSuccess(context, fToast, "Success");
+      AppAlert.showSuccess( "Success");
     }
   }
 }

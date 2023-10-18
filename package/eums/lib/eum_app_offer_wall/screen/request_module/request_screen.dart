@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -193,13 +193,13 @@ class _MakeQuestionState extends State<MakeQuestion> {
   bool check = false;
   TextEditingController titleCtrl = TextEditingController();
   TextEditingController contentCtrl = TextEditingController();
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
   int maxlength = 0;
   final controllerGet = Get.put(SettingFontSize());
 
   @override
   void initState() {
-    fToast.init(context);
+    // fToast.init(context);
     super.initState();
   }
 
@@ -396,7 +396,8 @@ class _MakeQuestionState extends State<MakeQuestion> {
                 InkWell(
                   onTap: () {
                     if (contentCtrl.text == "" || selectedArea == null) {
-                      AppAlert.showError(context, fToast, "empty field");
+                      // AppAlert.showError(context, fToast, "empty field");
+                      AppAlert.showError( "empty field");
                     } else {
                       if (check) {
                         getInquire();

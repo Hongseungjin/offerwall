@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:devicelocale/devicelocale.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:eums/common/constants.dart';
 import 'package:eums/common/events/events.dart';
@@ -40,7 +40,7 @@ class DetailOffWallScreen extends StatefulWidget {
 
 class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsBindingObserver {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
   dynamic point;
   dynamic urlApi;
   dynamic dataOfferWallVisit;
@@ -73,13 +73,15 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     try {
       isInstalled = await DeviceApps.isAppInstalled(uri.queryParameters['id'] ?? '');
     } catch (e) {
-      AppAlert.showError(context, fToast, '$e');
+      // AppAlert.showError(context, fToast, '$e');
+      AppAlert.showError('$e');
     }
     if (isInstalled == false) {
       launch(urlApi);
     } else {
       // ignore: use_build_context_synchronously
-      AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+      // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+      AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
     }
   }
 
@@ -87,7 +89,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   void initState() {
     _registerEventBus();
     _getPreferredLanguages();
-    fToast.init(context);
+    // fToast.init(context);
     super.initState();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -99,13 +101,13 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   check() async {
     Uri uri = Uri.parse(urlApi);
     List<Application> apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeSystemApps: true);
-    apps.forEach((app) {
+    for (var app in apps) {
       if (app.packageName == uri.queryParameters['id']) {
         globalKey.currentContext?.read<DetailOffWallBloc>().add(MissionCompleteOfferWall(xId: widget.xId));
       }
 
       // TODO Backend operation
-    });
+    }
   }
 
   void _unregisterEventBus() {
@@ -164,7 +166,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     }
     if (state.visitOfferWallInternalStatus == VisitOfferWallInternalStatus.failure) {
       LoadingDialog.instance.hide();
-      AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+      // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+      AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
 
       return;
     }
@@ -261,7 +264,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
               title = state.dataDetailOffWall['title'] ?? "";
             }
             return state.dataDetailOffWall == null
-                ? SizedBox()
+                ? const SizedBox()
                 : SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

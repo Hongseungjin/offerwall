@@ -91,6 +91,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
+
+
+    FirebaseMessaging.instance.subscribeToTopic('eums');
+
   }
 
   Future _checkPermissionLocationBackground() async {

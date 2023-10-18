@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:eums/common/events/rx_events.dart';
@@ -34,11 +35,11 @@ class _ReportPageState extends State<ReportPage> {
 
   bool checkContent = false;
   int? indexReport;
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
   final controllerGet = Get.put(SettingFontSize());
   @override
   void initState() {
-    fToast.init(context);
+    // fToast.init(context);
     super.initState();
   }
 
@@ -102,7 +103,8 @@ class _ReportPageState extends State<ReportPage> {
     if (state.reportStatus == ReportStatus.failure) {
       LoadingDialog.instance.hide();
 
-      AppAlert.showError(context, fToast, '이 광고를 신고했습니다');
+      // AppAlert.showError(context, fToast, '이 광고를 신고했습니다');
+      AppAlert.showError( '이 광고를 신고했습니다');
       // if (widget.checkOverlay) {
       //   LoadingDialog.instance.hide();
       // }
@@ -122,7 +124,8 @@ class _ReportPageState extends State<ReportPage> {
         // LoadingDialog.instance.hide();
         FlutterBackgroundService().invoke("closeOverlay");
       } else {
-        AppAlert.showSuccess(context, fToast, 'Success');
+        // AppAlert.showSuccess(context, fToast, 'Success');
+        AppAlert.showSuccess('Success');
       }
     }
   }
@@ -313,7 +316,8 @@ class _ReportPageState extends State<ReportPage> {
                     FocusScope.of(context).unfocus();
                     if (valueSelected == listReprot.last) {
                       if (contentCtrl.text == '') {
-                        AppAlert.showError(context, fToast, '신고사유를 적어주세요');
+                        // AppAlert.showError(context, fToast, '신고사유를 적어주세요');
+                        AppAlert.showError('신고사유를 적어주세요');
                       } else {
                         confimReport(reason: contentCtrl.text);
                       }

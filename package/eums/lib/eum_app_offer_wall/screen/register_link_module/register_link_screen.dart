@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:dio/dio.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:eums/common/routing.dart';
@@ -38,7 +39,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   List<File> files = [];
   File? fileImage;
-  FToast fToast = FToast();
+  // FToast fToast = FToast();
 
   String urlImage = '';
   String htmlWeb = '';
@@ -46,7 +47,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
 
   @override
   void initState() {
-    fToast.init(context);
+    // fToast.init(context);
     getHtml();
     // TODO: implement initState
     super.initState();
@@ -84,9 +85,12 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
     }
     if (state.registerLinkStatus == RegisterLinkStatus.failure) {
       LoadingDialog.instance.hide();
+      // AppAlert.showError(
+      //   context,
+      //   fToast,
+      //   'Invalid image',
+      // );
       AppAlert.showError(
-        context,
-        fToast,
         'Invalid image',
       );
       return;
@@ -128,7 +132,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         elevation: 1,
         actions: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Image.asset(Assets.chat.path, package: "eums", height: 24, width: 24),
           )
         ],
@@ -218,7 +222,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(5),
                                       decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
                                       child: Image.asset(listResLink[index]['link'], package: "eums", width: 44, height: 44),
                                     ),
@@ -284,7 +288,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
                 // Image.asset(
                 //   Assets.lineBreak.path,
                 //   package: "eums",
@@ -315,7 +319,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                 ),
                 const SizedBox(height: 12),
                 const SizedBox(height: 12),
-                Divider(),
+                const Divider(),
                 // Image.asset(
                 //   Assets.lineBreak.path,
                 //   package: "eums",
@@ -385,7 +389,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   lang = 'eng';
                 }
                 if (urlImage != '') {
-                  print("htmlWeb${htmlWeb}");
+                  print("htmlWeb$htmlWeb");
                   globalKey.currentContext
                       ?.read<RegisterLinkBloc>()
                       .add(MissionOfferWallRegisterLink(files: fileImage, xId: widget.data['idx'], lang: lang, html: htmlWeb));
