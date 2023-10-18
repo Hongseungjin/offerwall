@@ -120,10 +120,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
             timer.cancel();
           }
+          _checkPermissionLocationBackground();
         });
       }
-
-      _checkPermissionLocationBackground();
     }
   }
 
