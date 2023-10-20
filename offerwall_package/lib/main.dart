@@ -1,15 +1,13 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eums_library.dart';
 
-void main() {
+void main() async {
   // SdkEums.instant.init(onRun: () async {
   //   await Firebase.initializeApp();
 
@@ -29,7 +27,7 @@ void main() {
   //     ),
   //   ));
   // });
-  Eums.instant.initMaterial(home: const MyHomePage());
+  await Eums.instant.initMaterial(home: const MyHomePage());
 
   // runApp(const MaterialApp(
   //   debugShowCheckedModeBanner: false,
@@ -66,14 +64,13 @@ class _MyAppOverlayState extends State<MyAppOverlay> {
       // routes: {
       //   '/': (context) => const TrueCallOverlay(),
       // },
-      // builder: (context, child) {
-      //   return Overlay(
-      //     initialEntries: [
-      //       OverlayEntry(
-      //           builder: (context) => MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), child: child ?? const SizedBox())),
-      //     ],
-      //   );
-      // },
+      builder: (context, child) {
+        return Overlay(
+          initialEntries: [
+            OverlayEntry(builder: (context) => child ?? const SizedBox()),
+          ],
+        );
+      },
     );
   }
 }
@@ -172,7 +169,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Widget>(
-      future: EumsAppOfferWallService.instance.openSdk(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"),
+      future: EumsAppOfferWallService.instance.openSdkTest(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"),
       builder: (context, snapshot) => snapshot.data ?? const SizedBox(),
     );
     // return Scaffold(

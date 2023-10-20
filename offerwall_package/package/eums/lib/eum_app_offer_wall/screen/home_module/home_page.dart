@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eums/common/events/rx_events.dart';
+import 'package:eums/common/method_native/host_api.dart';
 import 'package:eums/common/rx_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +50,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   bool isdisable = false;
-  LocalStore? localStore;
+  late LocalStore localStore;
   final _currentPageNotifier = ValueNotifier<int>(0);
   final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll = ValueNotifier(GlobalKey());
   late TabController _tabController;
@@ -62,10 +63,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   bool firstShowDialogPoint = false;
 
+  late HostBookApi hostApi;
+
+  late HomeBloc bloc;
+
   @override
   void initState() {
+    bloc = HomeBloc();
     localStore = LocalStoreService();
-
+    hostApi = HostBookApi();
+   
+    bloc
+      ..add(InfoUser())
+      ..add(GetTotalPoint())
+      ..add(ListBanner(type: 'main'))
+      ..add(ListOfferWall(category: categary, filter: filter));
     categary = 'participation';
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
@@ -92,7 +104,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   checkPermission() async {
-    isdisable = await localStore!.getSaveAdver();
+    isdisable = await localStore.getSaveAdver();
     if (!isdisable) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
@@ -105,7 +117,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       if (!status) {
         await FlutterOverlayWindow.requestPermission();
       } else {}
-      localStore?.setAccessToken(await localStore?.getAccessToken() ?? '');
+      localStore.setAccessToken(await localStore.getAccessToken());
     }
   }
 
@@ -120,11 +132,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc()
-        ..add(InfoUser())
-        ..add(GetTotalPoint())
-        ..add(ListBanner(type: 'main'))
-        ..add(ListOfferWall(category: categary, filter: filter)),
+      create: (context) => bloc,
       child: MultiBlocListener(
         listeners: [
           BlocListener<HomeBloc, HomeState>(
@@ -190,7 +198,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                Navigator.pop(context);
+                hostApi.cancel();
+                // MethodOfferwallChannel.instant.back();
+                // Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -473,7 +483,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     setState(() {
                       isdisable = !isdisable;
                     });
-                    localStore?.setSaveAdver(isdisable);
+                    localStore.setSaveAdver(isdisable);
                     if (isdisable) {
                       String? token = await FirebaseMessaging.instance.getToken();
 

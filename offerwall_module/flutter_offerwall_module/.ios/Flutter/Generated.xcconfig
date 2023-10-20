@@ -1,5 +1,5 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/coi/fvm/versions/3.13.7
+FLUTTER_ROOT=/Users/coi/flutter
 FLUTTER_APPLICATION_PATH=/Users/coi/Documents/GitHub/greenapp/offerwall/offerwall_module/flutter_offerwall_module
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart

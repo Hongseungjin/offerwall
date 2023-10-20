@@ -76,23 +76,37 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   SettingFontSize controllerGet = Get.put(SettingFontSize());
+  LocalStore localStore = LocalStoreService();
 
   @override
   void initState() {
     _registerEventBus();
     _determinePosition();
     SettingFontSize().initSetingFontSize(controllerGet);
-    super.initState();
 
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
-
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (Platform.isAndroid) {
         settingBattery();
       }
+      String? token;
+      if (Platform.isIOS) {
+        try {
+          token = await FirebaseMessaging.instance.getAPNSToken();
+        } catch (e) {
+          token = await FirebaseMessaging.instance.getToken();
+        }
+      } else {
+        token = await FirebaseMessaging.instance.getToken();
+      }
+      if (token != null) {
+        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      }
       FirebaseMessaging.instance.subscribeToTopic('eums');
+
     });
   }
 

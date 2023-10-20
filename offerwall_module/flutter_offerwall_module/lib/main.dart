@@ -1,11 +1,13 @@
 // import 'package:device_preview/device_preview.dart';
+import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
+import 'package:eums/common/method_native/host_handle.dart';
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
-import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eums_library.dart';
 
 void main() {
@@ -116,20 +118,67 @@ class AppMainScreen extends StatefulWidget {
 }
 
 class _AppMainScreenState extends State<AppMainScreen> {
-  LocalStore? localStore;
+  late LocalStore localStore;
+
+  ValueNotifier<bool> showMain = ValueNotifier(false);
 
   @override
   void initState() {
     localStore = LocalStoreService();
+
+    print("book.encode()");
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final token = await localStore.getAccessToken();
+      print("Token->>>>: $token");
+      if (token.isNotEmpty == true) {
+        await FlutterBackgroundService().configure(
+            iosConfiguration: IosConfiguration(),
+            androidConfiguration: AndroidConfiguration(
+                onStart: onStart,
+                autoStart: true,
+                isForegroundMode: true,
+                initialNotificationTitle: "인천e음",
+                initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+      
+        showMain.value = true;
+      } else {
+        FlutterBookApi.setup(FlutterBookApiHandler((book) async {
+          print("aaaaaa ${book.encode()}");
+          dynamic data = await EumsOfferWallService.instance
+              .authConnect(memBirth: book.memBirth, memGen: book.memGen, memRegion: book.memRegion, memId: book.memId);
+          await localStore.setAccessToken(data['token']);
+          await FlutterBackgroundService().configure(
+              iosConfiguration: IosConfiguration(),
+              androidConfiguration: AndroidConfiguration(
+                  onStart: onStart,
+                  autoStart: true,
+                  isForegroundMode: true,
+                  initialNotificationTitle: "인천e음",
+                  initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+      
+          showMain.value = true;
+        }));
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-     return FutureBuilder<Widget>(
-      future: EumsAppOfferWallService.instance.openSdk(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"),
-      builder: (context, snapshot) => snapshot.data ?? const SizedBox(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: showMain,
+      builder: (context, value, child) {
+        if (value == true) {
+          return FutureBuilder<Widget>(
+            future: EumsAppOfferWallService.instance.openSdk(context),
+            builder: (context, snapshot) => snapshot.data ?? const SizedBox(),
+          );
+        }
+        return const SizedBox();
+      },
     );
+
     // return Scaffold(
     //   key: globalKeyMain,
     //   appBar: AppBar(),

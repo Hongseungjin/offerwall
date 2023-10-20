@@ -1,0 +1,108 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "offerwall_package",
+            "cwd": "offerwall_package",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "offerwall_package (profile mode)",
+            "cwd": "offerwall_package",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "offerwall_package (release mode)",
+            "cwd": "offerwall_package",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flutter_offerwall_module",
+            "cwd": "offerwall_module/flutter_offerwall_module",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter_offerwall_module (profile mode)",
+            "cwd": "offerwall_module/flutter_offerwall_module",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter_offerwall_module (release mode)",
+            "cwd": "offerwall_module/flutter_offerwall_module",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "eums",
+            "cwd": "offerwall_package/package/eums",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "eums (profile mode)",
+            "cwd": "offerwall_package/package/eums",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "eums (release mode)",
+            "cwd": "offerwall_package/package/eums",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "sdk_eums",
+            "cwd": "offerwall_package/package/sdk_eums",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "sdk_eums (profile mode)",
+            "cwd": "offerwall_package/package/sdk_eums",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "sdk_eums (release mode)",
+            "cwd": "offerwall_package/package/sdk_eums",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "sdk_eums_c",
+            "cwd": "offerwall_package/package/sdk_eums_c",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "sdk_eums_c (profile mode)",
+            "cwd": "offerwall_package/package/sdk_eums_c",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "sdk_eums_c (release mode)",
+            "cwd": "offerwall_package/package/sdk_eums_c",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

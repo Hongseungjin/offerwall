@@ -1,0 +1,217 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.example.eums",
+    "module": "eums_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "eums_profile-1.0.aar",
+          "url": "eums_profile-1.0.aar",
+          "size": 46893,
+          "sha512": "daa1cf57349ebc8236dafb14beb74bd1fe9a632dab169c1c1069968e85269c683b624b2faf7302652885b79d4a943a8ee8a8ce3c8e9157153bf9fffde577ac0a",
+          "sha256": "f793057eb115ef756a8bf97b97afbf3d80cb3d5de6ecd3ea4892e53b687620ff",
+          "sha1": "7f236b26fade256965f9c3490f59d834fe3c4dc0",
+          "md5": "418e727c9b07b004b026c602c3aca3a5"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk7",
+          "version": {
+            "requires": "1.7.10"
+          }
+        },
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-bom",
+          "version": {
+            "requires": "31.3.0"
+          },
+          "attributes": {
+            "org.gradle.category": "platform"
+          },
+          "endorseStrictVersions": true
+        },
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-analytics-ktx"
+        },
+        {
+          "group": "com.google.firebase",
+          "module": "firebase-messaging",
+          "version": {
+            "requires": "20.1.0"
+          }
+        },
+        {
+          "group": "androidx.multidex",
+          "module": "multidex",
+          "version": {
+            "requires": "2.0.1"
+          }
+        },
+        {
+          "group": "com.android.support",
+          "module": "multidex",
+          "version": {
+            "requires": "1.0.3"
+          }
+        },
+        {
+          "group": "androidx.window",
+          "module": "window",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "androidx.window",
+          "module": "window-java",
+          "version": {
+            "requires": "1.0.0"
+          }
+        },
+        {
+          "group": "io.flutter.plugins.firebasemessaging",
+          "module": "firebase_messaging_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "com.dexterous.flutterlocalnotifications",
+          "module": "flutter_local_notifications_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "io.flutter.plugins.firebase.core",
+          "module": "firebase_core_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "com.example.flutter_overlay_window",
+          "module": "flutter_overlay_window_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "io.flutter.plugins.packageinfo",
+          "module": "package_info_plus_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "dev.fluttercommunity.plus.device_info",
+          "module": "device_info_plus_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "com.pichillilorenzo.flutter_inappwebview",
+          "module": "flutter_inappwebview_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "fr.g123k.deviceapps",
+          "module": "device_apps_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "io.flutter.plugins.webviewflutter",
+          "module": "webview_flutter_android_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "creativemaybeno.wakelock",
+          "module": "wakelock_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "com.example.devicelocale",
+          "module": "devicelocale_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        },
+        {
+          "group": "in.jvapps.disable_battery_optimization",
+          "module": "disable_battery_optimization_profile",
+          "version": {
+            "requires": "1.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "eums_profile-1.0.aar",
+          "url": "eums_profile-1.0.aar",
+          "size": 46893,
+          "sha512": "daa1cf57349ebc8236dafb14beb74bd1fe9a632dab169c1c1069968e85269c683b624b2faf7302652885b79d4a943a8ee8a8ce3c8e9157153bf9fffde577ac0a",
+          "sha256": "f793057eb115ef756a8bf97b97afbf3d80cb3d5de6ecd3ea4892e53b687620ff",
+          "sha1": "7f236b26fade256965f9c3490f59d834fe3c4dc0",
+          "md5": "418e727c9b07b004b026c602c3aca3a5"
+        }
+      ]
+    }
+  ]
+}

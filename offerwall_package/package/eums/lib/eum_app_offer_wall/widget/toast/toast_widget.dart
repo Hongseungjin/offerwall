@@ -28,7 +28,7 @@ class ToastWidget {
           ),
         ),
       );
-      Overlay.of(globalKeyMain.currentState!.context).insert(_overlay!);
+      Overlay.of(navigatorKeyMain.currentState!.context).insert(_overlay!);
     } else {
       hideToast();
       showToast(message, seconds: seconds, success: success);

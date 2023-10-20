@@ -20,9 +20,10 @@ abstract class EumsAppOfferWallService extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<Widget> openSdk(BuildContext context,
+  Future<Widget> openSdk(BuildContext context);
+  Future<Widget> openSdkTest(BuildContext context,
       {String? memId, String? memGen, String? memRegion, String? memBirth});
 
-  openAppSkd(BuildContext context,
-      {String? memId, String? memGen, String? memRegion, String? memBirth});
+  // openAppSkd(BuildContext context,
+  //     {String? memId, String? memGen, String? memRegion, String? memBirth});
 }

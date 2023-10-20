@@ -1,87 +1,26 @@
 {
   "project_info": {
-    "project_number": "739452302790",
-    "project_id": "e-ums-24291",
-    "storage_bucket": "e-ums-24291.appspot.com"
+    "project_number": "334690543306",
+    "project_id": "myapplication-9a3e8",
+    "storage_bucket": "myapplication-9a3e8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:739452302790:android:9fe699ead424427640aec7",
+        "mobilesdk_app_id": "1:334690543306:android:a4d1d6dcbaab921847f633",
         "android_client_info": {
-          "package_name": "com.app.abeeofferwal"
+          "package_name": "com.example.myapplication"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "739452302790-827md5dq4j6po64vj9t0nqq9aj01p2ac.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.app.abeeofferwal",
-            "certificate_hash": "f61e1ffeead724e8f09eaa562678645579d078e0"
-          }
-        },
-        {
-          "client_id": "739452302790-ftdk8dhbknn20bi2fgrquojv78mcpitg.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBkj46lMsOL6WABO5FzeTXTlppVognezoM"
+          "current_key": "AIzaSyAab2Z_bcpBlcrWU118kA8a9dVkH6Q2LiE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "739452302790-ftdk8dhbknn20bi2fgrquojv78mcpitg.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "739452302790-bgis3nlmf7e0eofs2bqisb695g1gr05f.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.abee.offerwall"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:739452302790:android:d491a0a9b533b79d40aec7",
-        "android_client_info": {
-          "package_name": "com.example.eums"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "739452302790-ftdk8dhbknn20bi2fgrquojv78mcpitg.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBkj46lMsOL6WABO5FzeTXTlppVognezoM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "739452302790-ftdk8dhbknn20bi2fgrquojv78mcpitg.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "739452302790-bgis3nlmf7e0eofs2bqisb695g1gr05f.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.abee.offerwall"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

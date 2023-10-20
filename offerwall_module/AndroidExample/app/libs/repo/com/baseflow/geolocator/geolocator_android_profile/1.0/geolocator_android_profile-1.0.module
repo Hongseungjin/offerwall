@@ -1,0 +1,90 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.baseflow.geolocator",
+    "module": "geolocator_android_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "geolocator_android_profile-1.0.aar",
+          "url": "geolocator_android_profile-1.0.aar",
+          "size": 57721,
+          "sha512": "104e4c688f98c0a2f54c0f9c616226559f8f5ba350a68cbfabaf42f9d8bc5d27a17a2ea27e21a29fa15dc308cb2f234dac51b4608260d77eb883d1ead6e6c0cc",
+          "sha256": "3756d0f72af61d614d8b10f7694dac572e948d80e643ff040ed9ecc661dc0a8e",
+          "sha1": "6acac754e8c53d48efca6c3cf663ab218872841f",
+          "md5": "ccd5f5872cacd9a4abfafc0047bd3eb1"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        },
+        {
+          "group": "com.google.android.gms",
+          "module": "play-services-location",
+          "version": {
+            "requires": "21.0.1"
+          }
+        },
+        {
+          "group": "androidx.core",
+          "module": "core",
+          "version": {
+            "requires": "1.9.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "geolocator_android_profile-1.0.aar",
+          "url": "geolocator_android_profile-1.0.aar",
+          "size": 57721,
+          "sha512": "104e4c688f98c0a2f54c0f9c616226559f8f5ba350a68cbfabaf42f9d8bc5d27a17a2ea27e21a29fa15dc308cb2f234dac51b4608260d77eb883d1ead6e6c0cc",
+          "sha256": "3756d0f72af61d614d8b10f7694dac572e948d80e643ff040ed9ecc661dc0a8e",
+          "sha1": "6acac754e8c53d48efca6c3cf663ab218872841f",
+          "md5": "ccd5f5872cacd9a4abfafc0047bd3eb1"
+        }
+      ]
+    }
+  ]
+}

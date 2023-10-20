@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:eums/common/method_native/method_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:queue/queue.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/local_store/local_store.dart';
-import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eums_library.dart';
 
@@ -63,19 +63,19 @@ closeOverlay() async {
   }
 }
 
-registerDeviceToken() async {
-  try {
-    // CronCustom().initCron();
-    String? token = await FirebaseMessaging.instance.getToken();
-    if (token != null && token.isNotEmpty) {
-      // if(count < 50){
-      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-      // }
-    }
-  } catch (e) {
-    print('e $e');
-  }
-}
+// registerDeviceToken() async {
+//   try {
+//     // CronCustom().initCron();
+//     String? token = await FirebaseMessaging.instance.getToken();
+//     if (token != null && token.isNotEmpty) {
+//       // if(count < 50){
+//       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+//       // }
+//     }
+//   } catch (e) {
+//     print('e $e');
+//   }
+// }
 
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
@@ -85,7 +85,7 @@ Future<void> onStart(ServiceInstance service) async {
 
   await Firebase.initializeApp();
   Queue queue = Queue();
-  registerDeviceToken();
+  // registerDeviceToken();
   try {
     service.on('showOverlay').listen((event) async {
       if (Platform.isAndroid) {
@@ -152,10 +152,57 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 class EumsAppOfferWall extends EumsAppOfferWallService {
   LocalStore localStore = LocalStoreService();
   @override
-  Future<Widget> openSdk(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async  {
+  Future<Widget> openSdk(BuildContext context) async {
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     Size size = view.physicalSize;
     double height = size.height;
+    localStore.setSizeDevice(height);
+
+    return const MyHomeScreen();
+  }
+  // @override
+  // Future<Widget> openSdk(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
+  //   FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+  //   Size size = view.physicalSize;
+  //   double height = size.height;
+
+  //   MethodOfferwallChannel.instant.init();
+
+  //   dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
+  //   localStore.setAccessToken(data['token']);
+  //   localStore.setSizeDevice(height);
+  //   FlutterBackgroundService().configure(
+  //       iosConfiguration: IosConfiguration(),
+  //       androidConfiguration: AndroidConfiguration(
+  //           onStart: onStart,
+  //           autoStart: true,
+  //           isForegroundMode: true,
+  //           initialNotificationTitle: "인천e음",
+  //           initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+  //   // openAppSkd(context);
+  //   return const MyHomeScreen();
+  // }
+
+  // @override
+  // openAppSkd(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
+  //   // await FlutterBackgroundService().configure(
+  //   //     iosConfiguration: IosConfiguration(),
+  //   //     androidConfiguration: AndroidConfiguration(
+  //   //         onStart: onStart,
+  //   //         autoStart: true,
+  //   //         isForegroundMode: true,
+  //   //         initialNotificationTitle: "인천e음",
+  //   //         initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+
+  //   // Routings().navigate(context, const MyHomeScreen());
+  // }
+  
+  @override
+  Future<Widget> openSdkTest(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async{
+       FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+    Size size = view.physicalSize;
+    double height = size.height;
+
 
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     localStore.setAccessToken(data['token']);
@@ -170,19 +217,5 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
     // openAppSkd(context);
     return const MyHomeScreen();
-  }
-
-  @override
-  openAppSkd(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
-    // await FlutterBackgroundService().configure(
-    //     iosConfiguration: IosConfiguration(),
-    //     androidConfiguration: AndroidConfiguration(
-    //         onStart: onStart,
-    //         autoStart: true,
-    //         isForegroundMode: true,
-    //         initialNotificationTitle: "인천e음",
-    //         initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-
-    // Routings().navigate(context, const MyHomeScreen());
   }
 }

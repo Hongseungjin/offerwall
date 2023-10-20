@@ -1,6 +1,6 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/Users/coi/fvm/versions/3.13.7"
+export "FLUTTER_ROOT=/Users/coi/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/coi/Documents/GitHub/greenapp/offerwall/offerwall_module/flutter_offerwall_module"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"

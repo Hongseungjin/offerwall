@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "fr.g123k.deviceapps",
+    "module": "device_apps_debug",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "debugVariantDebugApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_debug",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "device_apps_debug-1.0.aar",
+          "url": "device_apps_debug-1.0.aar",
+          "size": 18592,
+          "sha512": "b8e138d9d1e06e7b2f6033cbb92d2113798a0cbc7d2c6ea4663ea88c884a105a57af9c64b0fc6599d7ce7d1c9b5bf154d9eb4c917b06f5c7579bee6aeef0eb64",
+          "sha256": "ef05d816e6de7cf96869bb350ae96882c06941b36cc8be998c288155cdcaa3d7",
+          "sha1": "450d8ad230b87c703ac749df2bc9b321e36a2c0d",
+          "md5": "a6304af3f60d9a33b19a4c7129de700a"
+        }
+      ]
+    },
+    {
+      "name": "debugVariantDebugRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_debug",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        },
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.2.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "device_apps_debug-1.0.aar",
+          "url": "device_apps_debug-1.0.aar",
+          "size": 18592,
+          "sha512": "b8e138d9d1e06e7b2f6033cbb92d2113798a0cbc7d2c6ea4663ea88c884a105a57af9c64b0fc6599d7ce7d1c9b5bf154d9eb4c917b06f5c7579bee6aeef0eb64",
+          "sha256": "ef05d816e6de7cf96869bb350ae96882c06941b36cc8be998c288155cdcaa3d7",
+          "sha1": "450d8ad230b87c703ac749df2bc9b321e36a2c0d",
+          "md5": "a6304af3f60d9a33b19a4c7129de700a"
+        }
+      ]
+    }
+  ]
+}

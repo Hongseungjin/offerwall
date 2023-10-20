@@ -1,0 +1,104 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.flutter.plugins.videoplayer",
+    "module": "video_player_android_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "video_player_android_profile-1.0.aar",
+          "url": "video_player_android_profile-1.0.aar",
+          "size": 39118,
+          "sha512": "7eb1e1bdfba996968cbac1bf9357474f76600b5dcfc6128f5dc72e2a849cef81b3971e605738e227bd2fdd47e70b21ba687f20220940799ffdc17dd98e6cc59b",
+          "sha256": "a3a74aac6db21d7a5cde4fea50854545b59cf042302208834245af7637953567",
+          "sha1": "3b17fac925eccfac927de5049fff5593e5d90a1f",
+          "md5": "1657944060d348f583e83c160df6282b"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-core",
+          "version": {
+            "requires": "2.18.7"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-hls",
+          "version": {
+            "requires": "2.18.7"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-dash",
+          "version": {
+            "requires": "2.18.7"
+          }
+        },
+        {
+          "group": "com.google.android.exoplayer",
+          "module": "exoplayer-smoothstreaming",
+          "version": {
+            "requires": "2.18.7"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "video_player_android_profile-1.0.aar",
+          "url": "video_player_android_profile-1.0.aar",
+          "size": 39118,
+          "sha512": "7eb1e1bdfba996968cbac1bf9357474f76600b5dcfc6128f5dc72e2a849cef81b3971e605738e227bd2fdd47e70b21ba687f20220940799ffdc17dd98e6cc59b",
+          "sha256": "a3a74aac6db21d7a5cde4fea50854545b59cf042302208834245af7637953567",
+          "sha1": "3b17fac925eccfac927de5049fff5593e5d90a1f",
+          "md5": "1657944060d348f583e83c160df6282b"
+        }
+      ]
+    }
+  ]
+}

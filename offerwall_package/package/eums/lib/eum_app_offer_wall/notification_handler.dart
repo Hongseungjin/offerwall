@@ -119,9 +119,9 @@ class NotificationHandler {
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
 
-    try {
-      await _fcm.requestPermission(alert: false);
-    } catch (e) {}
+    // try {
+    //   await _fcm.requestPermission(alert: false);
+    // } catch (e) {}
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
     const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(

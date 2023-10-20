@@ -5,11 +5,11 @@
 //     return EumsPlatform.instance.getPlatformVersion();
 //   }
 // }
+import 'package:eums/common/const/values.dart';
 import 'package:flutter/material.dart';
 
 import 'eum_app_offer_wall/notification_handler.dart';
 import 'eums_library.dart';
-import 'eums_permission.dart';
 
 class Eums {
   Eums._();
@@ -31,7 +31,7 @@ class Eums {
     onRun.call();
   }
 
-  void initMaterial({required Widget home, Future Function()? onRun}) async {
+  Future initMaterial({required Widget home, Future Function()? onRun}) async {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();
@@ -63,7 +63,16 @@ class Eums {
         // theme: ThemeData.light(),
         // darkTheme: ThemeData.dark(),
 
-        home: MyInitPageEum(child: home),
+        home: home,
+        navigatorKey: navigatorKeyMain,
+
+        builder: (context, child) {
+          return Overlay(
+            initialEntries: [
+              OverlayEntry(builder: (context) => child ?? const SizedBox()),
+            ],
+          );
+        },
       ),
     );
 
@@ -71,20 +80,5 @@ class Eums {
     if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
       NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
     }
-  }
-}
-
-class MyInitPageEum extends StatefulWidget {
-  const MyInitPageEum({super.key, required this.child});
-  final Widget child;
-
-  @override
-  State<MyInitPageEum> createState() => _MyInitPageEumState();
-}
-
-class _MyInitPageEumState extends State<MyInitPageEum> {
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
   }
 }

@@ -1,0 +1,90 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.flutter.plugins.webviewflutter",
+    "module": "webview_flutter_android_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "webview_flutter_android_profile-1.0.aar",
+          "url": "webview_flutter_android_profile-1.0.aar",
+          "size": 135811,
+          "sha512": "8444fca7087cfe224bc43fe32cf50322470a7c1af9d43014208ea3045f40131d8b4f4aa91584dcf4fdad87374cd41d1c4979d53d68d78254654262084695db82",
+          "sha256": "61b4b2069edbe425f555d3807bbba5afa7d81d0f3caaa34b55bbf29bc83f32e6",
+          "sha1": "c2014aeffac7b9250a0c33292fcaadcfd3d46978",
+          "md5": "404795640cdf5b5a137f2c072eaadba3"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
+          }
+        },
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.7.0"
+          }
+        },
+        {
+          "group": "androidx.webkit",
+          "module": "webkit",
+          "version": {
+            "requires": "1.7.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "webview_flutter_android_profile-1.0.aar",
+          "url": "webview_flutter_android_profile-1.0.aar",
+          "size": 135811,
+          "sha512": "8444fca7087cfe224bc43fe32cf50322470a7c1af9d43014208ea3045f40131d8b4f4aa91584dcf4fdad87374cd41d1c4979d53d68d78254654262084695db82",
+          "sha256": "61b4b2069edbe425f555d3807bbba5afa7d81d0f3caaa34b55bbf29bc83f32e6",
+          "sha1": "c2014aeffac7b9250a0c33292fcaadcfd3d46978",
+          "md5": "404795640cdf5b5a137f2c072eaadba3"
+        }
+      ]
+    }
+  ]
+}

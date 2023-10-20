@@ -18,7 +18,7 @@ class LoadingDialog {
             ),
           ),
         );
-        Overlay.of(context ?? globalKeyMain.currentContext!).insert(_overlay!);
+        Overlay.of(context ?? navigatorKeyMain.currentContext!).insert(_overlay!);
       }
     } catch (e) {
       rethrow;
