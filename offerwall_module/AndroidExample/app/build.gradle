@@ -9,8 +9,8 @@ android {
     compileSdk 33
 
     defaultConfig {
-//        applicationId "com.app.abeeofferwal"
-        applicationId "com.example.myapplication"
+        applicationId "com.app.abeeofferwal"
+//        applicationId "com.example.myapplication"
         minSdk 24
         targetSdk 33
         versionCode 1
