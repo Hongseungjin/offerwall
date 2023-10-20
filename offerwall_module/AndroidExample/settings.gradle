@@ -11,11 +11,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        flatDir {
-            dirs 'libs'
-        }
+//        flatDir {
+//            dirs 'libs'
+//        }
+//        maven {
+//            url './app/libs/repo'
+//        }
         maven {
-            url './app/libs/repo'
+            url '/Users/coi/Documents/GitHub/greenapp/offerwall/offerwall_module/flutter_offerwall_module/build/host/outputs/repo'
         }
         maven {
             url "$storageUrl/download.flutter.io"
