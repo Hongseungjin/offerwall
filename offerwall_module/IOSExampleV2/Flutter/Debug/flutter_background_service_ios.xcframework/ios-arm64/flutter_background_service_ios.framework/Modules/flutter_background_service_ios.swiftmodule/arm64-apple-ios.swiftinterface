@@ -1,0 +1,25 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name flutter_background_service_ios
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVKit
+import BackgroundTasks
+import Flutter
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_exported import flutter_background_service_ios
+@objc @_inheritsConvenienceInitializers public class SwiftFlutterBackgroundServicePlugin : Flutter.FlutterPluginAppLifeCycleDelegate, Flutter.FlutterPlugin {
+  public static var taskIdentifier: Swift.String
+  @objc override dynamic public func application(_ application: UIKit.UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIKit.UIBackgroundFetchResult) -> Swift.Void) -> Swift.Bool
+  @objc override dynamic public func application(_ application: UIKit.UIApplication, didFinishLaunchingWithOptions launchOptions: [Swift.AnyHashable : Any] = [:]) -> Swift.Bool
+  @objc public func applicationDidEnterBackground(_ application: UIKit.UIApplication)
+  @available(iOS 13.0, *)
+  public static func registerTaskIdentifier(taskIdentifier: Swift.String)
+  @objc public static func register(with registrar: any Flutter.FlutterPluginRegistrar)
+  @objc public func handle(_ call: Flutter.FlutterMethodCall, result: @escaping Flutter.FlutterResult)
+  @objc override dynamic public init()
+  @objc deinit
+}

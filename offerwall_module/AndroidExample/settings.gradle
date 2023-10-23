@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 //            dirs 'libs'
 //        }
 //        maven {
-//            url './app/libs/repo'
+//            url './app/host/outputs/libs/repo'
 //        }
         maven {
             url '/Users/coi/Documents/GitHub/greenapp/offerwall/offerwall_module/flutter_offerwall_module/build/host/outputs/repo'

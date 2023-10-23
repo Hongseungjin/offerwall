@@ -109,9 +109,9 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             return mode == LoadStatus.loading
-                ? Center(
+                ?  Center(
                     child: Column(
-                    children: const [
+                    children: [
                       Text(' '),
                       CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                     ],

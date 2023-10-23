@@ -87,26 +87,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
+    print("======= MyHomeScreen init1 ======");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Firebase.initializeApp();
       if (Platform.isAndroid) {
         settingBattery();
       }
-      String? token;
-      if (Platform.isIOS) {
-        try {
-          token = await FirebaseMessaging.instance.getAPNSToken();
-        } catch (e) {
-          token = await FirebaseMessaging.instance.getToken();
-        }
-      } else {
-        token = await FirebaseMessaging.instance.getToken();
-      }
+      String? token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
         await EumsOfferWallServiceApi().createTokenNotifi(token: token);
       }
+      print("TOKEN======> $token");
       FirebaseMessaging.instance.subscribeToTopic('eums');
-
     });
   }
 
@@ -170,7 +163,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                 if (state.logoutStatus == LogoutStatus.loading) {
                   return;
                 }
-
                 if (state.logoutStatus == LogoutStatus.finish) {
                   return;
                 }

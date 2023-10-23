@@ -1,0 +1,11 @@
+framework module eums {
+  umbrella header "eums-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module eums.Swift {
+  header "eums-Swift.h"
+  requires objc
+}

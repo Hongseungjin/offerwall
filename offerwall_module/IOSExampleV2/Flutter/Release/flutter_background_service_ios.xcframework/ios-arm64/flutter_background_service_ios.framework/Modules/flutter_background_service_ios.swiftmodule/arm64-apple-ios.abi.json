@@ -1,0 +1,943 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Flutter",
+        "printedName": "Flutter",
+        "declKind": "Import",
+        "moduleName": "flutter_background_service_ios"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "flutter_background_service_ios"
+      },
+      {
+        "kind": "Import",
+        "name": "AVKit",
+        "printedName": "AVKit",
+        "declKind": "Import",
+        "moduleName": "flutter_background_service_ios"
+      },
+      {
+        "kind": "Import",
+        "name": "BackgroundTasks",
+        "printedName": "BackgroundTasks",
+        "declKind": "Import",
+        "moduleName": "flutter_background_service_ios"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "SwiftFlutterBackgroundServicePlugin",
+        "printedName": "SwiftFlutterBackgroundServicePlugin",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "taskIdentifier",
+            "printedName": "taskIdentifier",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvpZ",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvpZ",
+            "moduleName": "flutter_background_service_ios",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvgZ",
+                "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvgZ",
+                "moduleName": "flutter_background_service_ios",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvsZ",
+                "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvsZ",
+                "moduleName": "flutter_background_service_ios",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvMZ",
+                "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC14taskIdentifierSSvMZ",
+                "moduleName": "flutter_background_service_ios",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "application",
+            "printedName": "application(_:performFetchWithCompletionHandler:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIApplication",
+                "printedName": "UIKit.UIApplication",
+                "usr": "c:objc(cs)UIApplication"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(UIKit.UIBackgroundFetchResult) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIBackgroundFetchResult",
+                    "printedName": "UIKit.UIBackgroundFetchResult",
+                    "usr": "c:@E@UIBackgroundFetchResult"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(im)application:performFetchWithCompletionHandler:",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC11application_33performFetchWithCompletionHandlerSbSo13UIApplicationC_ySo012UIBackgroundL6ResultVctF",
+            "moduleName": "flutter_background_service_ios",
+            "overriding": true,
+            "objc_name": "application:performFetchWithCompletionHandler:",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "application",
+            "printedName": "application(_:didFinishLaunchingWithOptions:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIApplication",
+                "printedName": "UIKit.UIApplication",
+                "usr": "c:objc(cs)UIApplication"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.AnyHashable : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "AnyHashable",
+                    "printedName": "Swift.AnyHashable",
+                    "usr": "s:s11AnyHashableV"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(im)application:didFinishLaunchingWithOptions:",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC11application_29didFinishLaunchingWithOptionsSbSo13UIApplicationC_SDys11AnyHashableVypGtF",
+            "moduleName": "flutter_background_service_ios",
+            "overriding": true,
+            "objc_name": "application:didFinishLaunchingWithOptions:",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "applicationDidEnterBackground",
+            "printedName": "applicationDidEnterBackground(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIApplication",
+                "printedName": "UIKit.UIApplication",
+                "usr": "c:objc(cs)UIApplication"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(im)applicationDidEnterBackground:",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC019applicationDidEnterG0yySo13UIApplicationCF",
+            "moduleName": "flutter_background_service_ios",
+            "objc_name": "applicationDidEnterBackground:",
+            "declAttributes": [
+              "ObjC",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "registerTaskIdentifier",
+            "printedName": "registerTaskIdentifier(taskIdentifier:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC22registerTaskIdentifier04taskL0ySS_tFZ",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC22registerTaskIdentifier04taskL0ySS_tFZ",
+            "moduleName": "flutter_background_service_ios",
+            "static": true,
+            "intro_iOS": "13.0",
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "Available"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "register",
+            "printedName": "register(with:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "FlutterPluginRegistrar",
+                "printedName": "Flutter.FlutterPluginRegistrar",
+                "usr": "c:objc(pl)FlutterPluginRegistrar"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(cm)registerWithRegistrar:",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC8register4withySo0fI9Registrar_p_tFZ",
+            "moduleName": "flutter_background_service_ios",
+            "static": true,
+            "objc_name": "registerWithRegistrar:",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "handle",
+            "printedName": "handle(_:result:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "FlutterMethodCall",
+                "printedName": "Flutter.FlutterMethodCall",
+                "usr": "c:objc(cs)FlutterMethodCall"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Any?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Any?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(im)handleMethodCall:result:",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC6handle_6resultySo0F10MethodCallC_yypSgctF",
+            "moduleName": "flutter_background_service_ios",
+            "objc_name": "handleMethodCall:result:",
+            "declAttributes": [
+              "ObjC",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "SwiftFlutterBackgroundServicePlugin",
+                "printedName": "flutter_background_service_ios.SwiftFlutterBackgroundServicePlugin",
+                "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin(im)init",
+            "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginCACycfc",
+            "moduleName": "flutter_background_service_ios",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@flutter_background_service_ios@objc(cs)SwiftFlutterBackgroundServicePlugin",
+        "mangledName": "$s30flutter_background_service_ios35SwiftFlutterBackgroundServicePluginC",
+        "moduleName": "flutter_background_service_ios",
+        "declAttributes": [
+          "AccessControl",
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)FlutterPluginAppLifeCycleDelegate",
+        "inheritsConvenienceInitializers": true,
+        "superclassNames": [
+          "Flutter.FlutterPluginAppLifeCycleDelegate",
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 206,
+      "length": 32,
+      "value": "\"dev.flutter.background.refresh\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 888,
+      "length": 28,
+      "value": "\"background_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 982,
+      "length": 32,
+      "value": "\"Background handler is disabled\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1074,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 1266,
+      "length": 28,
+      "value": "\"Background Fetch Completed\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1342,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "Dictionary",
+      "offset": 1496,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1830,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2586,
+      "length": 2,
+      "value": "15"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2591,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 2872,
+      "length": 42,
+      "value": "\"Could not schedule app refresh: \""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 2913,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 3129,
+      "length": 28,
+      "value": "\"background_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 3223,
+      "length": 32,
+      "value": "\"Background handler is disabled\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 3713,
+      "length": 35,
+      "value": "\"id.flutter\/background_service_ios\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 4235,
+      "length": 12,
+      "value": "\"auto_start\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 4617,
+      "length": 28,
+      "value": "\"foreground_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 4711,
+      "length": 32,
+      "value": "\"Foreground service is disabled\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5119,
+      "length": 11,
+      "value": "\"configure\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5251,
+      "length": 19,
+      "value": "\"foreground_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5336,
+      "length": 19,
+      "value": "\"background_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5404,
+      "length": 12,
+      "value": "\"auto_start\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 5430,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5570,
+      "length": 28,
+      "value": "\"foreground_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5673,
+      "length": 28,
+      "value": "\"background_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 5747,
+      "length": 12,
+      "value": "\"auto_start\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 5886,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 5938,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 6009,
+      "length": 7,
+      "value": "\"start\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6073,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 6125,
+      "length": 10,
+      "value": "\"sendData\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 6230,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 6291,
+      "length": 18,
+      "value": "\"isServiceRunning\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "IntegerLiteral",
+      "offset": 6757,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 6461,
+      "length": 36,
+      "value": "\"flutter_background_service_ios.FlutterBackgroundRefreshAppOperation\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 7335,
+      "length": 22,
+      "value": "\"backgroundEntrypoint\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 7372,
+      "length": 76,
+      "value": "\"package:flutter_background_service_ios\/flutter_background_service_ios.dart\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 7486,
+      "length": 31,
+      "value": "\"BackgroundHandleFlutterEngine\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 7838,
+      "length": 28,
+      "value": "\"background_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 7932,
+      "length": 35,
+      "value": "\"No callback handle for background\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 8365,
+      "length": 38,
+      "value": "\"id.flutter\/background_service_ios_bg\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 8718,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 8887,
+      "length": 26,
+      "value": "\"setBackgroundFetchResult\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 8969,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9205,
+      "length": 38,
+      "value": "\"Flutter Background Service Completed\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9334,
+      "length": 22,
+      "value": "\"backgroundEntrypoint\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9371,
+      "length": 76,
+      "value": "\"package:flutter_background_service_ios\/flutter_background_service_ios.dart\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9485,
+      "length": 31,
+      "value": "\"BackgroundHandleFlutterEngine\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9883,
+      "length": 28,
+      "value": "\"background_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 9977,
+      "length": 35,
+      "value": "\"No callback handle for background\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 10410,
+      "length": 38,
+      "value": "\"id.flutter\/background_service_ios_bg\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 10850,
+      "length": 26,
+      "value": "\"setBackgroundFetchResult\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 10932,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11187,
+      "length": 38,
+      "value": "\"Flutter Background Service Completed\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11311,
+      "length": 22,
+      "value": "\"foregroundEntrypoint\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11348,
+      "length": 76,
+      "value": "\"package:flutter_background_service_ios\/flutter_background_service_ios.dart\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11462,
+      "length": 31,
+      "value": "\"ForegroundHandleFlutterEngine\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11851,
+      "length": 28,
+      "value": "\"foreground_callback_handle\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 11945,
+      "length": 35,
+      "value": "\"No callback handle for foreground\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 12378,
+      "length": 38,
+      "value": "\"id.flutter\/background_service_ios_bg\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 12646,
+      "length": 15,
+      "value": "\"onReceiveData\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 12814,
+      "length": 10,
+      "value": "\"sendData\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 12870,
+      "length": 15,
+      "value": "\"onReceiveData\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 12933,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "StringLiteral",
+      "offset": 13006,
+      "length": 13,
+      "value": "\"stopService\""
+    },
+    {
+      "filePath": "\/Users\/coi\/.pub-cache\/hosted\/pub.dev\/flutter_background_service_ios-3.0.0\/ios\/Classes\/SwiftFlutterBackgroundServicePlugin.swift",
+      "kind": "BooleanLiteral",
+      "offset": 13083,
+      "length": 4,
+      "value": "true"
+    }
+  ]
+}

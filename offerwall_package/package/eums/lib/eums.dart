@@ -5,6 +5,7 @@
 //     return EumsPlatform.instance.getPlatformVersion();
 //   }
 // }
+
 import 'package:eums/common/const/values.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,7 @@ class Eums {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();
+    print("============ Firebase.initializeApp ========= ");
 
     await NotificationHandler.instant.initializeFcmNotification();
 

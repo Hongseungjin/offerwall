@@ -16,13 +16,12 @@ class ViewController: UIViewController, BKHostBookApi {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        
         self.navigationItem.title = "AppIOS"
         // Do any additional setup after loading the view.
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         BKHostBookApiSetup(appDelegate.flutterEngine.binaryMessenger, self)
         api = BKFlutterBookApi.init(binaryMessenger: appDelegate.flutterEngine.binaryMessenger)
-        
         
         
         let button = UIButton(frame: CGRect(x: 200, y: 200, width: 100, height: 50))
@@ -34,9 +33,9 @@ class ViewController: UIViewController, BKHostBookApi {
     }
     @objc func buttonAction(sender: UIButton!) {
         print("Button tapped")
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let flutterViewController = FlutterViewController.init(
-            engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
+        //        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        //        let flutterViewController = FlutterViewController.init(
+        //            engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
         
         
         let dataParam: BKBook = BKBook.init()
@@ -51,7 +50,13 @@ class ViewController: UIViewController, BKHostBookApi {
                 print(error)
             }
         }
-        self.present(flutterViewController, animated: true, completion: nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let flutterViewController = FlutterViewController(engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
+        flutterViewController.modalPresentationStyle = .overCurrentContext
+        flutterViewController.isViewOpaque = false
+        self.present(flutterViewController, animated: true)
+        
+        //self.present(flutterViewController, animated: true, completion: nil)
     }
     
     
