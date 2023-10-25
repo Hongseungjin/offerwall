@@ -25,13 +25,13 @@ class _InstructAppScreenState extends State<InstructAppScreen> {
             ),
             Row(
               children: [
-                Spacer(),
+                const Spacer(),
                 WidgetAnimationClick(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Icon(Icons.close_rounded),
                     ))
               ],

@@ -57,16 +57,16 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future deleteKeep({advertiseIdx}) async {
+  Future deleteKeep({required idx}) async {
     await api.delete(
-      'advertises/delete-keep/$advertiseIdx',
+      'advertises/delete-keep/$idx',
     );
   }
 
   @override
-  Future deleteScrap({advertiseIdx}) async {
+  Future deleteScrap({idx}) async {
     await api.delete(
-      'advertises/delete-crap/$advertiseIdx',
+      'advertises/delete-crap/$idx',
     );
   }
 
@@ -222,9 +222,9 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future saveKeep({advertiseIdx}) async {
+  Future saveKeep({required int advertiseIdx, required String adType}) async {
     try {
-      dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
+      dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx,'ad_type': adType };
       final response = await api.post('advertises/save-keep-advertise', data: data);
       return response;
     } catch (e) {
@@ -233,8 +233,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future saveScrap({advertiseIdx}) async {
-    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
+  Future saveScrap({required int advertiseIdx, required String adType}) async {
+    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
     await api.post('advertises/save-scrap-advertise', data: data);
     return;
   }

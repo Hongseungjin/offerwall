@@ -22,16 +22,16 @@ class EarnPoin extends WatchAdverEvent {
 }
 
 class SaveAdver extends WatchAdverEvent {
-  SaveAdver({this.advertise_idx});
-  final dynamic advertise_idx;
+  SaveAdver({required this.advertiseIdx, required this.adType});
+  final int advertiseIdx;
+  final String adType;
   @override
-  // TODO: implement props
-  List<Object?> get props => [advertise_idx];
+  List<Object?> get props => [advertiseIdx, adType];
 }
 
 class DeleteScrap extends WatchAdverEvent {
-  DeleteScrap({this.id});
-  final dynamic id;
+  DeleteScrap({required this.idx});
+  final int idx;
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [idx];
 }

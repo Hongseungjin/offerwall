@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/method_native/host_api.dart';
 import 'package:eums/common/rx_bus.dart';
+import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:get/get_state_manager/get_state_manager.dart';
@@ -48,8 +49,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
-  bool isdisable = false;
+  // final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
+  bool isStartBackground = false;
   late LocalStore localStore;
   final _currentPageNotifier = ValueNotifier<int>(0);
   final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll = ValueNotifier(GlobalKey());
@@ -72,13 +73,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     bloc = HomeBloc();
     localStore = LocalStoreService();
     hostApi = HostBookApi();
-   
+    categary = 'participation';
+
     bloc
       ..add(InfoUser())
       ..add(GetTotalPoint())
       ..add(ListBanner(type: 'main'))
-      ..add(ListOfferWall(category: categary, filter: filter));
-    categary = 'participation';
+      ..add(ListOfferWall(category: categary, filter: filter, limit: 10));
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
     checkPermission();
@@ -104,8 +105,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   checkPermission() async {
-    isdisable = await localStore.getSaveAdver();
-    if (!isdisable) {
+    isStartBackground = await localStore.getSaveAdver();
+    if (isStartBackground) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
         FlutterBackgroundService().startService();
@@ -124,7 +125,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   _onTabChange() {
     tabIndex = _tabController.index;
     if (tabIndex != tabPreviousIndex) {
-      _fetchData();
+      // _fetchData();
+      if (_tabController.index == 0) {
+        categary = 'participation';
+      } else {
+        categary = 'mission';
+      }
+      bloc.add(ListOfferWall(
+        limit: 10,
+        filter: filter,
+        category: categary,
+      ));
     }
     tabPreviousIndex = _tabController.index;
   }
@@ -198,9 +209,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                hostApi.cancel();
+                // hostApi.cancel();
                 // MethodOfferwallChannel.instant.back();
-                // Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -241,7 +252,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               )
             ],
           ),
-          key: globalKey,
+          // key: globalKey,
           body: CustomScrollCampaignDetail(
             buildChildren: (BuildContext context, ValueNotifier<bool> showAppBar, ScrollController scrollController) {
               return [
@@ -285,16 +296,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   toolbarHeight: kToolbarHeight - MediaQuery.of(context).padding.top,
                   header: TabBar(
                     onTap: (value) {
-                      int index = value;
-                      if (_tabController.index == 0) {
-                        categary = 'participation';
-                      } else {
-                        categary = 'mission';
-                      }
-                      _fetchData();
-                      setState(() {
-                        _tabController.index = index;
-                      });
+                      // int index = value;
+                      // if (_tabController.index == 0) {
+                      //   categary = 'participation';
+                      // } else {
+                      //   categary = 'mission';
+                      // }
+                      // _fetchData();
+                      // setState(() {
+                      //   _tabController.index = index;
+                      // });
                     },
                     labelPadding: const EdgeInsets.only(bottom: 10, top: 10),
                     controller: _tabController,
@@ -347,13 +358,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     } else {
       categary = 'mission';
     }
-    await Future.delayed(const Duration(seconds: 1));
-    globalKey.currentContext?.read<HomeBloc>().add(GetTotalPoint());
-    globalKey.currentContext?.read<HomeBloc>().add(ListOfferWall(
-          limit: 10,
-          filter: filter,
-          category: categary,
-        ));
+    // await Future.delayed(const Duration(seconds: 1));
+    // globalKey.currentContext?.read<HomeBloc>().add(GetTotalPoint());
+    // globalKey.currentContext?.read<HomeBloc>().add(ListOfferWall(
+    //       limit: 10,
+    //       filter: filter,
+    //       category: categary,
+    //     ));
+    bloc.add(GetTotalPoint());
+    bloc.add(ListOfferWall(
+      limit: 10,
+      filter: filter,
+      category: categary,
+    ));
   }
 
   _filterMedia(String? value) {
@@ -472,19 +489,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: Text(
-                    isdisable ? '벌 광고 비활성화 중입니다' : '벌 광고 활성화 중입니다',
+                    isStartBackground ? '벌 광고 활성화 중입니다' : '벌 광고 비활성화 중입니다',
                     maxLines: 2,
                     style: AppStyle.medium.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
                   ),
                 ),
                 const Spacer(),
-                WidgetAnimationClick(
-                  onTap: () async {
+                WidgetSwipCheckBox(
+                  valueDefault: isStartBackground,
+                  onChange: (value) async {
+                    // setState(() {
+                    //   isdisable = !isdisable;
+                    // });
                     setState(() {
-                      isdisable = !isdisable;
+                      isStartBackground = value;
                     });
-                    localStore.setSaveAdver(isdisable);
-                    if (isdisable) {
+                    localStore.setSaveAdver(isStartBackground);
+                    if (!isStartBackground) {
                       String? token = await FirebaseMessaging.instance.getToken();
 
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
@@ -503,50 +524,76 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       }
                     }
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                    width: 34,
-                    decoration: BoxDecoration(
-                        color: !isdisable ? AppColor.orange2 : AppColor.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: !isdisable ? Colors.transparent : AppColor.color70)),
-                    child: Row(
-                      children: [
-                        isdisable
-                            ? Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColor.color70,
-                                ),
-                                padding: const EdgeInsets.all(4),
-                                child: Image.asset(
-                                  Assets.check.path,
-                                  package: "eums",
-                                  height: 7,
-                                  color: Colors.transparent,
-                                ),
-                              )
-                            : const SizedBox(),
-                        const Spacer(),
-                        isdisable
-                            ? const SizedBox()
-                            : Container(
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColor.white,
-                                ),
-                                padding: const EdgeInsets.all(4),
-                                child: Image.asset(
-                                  Assets.check.path,
-                                  package: "eums",
-                                  height: 7,
-                                  color: Colors.transparent,
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
                 )
+                // WidgetAnimationClick(
+                //   onTap: () async {
+                //     setState(() {
+                //       isdisable = !isdisable;
+                //     });
+                //     localStore.setSaveAdver(isdisable);
+                //     if (isdisable) {
+                //       String? token = await FirebaseMessaging.instance.getToken();
+
+                //       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                //       FlutterBackgroundService().invoke("stopService");
+                //     } else {
+                //       dynamic data = <String, dynamic>{
+                //         'count': 0,
+                //         'date': Constants.formatTime(DateTime.now().toIso8601String()),
+                //       };
+                //       // localStore?.setCountAdvertisement(data);
+                //       String? token = await FirebaseMessaging.instance.getToken();
+                //       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                //       bool isRunning = await FlutterBackgroundService().isRunning();
+                //       if (!isRunning) {
+                //         FlutterBackgroundService().startService();
+                //       }
+                //     }
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                //     width: 34,
+                //     decoration: BoxDecoration(
+                //         color: !isdisable ? AppColor.orange2 : AppColor.white,
+                //         borderRadius: BorderRadius.circular(12),
+                //         border: Border.all(color: !isdisable ? Colors.transparent : AppColor.color70)),
+                //     child: Row(
+                //       children: [
+                //         isdisable
+                //             ? Container(
+                //                 decoration: const BoxDecoration(
+                //                   shape: BoxShape.circle,
+                //                   color: AppColor.color70,
+                //                 ),
+                //                 padding: const EdgeInsets.all(4),
+                //                 child: Image.asset(
+                //                   Assets.check.path,
+                //                   package: "eums",
+                //                   height: 7,
+                //                   color: Colors.transparent,
+                //                 ),
+                //               )
+                //             : const SizedBox(),
+                //         const Spacer(),
+                //         isdisable
+                //             ? const SizedBox()
+                //             : Container(
+                //                 decoration: const BoxDecoration(
+                //                   shape: BoxShape.circle,
+                //                   color: AppColor.white,
+                //                 ),
+                //                 padding: const EdgeInsets.all(4),
+                //                 child: Image.asset(
+                //                   Assets.check.path,
+                //                   package: "eums",
+                //                   height: 7,
+                //                   color: Colors.transparent,
+                //                 ),
+                //               ),
+                //       ],
+                //     ),
+                //   ),
+                // )
               ],
             ),
           )

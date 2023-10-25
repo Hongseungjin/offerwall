@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +62,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           deviceHeight = double.parse(event['sizeDevice'] ?? '0');
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
-          checkSave = false;
+          // checkSave = false;
+          final dataTemp = (jsonDecode(event['data']));
+          checkSave = dataTemp['isScrap'] ?? false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
 
@@ -91,7 +94,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         // print('end ${call.method} ${call.arguments}');
         dy = call.arguments['lastY'];
         // dy = 1900;
-        debugPrint("xxxx->>> END_DRAG $dy - $heightScreen");
+        // debugPrint("xxxx->>> END_DRAG $dy - $heightScreen");
 
         onVerticalDragEnd();
       }
@@ -204,20 +207,20 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 checkSave = !checkSave;
               });
               try {
+                final data = (jsonDecode(dataEvent['data']));
                 if (checkSave) {
-                  TrueOverlayService().saveScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+                  TrueOverlayService().saveScrap(advertiseIdx: data['idx'], token: tokenSdk!, adType: data['ad_type']!);
                 } else {
-                  TrueOverlayService().deleteScrap(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+                  TrueOverlayService().deleteScrap(advertiseIdx: data['idx'], token: tokenSdk);
                 }
               } catch (e) {
-                print('e $e');
                 FlutterBackgroundService().invoke("closeOverlay");
               }
             },
             child: Container(
               decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Image.asset(checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
+              child: Image.asset(!checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
             )
             // checkSave
             //     ? Image.asset(Assets.saveKeep.path,
@@ -229,13 +232,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           if (dataEvent != null && dataEvent['data'] != null) {
             DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
               try {
-                TrueOverlayService().missionOfferWallOutside(
-                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
-                setState(() {
+                 setState(() {
                   isWebView = false;
                   checkSave = false;
                 });
                 FlutterBackgroundService().invoke("closeOverlay");
+                TrueOverlayService().missionOfferWallOutside(
+                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
+               
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 // print(e);
@@ -292,15 +296,20 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     // }
     // debugPrint("${heightScreen * .15}");
     if (dy! > (heightScreen - heightScreen * .2)) {
+      NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+
       try {
-        TrueOverlayService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
+        final data = (jsonDecode(dataEvent['data']));
+        TrueOverlayService().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk!);
         FlutterBackgroundService().invoke("closeOverlay");
         // ignore: empty_catches
       } catch (e) {
-        debugPrint("error: $e");
+        FlutterBackgroundService().invoke("closeOverlay");
+        rethrow;
       }
     } else {
       if (dy! < heightScreen * .2) {
+        NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
           FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
@@ -350,11 +359,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
             //     print('update ${details.localPosition.dy}');
             //     dy = details.localPosition.dy;
             //   },
-            child: Image.asset(
-              Assets.icon_logo.path,
-              package: "eums",
-              width: 100,
-              height: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                Assets.icon_logo.path,
+                package: "eums",
+                width: 100,
+                height: 100,
+              ),
             ),
             // ),
             // ),

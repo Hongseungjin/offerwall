@@ -43,7 +43,7 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
     emit(state.copyWith(saveKeepStatus: SaveKeepStatus.initial));
 
     try {
-      await _eumsOfferWallService.saveKeep(advertiseIdx: event.id);
+      await _eumsOfferWallService.saveKeep(advertiseIdx: event.id, adType: event.adType);
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.success));
     } catch (ex) {
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.failure));
@@ -88,7 +88,7 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
   _mapDeleteKeepAdverboxToState(DeleteKeep event, emit) async {
     emit(state.copyWith(deleteKeepStatus: DeleteKeepStatus.loading));
     try {
-      await _eumsOfferWallService.deleteKeep(advertiseIdx: event.id);
+      await _eumsOfferWallService.deleteKeep(idx: event.idx);
       emit(state.copyWith(
         deleteKeepStatus: DeleteKeepStatus.success,
       ));
@@ -100,7 +100,7 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
   _mapSaveKeepAdverboxToState(SaveScrap event, emit) async {
     emit(state.copyWith(saveScrapStatus: SaveScrapStatus.loading));
     try {
-      await _eumsOfferWallService.saveScrap(advertiseIdx: event.advertise_idx);
+      await _eumsOfferWallService.saveScrap(advertiseIdx: event.advertiseIdx, adType: event.adType);
       emit(state.copyWith(
         saveScrapStatus: SaveScrapStatus.success,
       ));
@@ -111,14 +111,14 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
 
   _mapDeleteScrapAdverboxToState(DeleteScrap event, emit) async {
     try {
-      await _eumsOfferWallService.deleteScrap(advertiseIdx: event.advertise_idx);
+      await _eumsOfferWallService.deleteScrap(idx: event.idx);
     } catch (e) {}
   }
 
   _mapEarnPoinKeepAdverboxToState(EarnPoin event, emit) async {
     emit(state.copyWith(adverKeepStatus: AdverKeepStatus.loading));
     try {
-      await _eumsOfferWallService.missionOfferWallOutside(advertiseIdx: event.advertise_idx, pointType: event.pointType);
+      await _eumsOfferWallService.missionOfferWallOutside(advertiseIdx: event.advertiseIdx, pointType: event.pointType);
       emit(state.copyWith(
         adverKeepStatus: AdverKeepStatus.success,
       ));

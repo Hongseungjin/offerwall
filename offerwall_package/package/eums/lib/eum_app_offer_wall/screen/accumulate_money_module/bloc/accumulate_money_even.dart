@@ -71,8 +71,9 @@ class NextPageOverlay extends AccumulateMoneyEvent {
 // }
 
 class SaveKeepAdver extends AccumulateMoneyEvent {
-  SaveKeepAdver({this.advertise_idx});
-  final dynamic advertise_idx;
+  SaveKeepAdver({required this.advertiseIdx, required this.adType});
+  final int advertiseIdx;
+  final String adType;
   @override
-  List<Object?> get props => [advertise_idx];
+  List<Object?> get props => [advertiseIdx, adType];
 }

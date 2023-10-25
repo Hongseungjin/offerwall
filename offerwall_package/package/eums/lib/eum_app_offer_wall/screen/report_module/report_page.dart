@@ -13,7 +13,6 @@ import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
 
@@ -118,7 +117,8 @@ class _ReportPageState extends State<ReportPage> {
       if (widget.deleteAdver) {
         globalKey.currentContext
             ?.read<ReportBloc>()
-            .add(DeleteKeep(advertise_idx: widget.checkOverlay ? widget.data['idx'] : widget.data['advertiseIdx']));
+            // .add(DeleteKeep(advertise_idx: widget.checkOverlay ? widget.data['idx'] : widget.data['advertiseIdx']));
+            .add(DeleteKeep(idx: widget.data['idx']));
       }
       if (widget.checkOverlay) {
         // LoadingDialog.instance.hide();

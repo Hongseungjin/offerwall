@@ -1,4 +1,6 @@
 // import 'package:flutter/cupertino.dart';
+
+import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -16,7 +18,6 @@ import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 
 // import 'package:eums/eum_app_offer_wall/widget/set_date_dialog.dart';
 
-import '../../utils/appColor.dart';
 import 'bloc/setting_bloc.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -43,8 +44,8 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   void initState() {
     localStore = LocalStoreService();
-    startDate = DateTime.now();
-    endDate = DateTime.now();
+    startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23, 59);
     checkBoolTime();
     checkVersionApp();
 
@@ -110,9 +111,14 @@ class _SettingScreenState extends State<SettingScreen> {
     return BlocBuilder<SettingBloc, SettingState>(
       builder: (context, state) {
         try {
-          startDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['startTimeCron']) : DateTime.now();
-
-          endDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['endTimeCron']) : DateTime.now();
+          // startDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['startTimeCron']) : startDate;
+          // endDate = state.dataSetting != null ? DateTime.tryParse(state.dataSetting['endTimeCron']) : endDate;
+          if (state.dataSetting != null) {
+            final startData = state.dataSetting['startTime'];
+            final endData = state.dataSetting['endTime'];
+            startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, startData['hours'], startData['minutes']);
+            endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, endData['hours'], endData['minutes']);
+          }
         } catch (ex) {}
 
         return Scaffold(
@@ -149,13 +155,16 @@ class _SettingScreenState extends State<SettingScreen> {
                       style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 15),
-                    InkWell(
-                      onTap: () async {
+                    _buildCheckSetting(
+                      checkSetting: checkToken,
+                      title: '벌 광고 활성화',
+                      onChange: (value) async {
                         setState(() {
-                          checkToken = !checkToken;
-                          localStore?.setSaveAdver(checkToken);
+                          checkToken = value;
                         });
-                        if (checkToken) {
+                        localStore?.setSaveAdver(checkToken);
+
+                        if (!checkToken) {
                           String? token = await FirebaseMessaging.instance.getToken();
 
                           await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
@@ -175,18 +184,19 @@ class _SettingScreenState extends State<SettingScreen> {
                           }
                         }
                       },
-                      child: _buildCheckSetting(checkSetting: !checkToken, title: '벌 광고 활성화'),
                     ),
                     const SizedBox(height: 30),
-                    InkWell(
-                      onTap: () {
+                    _buildCheckSetting(
+                      checkSetting: checkTime,
+                      title: '광고 시간대 설정',
+                      onChange: (value) {
                         setState(() {
-                          checkTime = !checkTime;
-                          localStore?.setBoolTime(checkTime);
+                          checkTime = value;
                         });
+                        localStore?.setBoolTime(checkTime);
+
                         globalKey.currentContext?.read<SettingBloc>().add(EnableOrDisbleSetting(enableOrDisble: checkTime));
                       },
-                      child: _buildCheckSetting(checkSetting: checkTime, title: '광고 시간대 설정'),
                     ),
                     const SizedBox(height: 7),
                     Text(
@@ -273,14 +283,14 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  _buildSelectDate({int? dateNumber, String? title}) {
+  _buildSelectDate({required int dateNumber, String? title}) {
     DateTime date = DateTime.now();
     switch (dateNumber) {
       case 1:
-        date = startDate ?? DateTime.now();
+        date = startDate!;
         break;
       case 2:
-        date = endDate ?? DateTime.now();
+        date = endDate!;
         break;
 
       default:
@@ -289,6 +299,7 @@ class _SettingScreenState extends State<SettingScreen> {
       InkWell(
           onTap: () async {
             _selectDate(
+                index: dateNumber,
                 dateTime: date,
                 callBack: (value) {
                   switch (dateNumber) {
@@ -341,7 +352,7 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  _selectDate({DateTime? dateTime, Function? callBack}) {
+  _selectDate({required int index, DateTime? dateTime, Function? callBack}) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -349,6 +360,10 @@ class _SettingScreenState extends State<SettingScreen> {
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) {
+        // final timeEnd = endDate?.add(const Duration(days: -1));
+        // final timeStart = startDate?.add(const Duration(days: 1));
+        final timeEnd = endDate;
+        final timeStart = startDate;
         return Center(
           child: Material(
             color: Colors.transparent,
@@ -363,6 +378,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     height: 150,
                     child: CupertinoDatePicker(
                       initialDateTime: dateTime,
+                      minimumDate: index == 2 && timeStart != null ? timeStart : null,
+                      maximumDate: index == 1 && timeEnd != null ? timeEnd : null,
                       mode: CupertinoDatePickerMode.time,
                       use24hFormat: true,
                       onDateTimeChanged: (DateTime newTime) {
@@ -398,43 +415,55 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  _buildCheckSetting({bool checkSetting = false, String? title}) {
+  _buildCheckSetting({bool checkSetting = false, String? title, required Function(bool value) onChange}) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          title ?? '',
-          style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
-        ),
-        const Spacer(),
-        Container(
-          width: 55,
-          padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: !checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
-          child: Row(
-            children: [
-              !checkSetting
-                  ? Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.white,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                    )
-                  : const SizedBox(),
-              const Spacer(),
-              !checkSetting
-                  ? const SizedBox()
-                  : Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.white,
-                      ),
-                      padding: const EdgeInsets.all(10),
-                    ),
-            ],
+        Expanded(
+          child: Text(
+            title ?? '',
+            style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
           ),
-        )
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+
+        WidgetSwipCheckBox(
+          valueDefault: checkSetting,
+          onChange: (value) async {
+            onChange.call(value);
+          },
+        ),
+
+        // Container(
+        //   width: 55,
+        //   padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+        //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: !checkSetting ? HexColor('#cccccc') : HexColor('#fdd000')),
+        //   child: Row(
+        //     children: [
+        //       !checkSetting
+        //           ? Container(
+        //               decoration: const BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 color: AppColor.white,
+        //               ),
+        //               padding: const EdgeInsets.all(10),
+        //             )
+        //           : const SizedBox(),
+        //       const Spacer(),
+        //       !checkSetting
+        //           ? const SizedBox()
+        //           : Container(
+        //               decoration: const BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 color: AppColor.white,
+        //               ),
+        //               padding: const EdgeInsets.all(10),
+        //             ),
+        //     ],
+        //   ),
+        // )
       ],
     );
   }

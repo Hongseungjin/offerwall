@@ -72,8 +72,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   _mapListOfferWall(ListOfferWall event, emit) async {
-    emit(state.copyWith(listAdverStatus: ListAdverStatus.loading));
-
+    emit(state.copyWith(listAdverStatus: ListAdverStatus.loading, listDataOfferWall: []));
     try {
       dynamic data = await _eumsOfferWallService.getListOfferWall(category: event.category, limit: event.limit, filter: event.filter);
 

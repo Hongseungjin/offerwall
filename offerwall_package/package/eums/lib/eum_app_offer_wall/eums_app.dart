@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -95,7 +96,7 @@ Future<void> onStart(ServiceInstance service) async {
     });
 
     service.on('closeOverlay').listen((event) async {
-      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+      // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
       queue.add(() async => await closeOverlay());
     });
 
@@ -114,9 +115,9 @@ Future<void> onStart(ServiceInstance service) async {
       if (await Permission.locationAlways.status == PermissionStatus.granted) {
         // Either the permission was already granted before or the user just granted it.
         // startTimeDown();
-        debugPrint("xxxx");
+        // debugPrint("xxxx");
         Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+        // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
         await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
       }
     });
@@ -211,7 +212,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
-            autoStart: true,
+            autoStart: false,
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",
             initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));

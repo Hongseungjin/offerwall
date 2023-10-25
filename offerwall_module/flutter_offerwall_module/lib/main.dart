@@ -137,7 +137,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
             iosConfiguration: IosConfiguration(),
             androidConfiguration: AndroidConfiguration(
                 onStart: onStart,
-                autoStart: true,
+                autoStart: false,
                 isForegroundMode: true,
                 initialNotificationTitle: "인천e음",
                 initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
@@ -153,7 +153,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
               iosConfiguration: IosConfiguration(),
               androidConfiguration: AndroidConfiguration(
                   onStart: onStart,
-                  autoStart: true,
+                  autoStart: false,
                   isForegroundMode: true,
                   initialNotificationTitle: "인천e음",
                   initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));

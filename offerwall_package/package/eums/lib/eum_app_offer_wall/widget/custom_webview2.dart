@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -9,7 +12,7 @@ import 'package:eums/gen/assets.gen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-
+import 'package:photo_view/photo_view.dart';
 import '../utils/appStyle.dart';
 
 class CustomWebView2 extends StatefulWidget {
@@ -48,15 +51,15 @@ class CustomWebView2 extends StatefulWidget {
 }
 
 class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObserver, TickerProviderStateMixin {
-  late final WebViewController _controller;
+  late WebViewController _controller;
   bool isLoading = true;
   final ScrollController _scrollController = ScrollController();
   FlutterGifController? gifController;
-  late LinearTimerController timerController = LinearTimerController(this);
+  late LinearTimerController timerController;
 
   // Timer? _timeDown;
   // int _startTime = 15;
-  // Timer? timer5s;
+  Timer? timer5s;
   ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
 
@@ -87,30 +90,32 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
   //   });
   // }
 
-  // start5s() {
-  //   timer5s?.cancel();
-  //   timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-  //     _timeDown?.cancel();
-  //     isRunning = false;
-  //     timerController.stop();
-  //     setState(() {});
-  //   });
-  // }
+  start5s() {
+    timer5s?.cancel();
+    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+      // _timeDown?.cancel();
+      isRunning = false;
+      timerController.stop();
+      // setState(() {});
+    });
+  }
 
   _scrollListener() {
     if (_scrollController.position.userScrollDirection == ScrollDirection.reverse ||
         _scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!isRunning) {
         isRunning = true;
+        timerController.start();
         // startTimeDown();
       }
-      // start5s();
+      start5s();
     }
   }
 
   @override
   void initState() {
     try {
+      timerController = LinearTimerController(this);
       gifController = FlutterGifController(vsync: this);
     } catch (e) {}
     // TODO: implement initState
@@ -118,11 +123,12 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
       // startTimeDown();
       // start5s();
     }
+
     super.initState();
     _scrollController.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      timerController.start();
+      // timerController.start();
       gifController?.repeat(
         min: 0,
         max: 53,
@@ -185,8 +191,11 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
   @override
   void dispose() {
     // _timeDown?.cancel();
-    // timer5s?.cancel();
-    _scrollController.dispose();
+    try {
+      timer5s?.cancel();
+      gifController?.dispose();
+      _scrollController.dispose();
+    } catch (e) {}
     // TODO: implement dispose
     super.dispose();
   }
@@ -199,7 +208,7 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
     //   child: );
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.grey.shade500,
       ),
@@ -207,7 +216,9 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
         child: Column(
           children: [
             Container(
+              margin: EdgeInsets.only(top: kToolbarHeight - MediaQuery.of(context).padding.top),
               decoration: const BoxDecoration(
+                color: Colors.white,
                 border: Border(bottom: BorderSide(color: Colors.grey)),
               ),
               child: Row(
@@ -235,30 +246,45 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                // controller: _scrollController,
-                child: CachedNetworkImage(
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    imageUrl: widget.urlLink,
-                    imageBuilder: (context, imageProvider) {
-                      if (timerController.value == 0) {
-                        timerController.start();
-                      }
-                      return Image(image: imageProvider);
-                    },
-                    progressIndicatorBuilder: (context, url, progress) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 30),
-                        child: Center(
-                            child: CircularProgressIndicator(
-                          color: Color(0xfffcc900),
-                        )),
-                      );
-                    },
-                    errorWidget: (context, url, error) {
-                      return Image.asset(Assets.logo.path, package: "eums", height: 16);
-                    }),
+              child: Container(
+                color: Colors.white,
+                child: WidgetImageOfferWall(
+                  scrollController: _scrollController,
+                  urlLink: widget.urlLink ?? '',
+                  onDone: () {
+                    if (timerController.value == 0) {
+                      timerController.start();
+                      start5s();
+                    }
+                  },
+                ),
+                // child: SingleChildScrollView(
+                //   controller: _scrollController,
+                //   // child:  CachedNetworkImage(
+                //   //       width: MediaQuery.of(context).size.width,
+                //   //       fit: BoxFit.cover,
+                //   //       imageUrl: widget.urlLink,
+                //   //       imageBuilder: (context, imageProvider) {
+                //   //         if (timerController.value == 0) {
+                //   //           timerController.start();
+                //   //           start5s();
+                //   //         }
+                //   //         return Image(image: imageProvider);
+                //   //       },
+                //   //       progressIndicatorBuilder: (context, url, progress) {
+                //   //         return const Padding(
+                //   //           padding: EdgeInsets.symmetric(vertical: 30),
+                //   //           child: Center(
+                //   //               child: CircularProgressIndicator(
+                //   //             color: Color(0xfffcc900),
+                //   //           )),
+                //   //         );
+                //   //       },
+                //   //       errorWidget: (context, url, error) {
+                //   //         return Image.asset(Assets.logo.path, package: "eums", height: 16);
+                //   //       }),
+
+                // ),
               ),
             ),
             !widget.showMission

@@ -30,7 +30,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
   _mapDeleteKeepToState(DeleteKeep event, emit) async {
     emit(state.copyWith(deleteKeepStatus: DeleteKeepStatus.loading));
     try {
-      await _eumsOfferWallService.deleteKeep(advertiseIdx: event.advertise_idx);
+      await _eumsOfferWallService.deleteKeep(idx: event.idx);
       emit(state.copyWith(
         deleteKeepStatus: DeleteKeepStatus.success,
       ));

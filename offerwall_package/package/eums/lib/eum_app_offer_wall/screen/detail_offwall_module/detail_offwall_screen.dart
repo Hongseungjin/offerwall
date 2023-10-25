@@ -17,7 +17,6 @@ import 'package:eums/eum_app_offer_wall/screen/register_link_module/register_lin
 import 'package:eums/eum_app_offer_wall/screen/visit_offerwall_module/visit_offerwall_screen.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -48,6 +47,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   List? _languages = [];
   String lang = '';
   String? title;
+  String? thumbnail;
   final controllerGet = Get.put(SettingFontSize());
 
   Future<void> _getPreferredLanguages() async {
@@ -262,6 +262,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
               urlApi = state.dataDetailOffWall['api'] ?? '';
               dataOfferWallVisit = state.dataDetailOffWall;
               title = state.dataDetailOffWall['title'] ?? "";
+              thumbnail = state.dataDetailOffWall["sub_thumbnail"] ?? "";
             }
             return state.dataDetailOffWall == null
                 ? const SizedBox()
@@ -275,10 +276,10 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width,
                               fit: BoxFit.cover,
-                              imageUrl: state.dataDetailOffWall != null ? "${Constants.baseUrlImage}${state.dataDetailOffWall['thumbnail']}" : "",
+                              imageUrl: state.dataDetailOffWall != null ? "${Constants.baseUrlImage}$thumbnail" : "",
                               placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) {
-                                return Assets.logo.image();
+                                return Assets.logo.image(package: 'eums');
                               }),
                         ),
                         const SizedBox(height: 12),
@@ -326,7 +327,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '적립 방법',
+                                // '적립 방법',
+                                '주의사항',
                                 style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: AppColor.black),
                               ),
                               const SizedBox(height: 8),
@@ -340,6 +342,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
                         const SizedBox(height: 16),
                         InkWell(
                           onTap: () {
+                            // debugPrint("xxxx: ${widget.type}");
                             if (widget.type == 'install') {
                               checkInstallApp();
                             } else if (widget.type == 'visit') {

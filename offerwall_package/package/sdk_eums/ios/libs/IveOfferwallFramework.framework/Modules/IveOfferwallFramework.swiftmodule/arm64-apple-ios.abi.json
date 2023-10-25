@@ -1,0 +1,1892 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TopLevel",
+    "printedName": "TopLevel",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "AdSupport",
+        "printedName": "AdSupport",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AppTrackingTransparency",
+        "printedName": "AppTrackingTransparency",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "CommonCrypto",
+        "printedName": "CommonCrypto",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "SystemConfiguration",
+        "printedName": "SystemConfiguration",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AdSupport",
+        "printedName": "AdSupport",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AppTrackingTransparency",
+        "printedName": "AppTrackingTransparency",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AdSupport",
+        "printedName": "AdSupport",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AppTrackingTransparency",
+        "printedName": "AppTrackingTransparency",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Gender",
+        "printedName": "Gender",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "None",
+            "printedName": "None",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IveOfferwallFramework.Gender.Type) -> IveOfferwallFramework.Gender",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Gender",
+                    "printedName": "IveOfferwallFramework.Gender",
+                    "usr": "s:21IveOfferwallFramework6GenderO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IveOfferwallFramework.Gender.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Gender",
+                        "printedName": "IveOfferwallFramework.Gender",
+                        "usr": "s:21IveOfferwallFramework6GenderO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:21IveOfferwallFramework6GenderO4NoneyA2CmF",
+            "mangledName": "$s21IveOfferwallFramework6GenderO4NoneyA2CmF",
+            "moduleName": "IveOfferwallFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "Male",
+            "printedName": "Male",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IveOfferwallFramework.Gender.Type) -> IveOfferwallFramework.Gender",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Gender",
+                    "printedName": "IveOfferwallFramework.Gender",
+                    "usr": "s:21IveOfferwallFramework6GenderO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IveOfferwallFramework.Gender.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Gender",
+                        "printedName": "IveOfferwallFramework.Gender",
+                        "usr": "s:21IveOfferwallFramework6GenderO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:21IveOfferwallFramework6GenderO4MaleyA2CmF",
+            "mangledName": "$s21IveOfferwallFramework6GenderO4MaleyA2CmF",
+            "moduleName": "IveOfferwallFramework"
+          },
+          {
+            "kind": "Var",
+            "name": "Female",
+            "printedName": "Female",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(IveOfferwallFramework.Gender.Type) -> IveOfferwallFramework.Gender",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Gender",
+                    "printedName": "IveOfferwallFramework.Gender",
+                    "usr": "s:21IveOfferwallFramework6GenderO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "IveOfferwallFramework.Gender.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Gender",
+                        "printedName": "IveOfferwallFramework.Gender",
+                        "usr": "s:21IveOfferwallFramework6GenderO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:21IveOfferwallFramework6GenderO6FemaleyA2CmF",
+            "mangledName": "$s21IveOfferwallFramework6GenderO6FemaleyA2CmF",
+            "moduleName": "IveOfferwallFramework"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Gender",
+                "printedName": "IveOfferwallFramework.Gender",
+                "usr": "s:21IveOfferwallFramework6GenderO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Gender",
+                "printedName": "IveOfferwallFramework.Gender",
+                "usr": "s:21IveOfferwallFramework6GenderO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework6GenderO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s21IveOfferwallFramework6GenderO2eeoiySbAC_ACtFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:21IveOfferwallFramework6GenderO9hashValueSivp",
+            "mangledName": "$s21IveOfferwallFramework6GenderO9hashValueSivp",
+            "moduleName": "IveOfferwallFramework",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:21IveOfferwallFramework6GenderO9hashValueSivg",
+                "mangledName": "$s21IveOfferwallFramework6GenderO9hashValueSivg",
+                "moduleName": "IveOfferwallFramework",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework6GenderO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s21IveOfferwallFramework6GenderO4hash4intoys6HasherVz_tF",
+            "moduleName": "IveOfferwallFramework",
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:21IveOfferwallFramework6GenderO",
+        "mangledName": "$s21IveOfferwallFramework6GenderO",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "AccessControl",
+          "RawDocComment"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Security",
+        "printedName": "Security",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AdSupport",
+        "printedName": "AdSupport",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "Import",
+        "name": "AppTrackingTransparency",
+        "printedName": "AppTrackingTransparency",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "IveSdk",
+        "printedName": "IveSdk",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "initSdk",
+            "printedName": "initSdk(appCode:title:isShowATT:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "hasDefaultArg": true,
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC04initD07appCode5title9isShowATTySS_SSSbtFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC04initD07appCode5title9isShowATTySS_SSSbtFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setUser",
+            "printedName": "setUser(user:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UserModel",
+                "printedName": "IveOfferwallFramework.UserModel",
+                "usr": "s:21IveOfferwallFramework9UserModelV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC7setUser4useryAA0F5ModelV_tFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC7setUser4useryAA0F5ModelV_tFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setInterFaceStyle",
+            "printedName": "setInterFaceStyle(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIUserInterfaceStyle",
+                "printedName": "UIKit.UIUserInterfaceStyle",
+                "hasDefaultArg": true,
+                "usr": "c:@E@UIUserInterfaceStyle"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC17setInterFaceStyleyySo015UIUserInterfaceH0VFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC17setInterFaceStyleyySo015UIUserInterfaceH0VFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "intro_iOS": "13.0",
+            "declAttributes": [
+              "Final",
+              "AccessControl",
+              "Available"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setNavigationBarColor",
+            "printedName": "setNavigationBarColor(backgroundColor:textColor:isTop:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC21setNavigationBarColor010backgroundH004textH05isTopySo7UIColorC_AISbtFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC21setNavigationBarColor010backgroundH004textH05isTopySo7UIColorC_AISbtFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setNavigationBarColor",
+            "printedName": "setNavigationBarColor(backgroundColorHex:textColorHex:isTop:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC21setNavigationBarColor010backgroundH3Hex04texthJ05isTopySS_SSSbtFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC21setNavigationBarColor010backgroundH3Hex04texthJ05isTopySS_SSSbtFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setMainColor",
+            "printedName": "setMainColor(mainColor:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIColor",
+                "printedName": "UIKit.UIColor",
+                "usr": "c:objc(cs)UIColor"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC12setMainColor04mainG0ySo7UIColorC_tFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC12setMainColor04mainG0ySo7UIColorC_tFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setMainColor",
+            "printedName": "setMainColor(mainColorHex:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC12setMainColor04mainG3HexySS_tFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC12setMainColor04mainG3HexySS_tFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "open",
+            "printedName": "open(controller:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "UIViewController",
+                "printedName": "UIKit.UIViewController",
+                "usr": "c:objc(cs)UIViewController"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC4open10controllerySo16UIViewControllerC_tFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC4open10controllerySo16UIViewControllerC_tFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getEarnAdPoints",
+            "printedName": "getEarnAdPoints(completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.Int) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:21IveOfferwallFramework0A3SdkC15getEarnAdPoints10completionyySic_tFZ",
+            "mangledName": "$s21IveOfferwallFramework0A3SdkC15getEarnAdPoints10completionyySic_tFZ",
+            "moduleName": "IveOfferwallFramework",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:21IveOfferwallFramework0A3SdkC",
+        "mangledName": "$s21IveOfferwallFramework0A3SdkC",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "hasMissingDesignatedInitializers": true
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "IveOfferwallFramework"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "UserModel",
+        "printedName": "UserModel",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(userId:age:gender:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "UserModel",
+                "printedName": "IveOfferwallFramework.UserModel",
+                "usr": "s:21IveOfferwallFramework9UserModelV"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "hasDefaultArg": true,
+                "usr": "s:Si"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Gender",
+                "printedName": "IveOfferwallFramework.Gender",
+                "hasDefaultArg": true,
+                "usr": "s:21IveOfferwallFramework6GenderO"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:21IveOfferwallFramework9UserModelV6userId3age6genderACSS_SiAA6GenderOtcfc",
+            "mangledName": "$s21IveOfferwallFramework9UserModelV6userId3age6genderACSS_SiAA6GenderOtcfc",
+            "moduleName": "IveOfferwallFramework",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:21IveOfferwallFramework9UserModelV",
+        "mangledName": "$s21IveOfferwallFramework9UserModelV",
+        "moduleName": "IveOfferwallFramework",
+        "declAttributes": [
+          "AccessControl",
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "UIControl",
+        "printedName": "UIControl",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "addAction",
+            "printedName": "addAction(for:closure:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "UIKit.UIControl.Event",
+                "usr": "c:@E@UIControlEvents"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(UIKit.UIControl) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "UIControl",
+                    "printedName": "UIKit.UIControl",
+                    "usr": "c:objc(cs)UIControl"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:So9UIControlC21IveOfferwallFrameworkE9addAction3for7closureySo0A6EventsV_yABctF",
+            "mangledName": "$sSo9UIControlC21IveOfferwallFrameworkE9addAction3for7closureySo0A6EventsV_yABctF",
+            "moduleName": "IveOfferwallFramework",
+            "declAttributes": [
+              "Custom",
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:objc(cs)UIControl",
+        "moduleName": "UIKit",
+        "isOpen": true,
+        "intro_iOS": "2.0",
+        "objc_name": "UIControl",
+        "declAttributes": [
+          "Available",
+          "ObjC",
+          "NonSendable",
+          "Custom",
+          "Dynamic"
+        ],
+        "superclassUsr": "c:objc(cs)UIView",
+        "isExternal": true,
+        "inheritsConvenienceInitializers": true,
+        "superclassNames": [
+          "UIKit.UIView",
+          "UIKit.UIResponder",
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "__DefaultCustomPlaygroundQuickLookable",
+            "printedName": "__DefaultCustomPlaygroundQuickLookable",
+            "usr": "s:s38__DefaultCustomPlaygroundQuickLookableP",
+            "mangledName": "$ss38__DefaultCustomPlaygroundQuickLookableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Utils.swift",
+      "kind": "FloatLiteral",
+      "offset": 6771,
+      "length": 3,
+      "value": "1.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Utils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 7514,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Utils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 7525,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Response.swift",
+      "kind": "StringLiteral",
+      "offset": 238,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Response.swift",
+      "kind": "StringLiteral",
+      "offset": 270,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Response.swift",
+      "kind": "StringLiteral",
+      "offset": 238,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/Response.swift",
+      "kind": "StringLiteral",
+      "offset": 270,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 544,
+      "length": 7,
+      "value": "\"1.0.2\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 586,
+      "length": 3,
+      "value": "\"i\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 631,
+      "length": 3,
+      "value": "\"1\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 672,
+      "length": 1,
+      "value": "7"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 676,
+      "length": 2,
+      "value": "24"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 681,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 686,
+      "length": 2,
+      "value": "60"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 691,
+      "length": 4,
+      "value": "1000"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 783,
+      "length": 38,
+      "value": "\"00000000-0000-0000-0000-000000000000\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 861,
+      "length": 34,
+      "value": "\"ive_offerwall_sdk_key_chain_uuid\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 975,
+      "length": 23,
+      "value": "\"ive_offerwall_sdk_dvc\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 1046,
+      "length": 27,
+      "value": "\"ive_offerwall_sdk_user_id\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 1126,
+      "length": 32,
+      "value": "\"ive_offerwall_sdk_company_name\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 1215,
+      "length": 37,
+      "value": "\"ive_offerwall_sdk_install_check_ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "Array",
+      "offset": 7951,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "Array",
+      "offset": 8005,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8050,
+      "length": 9,
+      "value": "\"#7186f2\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "BooleanLiteral",
+      "offset": 8181,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8219,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8249,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8282,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "IntegerLiteral",
+      "offset": 8304,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8331,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8362,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8434,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8465,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8502,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdkCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 8528,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 284,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 331,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 377,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 423,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 469,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 511,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "Array",
+      "offset": 563,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "Dictionary",
+      "offset": 616,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1052,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1625,
+      "length": 2,
+      "value": "20"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1668,
+      "length": 9,
+      "value": "\"#181f29\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1748,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1941,
+      "length": 2,
+      "value": "14"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1984,
+      "length": 9,
+      "value": "\"#777777\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2064,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 2338,
+      "length": 9,
+      "value": "\"#f5f6f8\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 19327,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferwallListViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 19349,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 186,
+      "length": 25,
+      "value": "\"https:\/\/api.i-screen.kr\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 343,
+      "length": 23,
+      "value": "\"\/sdk\/media_user\/login\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 426,
+      "length": 30,
+      "value": "\"\/sdk\/media_user\/rewarded_ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 501,
+      "length": 14,
+      "value": "\"\/sdk\/ad\/list\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 553,
+      "length": 14,
+      "value": "\"\/sdk\/ad\/join\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 609,
+      "length": 18,
+      "value": "\"\/sdk\/ad\/complete\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 667,
+      "length": 16,
+      "value": "\"\/sdk\/ad\/points\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 768,
+      "length": 3,
+      "value": "\"S\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/URLCommon.swift",
+      "kind": "StringLiteral",
+      "offset": 807,
+      "length": 8,
+      "value": "\"-10000\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 403,
+      "length": 12,
+      "value": "\"point_name\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 448,
+      "length": 19,
+      "value": "\"join_text_default\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 494,
+      "length": 12,
+      "value": "\"join_texts\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 528,
+      "length": 11,
+      "value": "\"list_data\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 403,
+      "length": 12,
+      "value": "\"point_name\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 448,
+      "length": 19,
+      "value": "\"join_text_default\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 494,
+      "length": 12,
+      "value": "\"join_texts\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdListResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 528,
+      "length": 11,
+      "value": "\"list_data\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferCell.swift",
+      "kind": "IntegerLiteral",
+      "offset": 241,
+      "length": 1,
+      "value": "5"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferCell.swift",
+      "kind": "IntegerLiteral",
+      "offset": 294,
+      "length": 2,
+      "value": "16"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/OfferCell.swift",
+      "kind": "IntegerLiteral",
+      "offset": 348,
+      "length": 2,
+      "value": "78"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 220,
+      "length": 5,
+      "value": "\"ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 220,
+      "length": 5,
+      "value": "\"ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 872,
+      "length": 9,
+      "value": "\"ads_idx\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 907,
+      "length": 12,
+      "value": "\"click_date\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 872,
+      "length": 9,
+      "value": "\"ads_idx\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/AdSaveModel.swift",
+      "kind": "StringLiteral",
+      "offset": 907,
+      "length": 12,
+      "value": "\"click_date\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdk.swift",
+      "kind": "StringLiteral",
+      "offset": 339,
+      "length": 21,
+      "value": "\"아이브 충전소\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdk.swift",
+      "kind": "BooleanLiteral",
+      "offset": 388,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdk.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1742,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/IveSdk.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2095,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 283,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 315,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 352,
+      "length": 14,
+      "value": "\"rewarded_ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 283,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 315,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/RewardedAdsResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 352,
+      "length": 14,
+      "value": "\"rewarded_ads\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 266,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 727,
+      "length": 1,
+      "value": "8"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 780,
+      "length": 3,
+      "value": "1.1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 788,
+      "length": 3,
+      "value": "1.1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 966,
+      "length": 4,
+      "value": "12.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 1182,
+      "length": 4,
+      "value": "14.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1563,
+      "length": 2,
+      "value": "10"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1600,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1692,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1727,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 1957,
+      "length": 4,
+      "value": "16.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2008,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 2049,
+      "length": 9,
+      "value": "\"#181f29\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 2095,
+      "length": 3,
+      "value": "0.7"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 2320,
+      "length": 4,
+      "value": "14.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2371,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 2472,
+      "length": 3,
+      "value": "0.7"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2672,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2723,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 2917,
+      "length": 4,
+      "value": "14.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2953,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 3380,
+      "length": 4,
+      "value": "14.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3487,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "FloatLiteral",
+      "offset": 3721,
+      "length": 4,
+      "value": "12.0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 15287,
+      "length": 8,
+      "value": "\"취소\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 15343,
+      "length": 8,
+      "value": "\"확인\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 16938,
+      "length": 23,
+      "value": "\"IveOfferwallFramework.UIControlClosureWrapper\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/PopupViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 17201,
+      "length": 15,
+      "value": "\"targetClosure\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/UserModel.swift",
+      "kind": "IntegerLiteral",
+      "offset": 277,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 317,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 349,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 7,
+      "value": "\"point\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 407,
+      "length": 5,
+      "value": "\"dvc\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 440,
+      "length": 8,
+      "value": "\"c_name\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 317,
+      "length": 8,
+      "value": "\"status\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 349,
+      "length": 9,
+      "value": "\"message\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 380,
+      "length": 7,
+      "value": "\"point\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 407,
+      "length": 5,
+      "value": "\"dvc\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 440,
+      "length": 8,
+      "value": "\"c_name\""
+    },
+    {
+      "filePath": "\/Users\/herogenie\/Developer\/i-ve\/ios\/ive-ios-offerwall-sdk\/IveOfferwallFramework\/IveOfferwallFramework\/LoginResponse.swift",
+      "kind": "StringLiteral",
+      "offset": 1176,
+      "length": 19,
+      "value": "\"Thread Safe Array\""
+    }
+  ]
+}

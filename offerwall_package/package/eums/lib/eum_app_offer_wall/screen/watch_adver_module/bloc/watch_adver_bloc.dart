@@ -31,7 +31,7 @@ class WatchAdverBloc extends Bloc<WatchAdverEvent, WatchAdverState> {
   _mapDeleteScrapToState(DeleteScrap event, emit) async {
     emit(state.copyWith(deleteScrapStatus: DeleteScrapStatus.loading));
     try {
-      await _eumsOfferWallService.deleteScrap(advertiseIdx: event.id);
+      await _eumsOfferWallService.deleteScrap(idx: event.idx);
       emit(state.copyWith(
         deleteScrapStatus: DeleteScrapStatus.success,
       ));
@@ -56,8 +56,7 @@ class WatchAdverBloc extends Bloc<WatchAdverEvent, WatchAdverState> {
   _mapSaveAdverToState(SaveAdver event, emit) async {
     emit(state.copyWith(saveKeepAdverboxStatus: SaveKeepAdverboxStatus.loading));
     try {
-      await _eumsOfferWallService.saveScrap(advertiseIdx: event.advertise_idx);
-
+      await _eumsOfferWallService.saveScrap(advertiseIdx: event.advertiseIdx, adType: event.adType);
       emit(state.copyWith(
         saveKeepAdverboxStatus: SaveKeepAdverboxStatus.success,
       ));

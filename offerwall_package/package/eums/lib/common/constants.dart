@@ -44,6 +44,21 @@ class Constants {
     String dataFormat = DateFormat('yyyy-MM-dd HH:mm:ss').format(parseDt);
     return dataFormat.toString();
   }
+
+  static String getStringByAdType(AdType adType){
+    switch (adType) {
+      case AdType.REGION:
+          return 'region';
+      case AdType.PARTICIPATION:
+          return 'participation';
+      case AdType.MISSION:
+          return 'mission';
+      case AdType.EXTERNAL:
+          return 'external';
+      default:
+          return 'bee';
+    }
+  }
 }
 
 const DATA_MEDIA = [
@@ -62,3 +77,5 @@ const QUESTION_LIST = [
   {"media": "point", "name": "포인트"},
   {"media": "inquire", "name": "문의"},
 ];
+
+enum AdType { REGION, BEE, PARTICIPATION, MISSION, EXTERNAL }

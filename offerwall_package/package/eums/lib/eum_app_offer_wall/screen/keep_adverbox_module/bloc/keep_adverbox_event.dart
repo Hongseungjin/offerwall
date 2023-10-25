@@ -21,31 +21,35 @@ class LoadMoreKeepAdverbox extends KeepAdverboxEvent {
 }
 
 class DeleteKeep extends KeepAdverboxEvent {
-  DeleteKeep({this.id});
+  DeleteKeep({required this.idx});
 
-  final dynamic id;
+  final int idx;
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [idx];
 }
 
 class SaveKeep extends KeepAdverboxEvent {
-  SaveKeep({this.id});
+  SaveKeep({
+    required this.id,
+    required this.adType,
+  });
 
-  final dynamic id;
+  final int id;
+  final String adType;
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, adType];
 }
 
 class EarnPoin extends KeepAdverboxEvent {
-  EarnPoin({this.advertise_idx, this.pointType});
+  EarnPoin({this.advertiseIdx, this.pointType});
 
-  final dynamic advertise_idx;
+  final dynamic advertiseIdx;
   final dynamic pointType;
   @override
   // TODO: implement props
-  List<Object?> get props => [advertise_idx, pointType];
+  List<Object?> get props => [advertiseIdx, pointType];
 }
 
 class GetAdvertiseSponsor extends KeepAdverboxEvent {
@@ -56,17 +60,18 @@ class GetAdvertiseSponsor extends KeepAdverboxEvent {
 }
 
 class SaveScrap extends KeepAdverboxEvent {
-  SaveScrap({this.advertise_idx});
-  final dynamic advertise_idx;
+  SaveScrap({required this.advertiseIdx, required this.adType});
+  final int advertiseIdx;
+  final String adType;
   @override
-  List<Object?> get props => [advertise_idx];
+  List<Object?> get props => [advertiseIdx, adType];
 }
 
 class DeleteScrap extends KeepAdverboxEvent {
-  DeleteScrap({this.advertise_idx});
+  DeleteScrap({required this.idx});
 
-  final dynamic advertise_idx;
+  final int idx;
 
   @override
-  List<Object?> get props => [advertise_idx];
+  List<Object?> get props => [idx];
 }

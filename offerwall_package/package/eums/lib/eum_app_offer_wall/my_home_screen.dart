@@ -107,7 +107,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     if (await Permission.locationAlways.status != PermissionStatus.granted) {
       Timer.periodic(const Duration(seconds: 2), (timer) async {
         timer.cancel();
-        await Permission.locationAlways.request();
+        try {
+          await Permission.locationAlways.request();
+        } catch (e) {}
         await _checkPermissionLocationBackground();
       });
     } else {

@@ -56,7 +56,7 @@ class AccumulateMoneyBloc extends Bloc<AccumulateMoneyEvent, AccumulateMoneyStat
     emit(state.copyWith(saveKeepStatus: SaveKeepStatus.loading));
 
     try {
-      await _eumsOfferWallService.saveKeep(advertiseIdx: event.advertise_idx);
+      await _eumsOfferWallService.saveKeep(advertiseIdx: event.advertiseIdx, adType: event.adType);
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.success));
     } catch (ex) {
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.failure));

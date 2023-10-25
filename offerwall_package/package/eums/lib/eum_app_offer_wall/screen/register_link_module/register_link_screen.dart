@@ -13,7 +13,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_inappweb.dart';
 import 'package:eums/eum_app_offer_wall/widget/select_image_picker_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
@@ -28,8 +27,8 @@ import '../../widget/custom_dialog.dart';
 import 'bloc/register_link_bloc.dart';
 
 class RegisterLinkScreen extends StatefulWidget {
-  dynamic data;
-  RegisterLinkScreen({Key? key, this.data}) : super(key: key);
+  final dynamic data;
+  const RegisterLinkScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<RegisterLinkScreen> createState() => _RegisterLinkScreenState();
@@ -139,7 +138,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         backgroundColor: AppColor.white,
         title: Text(
           '캐시적립',
-          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 18 + controllerGet.fontSizeObx.value),
+          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 6 + controllerGet.fontSizeObx.value),
         ),
       ),
       body: SingleChildScrollView(
@@ -158,10 +157,11 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                           height: 80,
                           width: 80,
                           fit: BoxFit.cover,
-                          imageUrl: Constants.baseUrlImage + widget.data['thumbnail'],
+                          // imageUrl: Constants.baseUrlImage + widget.data['thumbnail'],
+                          imageUrl: Constants.baseUrlImage + widget.data['sub_thumbnail'],
                           placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
                           errorWidget: (context, url, error) {
-                            return Assets.logo.image();
+                            return Assets.logo.image(package: 'eums');
                           }),
                     ),
                   ),
@@ -176,6 +176,9 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 2 + controllerGet.fontSizeObx.value),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 4,
                       ),
                       Text(
                         '구독시 포인트 적립',
@@ -312,11 +315,28 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-
-                Image.asset(
-                  Assets.resLinkBanner.path,
-                  package: "eums",
-                ),
+                (widget.data['sub_thumbnail2'].toString().isNotEmpty == true)
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColor.black)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                              // height: 80,
+                              // width: 80,
+                              fit: BoxFit.cover,
+                              // imageUrl: Constants.baseUrlImage + widget.data['thumbnail'],
+                              imageUrl: Constants.baseUrlImage + widget.data['sub_thumbnail2'],
+                              placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) {
+                                return Assets.logo.image(package: 'eums');
+                              }),
+                        ),
+                      )
+                    : Image.asset(
+                        Assets.resLinkBanner.path,
+                        package: "eums",
+                      ),
                 const SizedBox(height: 12),
                 const SizedBox(height: 12),
                 const Divider(),

@@ -1,4 +1,6 @@
 // import 'package:device_preview/device_preview.dart';
+import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
@@ -168,26 +170,28 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: EumsAppOfferWallService.instance.openSdkTest(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"),
-      builder: (context, snapshot) => snapshot.data ?? const SizedBox(),
-    );
-    // return Scaffold(
-    //   key: globalKeyMain,
-    //   appBar: AppBar(),
-    //   body: Column(
-    //     children: [
-    //       InkWell(
-    //         onTap: () async {
-    //           await localStore?.setDataShare(dataShare: null);
-    //           // ignore: use_build_context_synchronously
-    //           EumsAppOfferWallService.instance.openSdk(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서");
-    //         },
-    //         child: Container(color: AppColor.blue1, padding: const EdgeInsets.all(20), child: const Text('go to sdk')),
-    //       ),
-    //     ],
-    //   ),
+    // return FutureBuilder<Widget>(
+    //   future: EumsAppOfferWallService.instance.openSdkTest(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"),
+    //   builder: (context, snapshot) => snapshot.data ?? const SizedBox(),
     // );
+    return Scaffold(
+      // key: globalKeyMain,
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          InkWell(
+            onTap: () async {
+              await localStore?.setDataShare(dataShare: null);
+              // ignore: use_build_context_synchronously
+              final child = await EumsAppOfferWallService.instance
+                  .openSdkTest(context, memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서");
+              Routings().navigate(context, child);
+            },
+            child: Container(color: AppColor.blue1, padding: const EdgeInsets.all(20), child: const Text('go to sdk')),
+          ),
+        ],
+      ),
+    );
   }
 }
 

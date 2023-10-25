@@ -78,7 +78,8 @@ class NotificationHandler {
   ];
 
   Future initializeFcmNotification() async {
-    var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
+    // var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
+    var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_bg_service_small');
 
     final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -146,6 +147,7 @@ class NotificationHandler {
         if (message.from == "/topics/eums") {
           FlutterBackgroundService().invoke('locationCurrent');
         } else {
+          await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
           if (Platform.isAndroid) {
             CountAdver().initCount();
             FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
@@ -182,7 +184,8 @@ class NotificationHandler {
         //   break;
         case keepID:
           try {
-            await EumsOfferWallServiceApi().saveKeep(advertiseIdx: jsonDecode(dataMessage['data'])['idx']);
+            final data = jsonDecode(dataMessage['data']);
+            await EumsOfferWallServiceApi().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type']);
             if (Platform.isAndroid) {
               bool isActive = await FlutterOverlayWindow.isActive();
               if (isActive == true) {
@@ -246,7 +249,7 @@ class NotificationHandler {
     // if (Platform.isIOS) {
     //   token = await _fcm.getAPNSToken();
     // } else {
-      token = await _fcm.getToken();
+    token = await _fcm.getToken();
     // }
     LocalStoreService().setDeviceToken(token);
     // print('deviceTokenInit $token');
@@ -316,6 +319,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     FlutterBackgroundService().invoke('locationCurrent');
   } else {
 // NotificationHandler.instant.initializeFcmNotification();
+
     const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
       darwinNotificationCategoryPlain,
       darwinNotificationCategoryPlain,
@@ -334,6 +338,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       categoryIdentifier: darwinNotificationCategoryPlain,
     );
     const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
+    await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
 
     // CronCustom().initCron();
     if (Platform.isAndroid) {

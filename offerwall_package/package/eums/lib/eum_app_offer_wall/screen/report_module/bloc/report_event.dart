@@ -14,10 +14,10 @@ class ReportAdver extends ReportEvent {
 }
 
 class DeleteKeep extends ReportEvent {
-  DeleteKeep({this.advertise_idx});
+  DeleteKeep({required this.idx});
 
-  final dynamic advertise_idx;
+  final int idx;
 
   @override
-  List<Object?> get props => [advertise_idx];
+  List<Object?> get props => [idx];
 }

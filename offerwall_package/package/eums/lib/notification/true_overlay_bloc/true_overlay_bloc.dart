@@ -16,14 +16,16 @@ class TrueOverlayService {
     return;
   }
 
-  Future saveKeep({advertiseIdx, token}) async {
-    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
+  Future saveKeep({required int advertiseIdx, required String adType, required String token}) async {
+    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
     return await dio.post('${Constants.baseUrl}advertises/save-keep-advertise',
         data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
   }
 
-  Future saveScrap({advertiseIdx, token}) async {
-    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx};
+  Future saveScrap({required int advertiseIdx, required String adType, required String token}) async {
+    final data = <String, dynamic>{};
+    data["advertise_idx"] = advertiseIdx;
+    data["ad_type"] = adType;
     await dio.post('${Constants.baseUrl}advertises/save-scrap-advertise', data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
     return;
   }

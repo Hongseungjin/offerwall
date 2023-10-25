@@ -82,11 +82,11 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   /// KEEP광고 저장
   ///[advertiseIdx]광고 아이디
-  Future<dynamic> saveKeep({int? advertiseIdx});
+  Future<dynamic> saveKeep({required int advertiseIdx, required String adType});
 
   ///KEEP광고 삭제
   ///[advertiseIdx] 광고 아이디
-  Future<dynamic> deleteKeep({int? advertiseIdx});
+  Future<dynamic> deleteKeep({required int idx});
 
   /// 스크랩 광고 리스트
   /// [sort] enum{날짜 오름차순 = [DATE_ASC], 날짜 내림차순 = [DATE_DESC] ,좋아요 = [LIKE]}
@@ -94,11 +94,11 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   ///스크랩 광고 저장
   ///[advertiseIdx]광고 아이디
-  Future<dynamic> saveScrap({int? advertiseIdx});
+  Future<dynamic> saveScrap({required int advertiseIdx, required String adType});
 
   ///스크랩 광고 삭제
   ///[advertiseIdx] 광고 아이디
-  Future<dynamic> deleteScrap({int? advertiseIdx});
+  Future<dynamic> deleteScrap({int? idx});
 
   /// 내부 오퍼월 미션
   ///  [offerWallIdx] 광고 아이디

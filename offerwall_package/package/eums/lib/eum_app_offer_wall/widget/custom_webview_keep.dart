@@ -1,4 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
+
+import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -29,11 +31,14 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   // Timer? _timer;
   // final int _startTime = 15;
-  // Timer? timer5s;
+  Timer? timer5s;
   ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
   final controllerGet = Get.put(SettingFontSize());
-  late LinearTimerController timerController = LinearTimerController(this);
+  late LinearTimerController timerController;
+
+  final events = [];
+  bool canScroll = true;
 
   // void startTimeDown() {
   //   _timer?.cancel();
@@ -60,7 +65,9 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
   @override
   void initState() {
     try {
+      timerController = LinearTimerController(this);
       gifController = FlutterGifController(vsync: this);
+
       // ignore: empty_catches
     } catch (e) {}
     // TODO: implement initState
@@ -83,35 +90,61 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
   void dispose() {
     _scrollController.dispose();
     timerController.dispose();
-    // timer5s?.cancel();
+    timer5s?.cancel();
     // _timer?.cancel();
     super.dispose();
   }
 
-  // start5s() {
-  //   timer5s?.cancel();
-  //   timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-  //     _timer?.cancel();
-  //     isRunning = false;
-  //     timerController.stop();
-  //     setState(() {});
-  //   });
-  // }
+  start5s() {
+    timer5s?.cancel();
+    timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
+      // _timer?.cancel();
+      isRunning = false;
+      timerController.stop();
+      // setState(() {});
+    });
+  }
 
   _scrollListener() {
     if (_scrollController.position.userScrollDirection == ScrollDirection.reverse ||
         _scrollController.position.userScrollDirection == ScrollDirection.forward) {
       if (!isRunning) {
         isRunning = true;
+        timerController.start();
         // startTimeDown();
         // controller?.forward(from: _startTime.toDouble());
       }
-      // start5s();
+      start5s();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // final imageCache = InteractiveViewer(
+    //   minScale: 0.1,
+    //   maxScale: 2.6,
+    //   child: CachedNetworkImage(
+    //       width: MediaQuery.of(context).size.width,
+    //       fit: BoxFit.cover,
+    //       imageUrl: widget.urlLink ?? '',
+    //       placeholder: (context, url) => const Padding(
+    //             padding: EdgeInsets.symmetric(vertical: 30),
+    //             child: Center(
+    //                 child: CircularProgressIndicator(
+    //               color: Color(0xfffcc900),
+    //             )),
+    //           ),
+    //       imageBuilder: (context, imageProvider) {
+    //         if (timerController.value == 0) {
+    //           timerController.start();
+    //           start5s();
+    //         }
+    //         return Image(image: imageProvider);
+    //       },
+    //       errorWidget: (context, url, error) {
+    //         return Image.asset(Assets.logo.path, package: "eums", height: 100);
+    //       }),
+    // );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.white,
@@ -132,41 +165,16 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
         children: [
           Expanded(
             child: NotificationListener(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                child: CachedNetworkImage(
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    imageUrl: widget.urlLink ?? '',
-                    // placeholder: (context, url) => const Padding(
-                    //       padding: EdgeInsets.symmetric(vertical: 30),
-                    //       child: Center(
-                    //           child: CircularProgressIndicator(
-                    //         color: Color(0xfffcc900),
-                    //       )),
-                    //     ),
-
-                    imageBuilder: (context, imageProvider) {
-                      if (timerController.value == 0) {
-                        timerController.start();
-                      }
-                      return Image(image: imageProvider);
-                    },
-                    progressIndicatorBuilder: (context, url, progress) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 30),
-                        child: Center(
-                            child: CircularProgressIndicator(
-                          color: Color(0xfffcc900),
-                        )),
-                      );
-                    },
-                    errorWidget: (context, url, error) {
-                      return Image.asset(Assets.logo.path, package: "eums", height: 100);
-                    }),
-              ),
-            ),
+                child: WidgetImageOfferWall(
+              scrollController: _scrollController,
+              urlLink: widget.urlLink ?? '',
+              onDone: () {
+                if (timerController.value == 0) {
+                  timerController.start();
+                  start5s();
+                }
+              },
+            )),
           ),
           Container(
             padding: EdgeInsets.only(top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),

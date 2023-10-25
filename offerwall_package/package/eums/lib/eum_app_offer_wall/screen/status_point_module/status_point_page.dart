@@ -185,12 +185,19 @@ class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProv
                             '현재 보유 포인트',
                             style: AppStyle.medium.copyWith(color: HexColor('707070'), fontSize: controllerGet.fontSizeObx.value),
                           ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           Row(
                             children: [
                               Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
                               const SizedBox(width: 8),
                               Text(
-                                Constants.formatMoney(state.dataTotalPoint != null ? state.dataTotalPoint['totalPoint'] : 0, suffix: '원'),
+                                Constants.formatMoney(
+                                    state.dataTotalPoint != null
+                                        ? state.dataTotalPoint[_tabController.index == 0 ? 'totalPoint' : 'offerWallPoint']
+                                        : 0,
+                                    suffix: _tabController.index == 0 ? '원' : "P"),
                                 style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                               ),
                             ],
@@ -241,7 +248,9 @@ class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProv
                             style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
                             textAlign: TextAlign.center,
                           ),
-                          Text(Constants.formatMoney(_tabController.index == 0 ? state.totalPoint ?? 0 : totalPointOfferWall, suffix: '원'),
+                          Text(
+                              Constants.formatMoney(_tabController.index == 0 ? state.totalPoint ?? 0 : totalPointOfferWall,
+                                  suffix: _tabController.index == 0 ? '원' : "P"),
                               style: AppStyle.bold.copyWith(fontSize: 8 + controllerGet.fontSizeObx.value)),
                         ],
                       ),

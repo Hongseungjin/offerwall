@@ -132,7 +132,8 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                     context,
                                                     DetailScrapScreen(
                                                       url: state.dataScrapAdverbox[index]['url_link'],
-                                                      adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                      // adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                      adIdx: state.dataScrapAdverbox[index]['idx'],
                                                     ));
                                               }
                                             },
@@ -170,7 +171,8 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                           context,
                                                           DetailScrapScreen(
                                                             url: state.dataScrapAdverbox[index]['url_link'],
-                                                            adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                            // adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                            adIdx: state.dataScrapAdverbox[index]['idx'],
                                                           ));
                                                     }
                                                   },
@@ -328,7 +330,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
               actions: InkWell(
                 onTap: () {
                   globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(
-                        id: widget.adIdx,
+                        idx: widget.adIdx,
                       ));
                 },
                 child: Padding(

@@ -109,13 +109,9 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             return mode == LoadStatus.loading
-                ?  Center(
-                    child: Column(
-                    children: [
-                      Text(' '),
-                      CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
-                    ],
-                  ))
+                ? const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
+                  )
                 : Container();
           },
         ),
@@ -350,6 +346,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
     // fToast.init(context);
     // TODO: implement initStat
     super.initState();
+    checkSave = widget.data['isScrap'] ?? false;
 
     _controller.addListener(() {
       if (_controller.position.atEdge) {
@@ -451,7 +448,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
 
   double? dyStart;
   double? dy;
-  bool checkSave = true;
+  bool checkSave = false;
 
   onVerticalDrapEnd(DragEndDetails details) {}
 
@@ -488,25 +485,28 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                   setState(() {
                     checkSave = !checkSave;
                   });
-                  if (!checkSave) {
-                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(SaveScrap(advertise_idx: widget.data['advertiseIdx']));
+                  if (checkSave) {
+                    globalKey.currentContext
+                        ?.read<KeepAdverboxBloc>()
+                        .add(SaveScrap(advertiseIdx: widget.data['advertiseIdx'], adType: widget.data['ad_type']));
                   } else {
-                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(DeleteScrap(advertise_idx: widget.data['advertiseIdx']));
+                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(DeleteScrap(idx: widget.data['idx']));
                   }
                 },
                 child: Container(
                   decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: Image.asset(checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
+                  child: Image.asset(!checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
                 ),
               ),
               mission: () {
                 DialogUtils.showDialogRewardPoint(context, checkImage: true, point: widget.data['typePoint'], data: (state.dataAdvertiseSponsor),
                     voidCallback: () {
-                  context.read<KeepAdverboxBloc>().add(DeleteKeep(id: widget.data['advertiseIdx']));
+                  // context.read<KeepAdverboxBloc>().add(DeleteKeep(id: widget.data['advertiseIdx']));
+                  context.read<KeepAdverboxBloc>().add(DeleteKeep(idx: widget.data['idx']));
                   globalKey.currentContext
                       ?.read<KeepAdverboxBloc>()
-                      .add(EarnPoin(advertise_idx: widget.data['advertiseIdx'], pointType: widget.data['typePoint']));
+                      .add(EarnPoin(advertiseIdx: widget.data['advertiseIdx'], pointType: widget.data['typePoint']));
                 });
               },
             );
