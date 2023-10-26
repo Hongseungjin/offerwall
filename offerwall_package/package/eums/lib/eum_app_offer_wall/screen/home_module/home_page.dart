@@ -209,9 +209,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                // hostApi.cancel();
+                hostApi.cancel();
                 // MethodOfferwallChannel.instant.back();
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,

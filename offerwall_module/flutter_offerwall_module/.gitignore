@@ -48,6 +48,8 @@ build/
 .ios/Pods/
 .ios/Podfile.lock
 
+pubspec.lock
+
 # Symbolication related
 app.*.symbols
 

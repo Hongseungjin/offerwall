@@ -53,7 +53,7 @@ class ViewController: UIViewController, BKHostBookApi {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let flutterViewController = FlutterViewController(engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
         flutterViewController.modalPresentationStyle = .overCurrentContext
-        flutterViewController.isViewOpaque = false
+//        flutterViewController.isViewOpaque = false
         self.present(flutterViewController, animated: true)
         
         //self.present(flutterViewController, animated: true, completion: nil)
