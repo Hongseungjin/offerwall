@@ -32,7 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
   bool checkToken = false;
   bool checkTime = false;
 
-  LocalStore? localStore;
+  // LocalStore? localStore;
   DateTime? startDate;
   DateTime? endDate;
 
@@ -43,7 +43,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   void initState() {
-    localStore = LocalStoreService();
+    // localStore = LocalStoreService();
     startDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23, 59);
     checkBoolTime();
@@ -53,8 +53,8 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   checkBoolTime() async {
-    checkTime = await localStore?.getBoolTime();
-    checkToken = await localStore?.getSaveAdver();
+    checkTime = await LocalStoreService.instant.getBoolTime();
+    checkToken =  LocalStoreService.instant.getSaveAdver();
   }
 
   @override
@@ -162,7 +162,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         setState(() {
                           checkToken = value;
                         });
-                        localStore?.setSaveAdver(checkToken);
+                        await LocalStoreService.instant.setSaveAdver(checkToken);
 
                         if (!checkToken) {
                           String? token = await FirebaseMessaging.instance.getToken();
@@ -189,11 +189,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     _buildCheckSetting(
                       checkSetting: checkTime,
                       title: '광고 시간대 설정',
-                      onChange: (value) {
+                      onChange: (value) async{
                         setState(() {
                           checkTime = value;
                         });
-                        localStore?.setBoolTime(checkTime);
+                        await LocalStoreService.instant.setBoolTime(checkTime);
 
                         globalKey.currentContext?.read<SettingBloc>().add(EnableOrDisbleSetting(enableOrDisble: checkTime));
                       },

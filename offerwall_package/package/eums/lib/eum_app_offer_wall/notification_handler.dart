@@ -251,7 +251,7 @@ class NotificationHandler {
     // } else {
     token = await _fcm.getToken();
     // }
-    LocalStoreService().setDeviceToken(token);
+    LocalStoreService.instant.setDeviceToken(token);
     // print('deviceTokenInit $token');
     return token;
   }
@@ -260,6 +260,7 @@ class NotificationHandler {
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) async {
   await Firebase.initializeApp();
+  await LocalStoreService.instant.init();
   NotificationHandler.instant.eventOpenNotification(notificationResponse);
   // final String? payload = notificationResponse.payload;
   // if (notificationResponse.payload != null) {
@@ -315,6 +316,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  await LocalStoreService.instant.init();
   if (message.from == "/topics/eums") {
     FlutterBackgroundService().invoke('locationCurrent');
   } else {
@@ -352,7 +354,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class CountAdver {
-  final LocalStore _localStore = LocalStoreService();
+  // final LocalStore _localStore = LocalStoreService();
   // var countAdvertisement = 0;
   // dynamic dataCount;
   String dateCount = '';
@@ -360,6 +362,7 @@ class CountAdver {
   bool isActive = false;
   initCount() async {
     await Firebase.initializeApp();
+    await LocalStoreService.instant.init();
     // dataCount = await _localStore.getCountAdvertisement();
     // countAdvertisement = dataCount['count'] ?? 0;
     // isActive = await _localStore.getSaveAdver();

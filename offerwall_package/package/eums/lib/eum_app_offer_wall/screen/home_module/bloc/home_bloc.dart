@@ -15,13 +15,13 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        _localStore = LocalStoreService(),
+        // _localStore = LocalStoreService(),
         super(const HomeState()) {
     on<HomeEvent>(_onHomeToState);
   }
 
   final EumsOfferWallService _eumsOfferWallService;
-  final LocalStore _localStore;
+  // final LocalStore _localStore;
 
   FutureOr<void> _onHomeToState(HomeEvent event, Emitter<HomeState> emit) async {
     if (event is ListOfferWall) {
@@ -53,9 +53,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _mapInfoUserToState(InfoUser event, emit) async {
     try {
       dynamic user = await _eumsOfferWallService.userInfo();
+      await LocalStoreService.instant.setDataUser(user);
       emit(state.copyWith(account: user));
       // print("useruser$user");
-      _localStore.setDataUser(user);
     } catch (ex) {
       // print("exexexex$ex");
     }

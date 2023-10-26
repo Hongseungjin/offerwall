@@ -51,7 +51,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   // final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   bool isStartBackground = false;
-  late LocalStore localStore;
+  // late LocalStore localStore;
   final _currentPageNotifier = ValueNotifier<int>(0);
   final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll = ValueNotifier(GlobalKey());
   late TabController _tabController;
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void initState() {
     bloc = HomeBloc();
-    localStore = LocalStoreService();
+    // localStore = LocalStoreService();
     hostApi = HostBookApi();
     categary = 'participation';
 
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   checkPermission() async {
-    isStartBackground = await localStore.getSaveAdver();
+    isStartBackground = await LocalStoreService.instant.getSaveAdver();
     if (isStartBackground) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       if (!status) {
         await FlutterOverlayWindow.requestPermission();
       } else {}
-      localStore.setAccessToken(await localStore.getAccessToken());
+      LocalStoreService.instant.setAccessToken(LocalStoreService.instant.getAccessToken());
     }
   }
 
@@ -209,9 +209,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                hostApi.cancel();
+                // hostApi.cancel();
                 // MethodOfferwallChannel.instant.back();
-                // Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -504,7 +504,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     setState(() {
                       isStartBackground = value;
                     });
-                    localStore.setSaveAdver(isStartBackground);
+                    await LocalStoreService.instant.setSaveAdver(isStartBackground);
                     if (!isStartBackground) {
                       String? token = await FirebaseMessaging.instance.getToken();
 

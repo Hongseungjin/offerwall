@@ -13,17 +13,18 @@ part 'authentication_state.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc()
-      : _localStore = LocalStoreService(),
+      : 
+      // _localStore = LocalStoreService(),
         super(const AuthenticationState()) {
     on<AuthenticationEvent>(mapEventToState);
-    _localStore.hasAuthenticated().then((hasAuthenticated) {
+    LocalStoreService.instant.hasAuthenticated().then((hasAuthenticated) {
       add(AuthenticationStatusChanged(hasAuthenticated
           ? AuthenticationStatus.authenticated
           : AuthenticationStatus.unauthenticated));
     });
   }
 
-  final LocalStore _localStore;
+  // final LocalStore _localStore;
   bool onLoggingOut = false;
 
   FutureOr<void> mapEventToState(AuthenticationEvent event, emit) async {
@@ -40,7 +41,7 @@ class AuthenticationBloc
       AuthenticationStatusChanged event, emit) async {
     switch (event.status) {
       case AuthenticationStatus.unauthenticated:
-        await _localStore.removeCredentials();
+        await LocalStoreService.instant.removeCredentials();
         emit(state.copyWith(status: AuthenticationStatus.unauthenticated));
         return;
       case AuthenticationStatus.authenticated:
@@ -54,7 +55,7 @@ class AuthenticationBloc
 
   _mapCheckSaveAccountLoggedToState(CheckSaveAccountLogged event, emit) async {
     await Future.delayed(const Duration(milliseconds: 200));
-    bool isSave = await _localStore.getSaveOrNotCredentials();
+    bool isSave = await LocalStoreService.instant.getSaveOrNotCredentials();
     
     if (!isSave) {
       add(AuthenticationStatusChanged(AuthenticationStatus.unauthenticated));
@@ -69,7 +70,7 @@ class AuthenticationBloc
     onLoggingOut = true;
     emit(state.copyWith(logoutStatus: LogoutStatus.loading));
     try {
-      String accessToken = await _localStore.getAccessToken();
+      String accessToken = await LocalStoreService.instant.getAccessToken();
       if (accessToken.isNotEmpty) {
         // await _accountRepos.logout();
       }

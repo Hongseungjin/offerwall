@@ -7,7 +7,7 @@ import 'local_store/local_store.dart';
 import 'local_store/local_store_service.dart';
 
 class BaseApi {
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
   Dio? dio;
 
   BaseApi()
@@ -17,7 +17,8 @@ class BaseApi {
           receiveTimeout: const Duration(milliseconds: Constants.receiveTimeout),
         )) {
     dio?.interceptors.addAll([
-      AccessTokenInterceptor(localStore: localStore),
+      // AccessTokenInterceptor(localStore: localStore),
+      AccessTokenInterceptor(),
       LoggingInterceptor(),
       UnauthorizedInterceptor(),
     ]);

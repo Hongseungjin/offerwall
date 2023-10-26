@@ -26,8 +26,8 @@ showOverlay(event) async {
       overlayTitle: event?['data']['title'],
       overlayContent: event?['data']['body'],
     );
-    event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-    event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
+    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   } else {
     if (event?['data']['isToast'] != null) {
@@ -36,11 +36,11 @@ showOverlay(event) async {
         await FlutterOverlayWindow.closeOverlay();
       });
     } else {
-      LocalStoreService().setDataShare(dataShare: event);
+      await LocalStoreService.instant.setDataShare(dataShare: event);
       await FlutterOverlayWindow.showOverlay(enableDrag: true, height: 300, width: 300, alignment: OverlayAlignment.center);
     }
-    event?['data']['tokenSdk'] = await LocalStoreService().getAccessToken();
-    event?['data']['sizeDevice'] = await LocalStoreService().getSizeDevice();
+    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
     await FlutterOverlayWindow.shareData(event?['data']);
   }
 }
@@ -85,6 +85,8 @@ Future<void> onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
   await Firebase.initializeApp();
+
+  await LocalStoreService.instant.init();
   Queue queue = Queue();
   // registerDeviceToken();
   try {
@@ -151,13 +153,13 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 }
 
 class EumsAppOfferWall extends EumsAppOfferWallService {
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
   @override
   Future<Widget> openSdk(BuildContext context) async {
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     Size size = view.physicalSize;
     double height = size.height;
-    localStore.setSizeDevice(height);
+    LocalStoreService.instant.setSizeDevice(height);
 
     return const MyHomeScreen();
   }
@@ -197,17 +199,16 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
 
   //   // Routings().navigate(context, const MyHomeScreen());
   // }
-  
+
   @override
-  Future<Widget> openSdkTest(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async{
-       FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+  Future<Widget> openSdkTest(BuildContext context, {String? memId, String? memGen, String? memRegion, String? memBirth}) async {
+    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     Size size = view.physicalSize;
     double height = size.height;
 
-
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
-    localStore.setAccessToken(data['token']);
-    localStore.setSizeDevice(height);
+    await LocalStoreService.instant.setAccessToken(data['token']);
+    await LocalStoreService.instant.setSizeDevice(height);
     FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(),
         androidConfiguration: AndroidConfiguration(

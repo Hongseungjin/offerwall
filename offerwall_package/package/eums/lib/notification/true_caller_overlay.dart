@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:eums/eum_app_offer_wall/screen/report_module/report_page.dart';
@@ -20,7 +20,6 @@ import 'package:eums/gen/assets.gen.dart';
 import 'package:eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:eums/eums_library.dart';
 
-import '../common/local_store/local_store.dart';
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 
 class TrueCallOverlay extends StatefulWidget {
@@ -33,7 +32,7 @@ class TrueCallOverlay extends StatefulWidget {
 class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
   final GlobalKey<State<StatefulWidget>> webViewKey = GlobalKey<State<StatefulWidget>>();
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
   dynamic dataEvent;
   bool isWebView = false;
   bool isToast = false;
@@ -81,6 +80,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   initCallbackDrag() {
     _backgroundChannel.setMethodCallHandler((MethodCall call) async {
       await Firebase.initializeApp();
+      await LocalStoreService.instant.init();
 
       // if ('START_DRAG' == call.method) {
       //   // print('start ${call.method} ${call.arguments}');
@@ -232,14 +232,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           if (dataEvent != null && dataEvent['data'] != null) {
             DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
               try {
-                 setState(() {
+                setState(() {
                   isWebView = false;
                   checkSave = false;
                 });
                 FlutterBackgroundService().invoke("closeOverlay");
                 TrueOverlayService().missionOfferWallOutside(
                     advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
-               
+
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 // print(e);

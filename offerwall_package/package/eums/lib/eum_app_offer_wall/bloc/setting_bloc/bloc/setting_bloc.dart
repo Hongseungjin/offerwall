@@ -15,13 +15,13 @@ part 'setting_state.dart';
 class SettingBloc extends Bloc<SettingEvent, SettingState> {
   SettingBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        _localStore = LocalStoreService(),
+        // _localStore = LocalStoreService(),
         super(const SettingState()) {
     on<SettingEvent>(mapEventToState);
   }
 
   final EumsOfferWallService _eumsOfferWallService;
-  final LocalStore _localStore;
+  // final LocalStore _localStore;
 
   FutureOr<void> mapEventToState(SettingEvent event, emit) async {
     if (event is NextTab) {

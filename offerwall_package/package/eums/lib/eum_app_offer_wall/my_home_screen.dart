@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
+import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +26,6 @@ import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../common/local_store/local_store.dart';
 import '../common/routing.dart';
 import 'bloc/authentication_bloc/authentication_bloc.dart';
 
@@ -53,35 +54,50 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     RxBus.destroy();
   }
 
+  _permissionNotification() async {
+    PermissionStatus? statusNotification = await Permission.notification.request();
+    if (statusNotification == PermissionStatus.denied) {
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+      // _permissionNotification();
+    }
+  }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      // return Future.error('Location services are disabled.');
+      await Geolocator.openLocationSettings();
+      return _determinePosition();
+      // return Future.error('Location services are disabled.');
+    } else {
+      permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // return Future.error('Location permissions are denied');
+          return _determinePosition();
+        }
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      if (permission == LocationPermission.deniedForever) {
+        return _determinePosition();
+        // return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      }
+      return await Geolocator.getCurrentPosition();
     }
-    return await Geolocator.getCurrentPosition();
   }
 
   SettingFontSize controllerGet = Get.put(SettingFontSize());
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
 
   @override
   void initState() {
     _registerEventBus();
-    _determinePosition();
+    _determinePosition().then((value) {
+      _permissionNotification();
+    });
     SettingFontSize().initSetingFontSize(controllerGet);
 
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
@@ -91,6 +107,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Firebase.initializeApp();
+      await LocalStoreService.instant.init();
       if (Platform.isAndroid) {
         settingBattery();
       }
@@ -101,6 +118,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       print("TOKEN======> $token");
       FirebaseMessaging.instance.subscribeToTopic('eums');
     });
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
+      _permissionNotification();
+    }));
   }
 
   Future _checkPermissionLocationBackground() async {
@@ -148,7 +168,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
+        // RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
         RepositoryProvider<EumsOfferWallService>(create: (context) => EumsOfferWallServiceApi()),
       ],
       child: MultiBlocProvider(
@@ -286,7 +306,7 @@ class _MyHomePagePage2State extends State<MyHomePagePage2> with WidgetsBindingOb
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
+        // RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
         RepositoryProvider<EumsOfferWallService>(create: (context) => EumsOfferWallServiceApi()),
       ],
       child: MultiBlocProvider(

@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
   double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
   @override
@@ -63,22 +63,22 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   }
 
   setDeviceWidth() {
-    localStore.setDeviceWidth(deviceWidth(context));
+    LocalStoreService.instant.setDeviceWidth(deviceWidth(context));
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-    localStore.setDataShare(dataShare: null);
+    LocalStoreService.instant.setDataShare(dataShare: null);
   }
 
   @override
   Widget build(BuildContext context) {
     setDeviceWidth();
     return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
+      providers: const [
+        // RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
       ],
       child: MultiBlocProvider(
           providers: [
@@ -118,19 +118,19 @@ class AppMainScreen extends StatefulWidget {
 }
 
 class _AppMainScreenState extends State<AppMainScreen> {
-  late LocalStore localStore;
+  // late LocalStore localStore;
 
   ValueNotifier<bool> showMain = ValueNotifier(false);
 
   @override
   void initState() {
-    localStore = LocalStoreService();
+    // localStore = LocalStoreService();
 
     print("book.encode()");
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final token = await localStore.getAccessToken();
+      final token = LocalStoreService.instant.getAccessToken();
       print("Token->>>>: $token");
       if (token.isNotEmpty == true) {
         await FlutterBackgroundService().configure(
@@ -141,14 +141,14 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 isForegroundMode: true,
                 initialNotificationTitle: "인천e음",
                 initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-      
+
         showMain.value = true;
       } else {
         FlutterBookApi.setup(FlutterBookApiHandler((book) async {
           print("aaaaaa ${book.encode()}");
           dynamic data = await EumsOfferWallService.instance
               .authConnect(memBirth: book.memBirth, memGen: book.memGen, memRegion: book.memRegion, memId: book.memId);
-          await localStore.setAccessToken(data['token']);
+          await LocalStoreService.instant.setAccessToken(data['token']);
           await FlutterBackgroundService().configure(
               iosConfiguration: IosConfiguration(),
               androidConfiguration: AndroidConfiguration(
@@ -157,7 +157,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                   isForegroundMode: true,
                   initialNotificationTitle: "인천e음",
                   initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-      
+
           showMain.value = true;
         }));
       }

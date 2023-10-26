@@ -15,13 +15,13 @@ part 'accumulate_money_state.dart';
 class AccumulateMoneyBloc extends Bloc<AccumulateMoneyEvent, AccumulateMoneyState> {
   AccumulateMoneyBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        _localStore = LocalStoreService(),
-        super(AccumulateMoneyState()) {
+        // _localStore = LocalStoreService(),
+        super(const AccumulateMoneyState()) {
     on<AccumulateMoneyEvent>(mapEventToState);
   }
 
   final EumsOfferWallService _eumsOfferWallService;
-  final LocalStore _localStore;
+  // final LocalStore _localStore;
 
   FutureOr<void> mapEventToState(AccumulateMoneyEvent event, emit) async {
     if (event is AccumulateMoneyList) {
@@ -69,12 +69,12 @@ class AccumulateMoneyBloc extends Bloc<AccumulateMoneyEvent, AccumulateMoneyStat
   // }
 
   _mapGetOnOrOffAdverToState(GetOnOrOffAdver event, emit) async {
-    bool check = await _localStore.getSaveAdver();
+    bool check = await LocalStoreService.instant.getSaveAdver();
     emit(state.copyWith(checkOnOffAdver: check));
   }
 
   _mapOnOrOffAdverToState(OnOrOffAdver event, emit) async {
-    await _localStore.setSaveAdver(event.checkOnOff ?? false);
+    await LocalStoreService.instant.setSaveAdver(event.checkOnOff ?? false);
   }
 
   _mapEarnCashListToState(AccumulateMoneyList event, emit) async {

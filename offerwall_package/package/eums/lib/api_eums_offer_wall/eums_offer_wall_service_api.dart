@@ -3,19 +3,18 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:eums/common/api.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 
 import 'eums_offer_wall_service.dart';
 
 class EumsOfferWallServiceApi extends EumsOfferWallService {
   Dio api = BaseApi().buildDio();
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
 
   @override
   Future authConnect({String? memId, String? memGen, String? memRegion, String? memBirth}) async {
     dynamic data = <String, dynamic>{"memId": memId, "memGen": memGen, "memRegion": memRegion, "memBirth": memBirth};
-    localStore.setLoggedAccount(data);
+    LocalStoreService.instant.setLoggedAccount(data);
     Response result = await api.post('auth/connect', data: data);
     return result.data;
   }
@@ -224,7 +223,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   @override
   Future saveKeep({required int advertiseIdx, required String adType}) async {
     try {
-      dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx,'ad_type': adType };
+      dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
       final response = await api.post('advertises/save-keep-advertise', data: data);
       return response;
     } catch (e) {

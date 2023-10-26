@@ -110,7 +110,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
 
   double deviceWith = 0;
   getDeviceWidth() async {
-    deviceWith = double.parse(await LocalStoreService().getDeviceWidth());
+    deviceWith = double.parse(LocalStoreService.instant.getDeviceWidth());
     print('deviceWithdeviceWith $deviceWith');
   }
 

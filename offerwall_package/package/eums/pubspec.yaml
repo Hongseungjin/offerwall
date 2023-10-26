@@ -70,6 +70,7 @@ dependencies:
   device_preview: ^1.1.0
   geolocator:
   photo_view: ^0.14.0
+  app_settings: ^5.1.1
   # flutter_time_picker_spinner: ^2.0.0
   # awesome_notifications: ^0.0.6+10
   # flutter_apns:

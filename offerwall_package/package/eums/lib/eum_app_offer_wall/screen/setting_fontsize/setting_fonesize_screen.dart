@@ -18,7 +18,7 @@ class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
   final controller = Get.put(SettingFontSize());
 
   final SfRangeValues _dataValues = const SfRangeValues(1, 4);
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
 
   double _value = 1;
   @override
@@ -29,7 +29,7 @@ class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
   }
 
   getSize() async {
-    switch ((double.parse(await localStore.getSizeText())).toInt()) {
+    switch ((double.parse(LocalStoreService.instant.getSizeText())).toInt()) {
       case 14:
         _value = 1;
         break;
@@ -62,7 +62,7 @@ class _SettingFontSizeScreenState extends State<SettingFontSizeScreen> {
                   "마케팅 알림$_value",
                   style: AppStyle.medium.copyWith(fontSize: controller.fontSizeObx.value),
                 ),
-                SizedBox(height: 19),
+                const SizedBox(height: 19),
                 SfSlider(
                   min: 1.0,
                   max: 4.0,

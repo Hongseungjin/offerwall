@@ -1,63 +1,64 @@
-abstract class LocalStore {
-  Future<bool> hasAuthenticated();
+// abstract class LocalStore {
+//   Future init();
+//   Future<bool> hasAuthenticated();
 
-  Future setAccessToken(String accessToken);
+//   Future setAccessToken(String accessToken);
 
-  Future<String> getAccessToken();
+//   Future<String> getAccessToken();
 
-  Future setLoggedAccount(dynamic account);
+//   Future setLoggedAccount(dynamic account);
 
-  Future<dynamic> getLoggedAccount();
+//   Future<dynamic> getLoggedAccount();
 
-  Future removeCredentials();
+//   Future removeCredentials();
 
-  Future<bool> containsKey(String key);
+//   Future<bool> containsKey(String key);
 
-  Future<bool> removeKey(String key);
+//   Future<bool> removeKey(String key);
 
-  Future<bool> clear();
+//   Future<bool> clear();
 
-  Future reload();
+//   Future reload();
 
-  Future saveCredentials(String accessToken, dynamic account);
+//   Future saveCredentials(String accessToken, dynamic account);
 
-  Future updateLoggedAccount(dynamic account);
+//   Future updateLoggedAccount(dynamic account);
 
-  Future<bool> getSaveOrNotCredentials();
+//   Future<bool> getSaveOrNotCredentials();
 
-  Future<dynamic> getSaveAdver();
+//   Future<dynamic> getSaveAdver();
 
-  Future setSaveAdver(bool status);
+//   Future setSaveAdver(bool status);
 
-  Future<String?> getDataShare();
+//   Future<String?> getDataShare();
 
-  Future setDataShare({dynamic dataShare});
+//   Future setDataShare({dynamic dataShare});
 
-  Future setDeviceToken(dynamic token);
+//   Future setDeviceToken(dynamic token);
 
-  Future<dynamic> getDeviceToken();
+//   Future<dynamic> getDeviceToken();
 
-  Future setDeviceWidth(double width);
+//   Future setDeviceWidth(double width);
 
-  Future<dynamic> getDeviceWidth();
+//   Future<dynamic> getDeviceWidth();
 
-  // Future setCountAdvertisement(dynamic data);
+//   // Future setCountAdvertisement(dynamic data);
 
-  // Future<dynamic> getCountAdvertisement();
+//   // Future<dynamic> getCountAdvertisement();
 
-  Future setDataUser(dynamic account);
+//   Future setDataUser(dynamic account);
 
-  Future<dynamic> getDataUser();
+//   Future<dynamic> getDataUser();
 
-  Future setBoolTime(bool checkBool);
+//   Future setBoolTime(bool checkBool);
 
-  Future<dynamic> getBoolTime();
+//   Future<dynamic> getBoolTime();
 
-  Future<dynamic> getSizeDevice();
+//   Future<dynamic> getSizeDevice();
 
-  Future setSizeDevice(dynamic sizeHeight);
+//   Future setSizeDevice(dynamic sizeHeight);
 
-  Future<dynamic> getSizeText();
+//   Future<dynamic> getSizeText();
 
-  Future setSizeText(double sizeHeight);
-}
+//   Future setSizeText(double sizeHeight);
+// }

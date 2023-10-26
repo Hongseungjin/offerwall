@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:eums/common/constants.dart';
-import 'package:eums/common/local_store/local_store.dart';
-import 'package:eums/common/local_store/local_store_service.dart';
 
 class TrueOverlayService {
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
 
   Dio dio = Dio();
   Future missionOfferWallOutside({advertiseIdx, pointType, token}) async {

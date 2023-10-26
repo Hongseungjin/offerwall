@@ -52,13 +52,13 @@ class _CustomWebViewState extends State<CustomWebView> {
     String start1 = 'https:';
     int startIndex1 = content.indexOf(start1);
     String iframeTag1 = content.substring(startIndex1 + 6);
-    content = iframeTag1.replaceAll("$iframeTag1", "http:${iframeTag1}");
+    content = iframeTag1.replaceAll(iframeTag1, "http:$iframeTag1");
     return content;
   }
 
   double deviceWith = 0;
   getDeviceWidth() async {
-    deviceWith = double.parse(await LocalStoreService().getDeviceWidth());
+    deviceWith = double.parse(LocalStoreService.instant.getDeviceWidth());
     print('deviceWithdeviceWith $deviceWith');
   }
 

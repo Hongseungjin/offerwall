@@ -3,12 +3,12 @@ import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 
 class SettingFontSize extends GetxController {
-  LocalStore localStore = LocalStoreService();
+  // LocalStore localStore = LocalStoreService();
   RxDouble fontSizeObx = RxDouble(14);
 
   initSetingFontSize(SettingFontSize controllerGet) async {
     double value = 1.obs.toDouble();
-    switch ((double.parse(await localStore.getSizeText())).toInt()) {
+    switch ((double.parse(LocalStoreService.instant.getSizeText())).toInt()) {
       case 14:
         value = 1;
         break;
@@ -45,6 +45,6 @@ class SettingFontSize extends GetxController {
       default:
     }
 
-    localStore.setSizeText(fontSizeObx.value);
+    LocalStoreService.instant.setSizeText(fontSizeObx.value);
   }
 }

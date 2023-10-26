@@ -41,7 +41,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   final _currentPageNotifier = ValueNotifier<int>(0);
   dynamic dataUser;
-  LocalStore? localStore = LocalStoreService();
+  // LocalStore? localStore = LocalStoreService();
   final controllerGet = Get.put(SettingFontSize());
 
   @override
@@ -52,7 +52,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   getUser() async {
-    dataUser = await localStore?.getDataUser();
+    dataUser = await LocalStoreService.instant?.getDataUser();
     setState(() {});
   }
 
@@ -290,7 +290,7 @@ class _MyPageState extends State<MyPage> {
                             Routings().navigate(context, const ScrapAdverBoxScreen());
                             break;
                           case 5:
-                            Routings().navigate(context, NotifiScreen());
+                            Routings().navigate(context, const NotifiScreen());
                             break;
                           case 6:
                             Routings().navigate(context, const RequestScreen());
@@ -299,7 +299,7 @@ class _MyPageState extends State<MyPage> {
                             Routings().navigate(context, const AskedQuestionScreen());
                             break;
                           case 8:
-                            Routings().navigate(context, LinkAddvertisingScreen());
+                            Routings().navigate(context, const LinkAddvertisingScreen());
                             // Routing().navigate(
                             //     context,
                             //     ChargingStationScreen(
@@ -311,13 +311,13 @@ class _MyPageState extends State<MyPage> {
                             //     ));
                             break;
                           case 9:
-                            Routings().navigate(context, SettingFontSizeScreen());
+                            Routings().navigate(context, const SettingFontSizeScreen());
                             print("asdlkasdaajsd");
                             break;
 
                           case 10:
                             print("asdsssslkajsd");
-                            Routings().navigate(context, UsingTermScreen());
+                            Routings().navigate(context, const UsingTermScreen());
                             break;
                           case 11:
                             Routings().navigate(context, const SettingScreen());

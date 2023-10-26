@@ -37,7 +37,6 @@ class ViewController: UIViewController, BKHostBookApi {
         //        let flutterViewController = FlutterViewController.init(
         //            engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
         
-        
         let dataParam: BKBook = BKBook.init()
         dataParam.memBirth="2000-01-01"
         dataParam.memGen="w"

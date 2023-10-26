@@ -7,6 +7,7 @@
 // }
 
 import 'package:eums/common/const/values.dart';
+import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:flutter/material.dart';
 
 import 'eum_app_offer_wall/notification_handler.dart';
@@ -36,6 +37,8 @@ class Eums {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();
+    await LocalStoreService.instant.init();
+
     print("============ Firebase.initializeApp ========= ");
 
     await NotificationHandler.instant.initializeFcmNotification();
