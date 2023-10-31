@@ -10,6 +10,10 @@ Prepared based on the following documents:
 
 # Getting Started
 
+## Android
+
 - Android studio version:
 
 ![Alt text](./images/version-android-studio.png)
+
+
