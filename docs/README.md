@@ -34,10 +34,51 @@ WARNING: Please check if the version on your device is suitable, it may be equal
 
 ## Getting Started Import Module
 
+- Project folder structure:
+
+```
+offerwall
+├── docs
+├── offerwall_module
+│     ├── AndroidExample
+│     ├── flutter_offerwall_module (Folder build sdk)
+│     └── IOSExampleV2
+└── offerwall_package (Folder source code module)
+
+```
+
 ### ANDROID
 
 ### Create project android kotlin
 
 ![Alt text](./images/create-project-android.gif)
 
+### Build sdk aar
+
+- Open the terminal folder :  
+
+```
+offerwall
+├── docs
+├── offerwall_module
+│     ├── AndroidExample
+│     ├── flutter_offerwall_module (Folder build sdk)
+│     └── IOSExampleV2
+└── offerwall_package (Folder source code module)
+
+```
+
+- Example path folder build sdk: 
+
+```
+cd <your path>/offerwal/offerwall_module/flutter_offerwall_module
+```
+
+- Command build sdk:
+
+```
+flutter build aar --output=< your path >/< My Application >/app/libs
+```
+
+![Alt text](./images/result-build-aar.png)
 
