@@ -10,9 +10,18 @@ Prepared based on the following documents:
 
 # Getting Started
 
+Please check if the version on your device is suitable, it may be equal or higher
+
+## Flutter
+
+- Flutter version 3.13.8 on channel stable
+- Dart version 3.1.4
+- DevTools version 2.25.0
+
 ## Android
 
-- Android studio version:
+- Android studio version: (Android SDK version 34.0.0)
+- Java version OpenJDK Runtime Environment (build 11.0.15+0-b2043.56-8887301)
 
 ![Alt text](./images/version-android-studio.png)
 
