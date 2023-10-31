@@ -12,4 +12,4 @@ Prepared based on the following documents:
 
 - Android studio version:
 
-![Alt text](images/version-android-studio.png)
+![Alt text](./images/version-android-studio.png)
