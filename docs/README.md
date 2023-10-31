@@ -118,4 +118,11 @@ flutter build aar --output=<your path>/<My Application>/app/libs
     }
 ```
 
+- Example the `settings.gradle`:
+
 ![Alt text](./images/example-settings-gradle.png)
+
+- Example the `profile` build type:
+
+![Alt text](./images/example-build-gradle.png)
+
