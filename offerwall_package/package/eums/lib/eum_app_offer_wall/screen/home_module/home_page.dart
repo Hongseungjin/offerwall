@@ -6,15 +6,18 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/method_native/host_api.dart';
 import 'package:eums/common/rx_bus.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/flutter_component.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:get/get_state_manager/get_state_manager.dart';
 // import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/constants.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/common/routing.dart';
 // import 'package:eums/common/routing.dart';
@@ -38,6 +41,7 @@ import 'package:eums/eums_library.dart';
 
 import '../keep_adverbox_module/keep_adverbox_module.dart';
 import 'widget/custom_scroll_campaign_detail.dart';
+import 'widget/widget_list_data_offerwall.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -56,36 +60,51 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   final ValueNotifier<GlobalKey<NestedScrollViewState>> globalKeyScroll = ValueNotifier(GlobalKey());
   late TabController _tabController;
   String? filter;
-  String? categary;
+  late String category;
   final ScrollController controller = ScrollController();
   int tabIndex = 0;
   int tabPreviousIndex = 0;
-  dynamic account;
+  // dynamic account;
 
   bool firstShowDialogPoint = false;
 
   late HostBookApi hostApi;
 
-  late HomeBloc bloc;
+  late HomeBloc blocMain;
+  late List<HomeBloc> blocs = [HomeBloc(), HomeBloc()];
+
+  HomeInitState? homeInit;
+  HomeBannerState? homeBannerState;
+  List<HomeListDataOfferWallState?> homeListDataOfferWallStates = [null, null];
 
   @override
   void initState() {
-    bloc = HomeBloc();
+    blocMain = HomeBloc();
     // localStore = LocalStoreService();
     hostApi = HostBookApi();
-    categary = 'participation';
+    category = 'participation';
 
-    bloc
-      ..add(InfoUser())
-      ..add(GetTotalPoint())
-      ..add(ListBanner(type: 'main'))
-      ..add(ListOfferWall(category: categary, filter: filter, limit: 10));
+    // bloc
+    //   ..add(InfoUser())
+    //   ..add(GetTotalPoint())
+    //   ..add(ListBanner(type: 'main'))
+    //   ..add(ListOfferWall(category: categary, filter: filter, limit: 10));
+
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
     _tabController.addListener(_onTabChange);
     checkPermission();
-    controller.addListener(() {});
+    // controller.addListener(() {});
     _registerEventBus();
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      blocMain
+        ..add(HomeInitEvent())
+        ..add(HomeBannerEvent(type: 'main'));
+
+      blocs.first.add(HomeListDataOfferWallEvent(category: category, filter: filter));
+      blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
+    });
   }
 
   @override
@@ -98,6 +117,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     RxBus.register<UpdateUser>().listen((event) {
       _fetchData();
     });
+    EventStaticComponent.instance.add(
+      key: "isStartBackground",
+      event: (params, key) {
+        if (params['data'] != null) {
+          isStartBackground = params['data'];
+          setState(() {});
+        }
+      },
+    );
   }
 
   void _unregisterEventBus() {
@@ -105,7 +133,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   checkPermission() async {
-    isStartBackground = await LocalStoreService.instant.getSaveAdver();
+    isStartBackground = LocalStoreService.instant.getSaveAdver();
     if (isStartBackground) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
@@ -127,30 +155,45 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if (tabIndex != tabPreviousIndex) {
       // _fetchData();
       if (_tabController.index == 0) {
-        categary = 'participation';
+        category = 'participation';
       } else {
-        categary = 'mission';
+        category = 'mission';
       }
-      bloc.add(ListOfferWall(
-        limit: 10,
-        filter: filter,
-        category: categary,
-      ));
+      setState(() {});
+
+      if (homeListDataOfferWallStates[_tabController.index] == null) {
+        blocs[_tabController.index].add(HomeListDataOfferWallEvent(
+          filter: filter,
+          category: category,
+        ));
+      }
     }
     tabPreviousIndex = _tabController.index;
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeBloc>(
-      create: (context) => bloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeBloc>(
+          create: (context) => blocMain,
+        ),
+        ...List.generate(
+          blocs.length,
+          (index) => BlocProvider(
+            create: (context) => blocs[index],
+          ),
+        )
+      ],
       child: MultiBlocListener(
         listeners: [
+          // BlocListener<HomeBloc, HomeState>(
+          //   listener: _listenListAdver,
+          // ),
           BlocListener<HomeBloc, HomeState>(
-            listener: _listenListAdver,
-          ),
-          BlocListener<HomeBloc, HomeState>(
-            listenWhen: (previous, current) => previous.getPointStatus != current.getPointStatus,
+            bloc: blocMain,
+
+            // listenWhen: (previous, current) => previous.getPointStatus != current.getPointStatus,
             listener: _listenDataPoint,
           ),
         ],
@@ -164,16 +207,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void _listenDataPoint(BuildContext context, HomeState state) {
-    if (state.getPointStatus == GetPointStatus.loading) {
-      LoadingDialog.instance.show();
-      return;
-    }
-    if (state.getPointStatus == GetPointStatus.failure) {
-      LoadingDialog.instance.hide();
-      return;
-    }
-    if (state.getPointStatus == GetPointStatus.success) {
-      LoadingDialog.instance.hide();
+    // if (state.getPointStatus == GetPointStatus.loading) {
+    //   LoadingDialog.instance.show();
+    //   return;
+    // }
+    // if (state.getPointStatus == GetPointStatus.failure) {
+    //   LoadingDialog.instance.hide();
+    //   return;
+    // }
+    // if (state.getPointStatus == GetPointStatus.success) {
+    //   LoadingDialog.instance.hide();
+    //   if (state.totalPoint != null && firstShowDialogPoint == false) {
+    //     firstShowDialogPoint = true;
+    //     DialogUtils.showDialogGetPoint(context, data: state.totalPoint);
+    //   }
+    // }
+    if (state is HomeInitState) {
       if (state.totalPoint != null && firstShowDialogPoint == false) {
         firstShowDialogPoint = true;
         DialogUtils.showDialogGetPoint(context, data: state.totalPoint);
@@ -181,29 +230,33 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     }
   }
 
-  void _listenListAdver(BuildContext context, HomeState state) {
-    if (state.listAdverStatus == ListAdverStatus.loading) {
-      LoadingDialog.instance.show();
-      return;
-    }
-    if (state.listAdverStatus == ListAdverStatus.failure) {
-      LoadingDialog.instance.hide();
-      return;
-    }
-    if (state.listAdverStatus == ListAdverStatus.success) {
-      LoadingDialog.instance.hide();
-    }
-  }
+  // void _listenListAdver(BuildContext context, HomeState state) {
+  //   if (state.listAdverStatus == ListAdverStatus.loading) {
+  //     LoadingDialog.instance.show();
+  //     return;
+  //   }
+  //   if (state.listAdverStatus == ListAdverStatus.failure) {
+  //     LoadingDialog.instance.hide();
+  //     return;
+  //   }
+  //   if (state.listAdverStatus == ListAdverStatus.success) {
+  //     LoadingDialog.instance.hide();
+  //   }
+  // }
 
   final controllerGet = Get.put(SettingFontSize());
 
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
+      bloc: blocMain,
+      buildWhen: (previous, current) => current is HomeInitState || current is HomeBannerState,
       builder: (context, state) {
-        if (state.account != null) {
-          account = state.account;
+        if (state is HomeInitState) {
+          homeInit = state;
         }
-
+        if (state is HomeBannerState) {
+          homeBannerState = state;
+        }
         return Scaffold(
           appBar: AppBar(
             backgroundColor: AppColor.white,
@@ -258,7 +311,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               return [
                 CustomSliverList(
                   children: [
-                    _buildUIShowPoint(point: state.totalPoint != null ? state.totalPoint['userPoint'] : 0),
+                    _buildUIShowPoint(point: homeInit?.totalPoint != null ? homeInit?.totalPoint['userPoint'] : 0),
                     Center(
                       child: Wrap(
                         direction: Axis.horizontal,
@@ -269,7 +322,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                 onTap: () {
                                   switch (index) {
                                     case 0:
-                                      Routings().navigate(context, StatusPointPage(account: state.account));
+                                      Routings().navigate(context, StatusPointPage(account: homeInit!.account));
                                       break;
                                     case 1:
                                       Routings().navigate(context, const KeepAdverboxScreen());
@@ -288,7 +341,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                     ),
                     const SizedBox(height: 20),
-                    _buildUIBannerImage(dataBanner: state.bannerList),
+                    _buildUIBannerImage(dataBanner: homeBannerState?.bannerList),
                   ],
                 ),
                 CustomSliverAppBar(
@@ -327,19 +380,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ),
                 CustomSliverList(
                   children: [
-                    _buildUIPoint(point: state.totalPoint != null ? state.totalPoint['totalPointCanGet'] : 0),
-                    ListViewHome(
-                      tab: _tabController.index,
-                      filter: _filterMedia,
-                      scrollController: controller,
-                    ),
+                    _buildUIPoint(point: homeInit?.totalPoint != null ? homeInit?.totalPoint['totalPointCanGet'] : 0),
                     // ListViewHome(
                     //   tab: _tabController.index,
                     //   filter: _filterMedia,
                     //   scrollController: controller,
                     // )
                   ],
-                )
+                ),
+                ListViewHome(
+                  tab: _tabController.index,
+                  onFilter: _filterMedia,
+                  category: category,
+                  filter: filter,
+                  scrollController: controller,
+                  stateClients: homeListDataOfferWallStates,
+                  blocs: blocs,
+                ),
               ];
             },
             onRefresh: () {
@@ -354,9 +411,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   _fetchData() async {
     if (_tabController.index == 0) {
-      categary = 'participation';
+      category = 'participation';
     } else {
-      categary = 'mission';
+      category = 'mission';
     }
     // await Future.delayed(const Duration(seconds: 1));
     // globalKey.currentContext?.read<HomeBloc>().add(GetTotalPoint());
@@ -365,23 +422,27 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     //       filter: filter,
     //       category: categary,
     //     ));
-    bloc.add(GetTotalPoint());
-    bloc.add(ListOfferWall(
-      limit: 10,
-      filter: filter,
-      category: categary,
-    ));
+
+    // bloc.add(GetTotalPoint());
+    // bloc.add(ListOfferWall(
+    //   limit: 10,
+    //   filter: filter,
+    //   category: category,
+    // ));
+    blocMain.add(HomeInitEvent());
+    blocMain.add(HomeBannerEvent(type: 'main'));
+    blocs[_tabController.index]
+        .add(HomeListDataOfferWallEvent(filter: filter, category: category, stateClient: homeListDataOfferWallStates[_tabController.index]));
   }
 
-  _filterMedia(String? value) {
+  void _filterMedia(String? value) {
     if (value != '최신순') {
       dynamic media = (DATA_MEDIA.where((element) => element['name'] == value).toList())[0]['media'];
-
       filter = media;
     } else {
       filter = DATA_MEDIA[2]['media'];
     }
-
+    setState(() {});
     _fetchData();
   }
 
@@ -438,7 +499,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ),
           WidgetAnimationClick(
             onTap: () {
-              Routings().navigate(context, StatusPointPage(account: account));
+              Routings().navigate(context, StatusPointPage(account: homeInit!.account));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -506,21 +567,26 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     });
                     await LocalStoreService.instant.setSaveAdver(isStartBackground);
                     if (!isStartBackground) {
-                      String? token = await FirebaseMessaging.instance.getToken();
-
+                      String? token = await NotificationHandler.instant.getToken();
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                       FlutterBackgroundService().invoke("stopService");
                     } else {
-                      dynamic data = <String, dynamic>{
-                        'count': 0,
-                        'date': Constants.formatTime(DateTime.now().toIso8601String()),
-                      };
-                      // localStore?.setCountAdvertisement(data);
-                      String? token = await FirebaseMessaging.instance.getToken();
-                      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                      bool isRunning = await FlutterBackgroundService().isRunning();
-                      if (!isRunning) {
-                        FlutterBackgroundService().startService();
+                      final checkBackgroundLocation = await _checkPermissionLocationBackground();
+                      if (checkBackgroundLocation == true) {
+                        // dynamic data = <String, dynamic>{
+                        //   'count': 0,
+                        //   'date': Constants.formatTime(DateTime.now().toIso8601String()),
+                        // };
+                        // localStore?.setCountAdvertisement(data);
+                        String? token = LocalStoreService.instant.getDeviceToken();
+                        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                        bool isRunning = await FlutterBackgroundService().isRunning();
+                        if (!isRunning) {
+                          FlutterBackgroundService().startService();
+                        }
+                      } else {
+                        isStartBackground = false;
+                        setState(() {});
                       }
                     }
                   },
@@ -602,6 +668,31 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
+  Future<bool> _checkPermissionLocationBackground() async {
+    if (await Permission.locationAlways.status != PermissionStatus.granted) {
+      // Timer.periodic(const Duration(seconds: 2), (timer) async {
+      //   timer.cancel();
+      try {
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.locationAlways,
+        ].request();
+
+        if (statuses[Permission.locationAlways] == PermissionStatus.permanentlyDenied ||
+            statuses[Permission.locationAlways] == PermissionStatus.denied) {
+          await Geolocator.openLocationSettings();
+          return false;
+          // return _checkPermissionLocationBackground();
+        }
+      } catch (e) {
+        return false;
+      }
+      return false;
+      // });
+    } else {
+      return true;
+    }
+  }
+
   _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
     return WidgetAnimationClick(
       onTap: onTap,
@@ -626,332 +717,65 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   _buildUIBannerImage({List? dataBanner}) {
-    return Stack(
-      children: [
-        SizedBox(
-          // height: 164,
-          width: MediaQuery.of(context).size.width,
-          child: CarouselSlider(
-            options: CarouselOptions(
-              autoPlay: true,
-              scrollDirection: Axis.horizontal,
-              enlargeCenterPage: true,
-              viewportFraction: 1,
-              onPageChanged: (int index, CarouselPageChangedReason c) {
-                setState(() {});
-                _currentPageNotifier.value = index;
-              },
-            ),
-            items: (dataBanner ?? []).map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return WidgetAnimationClick(
-                    onTap: () {
-                      Routings().navigate(
-                          context,
-                          CustomWebViewBanner(
-                            urlLink: i['deep_link_url'],
-                          ));
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: CachedNetworkImage(
-                          // height: 164,
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.cover,
-                          imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
-                          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) {
-                            return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                          }),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
-          ),
-        ),
-        Positioned(
-          top: 12,
-          right: 16,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ListViewHome extends StatefulWidget {
-  const ListViewHome({Key? key, required this.tab, this.fetchData, this.fetchDataLoadMore, this.scrollController, this.filter}) : super(key: key);
-
-  final int tab;
-  final Function? fetchData;
-  final Function? fetchDataLoadMore;
-  final Function? filter;
-  final ScrollController? scrollController;
-
-  @override
-  State<ListViewHome> createState() => _ListViewHomeState();
-}
-
-class _ListViewHomeState extends State<ListViewHome> {
-  RefreshController refreshController = RefreshController(initialRefresh: false);
-
-  ScrollController? controller;
-
-  String allMedia = '최신순';
-  final controllerGet = Get.put(SettingFontSize());
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildContent(context);
-  }
-
-  // void _onRefresh() async {
-  //   await Future.delayed(const Duration(seconds: 0));
-  //   refreshController.refreshCompleted();
-  //   setState(() {});
-  //   widget.fetchData!();
-  // }
-
-  // void _onLoading() async {
-  //   await Future.delayed(const Duration(seconds: 0));
-  //   refreshController.loadComplete();
-  //   List<dynamic>? dataCampaign = context.read<HomeBloc>().state.listDataOfferWall;
-  //   if (dataCampaign != null) {}
-  // }
-
-  Widget _buildDropDown(BuildContext context) {
-    dynamic medias = DATA_MEDIA.map((item) => item['name']).toList();
-    List<DropdownMenuItem<String>> items = medias.map<DropdownMenuItem<String>>((String? value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(
-          value ?? "",
-          textAlign: TextAlign.center,
-          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
-        ),
-      );
-    }).toList();
-
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<String>(
-        isExpanded: true,
-        dropdownColor: AppColor.white,
-        value: allMedia,
-        style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
-        hint: Text(
-          allMedia,
-          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 14),
-        ),
-        icon: const Icon(
-          Icons.keyboard_arrow_down_rounded,
-          color: AppColor.black,
-          size: 24,
-        ),
-        items: items,
-        onChanged: (value) {
-          setState(() {
-            allMedia = value!;
-          });
-
-          widget.filter!(value);
-        },
-      ),
-    );
-  }
-
-  _buildContent(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) {
-        return Column(
-          children: [
-            Container(
-              color: AppColor.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Text(
-                    '전체 ${state.listDataOfferWall != null ? state.listDataOfferWall?.length : 0} 개',
-                    style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 35,
-                    width: 100,
-                    child: Center(child: _buildDropDown(context)),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(color: AppColor.white, border: Border()),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: state.listDataOfferWall != null
-                  ? Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      children: List.generate(
-                          state.listDataOfferWall?.length ?? 0,
-                          (index) => WidgetAnimationClick(
-                                child: widget.tab == 0
-                                    ? _buildItemRow(data: state.listDataOfferWall?[index])
-                                    : _buildItemColum(data: state.listDataOfferWall?[index]),
-                                onTap: () {
-                                  Routings().navigate(
-                                      context,
-                                      DetailOffWallScreen(
-                                        title: state.listDataOfferWall?[index]['title'],
-                                        xId: state.listDataOfferWall?[index]['idx'],
-                                        type: state.listDataOfferWall?[index]['type'],
-                                      ));
-                                },
-                              )),
-                    )
-                  : const SizedBox(),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  _buildItemColum({dynamic data}) {
-    return Container(
-      color: Colors.white,
-      width: (MediaQuery.of(context).size.width - 48) / 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                fit: BoxFit.cover,
-                imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) {
-                  return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                }),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            data['title'] ?? "",
-            maxLines: 2,
-            style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value, color: Colors.black),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            Constants.formatMoney(data['reward'], suffix: '원'),
-            style: AppStyle.regular
-                .copyWith(decoration: TextDecoration.lineThrough, fontSize: controllerGet.fontSizeObx.value, color: HexColor('#888888')),
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text('60% ', style: AppStyle.bold.copyWith(color: HexColor('#ff7169'), fontSize: 2 + controllerGet.fontSizeObx.value)),
-              Text(Constants.formatMoney(data['reward'], suffix: '원'),
-                  style: AppStyle.bold.copyWith(color: HexColor('#000000'), fontSize: 2 + controllerGet.fontSizeObx.value))
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 6),
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(5)),
-            child: Text(
-              '+${Constants.formatMoney(data['reward'], suffix: '')}',
-              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
-            ),
-          ),
-          const SizedBox(height: 30),
-        ],
-      ),
-    );
-  }
-
-  _buildItemRow({Map<String, dynamic>? data}) {
-    String title = '';
-    switch (data?['type']) {
-      case 'install':
-        title = '설치하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
-        break;
-      case 'visit':
-        title = '방문하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
-        break;
-      case 'join':
-        title = '가입하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
-        break;
-      case 'shopping':
-        title = '구매하면${Constants.formatMoney(data?['reward'], suffix: '')}적립';
-        break;
-      case 'subscribe':
-        title = '구독/좋아요/팔로우 하면 ${Constants.formatMoney(data?['reward'], suffix: '')}적립 ';
-        break;
-      default:
-    }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.3)), borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: CachedNetworkImage(
+    return ValueListenableBuilder(
+        valueListenable: _currentPageNotifier,
+        builder: (context, value, child) => Stack(
+              children: [
+                SizedBox(
+                  // height: 164,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width / 2,
-                  // height: 200,
-                  fit: BoxFit.cover,
-                  imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) {
-                    return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                  }),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                data?['title'] ?? "",
-                // maxLines: 2,
-                style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 2 + controllerGet.fontSizeObx.value),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: (MediaQuery.of(context).size.width) / 1.8 - 10,
-                    child: Text(
-                      title,
-                      style: AppStyle.regular.copyWith(color: HexColor('#666666'), fontSize: controllerGet.fontSizeObx.value),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      scrollDirection: Axis.horizontal,
+                      enlargeCenterPage: true,
+                      viewportFraction: 1,
+                      onPageChanged: (int index, CarouselPageChangedReason c) {
+                        _currentPageNotifier.value = index;
+                      },
                     ),
+                    items: (dataBanner ?? []).map((i) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return WidgetAnimationClick(
+                            onTap: () {
+                              Routings().navigate(
+                                  context,
+                                  CustomWebViewBanner(
+                                    urlLink: i['deep_link_url'],
+                                  ));
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                  // height: 164,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.cover,
+                                  imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) {
+                                    return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
+                                  }),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HexColor('#fdd000')),
-                    child: Text(
-                      '포인트받기',
-                      style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                ),
+                Positioned(
+                  top: 12,
+                  right: 16,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
+                  ),
+                ),
+              ],
+            ));
   }
 }
 

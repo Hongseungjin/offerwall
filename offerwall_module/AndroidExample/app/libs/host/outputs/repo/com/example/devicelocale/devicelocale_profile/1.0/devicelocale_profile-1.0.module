@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.example.devicelocale",
+    "module": "devicelocale_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "devicelocale_profile-1.0.aar",
+          "url": "devicelocale_profile-1.0.aar",
+          "size": 6186,
+          "sha512": "9bfec258966b5fd4ac20fa3316c921a1ad819e87ec25e22198459e0c9e328b99697891032b5e457205c10edcb22682bef8646d0f88f31d7900dbf497a1dab1e9",
+          "sha256": "eb0314477098ccda9dcda314f487d904133f9d70e63076fa03c443b2bf7ea40f",
+          "sha1": "f048bd8055350c5b8dbf443a6a67c7eb3f432213",
+          "md5": "2ab512ce86a0c445be3aee11c9a075b6"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "devicelocale_profile-1.0.aar",
+          "url": "devicelocale_profile-1.0.aar",
+          "size": 6186,
+          "sha512": "9bfec258966b5fd4ac20fa3316c921a1ad819e87ec25e22198459e0c9e328b99697891032b5e457205c10edcb22682bef8646d0f88f31d7900dbf497a1dab1e9",
+          "sha256": "eb0314477098ccda9dcda314f487d904133f9d70e63076fa03c443b2bf7ea40f",
+          "sha1": "f048bd8055350c5b8dbf443a6a67c7eb3f432213",
+          "md5": "2ab512ce86a0c445be3aee11c9a075b6"
+        }
+      ]
+    }
+  ]
+}

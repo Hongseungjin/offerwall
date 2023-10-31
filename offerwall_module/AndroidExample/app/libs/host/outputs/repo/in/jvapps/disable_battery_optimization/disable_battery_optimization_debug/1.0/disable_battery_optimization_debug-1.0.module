@@ -1,0 +1,125 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "in.jvapps.disable_battery_optimization",
+    "module": "disable_battery_optimization_debug",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "debugVariantDebugApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_debug",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "disable_battery_optimization_debug-1.0.aar",
+          "url": "disable_battery_optimization_debug-1.0.aar",
+          "size": 1078384,
+          "sha512": "2ba7b296ab307fb922f13a27e5c7c3b606bfcf55b10f5c9f32ac8d2d6bdb86af827721b201b01feb49ebb1ccc9530452411b803f1dbe3ad36910357e1b52477d",
+          "sha256": "7d317ac2b8a11a58eebfe011eaaff94f0a44c64630104b727357c059e0a769bb",
+          "sha1": "e69f1806871df13e6723743dda582ce48b5b13fd",
+          "md5": "7b4edf9e72548c3b41417fa18beec625"
+        }
+      ]
+    },
+    {
+      "name": "debugVariantDebugRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_debug",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        },
+        {
+          "group": "androidx.annotation",
+          "module": "annotation",
+          "version": {
+            "requires": "1.3.0"
+          }
+        },
+        {
+          "group": "androidx.appcompat",
+          "module": "appcompat",
+          "version": {
+            "requires": "1.4.1"
+          }
+        },
+        {
+          "group": "com.google.android.material",
+          "module": "material",
+          "version": {
+            "requires": "1.5.0"
+          }
+        },
+        {
+          "group": "androidx.recyclerview",
+          "module": "recyclerview",
+          "version": {
+            "requires": "1.2.1"
+          }
+        },
+        {
+          "group": "com.afollestad.material-dialogs",
+          "module": "core",
+          "version": {
+            "requires": "0.9.6.0"
+          }
+        },
+        {
+          "group": "com.afollestad.material-dialogs",
+          "module": "commons",
+          "version": {
+            "requires": "0.9.6.0"
+          }
+        },
+        {
+          "group": "androidx.constraintlayout",
+          "module": "constraintlayout",
+          "version": {
+            "requires": "2.1.3"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "disable_battery_optimization_debug-1.0.aar",
+          "url": "disable_battery_optimization_debug-1.0.aar",
+          "size": 1078384,
+          "sha512": "2ba7b296ab307fb922f13a27e5c7c3b606bfcf55b10f5c9f32ac8d2d6bdb86af827721b201b01feb49ebb1ccc9530452411b803f1dbe3ad36910357e1b52477d",
+          "sha256": "7d317ac2b8a11a58eebfe011eaaff94f0a44c64630104b727357c059e0a769bb",
+          "sha1": "e69f1806871df13e6723743dda582ce48b5b13fd",
+          "md5": "7b4edf9e72548c3b41417fa18beec625"
+        }
+      ]
+    }
+  ]
+}

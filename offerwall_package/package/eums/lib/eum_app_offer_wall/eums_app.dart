@@ -103,13 +103,17 @@ Future<void> onStart(ServiceInstance service) async {
     });
 
     service.on('stopService').listen((event) async {
-      print("eventStop");
+      // print("eventStop");
       queue.add(() async => await closeOverlay());
-      String? token = await FirebaseMessaging.instance.getToken();
-      print('deviceToken $token');
-      if (token != null && token.isNotEmpty) {
-        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-      }
+      // String? token = await FirebaseMessaging.instance.getToken();
+      // // print('deviceToken $token');
+      // // if (token != null && token.isNotEmpty) {
+      // //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+      // // }
+      // if (token != null && token.isNotEmpty) {
+      //   await LocalStoreService.instant.setDeviceToken("");
+      //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+      // }
       service.stopSelf();
     });
 

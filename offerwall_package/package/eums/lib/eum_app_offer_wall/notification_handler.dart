@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/local_store/local_store.dart';
@@ -36,13 +37,15 @@ class NotificationHandler {
   NotificationHandler._();
   NotificationHandler();
 
+  int notificationId = 999;
+
   static NotificationHandler instant = NotificationHandler._();
 
   final StreamController<ReceivedNotification> didReceiveLocalNotificationStream = StreamController<ReceivedNotification>.broadcast();
 
   final StreamController<String?> selectNotificationStream = StreamController<String?>.broadcast();
 
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   // final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -147,13 +150,22 @@ class NotificationHandler {
         if (message.from == "/topics/eums") {
           FlutterBackgroundService().invoke('locationCurrent');
         } else {
-          await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-          if (Platform.isAndroid) {
-            CountAdver().initCount();
-            FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-          }
-          flutterLocalNotificationsPlugin.show(0, '${message.data['title']}', '${message.data['body']}', notificationDetails,
-              payload: jsonEncode(message.data));
+          try {
+            final dataTemp = jsonDecode(message.data['data']);
+            if (dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") {
+              // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+              await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+
+              if (Platform.isAndroid) {
+                CountAdver().initCount();
+                FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+              }
+              flutterLocalNotificationsPlugin.show(
+                  NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+                  payload: jsonEncode(message.data));
+            }
+            // ignore: empty_catches
+          } catch (e) {}
         }
       },
     );
@@ -249,10 +261,10 @@ class NotificationHandler {
     // if (Platform.isIOS) {
     //   token = await _fcm.getAPNSToken();
     // } else {
-    token = await _fcm.getToken();
+    token = await FirebaseMessaging.instance.getToken();
     // }
-    LocalStoreService.instant.setDeviceToken(token);
-    // print('deviceTokenInit $token');
+    await LocalStoreService.instant.setDeviceToken(token);
+    debugPrint('device-token: $token');
     return token;
   }
 }
@@ -321,35 +333,42 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     FlutterBackgroundService().invoke('locationCurrent');
   } else {
 // NotificationHandler.instant.initializeFcmNotification();
+    try {
+      final dataTemp = jsonDecode(message.data['data']);
+      if (dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") {
+        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
-    const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-      darwinNotificationCategoryPlain,
-      darwinNotificationCategoryPlain,
-      importance: Importance.max,
-      priority: Priority.high,
-      actions: <AndroidNotificationAction>[
-        AndroidNotificationAction(keepID, 'KEEP 하기'),
-        AndroidNotificationAction(
-          navigationScreenId,
-          '광고 시청하기',
-        ),
-      ],
-    );
+        const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+          darwinNotificationCategoryPlain,
+          darwinNotificationCategoryPlain,
+          importance: Importance.max,
+          priority: Priority.high,
+          actions: <AndroidNotificationAction>[
+            AndroidNotificationAction(keepID, 'KEEP 하기'),
+            AndroidNotificationAction(
+              navigationScreenId,
+              '광고 시청하기',
+            ),
+          ],
+        );
 
-    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-      categoryIdentifier: darwinNotificationCategoryPlain,
-    );
-    const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
-    await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+        const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+          categoryIdentifier: darwinNotificationCategoryPlain,
+        );
+        const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
-    // CronCustom().initCron();
-    if (Platform.isAndroid) {
-      // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-      CountAdver().initCount();
-      FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-    }
-    NotificationHandler.instant.flutterLocalNotificationsPlugin
-        .show(Random().nextInt(100), '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
+        // CronCustom().initCron();
+        if (Platform.isAndroid) {
+          // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+          CountAdver().initCount();
+          FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+        }
+        NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
+            NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+            payload: jsonEncode(message.data));
+      }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }
 

@@ -1,10 +1,12 @@
 // import 'package:flutter/cupertino.dart';
 
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/flutter_component.dart';
 import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -53,8 +55,8 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   checkBoolTime() async {
-    checkTime = await LocalStoreService.instant.getBoolTime();
-    checkToken =  LocalStoreService.instant.getSaveAdver();
+    checkTime = LocalStoreService.instant.getBoolTime();
+    checkToken = LocalStoreService.instant.getSaveAdver();
   }
 
   @override
@@ -165,10 +167,10 @@ class _SettingScreenState extends State<SettingScreen> {
                         await LocalStoreService.instant.setSaveAdver(checkToken);
 
                         if (!checkToken) {
-                          String? token = await FirebaseMessaging.instance.getToken();
-
+                          String? token = await NotificationHandler.instant.getToken();
                           await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                           FlutterBackgroundService().invoke("stopService");
+                          EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
                         } else {
                           // dynamic data = <String, dynamic>{
                           //   'count': 0,
@@ -176,12 +178,13 @@ class _SettingScreenState extends State<SettingScreen> {
                           //       DateTime.now().toIso8601String()),
                           // };
                           // localStore?.setCountAdvertisement(data);
-                          String? token = await FirebaseMessaging.instance.getToken();
+                          String? token = LocalStoreService.instant.getDeviceToken();
                           await EumsOfferWallServiceApi().createTokenNotifi(token: token);
                           bool isRunning = await FlutterBackgroundService().isRunning();
                           if (!isRunning) {
                             FlutterBackgroundService().startService();
                           }
+                          EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
                         }
                       },
                     ),
@@ -189,7 +192,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     _buildCheckSetting(
                       checkSetting: checkTime,
                       title: '광고 시간대 설정',
-                      onChange: (value) async{
+                      onChange: (value) async {
                         setState(() {
                           checkTime = value;
                         });

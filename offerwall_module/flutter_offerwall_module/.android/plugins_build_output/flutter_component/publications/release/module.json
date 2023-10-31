@@ -1,0 +1,97 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.example.flutter_component",
+    "module": "flutter_component_release",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.7.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_component_release-1.0.aar",
+          "url": "flutter_component_release-1.0.aar",
+          "size": 4937,
+          "sha512": "ca5ff2059ebc51188e5b19f198cf702e9edd48052ef4b6cb3c7b857bf4fab901059c3428b5e58e506636f7c0114bc736b8b6624505b36051e249a69661fa9426",
+          "sha256": "4a9b97f1270d58b1141e46c19009b9d7f72c9a4d2fa19084e8f41ccc5e1c4670",
+          "sha1": "b84410becc7e02a53c91ed7ffb1f2b2aee785fba",
+          "md5": "a67c19b0624911f94bd1df1e8c3374ba"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.7.10"
+          }
+        },
+        {
+          "group": "io.flutter.plugins.firebase.crashlytics",
+          "module": "firebase_crashlytics_release",
+          "version": {
+            "requires": "1.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_component_release-1.0.aar",
+          "url": "flutter_component_release-1.0.aar",
+          "size": 4937,
+          "sha512": "ca5ff2059ebc51188e5b19f198cf702e9edd48052ef4b6cb3c7b857bf4fab901059c3428b5e58e506636f7c0114bc736b8b6624505b36051e249a69661fa9426",
+          "sha256": "4a9b97f1270d58b1141e46c19009b9d7f72c9a4d2fa19084e8f41ccc5e1c4670",
+          "sha1": "b84410becc7e02a53c91ed7ffb1f2b2aee785fba",
+          "md5": "a67c19b0624911f94bd1df1e8c3374ba"
+        }
+      ]
+    }
+  ]
+}

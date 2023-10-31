@@ -55,10 +55,14 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   _permissionNotification() async {
-    PermissionStatus? statusNotification = await Permission.notification.request();
-    if (statusNotification == PermissionStatus.denied) {
-      await AppSettings.openAppSettings(type: AppSettingsType.notification);
-      // _permissionNotification();
+    try {
+      PermissionStatus? statusNotification = await Permission.notification.request();
+      if (statusNotification == PermissionStatus.denied) {
+        await AppSettings.openAppSettings(type: AppSettingsType.notification);
+        // _permissionNotification();
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -111,31 +115,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       if (Platform.isAndroid) {
         settingBattery();
       }
-      String? token = await FirebaseMessaging.instance.getToken();
+      String? token = await NotificationHandler.instant.getToken();
       if (token != null) {
-        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+        await LocalStoreService.instant.setDeviceToken(token);
+        // await EumsOfferWallServiceApi().createTokenNotifi(token: token);
       }
       print("TOKEN======> $token");
       FirebaseMessaging.instance.subscribeToTopic('eums');
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
-      _permissionNotification();
+      // _permissionNotification();
     }));
   }
 
-  Future _checkPermissionLocationBackground() async {
-    if (await Permission.locationAlways.status != PermissionStatus.granted) {
-      Timer.periodic(const Duration(seconds: 2), (timer) async {
-        timer.cancel();
-        try {
-          await Permission.locationAlways.request();
-        } catch (e) {}
-        await _checkPermissionLocationBackground();
-      });
-    } else {
-      return;
-    }
-  }
 
   getBatteryOptimization() async {
     await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
@@ -152,8 +144,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
             timer.cancel();
           }
-          _checkPermissionLocationBackground();
+          // _checkPermissionLocationBackground();
         });
+      } else {
+        // _checkPermissionLocationBackground();
       }
     }
   }

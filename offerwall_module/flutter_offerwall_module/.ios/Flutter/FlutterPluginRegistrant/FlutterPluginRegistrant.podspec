@@ -19,13 +19,16 @@ Depends on all your plugins, and provides a function to register them.
   s.static_framework    = true
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.dependency 'Flutter'
+  s.dependency 'app_settings'
   s.dependency 'audio_session'
   s.dependency 'device_info_plus'
   s.dependency 'devicelocale'
   s.dependency 'eums'
   s.dependency 'firebase_core'
+  s.dependency 'firebase_crashlytics'
   s.dependency 'firebase_messaging'
   s.dependency 'flutter_background_service_ios'
+  s.dependency 'flutter_component'
   s.dependency 'flutter_inappwebview'
   s.dependency 'flutter_local_notifications'
   s.dependency 'geolocator_apple'

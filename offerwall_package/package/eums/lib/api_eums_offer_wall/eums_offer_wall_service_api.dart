@@ -123,7 +123,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     Map<String, dynamic> dataParams = jsonDecode(jsonEncode(params));
 
     Response result = await api.get('offerwall', queryParameters: dataParams);
-    return result.data['data'];
+    // return result.data['data'];
+    return result.data;
   }
 
   @override

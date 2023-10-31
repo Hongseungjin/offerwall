@@ -14,11 +14,8 @@ dependencyResolutionManagement {
 //        flatDir {
 //            dirs 'libs'
 //        }
-//        maven {
-//            url './app/host/outputs/libs/repo'
-//        }
         maven {
-            url '/Users/coi/Documents/GitHub/greenapp/offerwall/offerwall_module/flutter_offerwall_module/build/host/outputs/repo'
+            url '/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_module/AndroidExample/app/libs/host/outputs/repo'
         }
         maven {
             url "$storageUrl/download.flutter.io"

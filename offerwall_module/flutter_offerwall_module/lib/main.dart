@@ -1,11 +1,9 @@
 // import 'package:device_preview/device_preview.dart';
-import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/method_native/host_handle.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eums/eums_library.dart';
@@ -126,7 +124,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
   void initState() {
     // localStore = LocalStoreService();
 
-    print("book.encode()");
+    // print("book.encode()");
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -145,7 +143,8 @@ class _AppMainScreenState extends State<AppMainScreen> {
         showMain.value = true;
       } else {
         FlutterBookApi.setup(FlutterBookApiHandler((book) async {
-          print("aaaaaa ${book.encode()}");
+          // print("aaaaaa ${book.encode()}");
+          await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, book.firebaseKey ?? '');
           dynamic data = await EumsOfferWallService.instance
               .authConnect(memBirth: book.memBirth, memGen: book.memGen, memRegion: book.memRegion, memId: book.memId);
           await LocalStoreService.instant.setAccessToken(data['token']);

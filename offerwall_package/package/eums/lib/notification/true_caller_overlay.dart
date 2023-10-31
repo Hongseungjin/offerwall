@@ -158,7 +158,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         title: '${(jsonDecode(dataEvent['data']))['name']}',
         key: webViewKey,
         showImage: true,
-        showMission: true,
+        // showMission: true,
         deviceWidth: deviceWidth,
         actions: Row(
           children: [

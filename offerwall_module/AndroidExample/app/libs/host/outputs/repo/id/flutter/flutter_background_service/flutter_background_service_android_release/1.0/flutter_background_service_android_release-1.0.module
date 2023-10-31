@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "id.flutter.flutter_background_service",
+    "module": "flutter_background_service_android_release",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_background_service_android_release-1.0.aar",
+          "url": "flutter_background_service_android_release-1.0.aar",
+          "size": 25432,
+          "sha512": "0fc98e19c255256789777558711693d0416f94e501bee7c215d39dbb1898b8e3524c2ee8638ad75ed99f14f145e8cdf2c43fda5295d83c7a26a3051f359fcba9",
+          "sha256": "37a9e76c04b24d5f10052821d9e1fb6816d24a2a2d69b903beb69d7ff02e3aea",
+          "sha1": "fef8d7446457c13fbbfe25b31f39d648125ac765",
+          "md5": "7c7033ac434694121b3645d7e8fa90fb"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_background_service_android_release-1.0.aar",
+          "url": "flutter_background_service_android_release-1.0.aar",
+          "size": 25432,
+          "sha512": "0fc98e19c255256789777558711693d0416f94e501bee7c215d39dbb1898b8e3524c2ee8638ad75ed99f14f145e8cdf2c43fda5295d83c7a26a3051f359fcba9",
+          "sha256": "37a9e76c04b24d5f10052821d9e1fb6816d24a2a2d69b903beb69d7ff02e3aea",
+          "sha1": "fef8d7446457c13fbbfe25b31f39d648125ac765",
+          "md5": "7c7033ac434694121b3645d7e8fa90fb"
+        }
+      ]
+    }
+  ]
+}

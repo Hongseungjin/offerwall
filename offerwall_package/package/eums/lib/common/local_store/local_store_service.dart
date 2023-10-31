@@ -14,6 +14,7 @@ class LocalStoreService {
   static const DEVICE_WIDTH = 'DEVICE_WIDTH';
   // static const COUNT_ADVER = 'COUNT_ADVER';
   static const dataUser = 'dataUser';
+  final firebaseKey='firebaseKey';
 
   late SharedPreferences preferences;
   LocalStoreService._();
@@ -31,7 +32,7 @@ class LocalStoreService {
   }
 
   Future setAccessToken(String sessionId) async {
-    preferences.setString(PREF_ACCESS_TOKEN, sessionId);
+    await preferences.setString(PREF_ACCESS_TOKEN, sessionId);
   }
 
   String getAccessToken() {
@@ -105,7 +106,7 @@ class LocalStoreService {
     await preferences.setString(SAVE_DATA_SHARE, jsonEncode(dataShare));
   }
 
-  Future getDeviceToken() async {
+  String? getDeviceToken() {
     return preferences.getString(SAVE_DEVICE_TOKEN);
   }
 
@@ -136,7 +137,7 @@ class LocalStoreService {
   //   await preferences.setString(COUNT_ADVER, jsonEncode(data));
   // }
 
-  dynamic getDataUser() async {
+  dynamic getDataUser() {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     return jsonDecode(preferences.getString(dataUser) ?? '{}');
   }

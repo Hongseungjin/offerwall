@@ -71,9 +71,16 @@ dependencies:
   geolocator:
   photo_view: ^0.14.0
   app_settings: ^5.1.1
+
+  flutter_component:
+    # path: /Volumes/coi-ssd/Github/flutter_component
+    git: https://github.com/tranhieudevvietnam/flutter_component.git
+
   # flutter_time_picker_spinner: ^2.0.0
   # awesome_notifications: ^0.0.6+10
   # flutter_apns:
+
+
 
   # restart_app: any
   # flutter_overlay_window:

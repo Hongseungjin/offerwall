@@ -18,29 +18,6 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
 
   @override
   Widget build(BuildContext context) {
-    final imageCache = InteractiveViewer(
-      minScale: 0.1,
-      maxScale: 2.6,
-      child: CachedNetworkImage(
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-          imageUrl: widget.urlLink,
-          placeholder: (context, url) => const Padding(
-                padding: EdgeInsets.symmetric(vertical: 30),
-                child: Center(
-                    child: CircularProgressIndicator(
-                  color: Color(0xfffcc900),
-                )),
-              ),
-          imageBuilder: (context, imageProvider) {
-            widget.onDone.call();
-            return Image(image: imageProvider);
-          },
-          errorWidget: (context, url, error) {
-            return Image.asset(Assets.logo.path, package: "eums", height: 100);
-          }),
-    );
-
     return SingleChildScrollView(
       controller: widget.scrollController,
       scrollDirection: Axis.vertical,
@@ -64,7 +41,57 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
               });
             }
           },
-          child: imageCache),
+          child: InteractiveViewer(
+            child: Image.network(
+              widget.urlLink,
+              fit: BoxFit.contain,
+              width: MediaQuery.of(context).size.width,
+              errorBuilder: (context, error, stackTrace) => Image.asset(Assets.logo.path, package: "eums", height: 100),
+              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                final valueProgress = loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!;
+                if (valueProgress == 1.0) {
+                  widget.onDone.call();
+                }
+                debugPrint('valueProgress: $valueProgress');
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: const Color(0xfffcc900),
+                    value: loadingProgress.expectedTotalBytes != null ? valueProgress : null,
+                  )),
+                );
+                // return Center(
+                //   child: CircularProgressIndicator(
+                //     value: loadingProgress.expectedTotalBytes != null
+                //         ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                //         : null,
+                //   ),
+                // );
+              },
+            ),
+            // child: CachedNetworkImage(
+            //     width: MediaQuery.of(context).size.width,
+            //     fit: BoxFit.cover,
+            //     imageUrl: widget.urlLink,
+            //     placeholder: (context, url) => const Padding(
+            //           padding: EdgeInsets.symmetric(vertical: 30),
+            //           child: Center(
+            //               child: CircularProgressIndicator(
+            //             color: Color(0xfffcc900),
+            //           )),
+            //         ),
+            //     imageBuilder: (context, imageProvider) {
+            //       widget.onDone.call();
+            //       return Image(image: imageProvider);
+            //     },
+            //     errorWidget: (context, url, error) {
+            //       return Image.asset(Assets.logo.path, package: "eums", height: 100);
+            //     }),
+          )),
     );
   }
 }

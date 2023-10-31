@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.spencerccf.app_settings",
+    "module": "app_settings_release",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "app_settings_release-1.0.aar",
+          "url": "app_settings_release-1.0.aar",
+          "size": 8840,
+          "sha512": "dc418176446731390fe3fc4f53c23f82711151bc49bb1ac2f5c54764373d409f90c95f5134293d887473591736aac3fd6ee3a681fd07649fcaa54b035b068f64",
+          "sha256": "89140b1faaa31f5cb5653b9f59b5e11c9ce34052fe503138e41e3c8c09544cf0",
+          "sha1": "45bbdbc91512f62bcc9b48eeded6a9267d4b7cb7",
+          "md5": "e9014574d35c093a27a9d25ebe09e222"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_release",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.8.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "app_settings_release-1.0.aar",
+          "url": "app_settings_release-1.0.aar",
+          "size": 8840,
+          "sha512": "dc418176446731390fe3fc4f53c23f82711151bc49bb1ac2f5c54764373d409f90c95f5134293d887473591736aac3fd6ee3a681fd07649fcaa54b035b068f64",
+          "sha256": "89140b1faaa31f5cb5653b9f59b5e11c9ce34052fe503138e41e3c8c09544cf0",
+          "sha1": "45bbdbc91512f62bcc9b48eeded6a9267d4b7cb7",
+          "md5": "e9014574d35c093a27a9d25ebe09e222"
+        }
+      ]
+    }
+  ]
+}

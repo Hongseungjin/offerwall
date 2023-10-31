@@ -21,7 +21,7 @@ class CustomWebView2 extends StatefulWidget {
   final Function()? onSave;
   final Function()? mission;
   final Function onClose;
-  final bool showMission;
+  // final bool showMission;
   final Color color;
   final Color colorIconBack;
   final Widget? actions;
@@ -36,7 +36,7 @@ class CustomWebView2 extends StatefulWidget {
       this.onSave,
       this.mission,
       required this.onClose,
-      this.showMission = false,
+      // this.showMission = false,
       this.colorIconBack = AppColor.black,
       this.color = AppColor.white,
       this.actions,
@@ -117,12 +117,14 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
     try {
       timerController = LinearTimerController(this);
       gifController = FlutterGifController(vsync: this);
-    } catch (e) {}
-    // TODO: implement initState
-    if (widget.showMission) {
-      // startTimeDown();
-      // start5s();
+    } catch (e) {
+      rethrow;
     }
+    // TODO: implement initState
+    // if (widget.showMission) {
+    //   // startTimeDown();
+    //   // start5s();
+    // }
 
     super.initState();
     _scrollController.addListener(_scrollListener);
@@ -186,7 +188,7 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
     _controller = controller;
   }
 
-  void _updateLocation(PointerEvent details) {}
+  // void _updateLocation(PointerEvent details) {}
 
   @override
   void dispose() {
@@ -256,123 +258,99 @@ class _CustomWebView2State extends State<CustomWebView2> with WidgetsBindingObse
                     urlLink: widget.urlLink ?? '',
                     onDone: () {
                       if (timerController.value == 0) {
-                        timerController.start();
-                        start5s();
+                        try {
+                          timerController.start();
+                          start5s();
+                        } catch (e) {
+                          rethrow;
+                        }
                       }
                     },
                   ),
-                  // child: SingleChildScrollView(
-                  //   controller: _scrollController,
-                  //   // child:  CachedNetworkImage(
-                  //   //       width: MediaQuery.of(context).size.width,
-                  //   //       fit: BoxFit.cover,
-                  //   //       imageUrl: widget.urlLink,
-                  //   //       imageBuilder: (context, imageProvider) {
-                  //   //         if (timerController.value == 0) {
-                  //   //           timerController.start();
-                  //   //           start5s();
-                  //   //         }
-                  //   //         return Image(image: imageProvider);
-                  //   //       },
-                  //   //       progressIndicatorBuilder: (context, url, progress) {
-                  //   //         return const Padding(
-                  //   //           padding: EdgeInsets.symmetric(vertical: 30),
-                  //   //           child: Center(
-                  //   //               child: CircularProgressIndicator(
-                  //   //             color: Color(0xfffcc900),
-                  //   //           )),
-                  //   //         );
-                  //   //       },
-                  //   //       errorWidget: (context, url, error) {
-                  //   //         return Image.asset(Assets.logo.path, package: "eums", height: 16);
-                  //   //       }),
-
-                  // ),
+                
                 ),
               ),
-              !widget.showMission
-                  ? const SizedBox()
-                  : Container(
-                      padding: const EdgeInsets.only(top: 10, bottom: 10),
-                      width:
-                          // widget.deviceWidth > 0
-                          //     ? widget.deviceWidth
-                          //     :
-                          MediaQuery.of(context).size.width,
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          widget.bookmark ?? const SizedBox(),
-                          // InkWell(
-                          //     onTap: widget.onSave,
-                          //     child: Image.asset(Assets.bookmark.path,
-                          //         package: "eums",
-                          //         height: 27,
-                          //         color: AppColor.black)),
-                          ValueListenableBuilder(
-                            valueListenable: showButton,
-                            builder: (context, value, child) => InkWell(
-                              onTap: !showButton.value ? null : widget.mission,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4), color: !showButton.value ? AppColor.grey.withOpacity(0.5) : AppColor.red),
-                                child: Text(
-                                  '포인트 적립하기',
-                                  style: AppStyle.medium.copyWith(color: !showButton.value ? AppColor.grey : AppColor.white),
-                                ),
-                              ),
-                            ),
+              Container(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                width:
+                    // widget.deviceWidth > 0
+                    //     ? widget.deviceWidth
+                    //     :
+                    MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    widget.bookmark ?? const SizedBox(),
+                    // InkWell(
+                    //     onTap: widget.onSave,
+                    //     child: Image.asset(Assets.bookmark.path,
+                    //         package: "eums",
+                    //         height: 27,
+                    //         color: AppColor.black)),
+                    ValueListenableBuilder(
+                      valueListenable: showButton,
+                      builder: (context, value, child) => InkWell(
+                        onTap: !showButton.value ? null : widget.mission,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4), color: !showButton.value ? AppColor.grey.withOpacity(0.5) : AppColor.red),
+                          child: Text(
+                            '포인트 적립하기',
+                            style: AppStyle.medium.copyWith(color: !showButton.value ? AppColor.grey : AppColor.white),
                           ),
-                          Stack(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                height: 50,
-                                width: 50,
-                                child: LinearTimer(
-                                  color: AppColor.yellow,
-                                  backgroundColor: HexColor('#888888').withOpacity(0.3),
-                                  controller: timerController,
-                                  duration: const Duration(seconds: 15),
-                                  onTimerEnd: () {
-                                    showButton.value = true;
-                                    // gifController?.stop();
-                                  },
-                                ),
-                              ),
-                              Positioned(
-                                  right: 0,
-                                  left: 0,
-                                  top: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: GifImage(
-                                      height: 30,
-                                      width: 30,
-                                      fit: BoxFit.fill,
-                                      controller: gifController!,
-                                      image: AssetImage(
-                                        package: "eums",
-                                        Assets.coingif.path,
-                                      ),
-                                    ),
-                                  ))
-                            ],
-                          ),
-                          // Container(
-                          //     padding: const EdgeInsets.all(10),
-                          //     decoration: BoxDecoration(
-                          //         color: AppColor.grey.withOpacity(0.5),
-                          //         shape: BoxShape.circle),
-                          //     child: Text(
-                          //       _startTime.toString(),
-                          //       style: AppStyle.medium.copyWith(fontSize: 16),
-                          //     ))
-                        ],
+                        ),
                       ),
-                    )
+                    ),
+                    Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          height: 50,
+                          width: 50,
+                          child: LinearTimer(
+                            color: AppColor.yellow,
+                            backgroundColor: HexColor('#888888').withOpacity(0.3),
+                            controller: timerController,
+                            duration: const Duration(seconds: 15),
+                            onTimerEnd: () {
+                              showButton.value = true;
+                              // gifController?.stop();
+                            },
+                          ),
+                        ),
+                        Positioned(
+                            right: 0,
+                            left: 0,
+                            top: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: GifImage(
+                                height: 30,
+                                width: 30,
+                                fit: BoxFit.fill,
+                                controller: gifController!,
+                                image: AssetImage(
+                                  package: "eums",
+                                  Assets.coingif.path,
+                                ),
+                              ),
+                            ))
+                      ],
+                    ),
+                    // Container(
+                    //     padding: const EdgeInsets.all(10),
+                    //     decoration: BoxDecoration(
+                    //         color: AppColor.grey.withOpacity(0.5),
+                    //         shape: BoxShape.circle),
+                    //     child: Text(
+                    //       _startTime.toString(),
+                    //       style: AppStyle.medium.copyWith(fontSize: 16),
+                    //     ))
+                  ],
+                ),
+              )
             ],
           ),
         ),

@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "id.flutter.flutter_background_service",
+    "module": "flutter_background_service_android_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_background_service_android_profile-1.0.aar",
+          "url": "flutter_background_service_android_profile-1.0.aar",
+          "size": 25432,
+          "sha512": "09b7e7a8b95604465c81f8f3a7d67ff20127aaefe319949f25a35a912a64e3f18137234809e92ca9f92351c670d444f406ed48ee1b5fac9a1d93db80be574ced",
+          "sha256": "2f00672fb5043c2a208e9af59014fe80116783280ff40460e23acb29daee3f41",
+          "sha1": "4715260daa3981ed283878bbd698965e6baa0668",
+          "md5": "5c93f87b373223decb49e71bd5b9c80b"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "flutter_background_service_android_profile-1.0.aar",
+          "url": "flutter_background_service_android_profile-1.0.aar",
+          "size": 25432,
+          "sha512": "09b7e7a8b95604465c81f8f3a7d67ff20127aaefe319949f25a35a912a64e3f18137234809e92ca9f92351c670d444f406ed48ee1b5fac9a1d93db80be574ced",
+          "sha256": "2f00672fb5043c2a208e9af59014fe80116783280ff40460e23acb29daee3f41",
+          "sha1": "4715260daa3981ed283878bbd698965e6baa0668",
+          "md5": "5c93f87b373223decb49e71bd5b9c80b"
+        }
+      ]
+    }
+  ]
+}

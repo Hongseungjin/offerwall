@@ -1,0 +1,76 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.baseflow.permissionhandler",
+    "module": "permission_handler_android_profile",
+    "version": "1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "profileVariantProfileApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "permission_handler_android_profile-1.0.aar",
+          "url": "permission_handler_android_profile-1.0.aar",
+          "size": 26848,
+          "sha512": "eca72e673b962425e5641c55bb7731ce35e0b3bdd87c5f718de2d8e70b6d79e40936e2038c3b383618f966da3f805e2c3dc80587fc5481df3b9c71e6f6a36cb7",
+          "sha256": "32540300c5b4e0c84317c11b151ab70fb0a7704aa2f700ac515c61ef11e01dca",
+          "sha1": "ce1449854d822f549d6e883b4eb840633ff760a0",
+          "md5": "cb9ffa6396c6c12e831ae72e19121890"
+        }
+      ]
+    },
+    {
+      "name": "profileVariantProfileRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.flutter",
+          "module": "flutter_embedding_profile",
+          "version": {
+            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "permission_handler_android_profile-1.0.aar",
+          "url": "permission_handler_android_profile-1.0.aar",
+          "size": 26848,
+          "sha512": "eca72e673b962425e5641c55bb7731ce35e0b3bdd87c5f718de2d8e70b6d79e40936e2038c3b383618f966da3f805e2c3dc80587fc5481df3b9c71e6f6a36cb7",
+          "sha256": "32540300c5b4e0c84317c11b151ab70fb0a7704aa2f700ac515c61ef11e01dca",
+          "sha1": "ce1449854d822f549d6e883b4eb840633ff760a0",
+          "md5": "cb9ffa6396c6c12e831ae72e19121890"
+        }
+      ]
+    }
+  ]
+}

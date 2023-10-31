@@ -1,0 +1,211 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    xmlns:tools="http://schemas.android.com/tools"
+4    package="com.example.eums" >
+5
+6    <uses-sdk
+7        android:minSdkVersion="21"
+7-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml
+8        android:targetSdkVersion="21" />
+8-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml
+9
+10    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+10-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:7:3-76
+10-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:7:20-73
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:8:3-65
+11-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:8:20-62
+12    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+12-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:9:3-75
+12-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:9:20-72
+13    <uses-permission android:name="android.permission.WAKE_LOCK" />
+13-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:10:3-66
+13-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:10:20-63
+14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+14-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:11:3-79
+14-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:11:20-76
+15    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+15-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:12:3-79
+15-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:12:20-76
+16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+16-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:13:3-77
+16-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:13:20-74
+17    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+17-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:14:3-81
+17-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:14:20-78
+18    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+18-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:15:3-77
+18-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:15:20-74
+19    <!--
+20  <uses-permission android:name="android.permission.BLUETOOTH" />
+21  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+22  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+23  <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+24  <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+25    -->
+26    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+26-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:21:3-69
+26-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:21:20-66
+27    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+27-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:22:3-79
+27-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:22:20-76
+28    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+28-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:23:3-78
+28-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:23:20-75
+29    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+29-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:24:3-73
+29-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:24:20-70
+30    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+30-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:25:3-74
+30-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:25:20-71
+31    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+31-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:26:3-28:5
+31-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:27:5-90
+32    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+32-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:29:3-31:5
+32-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:30:5-65
+33    <uses-permission
+33-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:32:3-35:5
+34        android:name="android.permission.USE_EXACT_ALARM"
+34-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:34:5-54
+35        android:minSdkVersion="34" />
+35-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:33:5-31
+36
+37    <application android:usesCleartextTraffic="true" >
+37-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:36:3-112:17
+37-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:36:16-51
+38        <meta-data
+38-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:39:6-42:7
+39            android:name="com.google.firebase.messaging.default_notification_channel_id"
+39-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:40:7-83
+40            android:value="default_notification_channel_id" />
+40-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:41:7-54
+41        <!--
+42    <meta-data
+43      android:name="com.google.firebase.messaging.default_notification_icon"
+44      android:resource="@drawable/ic_bg_service_small"
+45    />
+46    <meta-data
+47      android:name="com.google.firebase.messaging.default_notification_color"
+48      android:resource="@color/ic_launcher_background"
+49    />
+50        -->
+51
+52        <service
+52-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:52:5-55:7
+53            android:name="flutter.overlay.window.flutter_overlay_window.OverlayService"
+53-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:53:7-82
+54            android:exported="false" />
+54-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:54:7-31
+55        <service
+55-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:56:5-59:7
+56            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+56-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:57:7-83
+57            android:stopWithTask="true" />
+57-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:58:7-34
+58
+59        <activity
+59-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:60:5-70:16
+60            android:name="com.nextapps.naswall.NASWallBrowser"
+60-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:61:7-57
+61            android:configChanges="keyboardHidden|orientation|screenSize"
+61-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:62:7-68
+62            android:exported="true" >
+62-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:63:7-30
+63            <intent-filter tools:ignore="AppLinkUrlError" >
+63-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:65:7-69:23
+63-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:65:22-52
+64                <action android:name="android.intent.action.VIEW" />
+64-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:66:9-61
+64-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:66:17-58
+65
+66                <category android:name="android.intent.category.DEFAULT" />
+66-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:67:9-68
+66-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:67:19-65
+67                <category android:name="android.intent.category.BROWSABLE" />
+67-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:68:9-70
+67-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:68:19-67
+68            </intent-filter>
+69        </activity>
+70
+71        <meta-data
+71-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:73:5-79
+72            android:name="partner_id"
+72-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:73:16-41
+73            android:value="15395-20230512-881" />
+73-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:73:42-76
+74        <meta-data
+74-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:74:5-77:7
+75            android:name="title_color"
+75-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:75:7-33
+76            android:value="#00e0e0" />
+76-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:76:7-30
+77        <!--
+78      타이틀 텍트스 크기 설정 (dp 단위,
+79        미설정 시 21dp)
+80        -->
+81        <meta-data
+81-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:79:5-63
+82            android:name="title_size"
+82-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:79:16-41
+83            android:value="21" />
+83-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:79:42-60
+84        <!-- 닫기 버튼의 위치 (L: 좌측, R 또는 미설정 시 우측) -->
+85        <meta-data
+85-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:81:5-67
+86            android:name="title_close_pos"
+86-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:81:16-46
+87            android:value="R" />
+87-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:81:47-64
+88        <!-- 닫기 버튼의 좌/우 마진 (dp 단위, 미설정 시 기본 15dp) -->
+89        <meta-data
+89-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:83:5-86:7
+90            android:name="title_close_margin"
+90-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:84:7-40
+91            android:value="15" /> <!-- 타이틀 높이 (dp 단위) -->
+91-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:85:7-25
+92        <meta-data
+92-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:87:5-65
+93            android:name="title_height"
+93-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:87:16-43
+94            android:value="50" />
+94-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:87:44-62
+95        <!-- 닫기 버튼의 width (dp 단위) -->
+96        <meta-data
+96-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:89:5-92:7
+97            android:name="title_close_width"
+97-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:90:7-39
+98            android:value="20" /> <!-- 닫기 버튼의 height (dp 단위) -->
+98-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:91:7-25
+99        <meta-data
+99-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:93:5-71
+100            android:name="title_close_height"
+100-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:93:16-49
+101            android:value="20" />
+101-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:93:50-68
+102
+103        <!--
+104         Don't delete the meta-data below.
+105             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+106        -->
+107        <meta-data
+107-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:99:5-68
+108            android:name="flutterEmbedding"
+108-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:99:16-47
+109            android:value="2" />
+109-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:99:48-65
+110        <meta-data
+110-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:102:5-105:7
+111            android:name="firebase_messaging_auto_init_enabled"
+111-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:103:7-58
+112            android:value="false" />
+112-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:104:7-28
+113        <meta-data
+113-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:106:5-109:7
+114            android:name="firebase_analytics_collection_enabled"
+114-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:107:7-59
+115            android:value="false" />
+115-->/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_package/package/eums/android/src/main/AndroidManifest.xml:108:7-28
+116    </application>
+117
+118</manifest>
