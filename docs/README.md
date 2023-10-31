@@ -10,7 +10,7 @@ Prepared based on the following documents:
 
 # Getting Started
 
-Please check if the version on your device is suitable, it may be equal or higher
+WARNING: Please check if the version on your device is suitable, it may be equal or higher
 
 ## Flutter
 
@@ -26,3 +26,9 @@ Please check if the version on your device is suitable, it may be equal or highe
 ![Alt text](./images/version-android-studio.png)
 
 
+## IOS
+
+- Develop for iOS and macOS (Xcode 15.0)
+- CocoaPods version 1.13.0
+
+![Alt text](./images/version-android-studio.png)
