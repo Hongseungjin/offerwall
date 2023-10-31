@@ -31,4 +31,4 @@ WARNING: Please check if the version on your device is suitable, it may be equal
 - Develop for iOS and macOS (Xcode 15.0)
 - CocoaPods version 1.13.0
 
-![Alt text](./images/version-android-studio.png)
+![Alt text](./images/version-xcode.png)
