@@ -8,9 +8,8 @@ Prepared based on the following documents:
 
 - [documentation ios](https://docs.flutter.dev/add-to-app/ios/project-setup).
 
-
 # Getting Started
 
 - Android studio version:
 
-![Alt text](images/version-android-studio.png)
+![Alt text](./images/version-android-studio.png)
