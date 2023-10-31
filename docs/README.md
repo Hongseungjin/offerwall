@@ -86,12 +86,12 @@ flutter build aar --output=<your path>/<My Application>/app/libs
 
 ```
 1. Open <host>/app/build.gradle
-  2. Ensure you have the repositories configured, otherwise add them:
+  2. Ensure you have the repositories configured 'settings.gradle' , otherwise add them:
 
       String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
       repositories {
         maven {
-            url '/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_module/AndroidExample/app/libs/host/outputs/repo'
+            url '<your path>/<My Application>/app/libs/host/outputs/repo'
         }
         maven {
             url "$storageUrl/download.flutter.io"
@@ -117,3 +117,5 @@ flutter build aar --output=<your path>/<My Application>/app/libs
       }
     }
 ```
+
+![Alt text](./images/example-settings-gradle.png)
