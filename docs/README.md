@@ -68,7 +68,7 @@ offerwall
 
 ```
 
-- Example path folder build sdk: 
+- Example path folder build sdk:
 
 ```
 cd <your path>/offerwal/offerwall_module/flutter_offerwall_module
@@ -77,8 +77,43 @@ cd <your path>/offerwal/offerwall_module/flutter_offerwall_module
 - Command build sdk:
 
 ```
-flutter build aar --output=< your path >/< My Application >/app/libs
+flutter build aar --output=<your path>/<My Application>/app/libs
 ```
 
 ![Alt text](./images/result-build-aar.png)
 
+- Consuming the Module:
+
+```
+1. Open <host>/app/build.gradle
+  2. Ensure you have the repositories configured, otherwise add them:
+
+      String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
+      repositories {
+        maven {
+            url '/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_module/AndroidExample/app/libs/host/outputs/repo'
+        }
+        maven {
+            url "$storageUrl/download.flutter.io"
+        }
+      }
+
+  3. Make the host app depend on the Flutter module:
+
+    dependencies {
+      debugImplementation 'com.example.flutter_offerwall_module:flutter_debug:1.0'
+      profileImplementation 'com.example.flutter_offerwall_module:flutter_profile:1.0'
+      releaseImplementation 'com.example.flutter_offerwall_module:flutter_release:1.0'
+    }
+
+
+  4. Add the `profile` build type:
+
+    android {
+      buildTypes {
+        profile {
+          initWith debug
+        }
+      }
+    }
+```
