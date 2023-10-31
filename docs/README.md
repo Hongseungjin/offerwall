@@ -10,3 +10,7 @@ Prepared based on the following documents:
 
 
 # Getting Started
+
+- Android studio version:
+
+![Alt text](version-android-studio.png)
