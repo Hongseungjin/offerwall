@@ -1,4 +1,4 @@
-# flutter_offerwall_module
+# Flutter OfferWall Module
 
 This is a module for Android and iOS that can be used together, created based on the flutter framework
 
