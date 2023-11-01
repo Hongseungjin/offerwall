@@ -75,6 +75,7 @@ cd <your path>/offerwal/offerwall_module/flutter_offerwall_module
 ```
 
 - Command build sdk:
+  NOTE: The built file can be copied to another project to import as an sdk
 
 ```
 flutter build aar --output=<your path>/<My Application>/app/libs
@@ -86,7 +87,7 @@ flutter build aar --output=<your path>/<My Application>/app/libs
 
 ```
 1. Open <host>/app/build.gradle
-  2. Ensure you have the repositories configured 'settings.gradle' , otherwise add them:
+  1. Ensure you have the repositories configured 'settings.gradle' , otherwise add them:
 
       String storageUrl = System.env.FLUTTER_STORAGE_BASE_URL ?: "https://storage.googleapis.com"
       repositories {
@@ -98,7 +99,7 @@ flutter build aar --output=<your path>/<My Application>/app/libs
         }
       }
 
-  3. Make the host app depend on the Flutter module:
+  2. Make the host app depend on the Flutter module:
 
     dependencies {
       debugImplementation 'com.example.flutter_offerwall_module:flutter_debug:1.0'
