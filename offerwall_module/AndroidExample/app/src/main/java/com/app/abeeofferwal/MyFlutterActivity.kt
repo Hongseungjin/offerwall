@@ -10,11 +10,11 @@ import io.flutter.embedding.engine.FlutterEngine
 class MyFlutterActivity : FlutterActivity(){
     companion object {
         const val EXTRA_BOOK = "offerWall"
-        fun withOfferwall(context: Context, offerwall: Api.Offerwall): Intent {
+        fun withOfferWall(context: Context, offerWall: Api.OfferWall): Intent {
             return CachedEngineBookIntentBuilder(MyFlutterApplication.ENGINE_ID)
                 .build(context) .putExtra(
                     EXTRA_BOOK,
-                    HashMap(offerwall.toMap())
+                    HashMap(offerWall.toMap())
                 )
         }
 
@@ -28,19 +28,19 @@ class MyFlutterActivity : FlutterActivity(){
 
 
         // Register the HostBookApiHandler callback class to get results from Flutter.
-        Api.HostOfferwallApi.setup(flutterEngine.dartExecutor, HostBookApiHandler())
+        Api.HostOfferWallApi.setup(flutterEngine.dartExecutor, HostOfferWallApiHandler())
 
 
         // The book to give to Flutter is passed in from the MainActivity via this activity's
         // source intent getter. The intent contains the book serialized as on extra.
-        val bookToShow = Api.Offerwall.fromMap(intent.getSerializableExtra(EXTRA_BOOK) as HashMap<String, Any>)
+        val bookToShow = Api.OfferWall.fromMap(intent.getSerializableExtra(EXTRA_BOOK) as HashMap<String, Any>)
         // Send in the book instance to Flutter.
-        Api.FlutterOfferWallApi(flutterEngine.dartExecutor).displayOfferwallDetails(bookToShow) {
+        Api.FlutterOfferWallApi(flutterEngine.dartExecutor).displayOfferWallDetails(bookToShow) {
             // We don't care about the callback
         }
     }
 
-    inner class HostBookApiHandler: Api.HostOfferwallApi {
+    inner class HostOfferWallApiHandler: Api.HostOfferWallApi {
         override fun cancel() {
             // Flutter called cancel. Finish the activity with a cancel result.
             setResult(Activity.RESULT_CANCELED)

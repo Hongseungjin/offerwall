@@ -1,21 +1,20 @@
 import 'package:pigeon/pigeon.dart';
 
-class Book {
+class OfferWall {
   String? memBirth;
   String? memGen;
   String? memRegion;
   String? memId;
-  String? firebaseKey; 
+  String? firebaseKey;
 }
 
-
 @FlutterApi()
-abstract class FlutterBookApi {
-  void displayBookDetails(Book book);
+abstract class FlutterOfferWallApi {
+  void displayOfferWallDetails(OfferWall offerWall);
 }
 
 @HostApi()
-abstract class HostBookApi {
+abstract class HostOfferWallApi {
   void cancel();
   // void finishEditingBook(Book book);
 }

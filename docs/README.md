@@ -133,7 +133,7 @@ flutter build aar --output=<your path>/<My Application>/app/libs
 - Add file `Api.java`:
 
 ```
-package <your package>;
+package <Your packageName>;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
@@ -148,8 +148,8 @@ import io.flutter.plugin.common.MessageCodec;
 import io.flutter.plugin.common.StandardMessageCodec;
 
 public class  Api{
-    public static class Offerwall {
-        // example:  memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"
+    public static class OfferWall {
+        //  memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"
 
         public String getMemId() {
             return memId;
@@ -205,8 +205,8 @@ public class  Api{
 
             return toMapResult;
         }
-        static Offerwall fromMap(Map<String, Object> map) {
-            Offerwall fromMapResult = new Offerwall();
+        static OfferWall fromMap(Map<String, Object> map) {
+            OfferWall fromMapResult = new OfferWall();
             fromMapResult.memId = (String)map.get("memId");
             fromMapResult.memGen = (String)map.get("memGen");
             fromMapResult.memBirth = (String)map.get("memBirth");
@@ -216,14 +216,14 @@ public class  Api{
         }
     }
 
-    private static class HostOfferwallApiCodec extends StandardMessageCodec {
-        public static final HostOfferwallApiCodec INSTANCE = new HostOfferwallApiCodec();
-        private HostOfferwallApiCodec() {}
+    private static class HostOfferWallApiCodec extends StandardMessageCodec {
+        public static final HostOfferWallApiCodec INSTANCE = new HostOfferWallApiCodec();
+        private HostOfferWallApiCodec() {}
         @Override
         protected Object readValueOfType(byte type, ByteBuffer buffer) {
             switch (type) {
                 case (byte)128:
-                    return Offerwall.fromMap((Map<String, Object>)readValue(buffer));
+                    return OfferWall.fromMap((Map<String, Object>)readValue(buffer));
 
                 default:
                     return super.readValueOfType(type, buffer);
@@ -231,28 +231,28 @@ public class  Api{
         }
         @Override
         protected void writeValue(ByteArrayOutputStream stream, Object value) {
-            if (value instanceof Offerwall) {
+            if (value instanceof OfferWall) {
                 stream.write(128);
-                writeValue(stream, ((Offerwall)value).toMap());
+                writeValue(stream, ((OfferWall)value).toMap());
             } else {
                 super.writeValue(stream, value);
             }
         }
     }
-    public interface HostOfferwallApi {
+    public interface HostOfferWallApi {
         void cancel();
 
         /** The codec used by HostOfferwallApi. */
-        static MessageCodec<Object> getCodec() { return HostOfferwallApiCodec.INSTANCE; }
+        static MessageCodec<Object> getCodec() { return HostOfferWallApiCodec.INSTANCE; }
 
         /**
          * Sets up an instance of `HostOfferwallApi` to handle messages through the
          * `binaryMessenger`.
          */
-        static void setup(BinaryMessenger binaryMessenger, HostOfferwallApi api) {
+        static void setup(BinaryMessenger binaryMessenger, HostOfferWallApi api) {
             {
                 BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
-                        binaryMessenger, "dev.flutter.pigeon.HostOfferwallApi.cancel",
+                        binaryMessenger, "dev.flutter.pigeon.HostOfferWallApi.cancel",
                         getCodec());
                 if (api != null) {
                     channel.setMessageHandler((message, reply) -> {
@@ -273,35 +273,36 @@ public class  Api{
     }
 
 
-    public static class FlutterOfferwallApi {
+    public static class FlutterOfferWallApi {
         private final BinaryMessenger binaryMessenger;
-        public FlutterOfferwallApi(BinaryMessenger argBinaryMessenger) {
+        public FlutterOfferWallApi(BinaryMessenger argBinaryMessenger) {
             this.binaryMessenger = argBinaryMessenger;
         }
         public interface Reply<T> {
             void reply(T reply);
         }
         static MessageCodec<Object> getCodec() {
-            return FlutterOfferwallApiCodec.INSTANCE;
+            return FlutterOfferWallApiCodec.INSTANCE;
         }
 
-        public void displayOfferwallDetails(Offerwall bookArg, Reply<Void> callback) {
+        public void displayOfferWallDetails(OfferWall bookArg, Reply<Void> callback) {
             BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
                     binaryMessenger,
-                    "dev.flutter.pigeon.FlutterOfferWallApi.displayDetails", getCodec());
+//                    "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
+                    "dev.flutter.pigeon.FlutterOfferWallApi.displayOfferWallDetails", getCodec());
             channel.send(new ArrayList<Object>(Arrays.asList(bookArg)),
                     channelReply -> { callback.reply(null); });
         }
     }
-    private static class FlutterOfferwallApiCodec extends StandardMessageCodec {
-        public static final FlutterOfferwallApiCodec INSTANCE =
-                new FlutterOfferwallApiCodec();
-        private FlutterOfferwallApiCodec() {}
+    private static class FlutterOfferWallApiCodec extends StandardMessageCodec {
+        public static final FlutterOfferWallApiCodec INSTANCE =
+                new FlutterOfferWallApiCodec();
+        private FlutterOfferWallApiCodec() {}
         @Override
         protected Object readValueOfType(byte type, ByteBuffer buffer) {
             switch (type) {
                 case (byte)128:
-                    return Offerwall.fromMap((Map<String, Object>)readValue(buffer));
+                    return OfferWall.fromMap((Map<String, Object>)readValue(buffer));
 
                 default:
                     return super.readValueOfType(type, buffer);
@@ -309,9 +310,9 @@ public class  Api{
         }
         @Override
         protected void writeValue(ByteArrayOutputStream stream, Object value) {
-            if (value instanceof Offerwall) {
+            if (value instanceof OfferWall) {
                 stream.write(128);
-                writeValue(stream, ((Offerwall)value).toMap());
+                writeValue(stream, ((OfferWall)value).toMap());
             } else {
                 super.writeValue(stream, value);
             }
@@ -330,12 +331,10 @@ public class  Api{
 
 ![Alt text](./images/example-api.png)
 
-### Call sdk to project (Kotlin)
-
 - Create file `MyFlutterActivity`:
 
 ```
-package com.app.abeeofferwal
+package <Your package>
 
 import android.app.Activity
 import android.content.Context
@@ -343,18 +342,16 @@ import android.content.Intent
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
-
 class MyFlutterActivity : FlutterActivity(){
     companion object {
-        const val EXTRA_BOOK = "book"
-        fun withOfferwall(context: Context, offerwall: Api.Offerwall): Intent {
+        const val EXTRA_BOOK = "offerWall"
+        fun withOfferWall(context: Context, offerWall: Api.OfferWall): Intent {
             return CachedEngineBookIntentBuilder(MyFlutterApplication.ENGINE_ID)
                 .build(context) .putExtra(
                     EXTRA_BOOK,
-                    HashMap(offerwall.toMap())
+                    HashMap(offerWall.toMap())
                 )
         }
-
     }
     class CachedEngineBookIntentBuilder(engineId: String): CachedEngineIntentBuilder(MyFlutterActivity::class.java, engineId) { }
 
@@ -363,21 +360,19 @@ class MyFlutterActivity : FlutterActivity(){
         // FlutterEngine responsible for rendering the Flutter activity's content.
         super.configureFlutterEngine(flutterEngine)
 
-
         // Register the HostBookApiHandler callback class to get results from Flutter.
-        Api.HostOfferwallApi.setup(flutterEngine.dartExecutor, HostBookApiHandler())
-
+        Api.HostOfferWallApi.setup(flutterEngine.dartExecutor, HostOfferWallApiHandler())
 
         // The book to give to Flutter is passed in from the MainActivity via this activity's
         // source intent getter. The intent contains the book serialized as on extra.
-        val bookToShow = Api.Offerwall.fromMap(intent.getSerializableExtra(EXTRA_BOOK) as HashMap<String, Any>)
+        val bookToShow = Api.OfferWall.fromMap(intent.getSerializableExtra(EXTRA_BOOK) as HashMap<String, Any>)
         // Send in the book instance to Flutter.
-        Api.FlutterOfferwallApi(flutterEngine.dartExecutor).displayOfferwallDetails(bookToShow) {
+        Api.FlutterOfferWallApi(flutterEngine.dartExecutor).displayOfferWallDetails(bookToShow) {
             // We don't care about the callback
         }
     }
 
-    inner class HostBookApiHandler: Api.HostOfferwallApi {
+    inner class HostOfferWallApiHandler: Api.HostOfferWallApi {
         override fun cancel() {
             // Flutter called cancel. Finish the activity with a cancel result.
             setResult(Activity.RESULT_CANCELED)
@@ -385,4 +380,101 @@ class MyFlutterActivity : FlutterActivity(){
         }
     }
 }
+```
+
+- Add `MyFlutterActivity` and FlutterActivity to the `AndroidManifest.xml`
+
+```
+<application
+...
+>
+        ...
+        <activity
+            android:name=".MyFlutterActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:theme="@style/Theme.AndroidExample.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"
+            />
+        ...
+</application>
+```
+
+- Create `MyFlutterApplication`:
+
+```
+package <Your packageName>
+
+import android.app.Application
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
+
+
+class MyFlutterApplication : Application() {
+    companion object {
+        const val ENGINE_ID = "offerwall_engine"
+    }
+    private lateinit var flutterEngine: FlutterEngine
+    override fun onCreate() {
+        super.onCreate()
+        // This application reuses a single FlutterEngine instance throughout.
+        // Create the FlutterEngine on application start.
+        flutterEngine = FlutterEngine(this).apply{
+            dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+        }
+
+        FlutterEngineCache.getInstance().put(ENGINE_ID, flutterEngine)
+
+    }
+
+}
+
+```
+
+- Add `MyFlutterApplication` to the `AndroidManifest.xml`:
+
+```
+ <application
+     android:name=".MyFlutterApplication"
+     ...
+     >
+</application>
+```
+
+### Call sdk to project (Kotlin)
+
+- Call Activity SDK
+
+```
+        var data: Api.OfferWall = Api.OfferWall()
+            data.memId= "abee997"
+            data.memGen= "w"
+            data.memBirth= "2000-01-01"
+            data.memRegion= "인천_서"
+            data.firebaseKey= "AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp"
+            startActivityForResult(
+                MyFlutterActivity
+                    .withOfferWall(requireContext(), data),
+                0)
+```
+
+- Handle result Activity:
+
+```
+ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // The Flutter activity may cancel the edit. If so, don't update anything.
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                throw RuntimeException("The FlutterBookActivity returning RESULT_OK should always have a return data intent")
+            }
+        }
+    }
 ```

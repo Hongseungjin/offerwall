@@ -11,7 +11,7 @@ class AccessTokenInterceptor extends Interceptor {
   Future<dynamic> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     // String token = await localStore.getAccessToken();
-    String token = await LocalStoreService.instant.getAccessToken();
+    String token =  LocalStoreService.instant.getAccessToken();
     if (token.isNotEmpty) {
       options.headers['authorization'] = 'Bearer $token';
       options.queryParameters.addAll(<String, dynamic>{'access_token': 'Bearer $token'});

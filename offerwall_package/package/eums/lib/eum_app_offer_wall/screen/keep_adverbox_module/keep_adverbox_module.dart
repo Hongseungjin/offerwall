@@ -296,7 +296,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
   }
 
   int getDayLeft(String? dateTo) {
-    if (dateTo != null && dateTo.isNotEmpty) {
+    if (dateTo != null && dateTo.isNotEmpty==true) {
       DateTime parseDtFrom = DateTime.parse(dateTo).toLocal();
       DateTime parseDtTo = DateTime.parse(dateTo).toLocal().add(const Duration(days: 2));
       return parseDtTo.difference(parseDtFrom).inDays > 1 ? parseDtTo.difference(parseDtFrom).inDays : parseDtTo.day - parseDtFrom.day;

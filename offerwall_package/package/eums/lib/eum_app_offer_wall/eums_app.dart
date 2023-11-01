@@ -3,14 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:eums/common/method_native/method_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:queue/queue.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:eums/common/local_store/local_store.dart';
-import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
@@ -160,10 +157,15 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
   // LocalStore localStore = LocalStoreService();
   @override
   Future<Widget> openSdk(BuildContext context) async {
-    FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
-    Size size = view.physicalSize;
-    double height = size.height;
-    LocalStoreService.instant.setSizeDevice(height);
+    try {
+      FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
+      Size size = view.physicalSize;
+      double height = size.height;
+      // await LocalStoreService.instant.init();
+      LocalStoreService.instant.setSizeDevice(height);
+    } catch (e) {
+      print("=====> error: $e");
+    }
 
     return const MyHomeScreen();
   }

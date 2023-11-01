@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   bool firstShowDialogPoint = false;
 
-  late HostBookApi hostApi;
+  late HostOfferWallApi hostApi;
 
   late HomeBloc blocMain;
   late List<HomeBloc> blocs = [HomeBloc(), HomeBloc()];
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     blocMain = HomeBloc();
     // localStore = LocalStoreService();
-    hostApi = HostBookApi();
+    hostApi = HostOfferWallApi();
     category = 'participation';
 
     // bloc
@@ -262,9 +262,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                // hostApi.cancel();
+                hostApi.cancel();
                 // MethodOfferwallChannel.instant.back();
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,

@@ -14,7 +14,7 @@ class LocalStoreService {
   static const DEVICE_WIDTH = 'DEVICE_WIDTH';
   // static const COUNT_ADVER = 'COUNT_ADVER';
   static const dataUser = 'dataUser';
-  final firebaseKey='firebaseKey';
+  final firebaseKey = 'firebaseKey';
 
   late SharedPreferences preferences;
   LocalStoreService._();
@@ -27,7 +27,7 @@ class LocalStoreService {
 
   Future<bool> hasAuthenticated() async {
     String accessToken = getAccessToken();
-    dynamic account = await getLoggedAccount();
+    final account =  getLoggedAccount();
     return accessToken.isNotEmpty && account != null;
   }
 
@@ -44,7 +44,7 @@ class LocalStoreService {
     await preferences.setString(PREF_LOGGED_ACCOUNT, jsonEncode(user));
   }
 
-  Future<dynamic> getLoggedAccount() async {
+  dynamic getLoggedAccount() async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
     return jsonDecode(preferences.getString(PREF_LOGGED_ACCOUNT) ?? '{}');
   }

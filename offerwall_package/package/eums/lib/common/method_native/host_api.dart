@@ -1,17 +1,17 @@
 import 'package:flutter/services.dart';
 
-class HostBookApi {
-  /// Constructor for [HostBookApi].  The [binaryMessenger] named argument is
+class HostOfferWallApi {
+  /// Constructor for [HostOfferWallApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  HostBookApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  HostOfferWallApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
 
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _HostBookApiCodec();
+  static const MessageCodec<Object?> codec = _HostOfferWallApiCodec();
 
   Future<void> cancel() async {
-    final channel = BasicMessageChannel<Object?>('dev.flutter.pigeon.HostOfferwallApi.cancel', codec, binaryMessenger: _binaryMessenger);
+    final channel = BasicMessageChannel<Object?>('dev.flutter.pigeon.HostOfferWallApi.cancel', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap = await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
@@ -50,11 +50,11 @@ class HostBookApi {
   // }
 }
 
-class _HostBookApiCodec extends StandardMessageCodec {
-  const _HostBookApiCodec();
+class _HostOfferWallApiCodec extends StandardMessageCodec {
+  const _HostOfferWallApiCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is Book) {
+    if (value is OfferWall) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else {
@@ -66,7 +66,7 @@ class _HostBookApiCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:
-        return Book.decode(readValue(buffer)!);
+        return OfferWall.decode(readValue(buffer)!);
 
       default:
         return super.readValueOfType(type, buffer);
@@ -74,7 +74,7 @@ class _HostBookApiCodec extends StandardMessageCodec {
   }
 }
 
-class Book {
+class OfferWall {
   // memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId
   String? memBirth;
   String? memGen;
@@ -82,7 +82,7 @@ class Book {
   String? memId;
   String? firebaseKey;
 
-  Book({this.memBirth, this.memGen, this.memRegion, this.memId, this.firebaseKey});
+  OfferWall({this.memBirth, this.memGen, this.memRegion, this.memId, this.firebaseKey});
 
   Object encode() {
     final pigeonMap = <Object?, Object?>{};
@@ -94,9 +94,9 @@ class Book {
     return pigeonMap;
   }
 
-  static Book decode(Object message) {
+  static OfferWall decode(Object message) {
     final pigeonMap = message as Map<Object?, Object?>;
-    return Book(
+    return OfferWall(
       memBirth: pigeonMap['memBirth'] as String?,
       memGen: pigeonMap['memGen'] as String?,
       memRegion: pigeonMap['memRegion'] as String?,

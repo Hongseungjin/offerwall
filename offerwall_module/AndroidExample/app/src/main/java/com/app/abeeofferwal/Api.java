@@ -16,7 +16,7 @@ import io.flutter.plugin.common.StandardMessageCodec;
 
 
 public class  Api{
-    public static class Offerwall {
+    public static class OfferWall {
         //  memId: "abee997", memGen: "w", memBirth: "2000-01-01", memRegion: "인천_서"
 
         public String getMemId() {
@@ -73,8 +73,8 @@ public class  Api{
 
             return toMapResult;
         }
-        static Offerwall fromMap(Map<String, Object> map) {
-            Offerwall fromMapResult = new Offerwall();
+        static OfferWall fromMap(Map<String, Object> map) {
+            OfferWall fromMapResult = new OfferWall();
 //            Object title = map.get("title");
             fromMapResult.memId = (String)map.get("memId");
             fromMapResult.memGen = (String)map.get("memGen");
@@ -85,14 +85,14 @@ public class  Api{
         }
     }
 
-    private static class HostOfferwallApiCodec extends StandardMessageCodec {
-        public static final HostOfferwallApiCodec INSTANCE = new HostOfferwallApiCodec();
-        private HostOfferwallApiCodec() {}
+    private static class HostOfferWallApiCodec extends StandardMessageCodec {
+        public static final HostOfferWallApiCodec INSTANCE = new HostOfferWallApiCodec();
+        private HostOfferWallApiCodec() {}
         @Override
         protected Object readValueOfType(byte type, ByteBuffer buffer) {
             switch (type) {
                 case (byte)128:
-                    return Offerwall.fromMap((Map<String, Object>)readValue(buffer));
+                    return OfferWall.fromMap((Map<String, Object>)readValue(buffer));
 
                 default:
                     return super.readValueOfType(type, buffer);
@@ -100,28 +100,28 @@ public class  Api{
         }
         @Override
         protected void writeValue(ByteArrayOutputStream stream, Object value) {
-            if (value instanceof Offerwall) {
+            if (value instanceof OfferWall) {
                 stream.write(128);
-                writeValue(stream, ((Offerwall)value).toMap());
+                writeValue(stream, ((OfferWall)value).toMap());
             } else {
                 super.writeValue(stream, value);
             }
         }
     }
-    public interface HostOfferwallApi {
+    public interface HostOfferWallApi {
         void cancel();
 
         /** The codec used by HostOfferwallApi. */
-        static MessageCodec<Object> getCodec() { return HostOfferwallApiCodec.INSTANCE; }
+        static MessageCodec<Object> getCodec() { return HostOfferWallApiCodec.INSTANCE; }
 
         /**
          * Sets up an instance of `HostOfferwallApi` to handle messages through the
          * `binaryMessenger`.
          */
-        static void setup(BinaryMessenger binaryMessenger, HostOfferwallApi api) {
+        static void setup(BinaryMessenger binaryMessenger, HostOfferWallApi api) {
             {
                 BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
-                        binaryMessenger, "dev.flutter.pigeon.HostOfferwallApi.cancel",
+                        binaryMessenger, "dev.flutter.pigeon.HostOfferWallApi.cancel",
                         getCodec());
                 if (api != null) {
                     channel.setMessageHandler((message, reply) -> {
@@ -178,11 +178,11 @@ public class  Api{
             return FlutterOfferWallApiCodec.INSTANCE;
         }
 
-        public void displayOfferwallDetails(Offerwall bookArg, Reply<Void> callback) {
+        public void displayOfferWallDetails(OfferWall bookArg, Reply<Void> callback) {
             BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
                     binaryMessenger,
 //                    "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
-                    "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
+                    "dev.flutter.pigeon.FlutterOfferWallApi.displayOfferWallDetails", getCodec());
             channel.send(new ArrayList<Object>(Arrays.asList(bookArg)),
                     channelReply -> { callback.reply(null); });
         }
@@ -195,7 +195,7 @@ public class  Api{
         protected Object readValueOfType(byte type, ByteBuffer buffer) {
             switch (type) {
                 case (byte)128:
-                    return Offerwall.fromMap((Map<String, Object>)readValue(buffer));
+                    return OfferWall.fromMap((Map<String, Object>)readValue(buffer));
 
                 default:
                     return super.readValueOfType(type, buffer);
@@ -203,9 +203,9 @@ public class  Api{
         }
         @Override
         protected void writeValue(ByteArrayOutputStream stream, Object value) {
-            if (value instanceof Offerwall) {
+            if (value instanceof OfferWall) {
                 stream.write(128);
-                writeValue(stream, ((Offerwall)value).toMap());
+                writeValue(stream, ((OfferWall)value).toMap());
             } else {
                 super.writeValue(stream, value);
             }

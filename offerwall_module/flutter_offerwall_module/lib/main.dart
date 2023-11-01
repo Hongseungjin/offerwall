@@ -8,13 +8,15 @@ import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eums/eums_library.dart';
 
-void main() {
-  Eums.instant.initMaterial(home: const MyHomePage());
+void main() async {
+  await Eums.instant.initMaterial(home: const MyHomePage());
 }
 
 @pragma("vm:entry-point")
-void overlayMain() {
+void overlayMain() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocalStoreService.instant.init();
+
   runApp(
     const MyAppOverlay(),
   );
@@ -54,9 +56,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   @override
   void initState() {
     // checkOpenApp('initState');
-
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -74,37 +74,32 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   @override
   Widget build(BuildContext context) {
     setDeviceWidth();
-    return MultiRepositoryProvider(
-      providers: const [
-        // RepositoryProvider<LocalStore>(create: (context) => LocalStoreService()),
-      ],
-      child: MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthenticationBloc>(
-              create: (context) => AuthenticationBloc()..add(CheckSaveAccountLogged()),
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationBloc>(
+            create: (context) => AuthenticationBloc()..add(CheckSaveAccountLogged()),
+          ),
+        ],
+        child: MultiBlocListener(
+          listeners: [
+            BlocListener<AuthenticationBloc, AuthenticationState>(
+              listenWhen: (previous, current) => previous.logoutStatus != current.logoutStatus,
+              listener: (context, state) {
+                if (state.logoutStatus == LogoutStatus.loading) {
+                  return;
+                }
+
+                if (state.logoutStatus == LogoutStatus.finish) {
+                  return;
+                }
+              },
             ),
           ],
-          child: MultiBlocListener(
-            listeners: [
-              BlocListener<AuthenticationBloc, AuthenticationState>(
-                listenWhen: (previous, current) => previous.logoutStatus != current.logoutStatus,
-                listener: (context, state) {
-                  if (state.logoutStatus == LogoutStatus.loading) {
-                    return;
-                  }
-
-                  if (state.logoutStatus == LogoutStatus.finish) {
-                    return;
-                  }
-                },
-              ),
-            ],
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              child: const AppMainScreen(),
-            ),
-          )),
-    );
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+            child: const AppMainScreen(),
+          ),
+        ));
   }
 }
 
@@ -124,29 +119,31 @@ class _AppMainScreenState extends State<AppMainScreen> {
   void initState() {
     // localStore = LocalStoreService();
 
-    // print("book.encode()");
     super.initState();
+    print("=>>>>>>>>>>> AppMainScreen");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final token = LocalStoreService.instant.getAccessToken();
-      print("Token->>>>: $token");
-      if (token.isNotEmpty == true) {
-        await FlutterBackgroundService().configure(
-            iosConfiguration: IosConfiguration(),
-            androidConfiguration: AndroidConfiguration(
-                onStart: onStart,
-                autoStart: false,
-                isForegroundMode: true,
-                initialNotificationTitle: "인천e음",
-                initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+      print("Token->>>>: xxxxx");
 
-        showMain.value = true;
-      } else {
-        FlutterBookApi.setup(FlutterBookApiHandler((book) async {
-          // print("aaaaaa ${book.encode()}");
-          await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, book.firebaseKey ?? '');
-          dynamic data = await EumsOfferWallService.instance
-              .authConnect(memBirth: book.memBirth, memGen: book.memGen, memRegion: book.memRegion, memId: book.memId);
+      // final token = LocalStoreService.instant.getAccessToken();
+      // print("Token->>>>: $token");
+      // if (token.isNotEmpty == true) {
+      //   await FlutterBackgroundService().configure(
+      //       iosConfiguration: IosConfiguration(),
+      //       androidConfiguration: AndroidConfiguration(
+      //           onStart: onStart,
+      //           autoStart: false,
+      //           isForegroundMode: true,
+      //           initialNotificationTitle: "인천e음",
+      //           initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+
+      //   showMain.value = true;
+      // } else {
+        FlutterOfferWallApi.setup(FlutterOfferWallApiHandler((dataOfferWall) async {
+          print("aaaaaa ${dataOfferWall.encode()}");
+          await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, dataOfferWall.firebaseKey ?? '');
+          dynamic data = await EumsOfferWallService.instance.authConnect(
+              memBirth: dataOfferWall.memBirth, memGen: dataOfferWall.memGen, memRegion: dataOfferWall.memRegion, memId: dataOfferWall.memId);
           await LocalStoreService.instant.setAccessToken(data['token']);
           await FlutterBackgroundService().configure(
               iosConfiguration: IosConfiguration(),
@@ -159,12 +156,14 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
           showMain.value = true;
         }));
-      }
+      // }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print("=>>>>>>>>>>> AppMainScreen - build");
+
     return ValueListenableBuilder<bool>(
       valueListenable: showMain,
       builder: (context, value, child) {

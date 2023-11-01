@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../common/local_store/local_store.dart';
 import '../../../common/local_store/local_store_service.dart';
 
 part 'authentication_event.dart';
@@ -70,7 +69,7 @@ class AuthenticationBloc
     onLoggingOut = true;
     emit(state.copyWith(logoutStatus: LogoutStatus.loading));
     try {
-      String accessToken = await LocalStoreService.instant.getAccessToken();
+      String accessToken =  LocalStoreService.instant.getAccessToken();
       if (accessToken.isNotEmpty) {
         // await _accountRepos.logout();
       }
