@@ -478,7 +478,7 @@ class MyFlutterApplication : Application() {
             data.memGen= "w"
             data.memBirth= "2000-01-01"
             data.memRegion= "인천_서"
-            data.firebaseKey= "<Your >"
+            data.firebaseKey= "<Your Service Key>"
             startActivityForResult(
                 MyFlutterActivity
                     .withOfferWall(requireContext(), data),
