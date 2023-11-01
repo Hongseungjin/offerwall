@@ -71,6 +71,10 @@ offerwall
 
 ![Alt text](./images/example-docs-firebase1.png)
 
+- Step 5: Enable cloud messaging
+
+![Alt text](./images/example-start-service-notify.gif)
+
 ### Build sdk aar
 
 - Open the terminal folder :  
@@ -474,12 +478,16 @@ class MyFlutterApplication : Application() {
             data.memGen= "w"
             data.memBirth= "2000-01-01"
             data.memRegion= "인천_서"
-            data.firebaseKey= "AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp"
+            data.firebaseKey= "<Your >"
             startActivityForResult(
                 MyFlutterActivity
                     .withOfferWall(requireContext(), data),
                 0)
 ```
+
+Note: Value of `data.firebaseKey`:
+
+![Alt text](./images/example-service-key.png)
 
 - Handle result Activity:
 
