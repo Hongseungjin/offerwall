@@ -125,4 +125,3 @@ flutter build aar --output=<your path>/<My Application>/app/libs
 - Example the `profile` build type:
 
 ![Alt text](./images/example-build-gradle.png)
-
