@@ -75,7 +75,8 @@ cd <your path>/offerwal/offerwall_module/flutter_offerwall_module
 ```
 
 - Command build sdk:
-  NOTE: The built file can be copied to another project to import as an sdk
+
+NOTE: The built file can be copied to another project to import as an sdk
 
 ```
 flutter build aar --output=<your path>/<My Application>/app/libs
