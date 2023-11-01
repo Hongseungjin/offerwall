@@ -12,7 +12,7 @@ part 'keep_adverbox_state.dart';
 class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
   KeepAdverboxBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        super(KeepAdverboxState()) {
+        super(const KeepAdverboxState()) {
     on<KeepAdverboxEvent>(mapEventToState);
   }
 
@@ -26,7 +26,7 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
       await _mapLoadMoreKeepAdverboxToState(event, emit);
     } else if (event is DeleteKeep) {
       await _mapDeleteKeepAdverboxToState(event, emit);
-    } else if (event is EarnPoin) {
+    } else if (event is EarnPoint) {
       await _mapEarnPoinKeepAdverboxToState(event, emit);
     } else if (event is GetAdvertiseSponsor) {
       await _mapGetAdvertiseSponsorToState(event, emit);
@@ -115,10 +115,14 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
     } catch (e) {}
   }
 
-  _mapEarnPoinKeepAdverboxToState(EarnPoin event, emit) async {
+  _mapEarnPoinKeepAdverboxToState(EarnPoint event, emit) async {
     emit(state.copyWith(adverKeepStatus: AdverKeepStatus.loading));
     try {
-      await _eumsOfferWallService.missionOfferWallOutside(advertiseIdx: event.advertiseIdx, pointType: event.pointType);
+      if (event.adType == 'bee') {
+        await _eumsOfferWallService.missionOfferWallOutside(advertiseIdx: event.advertiseIdx, pointType: event.pointType);
+      } else {
+        await _eumsOfferWallService.regionOfferWallOutside(advertiseIdx: event.advertiseIdx, pointType: event.pointType);
+      }
       emit(state.copyWith(
         adverKeepStatus: AdverKeepStatus.success,
       ));

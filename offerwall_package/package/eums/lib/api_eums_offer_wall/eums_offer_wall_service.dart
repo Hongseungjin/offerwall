@@ -116,6 +116,8 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   Future<dynamic> missionOfferWallOutside(
       {int? advertiseIdx, String? pointType});
+  Future<dynamic> regionOfferWallOutside(
+      {int? advertiseIdx, String? pointType});
 
   /// GetAdvertiseSponsor
   Future<dynamic> getAdvertiseSponsor();

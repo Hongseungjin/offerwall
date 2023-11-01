@@ -5,12 +5,17 @@ class TrueOverlayService {
   // LocalStore localStore = LocalStoreService();
 
   Dio dio = Dio();
-  Future missionOfferWallOutside({advertiseIdx, pointType, token}) async {
+  Future missionOfferWallOutside({advertiseIdx, pointType, token, required String adType}) async {
     // bên ngoài
     dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, "pointType": pointType};
 
-    await dio.post('${Constants.baseUrl}point/advertises/mission-complete',
-        data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
+    if (adType == 'bee') {
+      await dio.post('${Constants.baseUrl}point/advertises/mission-complete',
+          data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
+    }else{
+      await dio.post('${Constants.baseUrl}point/region/mission-complete',
+          data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
+    }
     return;
   }
 

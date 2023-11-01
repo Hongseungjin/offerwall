@@ -220,6 +220,13 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     await api.post('point/advertises/mission-complete', data: data);
     return;
   }
+  @override
+  Future regionOfferWallOutside({advertiseIdx, pointType}) async {
+    // bên ngoài
+    dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, "pointType": pointType};
+    await api.post('point/region/mission-complete', data: data);
+    return;
+  }
 
   @override
   Future saveKeep({required int advertiseIdx, required String adType}) async {

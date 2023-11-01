@@ -42,14 +42,16 @@ class SaveKeep extends KeepAdverboxEvent {
   List<Object?> get props => [id, adType];
 }
 
-class EarnPoin extends KeepAdverboxEvent {
-  EarnPoin({this.advertiseIdx, this.pointType});
+class EarnPoint extends KeepAdverboxEvent {
+  EarnPoint( {required this.adType, this.advertiseIdx, this.pointType});
 
   final dynamic advertiseIdx;
   final dynamic pointType;
+  final String adType;
+
   @override
   // TODO: implement props
-  List<Object?> get props => [advertiseIdx, pointType];
+  List<Object?> get props => [advertiseIdx, pointType, adType];
 }
 
 class GetAdvertiseSponsor extends KeepAdverboxEvent {

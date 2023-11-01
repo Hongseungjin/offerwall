@@ -237,8 +237,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                   checkSave = false;
                 });
                 FlutterBackgroundService().invoke("closeOverlay");
+
+                final dataTemp = jsonDecode(dataEvent['data']);
+
                 TrueOverlayService().missionOfferWallOutside(
-                    advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], pointType: (jsonDecode(dataEvent['data']))['typePoint'], token: tokenSdk);
+                    advertiseIdx: dataTemp['idx'], pointType: dataTemp['typePoint'], token: tokenSdk, adType: dataTemp['ad_type']);
 
                 DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
