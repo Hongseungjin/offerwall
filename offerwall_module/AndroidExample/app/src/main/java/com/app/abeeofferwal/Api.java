@@ -166,30 +166,31 @@ public class  Api{
     }
 
 
-    public static class FlutterOfferwallApi {
+    public static class FlutterOfferWallApi {
         private final BinaryMessenger binaryMessenger;
-        public FlutterOfferwallApi(BinaryMessenger argBinaryMessenger) {
+        public FlutterOfferWallApi(BinaryMessenger argBinaryMessenger) {
             this.binaryMessenger = argBinaryMessenger;
         }
         public interface Reply<T> {
             void reply(T reply);
         }
         static MessageCodec<Object> getCodec() {
-            return FlutterOfferwallApiCodec.INSTANCE;
+            return FlutterOfferWallApiCodec.INSTANCE;
         }
 
         public void displayOfferwallDetails(Offerwall bookArg, Reply<Void> callback) {
             BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
                     binaryMessenger,
+//                    "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
                     "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
             channel.send(new ArrayList<Object>(Arrays.asList(bookArg)),
                     channelReply -> { callback.reply(null); });
         }
     }
-    private static class FlutterOfferwallApiCodec extends StandardMessageCodec {
-        public static final FlutterOfferwallApiCodec INSTANCE =
-                new FlutterOfferwallApiCodec();
-        private FlutterOfferwallApiCodec() {}
+    private static class FlutterOfferWallApiCodec extends StandardMessageCodec {
+        public static final FlutterOfferWallApiCodec INSTANCE =
+                new FlutterOfferWallApiCodec();
+        private FlutterOfferWallApiCodec() {}
         @Override
         protected Object readValueOfType(byte type, ByteBuffer buffer) {
             switch (type) {

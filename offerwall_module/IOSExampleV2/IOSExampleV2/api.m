@@ -134,7 +134,7 @@ NSObject<FlutterMessageCodec> *BKFlutterBookApiGetCodec(void) {
                     completion:(void (^)(NSError *_Nullable))completion {
   FlutterBasicMessageChannel *channel = [FlutterBasicMessageChannel
       messageChannelWithName:
-          @"dev.flutter.pigeon.FlutterBookApi.displayBookDetails"
+          @"dev.flutter.pigeon.FlutterOfferWallApi.displayDetails"
              binaryMessenger:self.binaryMessenger
                        codec:BKFlutterBookApiGetCodec()];
   [channel sendMessage:@[ arg_book ]

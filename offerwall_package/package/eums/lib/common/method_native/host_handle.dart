@@ -11,18 +11,18 @@ abstract class FlutterBookApi {
   static void setup(FlutterBookApi? api) {
     {
       const channel = BasicMessageChannel<Object?>(
-          'dev.flutter.pigeon.FlutterBookApi.displayBookDetails', codec);
+          'dev.flutter.pigeon.FlutterOfferWallApi.displayDetails', codec);
       if (api == null) {
         channel.setMessageHandler(null);
       } else {
         // ignore: avoid_types_on_closure_parameters
         channel.setMessageHandler((Object? message) async {
           assert(message != null,
-              'Argument for dev.flutter.pigeon.FlutterBookApi.displayBookDetails was null.');
+              'Argument for dev.flutter.pigeon.FlutterOfferWallApi.displayDetails was null.');
           final List<Object?> args = (message as List<Object?>?)!;
           final Book? arg_book = args[0] as Book?;
           assert(arg_book != null,
-              'Argument for dev.flutter.pigeon.FlutterBookApi.displayBookDetails was null, expected non-null Book.');
+              'Argument for dev.flutter.pigeon.FlutterOfferWallApi.displayDetails was null, expected non-null Book.');
           api.displayBookDetails(arg_book!);
           return;
         });

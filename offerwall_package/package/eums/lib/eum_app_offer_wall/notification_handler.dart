@@ -81,8 +81,7 @@ class NotificationHandler {
   ];
 
   Future initializeFcmNotification() async {
-    // var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
-    var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_bg_service_small');
+    var initializationSettingsAndroid = const AndroidInitializationSettings('mipmap/ic_launcher');
 
     final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
       requestAlertPermission: false,
