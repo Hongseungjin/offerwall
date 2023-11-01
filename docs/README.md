@@ -272,30 +272,6 @@ public class  Api{
                     channel.setMessageHandler(null);
                 }
             }
-//            {
-//                BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
-//                        binaryMessenger, "dev.flutter.pigeon.HostBookApi.finishEditingBook",
-//                        getCodec());
-//                if (api != null) {
-//                    channel.setMessageHandler((message, reply) -> {
-//                        Map<String, Object> wrapped = new HashMap<>();
-//                        try {
-//                            ArrayList<Object> args = (ArrayList<Object>)message;
-//                            Book bookArg = (Book)args.get(0);
-//                            if (bookArg == null) {
-//                                throw new NullPointerException("bookArg unexpectedly null.");
-//                            }
-//                            api.finishEditingBook(bookArg);
-//                            wrapped.put("result", null);
-//                        } catch (Error | RuntimeException exception) {
-//                            wrapped.put("error", wrapError(exception));
-//                        }
-//                        reply.reply(wrapped);
-//                    });
-//                } else {
-//                    channel.setMessageHandler(null);
-//                }
-//            }
         }
     }
 
