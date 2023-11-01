@@ -120,6 +120,8 @@ flutter build aar --output=<your path>/<My Application>/app/libs
     }
 ```
 
+### Add sdk to project
+
 - Example the `settings.gradle`:
 
 ![Alt text](./images/example-settings-gradle.png)
