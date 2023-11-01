@@ -290,7 +290,6 @@ public class  Api{
         public void displayOfferWallDetails(OfferWall bookArg, Reply<Void> callback) {
             BasicMessageChannel<Object> channel = new BasicMessageChannel<>(
                     binaryMessenger,
-//                    "dev.flutter.pigeon.FlutterBookApi.displayBookDetails", getCodec());
                     "dev.flutter.pigeon.FlutterOfferWallApi.displayOfferWallDetails", getCodec());
             channel.send(new ArrayList<Object>(Arrays.asList(bookArg)),
                     channelReply -> { callback.reply(null); });
