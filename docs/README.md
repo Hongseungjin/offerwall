@@ -47,7 +47,7 @@ offerwall
 
 ```
 
-### ANDROID
+### ANDROID (KOTLIN)
 
 ### Create project android kotlin
 
