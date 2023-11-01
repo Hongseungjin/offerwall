@@ -55,6 +55,22 @@ offerwall
 
 ![Alt text](./images/create-project-android.gif)
 
+### Create project firebase
+
+- Step 1: Open [Firebase console](https://console.firebase.google.com/u/0/)
+- Step 2: Add project
+
+![Alt text](./images/create-firebase.png)
+![Alt text](./images/example-create-project-firebase.gif)
+
+- Step 3: Create app android
+
+![Alt text](./images/example_create_app_firebase.gif)
+
+- Step 4: Add to the your project Android
+
+![Alt text](./images/example-docs-firebase1.png)
+
 ### Build sdk aar
 
 - Open the terminal folder :  
