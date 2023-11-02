@@ -187,9 +187,8 @@ pod install --repo-update
  <true/>
 ```
 
-- Add file `api` object-c:
+- Add file `api` object-c: [Link download file api](./files/).
 
-- [Link download file api](./files/).
-
-
+![Alt text](./videos/add-file-api-xcode.gif)
+ 
 ### Call IOS framework to project
