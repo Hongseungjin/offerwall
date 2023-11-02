@@ -133,7 +133,7 @@ $(inherited)
 
 - Add Framework in `Build Phases`:
 
-![Alt text](./videos/add-framework-xcode.mp4)
+![Alt text](./videos/add-framework-xcode.gif)
 
 - Host apps using CocoaPods can add Flutter to their `Podfile`:
 
@@ -187,6 +187,9 @@ pod install --repo-update
  <true/>
 ```
 
--
+- Add file `api` object-c:
+
+- [Link download file api](./files/).
+
 
 ### Call IOS framework to project
