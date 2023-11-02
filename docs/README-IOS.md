@@ -133,7 +133,7 @@ $(inherited)
 
 - Add Framework in `Build Phases`:
 
-![Alt text](./videos/add-framework-xcode.mov)
+![Alt text](./videos/add-framework-xcode.mp4)
 
 - Host apps using CocoaPods can add Flutter to their `Podfile`:
 
