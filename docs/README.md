@@ -25,13 +25,6 @@ WARNING: Please check if the version on your device is suitable, it may be equal
 
 ![Alt text](./images/version-android-studio.png)
 
-### IOS
-
-- Develop for iOS and macOS (Xcode 15.0)
-- CocoaPods version 1.13.0
-
-![Alt text](./images/version-xcode.png)
-
 ## Getting Started Import Module
 
 - Project folder structure:
