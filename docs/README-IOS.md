@@ -148,29 +148,29 @@ pod install --repo-update
 - Add config permission `Info.plist`:
 
 ```
-    <key>NSBonjourServices</key>
-	<array>
-		<string>_dartobservatory._tcp</string>
-	</array>
+ <key>NSBonjourServices</key>
+ <array>
+  <string>_dartobservatory._tcp</string>
+ </array>
 
     ...
 
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>remote-notification</string>
-	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
+ <key>UIBackgroundModes</key>
+ <array>
+  <string>fetch</string>
+  <string>processing</string>
+  <string>remote-notification</string>
+ </array>
+ <key>NSLocationAlwaysUsageDescription</key>
+ <string>This app needs access to location when in the background.</string>
+ <key>NSCameraUsageDescription</key>
+ <string>Allows access camera to take photo.</string>
+ <key>NSPhotoLibraryUsageDescription</key>
+ <string>Allows access camera to take photo.</string>
+ <key>NSUserTrackingUsageDescription</key>
+ <string>앱 추적 동의 팝업 창에 노출됩니다.</string>
+ <key>UIApplicationSupportsIndirectInputEvents</key>
+ <true/>
 ```
 
-### Call IOS framework to project 
+### Call IOS framework to project
