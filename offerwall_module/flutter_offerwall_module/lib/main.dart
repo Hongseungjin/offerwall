@@ -32,7 +32,7 @@ class MyAppOverlay extends StatefulWidget {
 class _MyAppOverlayState extends State<MyAppOverlay> {
   @override
   Widget build(BuildContext context) {
-   return MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const TrueCallOverlay(),
       navigatorKey: globalKeyMainOverlay,
@@ -150,10 +150,15 @@ class _AppMainScreenState extends State<AppMainScreen> {
       //   showMain.value = true;
       // } else {
       FlutterOfferWallApi.setup(FlutterOfferWallApiHandler((dataOfferWall) async {
-        print("aaaaaa ${dataOfferWall.encode()}");
+        // print("aaaaaa ${dataOfferWall.encode()}");
         await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, dataOfferWall.firebaseKey ?? '');
         dynamic data = await EumsOfferWallService.instance.authConnect(
-            memBirth: dataOfferWall.memBirth, memGen: dataOfferWall.memGen, memRegion: dataOfferWall.memRegion, memId: dataOfferWall.memId);
+          memBirth: dataOfferWall.memBirth,
+          memGen: dataOfferWall.memGen,
+          memRegion: dataOfferWall.memRegion,
+          memId: dataOfferWall.memId,
+          firebaseKey: dataOfferWall.firebaseKey,
+        );
         await LocalStoreService.instant.setAccessToken(data['token']);
 
         final autoStart = LocalStoreService.instant.getSaveAdver();

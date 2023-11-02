@@ -259,7 +259,7 @@ class FlutterDependencies: ObservableObject {
         dataParam.memGen="w"
         dataParam.memRegion="인천_서"
         dataParam.memId="abee997"
-        dataParam.firebaseKey="AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp"
+        dataParam.firebaseKey="<Your Service key>"
         
         api.displayBookDetailsBook(dataParam) { (error) in
             if let error = error {

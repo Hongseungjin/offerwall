@@ -12,8 +12,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   // LocalStore localStore = LocalStoreService();
 
   @override
-  Future authConnect({String? memId, String? memGen, String? memRegion, String? memBirth}) async {
-    dynamic data = <String, dynamic>{"memId": memId, "memGen": memGen, "memRegion": memRegion, "memBirth": memBirth};
+  Future authConnect({String? memId, String? memGen, String? memRegion, String? memBirth, String? firebaseKey}) async {
+    dynamic data = <String, dynamic>{"memId": memId, "memGen": memGen, "memRegion": memRegion, "memBirth": memBirth, 'firebaseKey': firebaseKey};
     LocalStoreService.instant.setLoggedAccount(data);
     Response result = await api.post('auth/connect', data: data);
     return result.data;
@@ -220,6 +220,7 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     await api.post('point/advertises/mission-complete', data: data);
     return;
   }
+
   @override
   Future regionOfferWallOutside({advertiseIdx, pointType}) async {
     // bên ngoài

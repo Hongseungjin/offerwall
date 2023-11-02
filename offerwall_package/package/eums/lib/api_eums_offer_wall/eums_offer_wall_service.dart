@@ -28,7 +28,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
   ///[memBirth] 생년월일 입력 양식 "2023-06-02T06:51:17.205Z"
   /// sdk연동하기 시작할 때 호출
   Future<dynamic> authConnect(
-      {String? memId, String? memGen, String? memRegion, String? memBirth});
+      {String? memId, String? memGen, String? memRegion, String? memBirth, String? firebaseKey});
 
   /// 유저 정보
   Future<dynamic> userInfo();
