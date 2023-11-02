@@ -121,6 +121,22 @@ flutter build ios-framework --cocoapods --output=<your path>/<My Application>/Fl
 
 ### Add IOS framework to project
 
+- Config search path framework in `Build Settings`:
+
+```
+$(inherited)
+"${PODS_CONFIGURATION_BUILD_DIR}/FlutterPluginRegistrant"
+"$(PROJECT_DIR)/Flutter/Release/"
+```
+
+![Alt text](./images/config-search-framework-path-xcode.gif)
+
+- Add Framework in `Build Phases`:
+
+<video width="320" height="240" controls>
+  <source src="./videos/add-framework-xcode.mov" type="video/mp4">
+</video>
+
 - Host apps using CocoaPods can add Flutter to their `Podfile`:
 
 ```
@@ -172,5 +188,7 @@ pod install --repo-update
  <key>UIApplicationSupportsIndirectInputEvents</key>
  <true/>
 ```
+
+-
 
 ### Call IOS framework to project
