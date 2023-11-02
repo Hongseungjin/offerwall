@@ -134,7 +134,7 @@ $(inherited)
 - Add Framework in `Build Phases`:
 
 <video width="320" height="240" controls>
-  <source src="./videos/add-framework-xcode.mov" type="video/mp4">
+  <source src="/videos/add-framework-xcode.mov" type="video/mp4">
 </video>
 
 - Host apps using CocoaPods can add Flutter to their `Podfile`:
