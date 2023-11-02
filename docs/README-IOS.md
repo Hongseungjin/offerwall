@@ -56,9 +56,9 @@ offerwall
 ![Alt text](./images/create-firebase.png)
 ![Alt text](./images/example-create-project-firebase.gif)
 
-- Step 3: Create app android
+- Step 3: Create app ios
 
-![Alt text](./images/example_create_app_firebase.gif)
+![Alt text](./images/example-create-app-firebase2.gif)
 
 - Step 4: Add to the your project Android
 
