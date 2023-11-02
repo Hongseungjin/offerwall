@@ -273,3 +273,6 @@ class FlutterDependencies: ObservableObject {
 
 ```
 
+Note: Value of `data.firebaseKey`:
+
+![Alt text](./images/example-service-key.png)
