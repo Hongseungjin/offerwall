@@ -60,7 +60,7 @@ offerwall
 
 ![Alt text](./images/example_create_app_firebase2.gif)
 
-- Step 4: Add to the your project Android
+- Step 4: Add to the your project IOS Xcode
 
 ![Alt text](./images/example-docs-firebase2.png)
 
@@ -192,3 +192,84 @@ pod install --repo-update
 ![Alt text](./images/add-file-api-xcode.gif)
 
 ### Call IOS framework to project
+
+- Add config SDK to the `AppDelegate`
+
+```
+
+import UIKit
+import FirebaseCore
+import flutter_local_notifications
+import FlutterPluginRegistrant
+import Flutter
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    public var flutterEngine:FlutterEngine!
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+
+        ...
+        
+        //Start Config SDK OfferWall
+        //Firebase config
+        FirebaseApp.configure() 
+
+        //Notification config
+        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+            GeneratedPluginRegistrant.register(with: registry)
+        }
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+        }
+
+        //Config FlutterEngine 
+        let flutterDependencies = FlutterDependencies()        
+        flutterEngine=flutterDependencies.flutterEngine
+        //End Config SDK OfferWall
+
+        ...
+        
+        return true
+    }
+    
+}
+...
+//Config flutter
+class FlutterDependencies: ObservableObject {
+    let flutterEngine = FlutterEngine(name: "Offerwall")
+    init(){
+        // Runs the default Dart entrypoint with a default Flutter route.
+//        flutterEngine.run()
+        flutterEngine.run(withEntrypoint: nil)
+        // Connects plugins with iOS platform code to this app.
+        GeneratedPluginRegistrant.register(with: self.flutterEngine);
+    }
+}
+
+```
+
+- Call View OfferWall SDK
+
+```
+        let dataParam: BKBook = BKBook.init()
+        dataParam.memBirth="2000-01-01"
+        dataParam.memGen="w"
+        dataParam.memRegion="인천_서"
+        dataParam.memId="abee997"
+        dataParam.firebaseKey="AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp"
+        
+        api.displayBookDetailsBook(dataParam) { (error) in
+            if let error = error {
+                print(error)
+            }
+        }
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let flutterViewController = FlutterViewController(engine: appDelegate.flutterEngine, nibName: nil, bundle: nil)
+        flutterViewController.modalPresentationStyle = .overCurrentContext
+        self.present(flutterViewController, animated: true)
+
+```
+
