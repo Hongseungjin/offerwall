@@ -99,6 +99,78 @@ flutter build ios-framework --cocoapods --output=<your path>/<My Application>/Fl
 
 ![Alt text](./images/result-build-framework.png)
 
+```
+<your path>/<My Application>/
+└── Flutter/
+    ├── Debug/
+    │   ├── Flutter.podspec
+    │   ├── App.xcframework
+    │   ├── FlutterPluginRegistrant.xcframework
+    │   └── example_plugin.xcframework (each plugin with iOS platform code is a separate framework)
+    ├── Profile/
+    │   ├── Flutter.podspec
+    │   ├── App.xcframework
+    │   ├── FlutterPluginRegistrant.xcframework
+    │   └── example_plugin.xcframework
+    └── Release/
+        ├── Flutter.podspec
+        ├── App.xcframework
+        ├── FlutterPluginRegistrant.xcframework
+        └── example_plugin.xcframework
+```
+
 ### Add IOS framework to project
+
+- Host apps using CocoaPods can add Flutter to their `Podfile`:
+
+```
+pod 'Flutter', :podspec => './Flutter/Debug/Flutter.podspec'
+
+target 'IOSExample' do
+...
+end
+
+post_install do |installer|
+  flutter_post_install(installer) if defined?(flutter_post_install)
+  # installer.pods_project.build_configurations.each do |config|
+  #   config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "i386, arm64"
+  # end
+end
+
+```
+
+- Run `Podfile`:
+
+```
+pod install --repo-update
+```
+
+- Add config permission `Info.plist`:
+
+```
+    <key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
+
+    ...
+
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to location when in the background.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allows access camera to take photo.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+```
 
 ### Call IOS framework to project 
