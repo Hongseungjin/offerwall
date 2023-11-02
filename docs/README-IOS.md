@@ -46,7 +46,7 @@ offerwall
 
 ### Create project ios swift
 
-![Alt text](./images/create-project-ios.png)
+![Alt text](./images/create-project-ios.gif)
 
 ### Create project firebase
 
@@ -58,7 +58,7 @@ offerwall
 
 - Step 3: Create app ios
 
-![Alt text](./images/example-create-app-firebase2.gif)
+![Alt text](./images/example_create_app_firebase2.gif)
 
 - Step 4: Add to the your project Android
 
