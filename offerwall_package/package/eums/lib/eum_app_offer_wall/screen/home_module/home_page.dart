@@ -40,7 +40,7 @@ import 'package:eums/gen/assets.gen.dart';
 import 'package:eums/eums_library.dart';
 
 import '../keep_adverbox_module/keep_adverbox_module.dart';
-import 'widget/custom_scroll_campaign_detail.dart';
+import 'widget/custom_scroll.dart';
 import 'widget/widget_list_data_offerwall.dart';
 
 class HomePage extends StatefulWidget {
@@ -306,7 +306,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ],
           ),
           // key: globalKey,
-          body: CustomScrollCampaignDetail(
+          body: WidgetCustomScroll(
+            scrollController: controller,
             buildChildren: (BuildContext context, ValueNotifier<bool> showAppBar, ScrollController scrollController) {
               return [
                 CustomSliverList(
@@ -393,7 +394,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   onFilter: _filterMedia,
                   category: category,
                   filter: filter,
-                  scrollController: controller,
+                  scrollController: scrollController,
                   stateClients: homeListDataOfferWallStates,
                   blocs: blocs,
                 ),
@@ -402,7 +403,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             onRefresh: () {
               _fetchData();
             },
-            scrollController: controller,
           ),
         );
       },

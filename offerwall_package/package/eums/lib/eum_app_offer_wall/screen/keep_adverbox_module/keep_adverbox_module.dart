@@ -395,7 +395,9 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
       // EasyLoading.dismiss();
       return;
     }
-    if (state.saveScrapStatus == SaveScrapStatus.success) {}
+    if (state.saveScrapStatus == SaveScrapStatus.success) {
+      AppAlert.showSuccess("Success");
+    }
   }
 
   void _listenPointFetchData(BuildContext context, KeepAdverboxState state) {
@@ -459,7 +461,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
           builder: (context, state) {
             return CustomWebViewKeep(
               urlLink: widget.data['url_link'],
-              uriImage: widget.data[''],
+              // uriImage: widget.data[''],
               title: widget.data['name'],
               report: InkWell(
                   onTap: () async {

@@ -195,6 +195,7 @@ class NotificationHandler {
         //   break;
         case keepID:
           try {
+            NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
             final data = jsonDecode(dataMessage['data']);
             await EumsOfferWallServiceApi().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type']);
             if (Platform.isAndroid) {
@@ -209,6 +210,8 @@ class NotificationHandler {
           break;
         case navigationScreenId:
         default:
+          NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
+
           if (dataMessage != null) {
             dataMessage['isWebView'] = true;
             FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});

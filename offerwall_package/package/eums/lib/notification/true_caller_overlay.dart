@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import 'package:eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adv
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/custom_webview2.dart';
+import 'package:eums/eum_app_offer_wall/widget/custom_webview_overlay.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:eums/eums_library.dart';
@@ -154,10 +155,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     }
     return BlocProvider<WatchAdverBloc>(
       create: (context) => WatchAdverBloc(),
-      child: CustomWebView2(
+      child: CustomWebViewOverlay(
         title: '${(jsonDecode(dataEvent['data']))['name']}',
         key: webViewKey,
-        showImage: true,
+        showImage: !isWebView,
         // showMission: true,
         deviceWidth: deviceWidth,
         actions: Row(
@@ -168,7 +169,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                       context,
                       ReportPage(
                         checkOverlay: true,
-                        paddingTop: kToolbarHeight,
+                        paddingTop: kToolbarHeight + MediaQuery.of(context).padding.bottom,
                         data: (jsonDecode(dataEvent['data'])),
                         deleteAdver: true,
                       ));
@@ -210,11 +211,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 final data = (jsonDecode(dataEvent['data']));
                 if (checkSave) {
                   TrueOverlayService().saveScrap(advertiseIdx: data['idx'], token: tokenSdk!, adType: data['ad_type']!);
+                  AppAlert.showSuccess("Success");
                 } else {
                   TrueOverlayService().deleteScrap(advertiseIdx: data['idx'], token: tokenSdk);
+                  AppAlert.showSuccess("Deleted");
                 }
               } catch (e) {
-                FlutterBackgroundService().invoke("closeOverlay");
+                // FlutterBackgroundService().invoke("closeOverlay");
+                rethrow;
               }
             },
             child: Container(

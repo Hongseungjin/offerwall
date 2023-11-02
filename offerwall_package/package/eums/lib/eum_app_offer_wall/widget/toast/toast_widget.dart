@@ -15,7 +15,10 @@ class ToastWidget {
     int seconds = 4,
     required bool success,
   }) {
-    if (_overlay == null) {
+    final contextOverlay = globalKeyMainOverlay.currentState?.context;
+    final contextMain = navigatorKeyMain.currentState?.context;
+
+    if (_overlay == null && (contextOverlay != null || contextMain != null)) {
       startTimer(seconds: seconds);
       _overlay = OverlayEntry(
         builder: (context) => GestureDetector(
@@ -24,11 +27,11 @@ class ToastWidget {
           },
           child: Material(
             type: MaterialType.transparency,
-            child: BuildBodyWidget(message: message, seconds: seconds, success: success),
+            child: BuildBodyWidget(message: message, seconds: seconds, success: success, isMain: contextMain != null),
           ),
         ),
       );
-      Overlay.of(navigatorKeyMain.currentState!.context).insert(_overlay!);
+      Overlay.of((contextMain ?? contextOverlay)!).insert(_overlay!);
     } else {
       hideToast();
       showToast(message, seconds: seconds, success: success);
@@ -48,12 +51,14 @@ class ToastWidget {
   }
 }
 
+// ignore: must_be_immutable
 class BuildBodyWidget extends StatefulWidget {
-  BuildBodyWidget({Key? key, required this.message, this.seconds = 5, required this.success}) : super(key: key);
+  BuildBodyWidget({Key? key, required this.message, this.seconds = 5, required this.success, required this.isMain}) : super(key: key);
   int seconds;
   final String message;
 
   final bool success;
+  final bool isMain;
   @override
   State<BuildBodyWidget> createState() => _BuildBodyWidgetState();
 }
@@ -97,8 +102,8 @@ class _BuildBodyWidgetState extends State<BuildBodyWidget> with SingleTickerProv
         position: position,
         child: Column(
           children: [
-            const SizedBox(
-              height: 16,
+            SizedBox(
+              height: widget.isMain == true ? 16 : kToolbarHeight + MediaQuery.of(context).padding.top,
             ),
             widget.success == true ? _buildSuccess() : _buildError()
           ],

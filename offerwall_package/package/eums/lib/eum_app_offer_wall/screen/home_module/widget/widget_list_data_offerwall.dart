@@ -51,6 +51,8 @@ class _ListViewHomeState extends State<ListViewHome> {
 
   final double _endReachedThreshold = 400;
 
+  double width = 0.0;
+
   @override
   void initState() {
     widget.scrollController.addListener(_onScroll);
@@ -59,6 +61,7 @@ class _ListViewHomeState extends State<ListViewHome> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     return _buildContent(context);
   }
 
@@ -196,14 +199,14 @@ class _ListViewHomeState extends State<ListViewHome> {
   _buildItemColum({dynamic data}) {
     return Container(
       color: Colors.white,
-      width: (MediaQuery.of(context).size.width - 48) / 2,
+      width: (width - 48) / 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: CachedNetworkImage(
-                width: MediaQuery.of(context).size.width,
+                width: width,
                 height: 200,
                 fit: BoxFit.cover,
                 imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
@@ -278,8 +281,8 @@ class _ListViewHomeState extends State<ListViewHome> {
             ClipRRect(
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: CachedNetworkImage(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width / 2,
+                  width: width,
+                  height: width / 2,
                   // height: 200,
                   fit: BoxFit.cover,
                   imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
@@ -303,7 +306,7 @@ class _ListViewHomeState extends State<ListViewHome> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    width: (MediaQuery.of(context).size.width) / 1.8 - 10,
+                    width: width / 1.8 - 10,
                     child: Text(
                       title,
                       style: AppStyle.regular.copyWith(color: HexColor('#666666'), fontSize: controllerGet.fontSizeObx.value),

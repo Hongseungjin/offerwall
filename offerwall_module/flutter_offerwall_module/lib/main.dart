@@ -32,10 +32,20 @@ class MyAppOverlay extends StatefulWidget {
 class _MyAppOverlayState extends State<MyAppOverlay> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      key: globalKeyMainOverlay,
+   return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const TrueCallOverlay(),
+      navigatorKey: globalKeyMainOverlay,
+      // routes: {
+      //   '/': (context) => const TrueCallOverlay(),
+      // },
+      builder: (context, child) {
+        return Overlay(
+          initialEntries: [
+            OverlayEntry(builder: (context) => child ?? const SizedBox()),
+          ],
+        );
+      },
     );
   }
 }
@@ -139,23 +149,27 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
       //   showMain.value = true;
       // } else {
-        FlutterOfferWallApi.setup(FlutterOfferWallApiHandler((dataOfferWall) async {
-          print("aaaaaa ${dataOfferWall.encode()}");
-          await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, dataOfferWall.firebaseKey ?? '');
-          dynamic data = await EumsOfferWallService.instance.authConnect(
-              memBirth: dataOfferWall.memBirth, memGen: dataOfferWall.memGen, memRegion: dataOfferWall.memRegion, memId: dataOfferWall.memId);
-          await LocalStoreService.instant.setAccessToken(data['token']);
-          await FlutterBackgroundService().configure(
-              iosConfiguration: IosConfiguration(),
-              androidConfiguration: AndroidConfiguration(
-                  onStart: onStart,
-                  autoStart: false,
-                  isForegroundMode: true,
-                  initialNotificationTitle: "인천e음",
-                  initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+      FlutterOfferWallApi.setup(FlutterOfferWallApiHandler((dataOfferWall) async {
+        print("aaaaaa ${dataOfferWall.encode()}");
+        await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey, dataOfferWall.firebaseKey ?? '');
+        dynamic data = await EumsOfferWallService.instance.authConnect(
+            memBirth: dataOfferWall.memBirth, memGen: dataOfferWall.memGen, memRegion: dataOfferWall.memRegion, memId: dataOfferWall.memId);
+        await LocalStoreService.instant.setAccessToken(data['token']);
 
-          showMain.value = true;
-        }));
+        final autoStart = LocalStoreService.instant.getSaveAdver();
+
+        await FlutterBackgroundService().configure(
+            iosConfiguration: IosConfiguration(),
+            androidConfiguration: AndroidConfiguration(
+                onStart: onStart,
+                // autoStart: false,
+                autoStart: autoStart,
+                isForegroundMode: true,
+                initialNotificationTitle: "인천e음",
+                initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+
+        showMain.value = true;
+      }));
       // }
     });
   }

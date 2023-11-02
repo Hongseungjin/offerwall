@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -112,6 +113,7 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
   _mapDeleteScrapAdverboxToState(DeleteScrap event, emit) async {
     try {
       await _eumsOfferWallService.deleteScrap(idx: event.idx);
+      AppAlert.showSuccess("Deleted");
     } catch (e) {}
   }
 

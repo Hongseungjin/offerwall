@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -8,18 +7,28 @@ import 'package:get/instance_manager.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
-import 'package:eums/eum_app_offer_wall/widget/custom_circular.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import 'animation/widget_linear_timer.dart';
+import 'images/widget_image_offer_wall.dart';
 
 class CustomWebViewKeep extends StatefulWidget {
-  final dynamic urlLink;
-  final dynamic uriImage;
+  final String urlLink;
+  // final dynamic uriImage;
   final Widget? bookmark;
   final Widget? report;
   final Function()? mission;
   final String? title;
-  const CustomWebViewKeep({Key? key, this.urlLink, this.title, this.bookmark, this.mission, this.report, this.uriImage}) : super(key: key);
+  const CustomWebViewKeep({
+    Key? key,
+    required this.urlLink,
+    this.title,
+    this.bookmark,
+    this.mission,
+    this.report,
+  }) : super(key: key);
 
   @override
   State<CustomWebViewKeep> createState() => _CustomWebViewKeepState();
@@ -29,8 +38,6 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
   final ScrollController _scrollController = ScrollController();
   FlutterGifController? gifController;
 
-  // Timer? _timer;
-  // final int _startTime = 15;
   Timer? timer5s;
   ValueNotifier<bool> showButton = ValueNotifier(false);
   bool isRunning = true;
@@ -39,45 +46,18 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   final events = [];
   bool canScroll = true;
-
-  // void startTimeDown() {
-  //   _timer?.cancel();
-
-  //   _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     timerController.start();
-  //     if (_startTime == 0) {
-  //       _timer?.cancel();
-  //     } else {
-  //       setState(() {
-  //         _startTime--;
-  //       });
-  //       if (_startTime == 0) {
-  //         setState(() {
-  //           showButton = true;
-  //           gifController?.stop();
-  //           _timer?.cancel();
-  //         });
-  //       }
-  //     }
-  //   });
-  // }
-
   @override
   void initState() {
     try {
       timerController = LinearTimerController(this);
       gifController = FlutterGifController(vsync: this);
-
       // ignore: empty_catches
     } catch (e) {}
-    // TODO: implement initState
     super.initState();
-    // startTimeDown();
-    // start5s();
-    // gifController?.animateTo(52, duration: Duration(seconds: 1));
+
     _scrollController.addListener(_scrollListener);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // timerController.start();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       gifController?.repeat(
         min: 0,
         max: 53,
@@ -91,17 +71,14 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
     _scrollController.dispose();
     timerController.dispose();
     timer5s?.cancel();
-    // _timer?.cancel();
     super.dispose();
   }
 
   start5s() {
     timer5s?.cancel();
     timer5s = Timer.periodic(const Duration(seconds: 5), (_) {
-      // _timer?.cancel();
       isRunning = false;
       timerController.stop();
-      // setState(() {});
     });
   }
 
@@ -111,8 +88,6 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
       if (!isRunning) {
         isRunning = true;
         timerController.start();
-        // startTimeDown();
-        // controller?.forward(from: _startTime.toDouble());
       }
       start5s();
     }
@@ -120,31 +95,6 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
-    // final imageCache = InteractiveViewer(
-    //   minScale: 0.1,
-    //   maxScale: 2.6,
-    //   child: CachedNetworkImage(
-    //       width: MediaQuery.of(context).size.width,
-    //       fit: BoxFit.cover,
-    //       imageUrl: widget.urlLink ?? '',
-    //       placeholder: (context, url) => const Padding(
-    //             padding: EdgeInsets.symmetric(vertical: 30),
-    //             child: Center(
-    //                 child: CircularProgressIndicator(
-    //               color: Color(0xfffcc900),
-    //             )),
-    //           ),
-    //       imageBuilder: (context, imageProvider) {
-    //         if (timerController.value == 0) {
-    //           timerController.start();
-    //           start5s();
-    //         }
-    //         return Image(image: imageProvider);
-    //       },
-    //       errorWidget: (context, url, error) {
-    //         return Image.asset(Assets.logo.path, package: "eums", height: 100);
-    //       }),
-    // );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColor.white,
@@ -164,17 +114,26 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
       body: Column(
         children: [
           Expanded(
-            child: NotificationListener(
-                child: WidgetImageOfferWall(
+            child: WidgetImageOfferWall(
               scrollController: _scrollController,
-              urlLink: widget.urlLink ?? '',
+              urlLink: widget.urlLink,
               onDone: () {
                 if (timerController.value == 0) {
                   timerController.start();
                   start5s();
                 }
               },
-            )),
+            ),
+            // child: WidgetImageOfferWall(
+            //   scrollController: _scrollController,
+            //   urlLink: widget.urlLink ?? '',
+            //   onDone: () {
+            //     if (timerController.value == 0) {
+            //       timerController.start();
+            //       start5s();
+            //     }
+            //   },
+            // ),
           ),
           Container(
             padding: EdgeInsets.only(top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
@@ -208,14 +167,14 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
                       padding: const EdgeInsets.all(4),
                       height: 50,
                       width: 50,
-                      child: LinearTimer(
+                      child: WidgetLinearTimer(
                         color: AppColor.yellow,
                         backgroundColor: HexColor('#888888').withOpacity(0.3),
                         controller: timerController,
                         duration: const Duration(seconds: 15),
                         onTimerEnd: () {
                           showButton.value = true;
-                          // gifController?.stop();
+                          gifController?.stop();
                         },
                       ),
                     ),

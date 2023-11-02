@@ -62,9 +62,9 @@ class _MyAppOverlayState extends State<MyAppOverlay> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: globalKeyMainOverlay,
       debugShowCheckedModeBanner: false,
       home: const TrueCallOverlay(),
+      navigatorKey: globalKeyMainOverlay,
       // routes: {
       //   '/': (context) => const TrueCallOverlay(),
       // },
