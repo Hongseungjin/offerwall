@@ -7,9 +7,6 @@ import 'package:flutter_gif/flutter_gif.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/gen/assets.gen.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import '../utils/appStyle.dart';
 import 'animation/widget_linear_timer.dart';
 
@@ -331,7 +328,8 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
                                 controller: gifController!,
                                 image: AssetImage(
                                   package: "eums",
-                                  Assets.coingif.path,
+                                  // Assets.coingif.path,
+                                  Assets.icons.coinLoding.path,
                                 ),
                               ),
                             ))

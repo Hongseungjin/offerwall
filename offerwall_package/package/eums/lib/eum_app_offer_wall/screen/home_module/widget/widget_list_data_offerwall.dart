@@ -197,23 +197,29 @@ class _ListViewHomeState extends State<ListViewHome> {
   }
 
   _buildItemColum({dynamic data}) {
-    return Container(
-      color: Colors.white,
+    return SizedBox(
       width: (width - 48) / 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: CachedNetworkImage(
-                width: width,
-                height: 200,
-                fit: BoxFit.cover,
-                imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) {
-                  return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                }),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.shade300),
+              color: Colors.white,
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                  width: width,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  imageUrl: '${Constants.baseUrlImage}${data['thumbnail']}',
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) {
+                    return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
+                  }),
+            ),
           ),
           const SizedBox(height: 4),
           Text(

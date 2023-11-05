@@ -99,10 +99,11 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                   return SingleChildScrollView(
                     child: Column(
                       children: [
-                        Image.asset(
-                          Assets.scrap_banner.path,
-                          package: "eums",
-                        ),
+                        // Image.asset(
+                        //   Assets.scrap_banner.path,
+                        //   package: "eums",
+                        // ),
+                        Assets.icons.scrapBanner.image(),
                         Container(
                           height: 5,
                           width: MediaQuery.of(context).size.width,
@@ -141,7 +142,8 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                               children: [
                                                 Padding(
                                                   padding: const EdgeInsets.only(top: 0),
-                                                  child: Image.asset(Assets.keep_adver.path, package: "eums", height: 40),
+                                                  // child: Image.asset(Assets.keep_adver.path, package: "eums", height: 40),
+                                                  child: Assets.icons.keepAdver.image(height: 40),
                                                 ),
                                                 const SizedBox(width: 10),
                                                 Expanded(
@@ -335,7 +337,8 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(17.0),
-                  child: Image.asset(Assets.bookmark.path, package: "eums", height: 25),
+                  // child: Image.asset(Assets.bookmark.path, package: "eums", height: 25),
+                  child: Assets.icons.bookmark.image(height: 25),
                 ),
               ),
             ),

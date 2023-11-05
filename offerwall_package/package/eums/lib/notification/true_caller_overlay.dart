@@ -5,6 +5,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +33,7 @@ class TrueCallOverlay extends StatefulWidget {
 
 class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final GlobalKey<State<StatefulWidget>> globalKey = GlobalKey<State<StatefulWidget>>();
-  final GlobalKey<State<StatefulWidget>> webViewKey = GlobalKey<State<StatefulWidget>>();
+  // final GlobalKey<State<StatefulWidget>> webViewKey = GlobalKey<State<StatefulWidget>>();
   // LocalStore localStore = LocalStoreService();
   dynamic dataEvent;
   bool isWebView = false;
@@ -46,6 +47,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   final MethodChannel _backgroundChannel = const MethodChannel("x-slayer/overlay");
   int countAdvertisement = 0;
   double heightScreen = 0.0;
+
+  String messageToast = "";
 
   @override
   void initState() {
@@ -62,6 +65,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           deviceHeight = double.parse(event['sizeDevice'] ?? '0');
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
+          messageToast = event['messageToast'] ?? '';
           // checkSave = false;
           final dataTemp = (jsonDecode(event['data']));
           checkSave = dataTemp['isScrap'] ?? false;
@@ -113,6 +117,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     heightScreen = MediaQuery.of(context).size.height;
+
     return Material(
       color: Colors.transparent,
       child: MultiRepositoryProvider(
@@ -137,9 +142,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                       },
                     ),
                   ],
-                  child: !!isToast
+                  child: isToast
                       ? _buildWidgetToast()
-                      : !!isWebView
+                      : isWebView
                           ? _buildWebView()
                           : _buildWidget(context)))),
     );
@@ -157,7 +162,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       create: (context) => WatchAdverBloc(),
       child: CustomWebViewOverlay(
         title: '${(jsonDecode(dataEvent['data']))['name']}',
-        key: webViewKey,
+        // key: webViewKey,
         showImage: !isWebView,
         // showMission: true,
         deviceWidth: deviceWidth,
@@ -165,7 +170,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           children: [
             InkWell(
                 onTap: () async {
-                  final result = await Routings().navigate(
+                  await Routings().navigate(
                       context,
                       ReportPage(
                         checkOverlay: true,
@@ -180,7 +185,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 16),
-                  child: Image.asset(Assets.report.path, package: "eums", height: 30),
+                  // child: Image.asset(Assets.report.path, package: "eums", height: 30),
+                  child: Assets.icons.report.image(height: 30),
                 )),
             // Container(
             //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
@@ -224,7 +230,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
             child: Container(
               decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Image.asset(!checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
+              child: Image.asset(!checkSave ? Assets.icons.deleteKeep.path : Assets.icons.saveKeep.path,
+                  package: "eums", height: 18, color: AppColor.black),
             )
             // checkSave
             //     ? Image.asset(Assets.saveKeep.path,
@@ -240,14 +247,14 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                   isWebView = false;
                   checkSave = false;
                 });
+
                 FlutterBackgroundService().invoke("closeOverlay");
+                DeviceApps.openApp('com.app.abeeofferwal');
 
                 final dataTemp = jsonDecode(dataEvent['data']);
 
                 TrueOverlayService().missionOfferWallOutside(
                     advertiseIdx: dataTemp['idx'], pointType: dataTemp['typePoint'], token: tokenSdk, adType: dataTemp['ad_type']);
-
-                DeviceApps.openApp('com.app.abeeofferwal');
               } catch (e) {
                 // print(e);
                 FlutterBackgroundService().invoke("closeOverlay");
@@ -260,10 +267,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     );
   }
 
-  openWebView() {
-    dataEvent['isWebView'] = true;
-    FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-  }
+  // openWebView() {
+  //   dataEvent['isWebView'] = true;
+  //   FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+  // }
 
   void onVerticalDragEnd() async {
     // // double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
@@ -303,15 +310,28 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     // }
     // debugPrint("${heightScreen * .15}");
     if (dy! > (heightScreen - heightScreen * .2)) {
-      NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+      NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
       try {
         final data = (jsonDecode(dataEvent['data']));
-        TrueOverlayService().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk!);
-        FlutterBackgroundService().invoke("closeOverlay");
+        await TrueOverlayService().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk!);
+        // FlutterBackgroundService().invoke("closeOverlay");
+
+        dynamic dataToast = {};
+        dataToast['isToast'] = true;
+        dataToast['isWebView'] = null;
+        // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
+        dataToast['messageToast'] = "광고가 KEEP 추가";
+        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+
         // ignore: empty_catches
       } catch (e) {
-        FlutterBackgroundService().invoke("closeOverlay");
+        dynamic dataToast = {};
+        dataToast['isToast'] = true;
+        dataToast['isWebView'] = null;
+        dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
+        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        // FlutterBackgroundService().invoke("closeOverlay");
         rethrow;
       }
     } else {
@@ -332,13 +352,31 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
+            // Center(
+            //   // child: Image.asset(
+            //   //   Assets.alertOverlay.path,
+            //   //   package: "eums",
+            //   //   width: MediaQuery.of(context).size.width - 150,
+            //   //   // height: 10,
+            //   // ),
+            //   child: Assets.icons.alertOverlay.image(
+            //     width: MediaQuery.of(context).size.width - 150,
+            //   ),
+            // ),
             Center(
-              child: Image.asset(
-                Assets.alertOverlay.path,
-                package: "eums",
-                width: MediaQuery.of(context).size.width - 150,
-                // height: 10,
-              ),
+              child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.black87),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Assets.icons.logo.image(width: 40, height: 40, fit: BoxFit.cover),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, right: 16),
+                        child: Text(dataEvent['messageToast'], style: StyleFont.medium().copyWith(color: Colors.white)),
+                      ),
+                    ],
+                  )),
             ),
             const SizedBox(
               height: 16,
@@ -368,12 +406,16 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
             //   },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                Assets.icon_logo.path,
-                package: "eums",
+              child: Assets.icons.iconLogo.image(
                 width: 100,
                 height: 100,
               ),
+              // child: Image.asset(
+              //   Assets.icon_logo.path,
+              //   package: "eums",
+              //   width: 100,
+              //   height: 100,
+              // ),
             ),
             // ),
             // ),

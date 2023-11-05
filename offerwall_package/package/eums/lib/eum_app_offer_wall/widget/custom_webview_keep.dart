@@ -9,7 +9,6 @@ import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import 'animation/widget_linear_timer.dart';
 import 'images/widget_image_offer_wall.dart';
@@ -191,7 +190,8 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
                             controller: gifController!,
                             image: AssetImage(
                               package: "eums",
-                              Assets.coingif.path,
+                              // Assets.coingif.path,
+                              Assets.icons.coinLoding.path,
                             ),
                           ),
                         ))

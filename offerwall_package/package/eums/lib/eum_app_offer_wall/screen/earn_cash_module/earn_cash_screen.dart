@@ -175,7 +175,8 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
                             style: AppStyle.bold.copyWith(fontSize: 24),
                           ),
                           const Spacer(),
-                          Image.asset(Assets.point.path, package: "eums", height: 24),
+                          // Image.asset(Assets.point.path, package: "eums", height: 24),
+                          Assets.icons.pointPng.image(package: "eums",height: 24),
                           const SizedBox(width: 5),
                           account != null
                               ? Text(
@@ -201,7 +202,7 @@ class _EarnCashScreenState extends State<EarnCashScreen> {
                       ),
                       const SizedBox(height: 16),
                       Image.asset(
-                        Assets.banerAdverbox.path,
+                        Assets.icons.banerAdverbox.path,
                         package: "eums",
                       ),
                       const SizedBox(height: 16),

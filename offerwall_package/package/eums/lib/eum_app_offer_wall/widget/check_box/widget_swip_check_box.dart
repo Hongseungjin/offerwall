@@ -67,12 +67,13 @@ class _WidgetSwipCheckBoxState extends State<WidgetSwipCheckBox> {
                       color: AppColor.color70,
                     ),
                     padding: const EdgeInsets.all(4),
-                    child: Image.asset(
-                      Assets.check.path,
-                      package: "eums",
-                      height: 7,
-                      color: Colors.transparent,
-                    ),
+                    child: Assets.icons.check.image(height: 7, color: Colors.transparent),
+                    // child: Image.asset(
+                    //   Assets.check.path,
+                    //   package: "eums",
+                    //   height: 7,
+                    //   color: Colors.transparent,
+                    // ),
                   ),
             const Spacer(),
             widget.valueDefault
@@ -82,12 +83,13 @@ class _WidgetSwipCheckBoxState extends State<WidgetSwipCheckBox> {
                       color: AppColor.white,
                     ),
                     padding: const EdgeInsets.all(4),
-                    child: Image.asset(
-                      Assets.check.path,
-                      package: "eums",
-                      height: 7,
-                      color: Colors.transparent,
-                    ),
+                    child: Assets.icons.check.image(height: 7, color: Colors.transparent),
+                    // child: Image.asset(
+                    //   Assets.check.path,
+                    //   package: "eums",
+                    //   height: 7,
+                    //   color: Colors.transparent,
+                    // ),
                   )
                 : const SizedBox(),
           ],

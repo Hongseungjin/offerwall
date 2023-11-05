@@ -42,12 +42,13 @@ class DialogUtils {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            Assets.get_point.path,
-                            package: "eums",
-                            height: 200,
-                            width: 200,
-                          ),
+                          // Image.asset(
+                          //   Assets.get_point.path,
+                          //   package: "eums",
+                          //   height: 200,
+                          //   width: 200,
+                          // ),
+                          Assets.icons.getPoint.image(height: 200, width: 200),
                           const SizedBox(height: 40),
                           Text(
                             '지금 획득 가능한 포인트',
@@ -176,11 +177,14 @@ class DialogUtils {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(height: 16),
-                        Image.asset(
-                          Assets.point_dialog.path,
-                          package: "eums",
+                        Assets.icons.pointDialog.image(
                           height: 177,
                         ),
+                        // Image.asset(
+                        //   Assets.point_dialog.path,
+                        //   package: "eums",
+                        //   height: 177,
+                        // ),
                         // Text('$reward포인트',
                         //     style: AppStyle.medium.copyWith(
                         //         fontSize: 20, color: HexColor('#f4a43b'))),
@@ -282,11 +286,12 @@ class DialogUtils {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              Assets.fireworkLeft.path,
-                              package: "eums",
-                              height: 40,
-                            ),
+                            Assets.icons.fireworkLeft.image(height: 40),
+                            // Image.asset(
+                            //   Assets.fireworkLeft.path,
+                            //   package: "eums",
+                            //   height: 40,
+                            // ),
                             const SizedBox(width: 10),
                             RichText(
                                 text: TextSpan(
@@ -294,11 +299,12 @@ class DialogUtils {
                                     style: AppStyle.medium.copyWith(color: AppColor.red5),
                                     children: [TextSpan(text: ' 정상 적립 !', style: AppStyle.medium.copyWith(color: AppColor.black))])),
                             const SizedBox(width: 10),
-                            Image.asset(
-                              Assets.fireworkRight.path,
-                              package: "eums",
-                              height: 40,
-                            )
+                            Assets.icons.fireworkRight.image(height: 40),
+                            // Image.asset(
+                            //   Assets.fireworkRight.path,
+                            //   package: "eums",
+                            //   height: 40,
+                            // )
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -439,11 +445,12 @@ class DialogUtils {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset(
-                              Assets.fireworkLeft.path,
-                              package: "eums",
-                              height: 40,
-                            ),
+                            Assets.icons.fireworkLeft.image(height: 40),
+                            // Image.asset(
+                            //   Assets.fireworkLeft.path,
+                            //   package: "eums",
+                            //   height: 40,
+                            // ),
                             const SizedBox(width: 10),
                             RichText(
                                 text: TextSpan(
@@ -451,11 +458,12 @@ class DialogUtils {
                                     style: AppStyle.medium.copyWith(color: AppColor.red5),
                                     children: [TextSpan(text: ' 정상 적립 !', style: AppStyle.medium.copyWith(color: AppColor.black))])),
                             const SizedBox(width: 10),
-                            Image.asset(
-                              Assets.fireworkRight.path,
-                              package: "eums",
-                              height: 40,
-                            )
+                            Assets.icons.fireworkRight.image(height: 40),
+                            // Image.asset(
+                            //   Assets.fireworkRight.path,
+                            //   package: "eums",
+                            //   height: 40,
+                            // )
                           ],
                         ),
                         const SizedBox(height: 16),

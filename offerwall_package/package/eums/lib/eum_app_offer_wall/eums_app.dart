@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -29,7 +28,7 @@ showOverlay(event) async {
   } else {
     if (event?['data']['isToast'] != null) {
       await FlutterOverlayWindow.showOverlay(height: 300, width: WindowSize.matchParent, alignment: OverlayAlignment.bottomCenter);
-      Future.delayed(const Duration(seconds: 2), () async {
+      Future.delayed(const Duration(seconds: 4), () async {
         await FlutterOverlayWindow.closeOverlay();
       });
     } else {

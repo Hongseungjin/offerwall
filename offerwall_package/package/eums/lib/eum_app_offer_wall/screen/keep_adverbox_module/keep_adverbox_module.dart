@@ -179,11 +179,12 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
               //   ),
               // ),
 
-              Image.asset(
-                Assets.banner_keep.path,
-                package: "eums",
-                // height: 40,
-              ),
+              // Image.asset(
+              //   Assets.banner_keep.path,
+              //   package: "eums",
+              //   // height: 40,
+              // ),
+              Assets.icons.bannerKeep.image(),
               Container(
                 height: 5,
                 width: MediaQuery.of(context).size.width,
@@ -214,9 +215,13 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10),
-                                  child: Image.asset(
-                                    Assets.scrap_adver.path,
-                                    package: "eums",
+                                  // child: Image.asset(
+                                  //   Assets.scrap_adver.path,
+                                  //   package: "eums",
+                                  //   height: 40,
+                                  //   width: 40,
+                                  // ),
+                                  child: Assets.icons.scrapAdver.image(
                                     height: 40,
                                     width: 40,
                                   ),
@@ -480,7 +485,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Image.asset(Assets.report.path, package: "eums", height: 16),
+                    // child: Image.asset(Assets.report.path, package: "eums", height: 16),
+                    child: Assets.icons.report.image(height: 16),
                   )),
               bookmark: InkWell(
                 onTap: () {
@@ -498,7 +504,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                 child: Container(
                   decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  child: Image.asset(!checkSave ? Assets.deleteKeep.path : Assets.saveKeep.path, package: "eums", height: 18, color: AppColor.black),
+                  child: Image.asset(!checkSave ? Assets.icons.deleteKeep.path : Assets.icons.saveKeep.path,
+                      package: "eums", height: 18, color: AppColor.black),
                 ),
               ),
               mission: () {

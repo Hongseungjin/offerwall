@@ -15,13 +15,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:get/get_state_manager/get_state_manager.dart';
 // import 'package:get/instance_manager.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/constants.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/common/routing.dart';
 // import 'package:eums/common/routing.dart';
-import 'package:eums/eum_app_offer_wall/screen/detail_offwall_module/detail_offwall_screen.dart';
 import 'package:eums/eum_app_offer_wall/screen/home_module/bloc/home_bloc.dart';
 import 'package:eums/eum_app_offer_wall/screen/home_module/widget/custom_web_view_banner.dart';
 import 'package:eums/eum_app_offer_wall/screen/instruct_app_module/instruct_app.dart';
@@ -258,6 +256,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           homeBannerState = state;
         }
         return Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
@@ -277,11 +276,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Image.asset(
-                    Assets.logo_eums.path,
-                    package: "eums",
-                    height: 20,
-                  ),
+                  child: Assets.icons.logoEums.image(package: 'eums', height: 20),
+                  // child: Image.asset(
+                  //   Assets.logo_eums.path,
+                  //   package: "eums",
+                  //   height: 20,
+                  // ),
                 ),
                 const SizedBox(width: 10),
                 Padding(
@@ -297,7 +297,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Image.asset(Assets.my_page.path, package: "eums", height: 24),
+                  // child: Image.asset(Assets.my_page.path, package: "eums", height: 24),
+                  child: Assets.icons.myPage.image(height: 24),
                 ),
               ),
               const SizedBox(
@@ -314,31 +315,31 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   children: [
                     _buildUIShowPoint(point: homeInit?.totalPoint != null ? homeInit?.totalPoint['userPoint'] : 0),
                     Center(
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        // spacing: 20,
+                      child: Row(
                         children: List.generate(
                             uiIconList.length,
-                            (index) => _buildUiIcon(
-                                onTap: () {
-                                  switch (index) {
-                                    case 0:
-                                      Routings().navigate(context, StatusPointPage(account: homeInit!.account));
-                                      break;
-                                    case 1:
-                                      Routings().navigate(context, const KeepAdverboxScreen());
-                                      break;
-                                    case 2:
-                                      Routings().navigate(context, const ScrapAdverBoxScreen());
-                                      break;
-                                    case 3:
-                                      Routings().navigate(context, const UsingTermScreen());
-                                      break;
-                                    default:
-                                  }
-                                },
-                                urlImage: uiIconList[index]['icon'],
-                                title: uiIconList[index]['title'])),
+                            (index) => Expanded(
+                                  child: _buildUiIcon(
+                                      onTap: () {
+                                        switch (index) {
+                                          case 0:
+                                            Routings().navigate(context, StatusPointPage(account: homeInit!.account));
+                                            break;
+                                          case 1:
+                                            Routings().navigate(context, const KeepAdverboxScreen());
+                                            break;
+                                          case 2:
+                                            Routings().navigate(context, const ScrapAdverBoxScreen());
+                                            break;
+                                          case 3:
+                                            Routings().navigate(context, const UsingTermScreen());
+                                            break;
+                                          default:
+                                        }
+                                      },
+                                      urlImage: uiIconList[index]['icon'],
+                                      title: uiIconList[index]['title']),
+                                )),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -365,16 +366,23 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     controller: _tabController,
                     indicatorColor: HexColor('#f4a43b'),
                     unselectedLabelColor: HexColor('#707070'),
+                    unselectedLabelStyle: AppStyle.medium.copyWith(
+                      fontSize: controllerGet.fontSizeObx.value,
+                      color: HexColor('#707070'),
+                    ),
                     labelColor: HexColor('#f4a43b'),
-                    labelStyle: AppStyle.bold.copyWith(color: HexColor('#707070')),
-                    tabs: [
+                    labelStyle: AppStyle.bold.copyWith(
+                      fontSize: controllerGet.fontSizeObx.value,
+                      color: HexColor('#707070'),
+                    ),
+                    tabs: const [
                       Text(
                         '참여하고 리워드',
-                        style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                        // style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                       ),
                       Text(
                         '쇼핑하고 리워드',
-                        style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                        // style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                       ),
                     ],
                   ),
@@ -467,7 +475,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                // Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                Assets.icons.iconPointY.image(height: 24),
                 const SizedBox(width: 6),
                 Text(
                   Constants.formatMoney(point, suffix: ''),
@@ -506,7 +515,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                  // Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                  Assets.icons.iconPointY.image(height: 24),
                   const SizedBox(width: 12),
                   Text(Constants.formatMoney(point, suffix: ''), style: AppStyle.bold.copyWith(fontSize: 30, color: Colors.black)),
                   Text('P', style: AppStyle.bold.copyWith(fontSize: 18, color: Colors.black)),
@@ -528,7 +538,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Image.asset(Assets.err_grey.path, package: "eums", height: 12),
+                  // Image.asset(Assets.err_grey.path, package: "eums", height: 12),
+                  Assets.icons.errGrey.image(height: 12),
                   const SizedBox(width: 4),
                   Text(
                     '서비스 이용 안내',
@@ -669,11 +680,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Future<bool> _checkPermissionLocationBackground() async {
+
+
     if (await Permission.locationAlways.status != PermissionStatus.granted) {
       // Timer.periodic(const Duration(seconds: 2), (timer) async {
       //   timer.cancel();
       try {
         Map<Permission, PermissionStatus> statuses = await [
+          Permission.location,
           Permission.locationAlways,
         ].request();
 
@@ -693,25 +707,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     }
   }
 
-  _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
+  Widget _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
     return WidgetAnimationClick(
       onTap: onTap,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width / 4,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
-              decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
-              child: Image.asset(urlImage ?? '', package: "eums", height: 50),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title ?? '',
-              style: AppStyle.regular12.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value - 2),
-            )
-          ],
-        ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
+            child: Image.asset(urlImage ?? '', package: "eums", height: 50),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title ?? '',
+            style: AppStyle.regular12.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value - 2),
+          )
+        ],
       ),
     );
   }
@@ -780,14 +791,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 }
 
 List uiIconList = [
-  {'title': '포인트 현황', 'icon': Assets.icon_point.path},
+  {'title': '포인트 현황', 'icon': Assets.icons.iconPoint.path},
   {
     'title': '광고 보관함',
-    'icon': Assets.icon_loudspeaker.path,
+    'icon': Assets.icons.iconLoudspeaker.path,
   },
   {
     'title': '스크랩 광고',
-    'icon': Assets.adv_scrap.path,
+    'icon': Assets.icons.iconAdvScrap.path,
   },
-  {'title': '이용안내', 'icon': Assets.icon_info.path}
+  {'title': '이용안내', 'icon': Assets.icons.iconInfo.path}
 ];

@@ -59,6 +59,13 @@ class MyAppOverlay extends StatefulWidget {
 }
 
 class _MyAppOverlayState extends State<MyAppOverlay> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

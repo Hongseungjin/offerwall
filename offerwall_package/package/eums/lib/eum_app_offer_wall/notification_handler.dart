@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
+import 'package:eums/common/const/values.dart';
+import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eums_library.dart';
 
@@ -156,12 +157,17 @@ class NotificationHandler {
               await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
               if (Platform.isAndroid) {
-                CountAdver().initCount();
+                // CountAdver().initCount();
                 FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
               }
-              flutterLocalNotificationsPlugin.show(
-                  NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
-                  payload: jsonEncode(message.data));
+              Future.delayed(
+                const Duration(seconds: 1),
+                () {
+                  flutterLocalNotificationsPlugin.show(
+                      NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+                      payload: jsonEncode(message.data));
+                },
+              );
             }
             // ignore: empty_catches
           } catch (e) {}
@@ -198,14 +204,68 @@ class NotificationHandler {
             NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
             final data = jsonDecode(dataMessage['data']);
             await EumsOfferWallServiceApi().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type']);
+
             if (Platform.isAndroid) {
-              bool isActive = await FlutterOverlayWindow.isActive();
-              if (isActive == true) {
-                await FlutterOverlayWindow.closeOverlay();
-              }
+              // bool isActive = await FlutterOverlayWindow.isActive();
+              // if (isActive == true) {
+              //   await FlutterOverlayWindow.closeOverlay();
+
+              // }
+              dynamic dataToast = {};
+              dataToast['isToast'] = true;
+              dataToast['isWebView'] = null;
+              // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
+              dataToast['messageToast'] = "광고가 KEEP 추가";
+              FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+            } else {
+              const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+                categoryIdentifier: darwinNotificationCategoryPlain,
+              );
+              NotificationDetails notificationDetails = const NotificationDetails(
+                iOS: iosNotificationDetails,
+              );
+              flutterLocalNotificationsPlugin.show(
+                NotificationHandler.instant.notificationId + 1,
+                'Eums success',
+                '광고가 KEEP 되었습니다',
+                notificationDetails,
+              );
+
+              Future.delayed(
+                const Duration(seconds: 2),
+                () {
+                  NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId + 1);
+                },
+              );
             }
           } catch (ex) {
-            // print('exexex$ex');
+            dynamic dataToast = {};
+            dataToast['isToast'] = true;
+            dataToast['isWebView'] = null;
+            dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
+            if (Platform.isAndroid) {
+              FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+            } else {
+              const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+                categoryIdentifier: darwinNotificationCategoryPlain,
+              );
+              NotificationDetails notificationDetails = const NotificationDetails(
+                iOS: iosNotificationDetails,
+              );
+              flutterLocalNotificationsPlugin.show(
+                NotificationHandler.instant.notificationId + 1,
+                'Eums failure',
+                '일일 저장량을 초과했습니다.',
+                notificationDetails,
+              );
+
+              Future.delayed(
+                const Duration(seconds: 2),
+                () {
+                  NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId + 1);
+                },
+              );
+            }
           }
           break;
         case navigationScreenId:
@@ -218,11 +278,22 @@ class NotificationHandler {
           } else {
             FlutterBackgroundService().invoke("closeOverlay");
           }
-          // Routings().navigate(
-          //     globalKeyMain.currentContext!,
-          //     WatchAdverScreen(
-          //       data: dataMessage['data'],
-          //     ));
+
+          if (navigatorKeyMain.currentContext != null) {
+            final data = jsonDecode(dataMessage['data']);
+            data['advertiseIdx'] = data['idx'];
+            Routings().navigate(
+                navigatorKeyMain.currentContext!,
+                DetailKeepScreen(
+                  data: data,
+                ));
+            // Routings().navigate(
+            //     globalKeyMain.currentContext!,
+            //     WatchAdverScreen(
+            //       data: dataMessage['data'],
+            //     ));
+          }
+
           break;
       }
     }
@@ -362,12 +433,17 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         // CronCustom().initCron();
         if (Platform.isAndroid) {
           // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-          CountAdver().initCount();
+          // CountAdver().initCount();
           FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
         }
-        NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
-            NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
-            payload: jsonEncode(message.data));
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
+                NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+                payload: jsonEncode(message.data));
+          },
+        );
       }
       // ignore: empty_catches
     } catch (e) {}

@@ -190,7 +190,8 @@ class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProv
                           ),
                           Row(
                             children: [
-                              Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                              // Image.asset(Assets.icon_point_y.path, package: "eums", height: 24),
+                              Assets.icons.iconPointY.image(height: 24),
                               const SizedBox(width: 8),
                               Text(
                                 Constants.formatMoney(
@@ -445,7 +446,8 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
         Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
-          child: Image.asset(Assets.icon_point.path, package: "eums", height: 25),
+          // child: Image.asset(Assets.icon_point.path, package: "eums", height: 25),
+          child: Assets.icons.iconPoint.image(height: 25),
         ),
         const SizedBox(width: 5),
         Expanded(

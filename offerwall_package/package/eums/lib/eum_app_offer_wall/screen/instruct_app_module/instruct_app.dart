@@ -74,4 +74,4 @@ class _InstructAppScreenState extends State<InstructAppScreen> {
   }
 }
 
-List imageList = [Assets.banner1.path, Assets.banner2.path, Assets.banner3.path, Assets.banner4.path];
+List imageList = [Assets.icons.banner1.path, Assets.icons.banner2.path, Assets.icons.banner3.path, Assets.icons.banner4.path];

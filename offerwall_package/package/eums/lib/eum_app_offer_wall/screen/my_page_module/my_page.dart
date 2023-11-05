@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:eums/common/constants.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/screen/asked_question_module/asked_question_screen.dart';
@@ -52,7 +51,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   getUser() async {
-    dataUser = await LocalStoreService.instant?.getDataUser();
+    dataUser = await LocalStoreService.instant.getDataUser();
     setState(() {});
   }
 
@@ -137,9 +136,13 @@ class _MyPageState extends State<MyPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
-                          Image.asset(
-                            Assets.user.path,
-                            package: "eums",
+                          // Image.asset(
+                          //   Assets.user.path,
+                          //   package: "eums",
+                          //   height: 50,
+                          //   width: 50,
+                          // ),
+                          Assets.icons.user.image(
                             height: 50,
                             width: 50,
                           ),
@@ -356,15 +359,15 @@ class _MyPageState extends State<MyPage> {
 }
 
 List listItemMy = [
-  {"id": 1, "area": "포인트/광고 관련", "subArea": "포인트 적립 내역", "urlImage": Assets.history_point.path},
-  {"id": 2, "area": "포인트/광고 관련", "subArea": "포인트 전환", "urlImage": Assets.point_conversion.path},
-  {"id": 3, "area": "포인트/광고 관련", "subArea": "광고 보관함", "urlImage": Assets.adarchive.path},
-  {"id": 4, "area": "포인트/광고 관련", "subArea": "광고 스크랩", "urlImage": Assets.adscrap.path},
-  {"id": 5, "area": "기타", "subArea": "공지사항", "urlImage": Assets.notifi.path},
-  {"id": 6, "area": "기타", "subArea": "1:1 문의", "urlImage": Assets.inquiry1.path},
-  {"id": 7, "area": "기타", "subArea": "자주 묻는 질문", "urlImage": Assets.frequentlyAQ.path},
-  {"id": 8, "area": "서비스 이용 관련", "subArea": "제휴 및 광고 문의", "urlImage": Assets.frequentluasq.path},
-  {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.service_info.path},
-  {"id": 10, "area": "서비스 이용 관련", "subArea": "이용약관", "urlImage": Assets.termofuser.path},
-  {"id": 11, "area": "서비스 이용 관련", "subArea": "설정", "urlImage": Assets.setting.path}
+  {"id": 1, "area": "포인트/광고 관련", "subArea": "포인트 적립 내역", "urlImage": Assets.icons.historyPoint.path},
+  {"id": 2, "area": "포인트/광고 관련", "subArea": "포인트 전환", "urlImage": Assets.icons.pointConversion.path},
+  {"id": 3, "area": "포인트/광고 관련", "subArea": "광고 보관함", "urlImage": Assets.icons.adarchive.path},
+  {"id": 4, "area": "포인트/광고 관련", "subArea": "광고 스크랩", "urlImage": Assets.icons.adscrap.path},
+  {"id": 5, "area": "기타", "subArea": "공지사항", "urlImage": Assets.icons.notifi.path},
+  {"id": 6, "area": "기타", "subArea": "1:1 문의", "urlImage": Assets.icons.inquiry1.path},
+  {"id": 7, "area": "기타", "subArea": "자주 묻는 질문", "urlImage": Assets.icons.frequentlyAQ.path},
+  {"id": 8, "area": "서비스 이용 관련", "subArea": "제휴 및 광고 문의", "urlImage": Assets.icons.frequentluasq.path},
+  {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.icons.serviceInfo.path},
+  {"id": 10, "area": "서비스 이용 관련", "subArea": "이용약관", "urlImage": Assets.icons.termofuser.path},
+  {"id": 11, "area": "서비스 이용 관련", "subArea": "설정", "urlImage": Assets.icons.setting.path}
 ];

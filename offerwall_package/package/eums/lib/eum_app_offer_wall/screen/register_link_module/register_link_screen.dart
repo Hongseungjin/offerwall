@@ -132,7 +132,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Image.asset(Assets.chat.path, package: "eums", height: 24, width: 24),
+            // child: Image.asset(Assets.chat.path, package: "eums", height: 24, width: 24),
+            child: Assets.icons.chat.image(height: 24, width: 24),
           )
         ],
         backgroundColor: AppColor.white,
@@ -333,10 +334,7 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                               }),
                         ),
                       )
-                    : Image.asset(
-                        Assets.resLinkBanner.path,
-                        package: "eums",
-                      ),
+                    : Assets.icons.resLinkBanner.image(),
                 const SizedBox(height: 12),
                 const SizedBox(height: 12),
                 const Divider(),
@@ -369,7 +367,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(Assets.camera.path, package: "eums", height: 24, width: 24),
+                          // Image.asset(Assets.camera.path, package: "eums", height: 24, width: 24),
+                          Assets.icons.camera.image(height: 24, width: 24),
                           const SizedBox(width: 10),
                           SizedBox(
                               child: Text(files.isNotEmpty ? urlImage : '이미지 업로드 하기',
@@ -496,8 +495,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
 }
 
 List listResLink = [
-  {"name": '구독하기', "link": Assets.icon_sub.path},
-  {"name": '구독 화면 캡쳐', "link": Assets.icon_check.path},
-  {"name": '스크린샷 업로드', "link": Assets.icon_upload.path},
-  {"name": '리워드 지금', "link": Assets.icon_reward.path}
+  {"name": '구독하기', "link": Assets.icons.iconSub.path},
+  {"name": '구독 화면 캡쳐', "link": Assets.icons.iconCheck.path},
+  {"name": '스크린샷 업로드', "link": Assets.icons.iconUpload.path},
+  {"name": '리워드 지금', "link": Assets.icons.iconReward.path}
 ];

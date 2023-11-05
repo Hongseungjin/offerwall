@@ -83,4 +83,4 @@ class _RewardGuideScreenState extends State<RewardGuideScreen> {
   }
 }
 
-List imageList = [Assets.rewardGuide.path, Assets.rewardGuideMome.path];
+List imageList = [Assets.icons.rewardGuide.path, Assets.icons.rewardGuideMome.path];

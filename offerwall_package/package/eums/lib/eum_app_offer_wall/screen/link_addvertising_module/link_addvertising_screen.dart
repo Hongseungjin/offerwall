@@ -39,14 +39,17 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 32),
-            Image.asset(
-              Assets.text.path,
-              package: "eums",
-            ),
-            Image.asset(
-              Assets.watch_point.path,
-              package: "eums",
-            ),
+            // Image.asset(
+            //   Assets.text.path,
+            //   package: "eums",
+            // ),
+            //  Image.asset(
+            //   Assets.watch_point.path,
+            //   package: "eums",
+            // ),
+            Assets.icons.text.image(),
+            Assets.icons.watchPoint.image(),
+           
             // Center(
             //   child: Text(
             //     '제휴 및 광고 문의',
@@ -55,10 +58,11 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
             //   ),
             // ),
             const SizedBox(height: 12),
-            Image.asset(
-              Assets.note_text.path,
-              package: "eums",
-            ),
+            // Image.asset(
+            //   Assets.note_text.path,
+            //   package: "eums",
+            // ),
+            Assets.icons.noteText.image(),
             // Center(
             //   child: RichText(
             //       textAlign: TextAlign.center,

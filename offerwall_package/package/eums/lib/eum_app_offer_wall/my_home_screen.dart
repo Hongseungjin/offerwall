@@ -128,7 +128,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }));
   }
 
-
   getBatteryOptimization() async {
     await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
     bool? isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
@@ -203,8 +202,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                             children: [
                               Padding(
                                   padding: const EdgeInsets.only(right: 8),
-                                  child: Image.asset(Assets.polygon.path,
-                                      package: "eums", color: AppColor.grey.withOpacity(0.5), width: 30, height: 15)),
+                                  // child: Image.asset(Assets.polygon.path,
+                                  //     package: "eums", color: AppColor.grey.withOpacity(0.5), width: 30, height: 15)
+                                  child: Assets.icons.polygon.image(width: 30, height: 15, color: AppColor.grey.withOpacity(0.5))),
                               Container(
                                 decoration: BoxDecoration(
                                   color: AppColor.white,

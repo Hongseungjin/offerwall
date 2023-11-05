@@ -186,7 +186,7 @@ class _AskedQuestionScreenState extends State<AskedQuestionScreen> {
                                       Icons.close,
                                       color: Colors.black,
                                     ))
-                                : Image.asset(Assets.searchOrange.path, color: Colors.black, package: "eums", height: 15),
+                                : Image.asset(Assets.icons.searchOrange.path, color: Colors.black, package: "eums", height: 15),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
