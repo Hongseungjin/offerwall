@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
-import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
-import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
