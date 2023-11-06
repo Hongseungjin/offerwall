@@ -4,7 +4,6 @@ import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
 import 'package:get/instance_manager.dart';
@@ -171,7 +170,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         if (!checkToken) {
                           String? token = await NotificationHandler.instant.getToken();
                           await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                          FlutterBackgroundService().invoke("stopService");
+                          // FlutterBackgroundService().invoke("stopService");
                           EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
                         } else {
                           // dynamic data = <String, dynamic>{
@@ -182,10 +181,10 @@ class _SettingScreenState extends State<SettingScreen> {
                           // localStore?.setCountAdvertisement(data);
                           String? token = LocalStoreService.instant.getDeviceToken();
                           await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                          bool isRunning = await FlutterBackgroundService().isRunning();
-                          if (!isRunning) {
-                            await FlutterBackgroundService().startService();
-                          }
+                          // bool isRunning = await FlutterBackgroundService().isRunning();
+                          // if (!isRunning) {
+                          //   await FlutterBackgroundService().startService();
+                          // }
                           EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
                         }
                         LoadingDialog.instance.hide();

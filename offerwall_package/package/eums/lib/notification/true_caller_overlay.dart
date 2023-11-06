@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
-import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
-import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,11 @@ import 'package:eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:eums/eums_library.dart';
 
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
+
+String kPortName = 'overlay_port';
+String kPortNameToast = 'overlay_port_toast';
+final receivePort = ReceivePort();
+final receivePortToast = ReceivePort();
 
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
@@ -53,13 +59,60 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   String messageToast = "";
 
+  Timer? timer;
+
   @override
   void initState() {
     // TODO: implement initState
     // print('inittt overlay');
     initCallbackDrag();
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
+    receivePortToast.listen((event) {
+      try {
+        if (timer != null) {
+          timer!.cancel();
+        }
+        // printWrapped('overlayListener $event');
+        // printWrapped('overlayListener $deviceHeight');
+      } catch (e) {
+        // print('errorrrrrr $e');
+        rethrow;
+      }
+    });
+    receivePort.listen((event) {
+      try {
+        setState(() {
+          dataEvent = event;
+          tokenSdk = event['tokenSdk'] ?? '';
+          deviceHeight = double.parse(event['sizeDevice'] ?? '0');
+          isWebView = event['isWebView'] != null ? true : false;
+          isToast = event['isToast'] != null ? true : false;
+          messageToast = event['messageToast'] ?? '';
+          // checkSave = false;
+          try {
+            final dataTemp = (jsonDecode(event['data']));
+            checkSave = dataTemp['isScrap'] ?? false;
+          } catch (e) {}
+          deviceWidth = event['deviceWidth'] ?? 0;
+        });
+
+        if (isToast == true) {
+          timer?.cancel();
+          timer = Timer(const Duration(seconds: 10), () async {
+            await EumsApp.instant.closeOverlay();
+          });
+        }
+
+        // printWrapped('overlayListener $event');
+        // printWrapped('overlayListener $deviceHeight');
+      } catch (e) {
+        // print('errorrrrrr $e');
+        rethrow;
+      }
+    });
+    IsolateNameServer.registerPortWithName(receivePort.sendPort, kPortName);
+    IsolateNameServer.registerPortWithName(receivePortToast.sendPort, kPortName);
+
     FlutterOverlayWindow.overlayListener.listen((event) async {
       try {
         setState(() {
@@ -79,8 +132,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         // printWrapped('overlayListener $deviceHeight');
       } catch (e) {
         // print('errorrrrrr $e');
+        rethrow;
       }
     });
+    super.initState();
   }
 
   var pixelRatio = window.devicePixelRatio;
@@ -159,7 +214,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       url = (jsonDecode(dataEvent['data']))['url_link'];
     } catch (e) {
       // print(e);
-      FlutterBackgroundService().invoke("closeOverlay");
+      // FlutterBackgroundService().invoke("closeOverlay");
+      EumsApp.instant.closeOverlay();
     }
     return BlocProvider<WatchAdverBloc>(
       create: (context) => WatchAdverBloc(),
@@ -209,7 +265,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           ],
         ),
         onClose: () async {
-          FlutterBackgroundService().invoke("closeOverlay");
+          // FlutterBackgroundService().invoke("closeOverlay");
+          await EumsApp.instant.closeOverlay();
         },
         bookmark: InkWell(
             onTap: () {
@@ -227,6 +284,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 }
               } catch (e) {
                 // FlutterBackgroundService().invoke("closeOverlay");
+                EumsApp.instant.closeOverlay();
                 rethrow;
               }
             },
@@ -251,15 +309,18 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                   checkSave = false;
                 });
 
-                FlutterBackgroundService().invoke("closeOverlay");
+                // FlutterBackgroundService().invoke("closeOverlay");
+
                 await DeviceApps.openApp('com.app.abeeofferwal');
                 final dataTemp = jsonDecode(dataEvent['data']);
 
                 TrueOverlayService().missionOfferWallOutside(
                     advertiseIdx: dataTemp['idx'], pointType: dataTemp['typePoint'], token: tokenSdk, adType: dataTemp['ad_type']);
+                EumsApp.instant.closeOverlay();
               } catch (e) {
                 // print(e);
-                FlutterBackgroundService().invoke("closeOverlay");
+                // FlutterBackgroundService().invoke("closeOverlay");
+                await EumsApp.instant.closeOverlay();
               }
             });
           }
@@ -288,7 +349,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         dataToast['isWebView'] = null;
         // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
         dataToast['messageToast'] = "광고가 KEEP 추가";
-        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        await EumsApp.instant.jobQueue({'data': dataToast});
 
         // ignore: empty_catches
       } catch (e) {
@@ -296,7 +358,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         dataToast['isToast'] = true;
         dataToast['isWebView'] = null;
         dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
-        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        await EumsApp.instant.jobQueue({'data': dataToast});
+
         // FlutterBackgroundService().invoke("closeOverlay");
         rethrow;
       }
@@ -306,10 +370,13 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 
-          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+          // FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+          await EumsApp.instant.jobQueue({'data': dataEvent});
+
           await DeviceApps.openApp('com.app.abeeofferwal');
         } else {
-          FlutterBackgroundService().invoke("closeOverlay");
+          // FlutterBackgroundService().invoke("closeOverlay");
+          await EumsApp.instant.closeOverlay();
         }
       }
     }

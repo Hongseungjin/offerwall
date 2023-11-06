@@ -1,64 +1,166 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:queue/queue.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/eums_library.dart';
 
 import '../common/local_store/local_store_service.dart';
 
-void printWrapped(String text) {
-  final pattern = RegExp('.{1,800}');
-  pattern.allMatches(text).forEach((match) => print(match.group(0)));
-}
+class EumsApp {
+  EumsApp._();
+  static EumsApp instant = EumsApp._();
 
-showOverlay(event) async {
-  if (event?['data'] != null && event?['data']['isWebView'] != null) {
-    await FlutterOverlayWindow.showOverlay(
-      overlayTitle: event?['data']['title'],
-      overlayContent: event?['data']['body'],
-    );
-    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-    await FlutterOverlayWindow.shareData(event?['data']);
-  } else {
-    if (event?['data']['isToast'] != null) {
-      await FlutterOverlayWindow.showOverlay(height: 300, width: WindowSize.matchParent, alignment: OverlayAlignment.bottomCenter);
-      Future.delayed(const Duration(seconds: 4), () async {
-        await FlutterOverlayWindow.closeOverlay();
-      });
+  void printWrapped(String text) {
+    final pattern = RegExp('.{1,800}');
+    pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  }
+
+  showOverlay(event) async {
+    if (event?['data'] != null && event?['data']['isWebView'] != null) {
+      await FlutterOverlayWindow.showOverlay(
+        overlayTitle: event?['data']['title'],
+        overlayContent: event?['data']['body'],
+      );
+      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+      receivePort.sendPort.send(event?['data']);
+      await FlutterOverlayWindow.shareData(event?['data']);
     } else {
-      await LocalStoreService.instant.setDataShare(dataShare: event);
-      await FlutterOverlayWindow.showOverlay(enableDrag: true, height: 300, width: 300, alignment: OverlayAlignment.center);
+      receivePortToast.sendPort.send("close");
+
+      if (event?['data']['isToast'] != null) {
+        await FlutterOverlayWindow.showOverlay(
+          height: 300,
+          width: WindowSize.matchParent,
+          alignment: OverlayAlignment.bottomCenter,
+        );
+      } else {
+        await LocalStoreService.instant.setDataShare(dataShare: event);
+        await FlutterOverlayWindow.showOverlay(
+          enableDrag: true,
+          height: 300,
+          width: 300,
+          alignment: OverlayAlignment.center,
+          overlayTitle: event?['data']['title'],
+          overlayContent: event?['data']['body'],
+        );
+      }
+      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+      receivePort.sendPort.send(event?['data']);
+      await FlutterOverlayWindow.shareData(event?['data']);
     }
-    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-    await FlutterOverlayWindow.shareData(event?['data']);
+  }
+
+  jobQueue(event) async {
+    // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+    bool isActive = await FlutterOverlayWindow.isActive();
+    if (isActive == true) {
+      await FlutterOverlayWindow.closeOverlay();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await showOverlay(event);
+    } else {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await showOverlay(event);
+    }
+  }
+
+  closeOverlay() async {
+    bool isActive = await FlutterOverlayWindow.isActive();
+    if (isActive == true) {
+      await FlutterOverlayWindow.closeOverlay();
+    }
+  }
+
+  locationCurrent() async {
+    if (await Permission.locationAlways.status == PermissionStatus.granted) {
+      // Either the permission was already granted before or the user just granted it.
+      // startTimeDown();
+      // debugPrint("xxxx");
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+      await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+    }
   }
 }
 
-jobQueue(event) async {
-  bool isActive = await FlutterOverlayWindow.isActive();
-  if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await showOverlay(event);
-  } else {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await showOverlay(event);
-  }
-}
+// void printWrapped(String text) {
+//   final pattern = RegExp('.{1,800}');
+//   pattern.allMatches(text).forEach((match) => print(match.group(0)));
+// }
 
-closeOverlay() async {
-  bool isActive = await FlutterOverlayWindow.isActive();
-  if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-  }
-}
+// showOverlay(event) async {
+//   if (event?['data'] != null && event?['data']['isWebView'] != null) {
+//     await FlutterOverlayWindow.showOverlay(
+//       overlayTitle: event?['data']['title'],
+//       overlayContent: event?['data']['body'],
+//     );
+//     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+//     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+//     receivePort.sendPort.send(event?['data']);
+//     await FlutterOverlayWindow.shareData(event?['data']);
+//   } else {
+//     receivePort.sendPort.send(event?['data']);
+//     if (event?['data']['isToast'] != null) {
+//       await FlutterOverlayWindow.showOverlay(
+//         height: 300,
+//         width: WindowSize.matchParent,
+//         alignment: OverlayAlignment.bottomCenter,
+//       );
+//       // _timer = Timer(const Duration(seconds: 4), () async {
+//       //   await FlutterOverlayWindow.closeOverlay();
+//       // });
+//     } else {
+//       await LocalStoreService.instant.setDataShare(dataShare: event);
+//       await FlutterOverlayWindow.showOverlay(
+//         enableDrag: true,
+//         height: 300,
+//         width: 300,
+//         alignment: OverlayAlignment.center,
+//         overlayTitle: event?['data']['title'],
+//         overlayContent: event?['data']['body'],
+//       );
+//     }
+//     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+//     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+//     receivePort.sendPort.send(event?['data']);
+//     await FlutterOverlayWindow.shareData(event?['data']);
+//   }
+// }
+
+// jobQueue(event) async {
+//   // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+//   bool isActive = await FlutterOverlayWindow.isActive();
+//   if (isActive == true) {
+//     await FlutterOverlayWindow.closeOverlay();
+//     await Future.delayed(const Duration(milliseconds: 1000));
+//     await showOverlay(event);
+//   } else {
+//     await Future.delayed(const Duration(milliseconds: 1000));
+//     await showOverlay(event);
+//   }
+// }
+
+// closeOverlay() async {
+//   bool isActive = await FlutterOverlayWindow.isActive();
+//   if (isActive == true) {
+//     await FlutterOverlayWindow.closeOverlay();
+//   }
+// }
+
+// locationCurrent() async {
+//   if (await Permission.locationAlways.status == PermissionStatus.granted) {
+//     // Either the permission was already granted before or the user just granted it.
+//     // startTimeDown();
+//     // debugPrint("xxxx");
+//     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//     // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+//     await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+//   }
+// }
 
 // registerDeviceToken() async {
 //   try {
@@ -74,59 +176,59 @@ closeOverlay() async {
 //   }
 // }
 
-@pragma('vm:entry-point')
-Future<void> onStart(ServiceInstance service) async {
-  // print('onStart');
-  WidgetsFlutterBinding.ensureInitialized();
-  DartPluginRegistrant.ensureInitialized();
+// @pragma('vm:entry-point')
+// Future<void> onStart(ServiceInstance service) async {
+//   // print('onStart');
+//   WidgetsFlutterBinding.ensureInitialized();
+//   DartPluginRegistrant.ensureInitialized();
 
-  await Firebase.initializeApp();
+//   await Firebase.initializeApp();
 
-  await LocalStoreService.instant.init();
-  Queue queue = Queue();
-  // registerDeviceToken();
-  try {
-    service.on('showOverlay').listen((event) async {
-      if (Platform.isAndroid) {
-        queue.add(() async => await jobQueue(event));
-        // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-      } else {}
-    });
+//   await LocalStoreService.instant.init();
+//   Queue queue = Queue();
+//   // registerDeviceToken();
+//   try {
+//     service.on('showOverlay').listen((event) async {
+//       if (Platform.isAndroid) {
+//         queue.add(() async => await jobQueue(event));
+//         // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+//       } else {}
+//     });
 
-    service.on('closeOverlay').listen((event) async {
-      // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-      queue.add(() async => await closeOverlay());
-    });
+//     service.on('closeOverlay').listen((event) async {
+//       // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+//       queue.add(() async => await closeOverlay());
+//     });
 
-    service.on('stopService').listen((event) async {
-      // print("eventStop");
-      queue.add(() async => await closeOverlay());
-      // String? token = await FirebaseMessaging.instance.getToken();
-      // // print('deviceToken $token');
-      // // if (token != null && token.isNotEmpty) {
-      // //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-      // // }
-      // if (token != null && token.isNotEmpty) {
-      //   await LocalStoreService.instant.setDeviceToken("");
-      //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-      // }
-      service.stopSelf();
-    });
+//     service.on('stopService').listen((event) async {
+//       // print("eventStop");
+//       queue.add(() async => await closeOverlay());
+//       // String? token = await FirebaseMessaging.instance.getToken();
+//       // // print('deviceToken $token');
+//       // // if (token != null && token.isNotEmpty) {
+//       // //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+//       // // }
+//       // if (token != null && token.isNotEmpty) {
+//       //   await LocalStoreService.instant.setDeviceToken("");
+//       //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+//       // }
+//       service.stopSelf();
+//     });
 
-    service.on('locationCurrent').listen((event) async {
-      if (await Permission.locationAlways.status == PermissionStatus.granted) {
-        // Either the permission was already granted before or the user just granted it.
-        // startTimeDown();
-        // debugPrint("xxxx");
-        Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
-        await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
-      }
-    });
-  } catch (e) {
-    print(e);
-  }
-}
+//     service.on('locationCurrent').listen((event) async {
+//       if (await Permission.locationAlways.status == PermissionStatus.granted) {
+//         // Either the permission was already granted before or the user just granted it.
+//         // startTimeDown();
+//         // debugPrint("xxxx");
+//         Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//         // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+//         await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+//       }
+//     });
+//   } catch (e) {
+//     print(e);
+//   }
+// }
 
 // void startTimeDown() async {
 //   if (startLocationCurrent == false) {
@@ -144,13 +246,13 @@ Future<void> onStart(ServiceInstance service) async {
 //   }
 // }
 
-@pragma('vm:entry-point')
-Future<bool> onIosBackground(ServiceInstance service) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  DartPluginRegistrant.ensureInitialized();
+// @pragma('vm:entry-point')
+// Future<bool> onIosBackground(ServiceInstance service) async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   DartPluginRegistrant.ensureInitialized();
 
-  return true;
-}
+//   return true;
+// }
 
 class EumsAppOfferWall extends EumsAppOfferWallService {
   // LocalStore localStore = LocalStoreService();
@@ -214,19 +316,19 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     await LocalStoreService.instant.setAccessToken(data['token']);
     await LocalStoreService.instant.setSizeDevice(height);
-    final autoStart = LocalStoreService.instant.getSaveAdver();
-    final isRunging = await FlutterBackgroundService().isRunning();
+    // final autoStart = LocalStoreService.instant.getSaveAdver();
+    // final isRunging = await FlutterBackgroundService().isRunning();
 
-    if (isRunging == false) {
-      FlutterBackgroundService().configure(
-          iosConfiguration: IosConfiguration(),
-          androidConfiguration: AndroidConfiguration(
-              onStart: onStart,
-              autoStart: autoStart,
-              isForegroundMode: true,
-              initialNotificationTitle: "인천e음",
-              initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-    }
+    // if (isRunging == false) {
+    //   FlutterBackgroundService().configure(
+    //       iosConfiguration: IosConfiguration(),
+    //       androidConfiguration: AndroidConfiguration(
+    //           onStart: onStart,
+    //           autoStart: autoStart,
+    //           isForegroundMode: true,
+    //           initialNotificationTitle: "인천e음",
+    //           initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+    // }
     // openAppSkd(context);
     return const MyHomeScreen();
   }

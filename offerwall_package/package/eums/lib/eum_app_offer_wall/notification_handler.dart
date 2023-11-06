@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -149,30 +150,32 @@ class NotificationHandler {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) async {
         if (message.from == "/topics/eums") {
-          FlutterBackgroundService().invoke('locationCurrent');
+          // FlutterBackgroundService().invoke('locationCurrent');
+           EumsApp.instant.locationCurrent();
         } else {
           try {
             final dataTemp = jsonDecode(message.data['data']);
-            bool isRunning = true;
+            // bool isRunning = true;
 
-            if (Platform.isAndroid) {
-              isRunning = await FlutterBackgroundService().isRunning();
-            }
+            // if (Platform.isAndroid) {
+            //   isRunning = await FlutterBackgroundService().isRunning();
+            // }
 
-            if (isRunning == false &&
-                LocalStoreService.instant.getAccessToken().isNotEmpty == true &&
-                LocalStoreService.instant.getSaveAdver() == true) {
-              await FlutterBackgroundService().startService();
-              isRunning = await checkBackgroundService();
-            }
+            // if (isRunning == false &&
+            //     LocalStoreService.instant.getAccessToken().isNotEmpty == true &&
+            //     LocalStoreService.instant.getSaveAdver() == true) {
+            //   await FlutterBackgroundService().startService();
+            //   isRunning = await checkBackgroundService();
+            // }
 
-            if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
+            if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region")) {
               // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
               await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
               if (Platform.isAndroid) {
                 // CountAdver().initCount();
-                FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+                // FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+                await  EumsApp.instant.jobQueue({'data': message.data});
               }
               Future.delayed(
                 const Duration(seconds: 1),
@@ -230,7 +233,8 @@ class NotificationHandler {
               dataToast['isWebView'] = null;
               // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
               dataToast['messageToast'] = "광고가 KEEP 추가";
-              FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+              // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+              await  EumsApp.instant.jobQueue({'data': dataToast});
             } else {
               const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
                 categoryIdentifier: darwinNotificationCategoryPlain,
@@ -258,7 +262,8 @@ class NotificationHandler {
             dataToast['isWebView'] = null;
             dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
             if (Platform.isAndroid) {
-              FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+              // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+              await  EumsApp.instant.jobQueue({'data': dataToast});
             } else {
               const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
                 categoryIdentifier: darwinNotificationCategoryPlain,
@@ -290,9 +295,11 @@ class NotificationHandler {
           }
           if (Platform.isAndroid) {
             if (dataMessage != null) {
-              FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+              // FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+              await  EumsApp.instant.jobQueue({'data': dataMessage});
             } else {
-              FlutterBackgroundService().invoke("closeOverlay");
+              // FlutterBackgroundService().invoke("closeOverlay");
+              await  EumsApp.instant.closeOverlay();
             }
           }
           if (Platform.isIOS) {
@@ -419,62 +426,65 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
   if (message.from == "/topics/eums") {
-    FlutterBackgroundService().invoke('locationCurrent');
+    // FlutterBackgroundService().invoke('locationCurrent');
+     EumsApp.instant.locationCurrent();
   } else {
 // NotificationHandler.instant.initializeFcmNotification();
     try {
       final dataTemp = jsonDecode(message.data['data']);
       bool isRunning = true;
 
-      if (Platform.isAndroid) {
-        isRunning = await FlutterBackgroundService().isRunning();
-      }
-      if (isRunning == false && LocalStoreService.instant.getAccessToken().isNotEmpty == true && LocalStoreService.instant.getSaveAdver() == true) {
-        await FlutterBackgroundService().startService();
-        isRunning = await checkBackgroundService();
-      }
+      // if (Platform.isAndroid) {
+      //   isRunning = await FlutterBackgroundService().isRunning();
+      // }
+      // if (isRunning == false && LocalStoreService.instant.getAccessToken().isNotEmpty == true && LocalStoreService.instant.getSaveAdver() == true) {
+      //   await FlutterBackgroundService().startService();
+      //   isRunning = await checkBackgroundService();
+      // }
       if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
-        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
-        const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-          darwinNotificationCategoryPlain,
-          darwinNotificationCategoryPlain,
-          importance: Importance.max,
-          priority: Priority.high,
-          actions: <AndroidNotificationAction>[
-            AndroidNotificationAction(keepID, 'KEEP 하기'),
-            AndroidNotificationAction(
-              navigationScreenId,
-              '광고 시청하기',
-            ),
-          ],
-        );
+      const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+        darwinNotificationCategoryPlain,
+        darwinNotificationCategoryPlain,
+        importance: Importance.max,
+        priority: Priority.high,
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(keepID, 'KEEP 하기'),
+          AndroidNotificationAction(
+            navigationScreenId,
+            '광고 시청하기',
+          ),
+        ],
+      );
 
-        const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-          categoryIdentifier: darwinNotificationCategoryPlain,
-        );
-        const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
+      const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+        categoryIdentifier: darwinNotificationCategoryPlain,
+      );
+      const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
-        // CronCustom().initCron();
-        if (Platform.isAndroid) {
-          // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-          // CountAdver().initCount();
-          FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-        }
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
-                NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
-                payload: jsonEncode(message.data));
-          },
-        );
+      // CronCustom().initCron();
+      if (Platform.isAndroid) {
+        // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+        // CountAdver().initCount();
+        // FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+        await  EumsApp.instant.jobQueue({'data': message.data});
       }
+
+      NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
+          NotificationHandler.instant.notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails,
+          payload: jsonEncode(message.data));
+
+      }
+
       // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
@@ -555,12 +565,12 @@ class CountAdver {
   // }
 }
 
-Future<bool> checkBackgroundService() async {
-  bool isRunning = await FlutterBackgroundService().isRunning();
-  await Future.delayed(const Duration(seconds: 2));
-  if (isRunning == false) {
-    return checkBackgroundService();
-  } else {
-    return isRunning;
-  }
-}
+// Future<bool> checkBackgroundService() async {
+//   bool isRunning = await FlutterBackgroundService().isRunning();
+//   await Future.delayed(const Duration(seconds: 2));
+//   if (isRunning == false) {
+//     return checkBackgroundService();
+//   } else {
+//     return isRunning;
+//   }
+// }

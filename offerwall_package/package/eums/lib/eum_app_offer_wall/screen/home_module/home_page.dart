@@ -133,12 +133,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   checkPermission() async {
     isStartBackground = LocalStoreService.instant.getSaveAdver();
     if (isStartBackground) {
-      bool isRunning = await FlutterBackgroundService().isRunning();
-      if (!isRunning) {
-        LoadingDialog.instance.show();
-        await FlutterBackgroundService().startService();
-        LoadingDialog.instance.hide();
-      }
+      // bool isRunning = await FlutterBackgroundService().isRunning();
+      // if (!isRunning) {
+      //   LoadingDialog.instance.show();
+      //   await FlutterBackgroundService().startService();
+      //   LoadingDialog.instance.hide();
+      // }
     }
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
@@ -583,7 +583,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     if (!isStartBackground) {
                       String? token = await NotificationHandler.instant.getToken();
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                      FlutterBackgroundService().invoke("stopService");
+                      // FlutterBackgroundService().invoke("stopService");
                     } else {
                       final checkBackgroundLocation = await _checkPermissionLocationBackground();
                       if (checkBackgroundLocation == true) {
@@ -594,10 +594,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         // localStore?.setCountAdvertisement(data);
                         String? token = LocalStoreService.instant.getDeviceToken();
                         await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                        bool isRunning = await FlutterBackgroundService().isRunning();
-                        if (!isRunning) {
-                          await FlutterBackgroundService().startService();
-                        }
+                        // bool isRunning = await FlutterBackgroundService().isRunning();
+                        // if (!isRunning) {
+                        //   await FlutterBackgroundService().startService();
+                        // }
                       } else {
                         isStartBackground = false;
                         setState(() {});

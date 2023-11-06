@@ -161,17 +161,17 @@ class _AppMainScreenState extends State<AppMainScreen> {
         );
         await LocalStoreService.instant.setAccessToken(data['token']);
 
-        final autoStart = LocalStoreService.instant.getSaveAdver();
+        // final autoStart = LocalStoreService.instant.getSaveAdver();
 
-        await FlutterBackgroundService().configure(
-            iosConfiguration: IosConfiguration(),
-            androidConfiguration: AndroidConfiguration(
-                onStart: onStart,
-                // autoStart: false,
-                autoStart: autoStart,
-                isForegroundMode: true,
-                initialNotificationTitle: "인천e음",
-                initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+        // await FlutterBackgroundService().configure(
+        //     iosConfiguration: IosConfiguration(),
+        //     androidConfiguration: AndroidConfiguration(
+        //         onStart: onStart,
+        //         // autoStart: false,
+        //         autoStart: autoStart,
+        //         isForegroundMode: true,
+        //         initialNotificationTitle: "인천e음",
+        //         initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
 
         showMain.value = true;
       }));

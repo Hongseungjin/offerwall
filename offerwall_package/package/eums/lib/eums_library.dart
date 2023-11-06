@@ -5,7 +5,7 @@ library counter;
 
 export 'package:firebase_core/firebase_core.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
-export 'package:flutter_background_service/flutter_background_service.dart';
+// export 'package:flutter_background_service/flutter_background_service.dart';
 export 'package:flutter_overlay_window/flutter_overlay_window.dart';
 export 'package:get/get.dart';
 export 'package:eums/api_eums_offer_wall/eums_offer_wall_service.dart';
