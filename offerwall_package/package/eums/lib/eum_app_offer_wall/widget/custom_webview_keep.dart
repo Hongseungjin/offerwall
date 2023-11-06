@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eums/common/const/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -112,8 +113,10 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
       ),
       body: Column(
         children: [
+       
           Expanded(
             child: WidgetImageOfferWall(
+              
               scrollController: _scrollController,
               urlLink: widget.urlLink,
               onDone: () {

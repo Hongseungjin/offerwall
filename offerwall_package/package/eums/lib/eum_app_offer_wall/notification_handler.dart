@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
@@ -152,7 +153,20 @@ class NotificationHandler {
         } else {
           try {
             final dataTemp = jsonDecode(message.data['data']);
-            if (dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") {
+            bool isRunning = true;
+
+            if (Platform.isAndroid) {
+              isRunning = await FlutterBackgroundService().isRunning();
+            }
+
+            if (isRunning == false &&
+                LocalStoreService.instant.getAccessToken().isNotEmpty == true &&
+                LocalStoreService.instant.getSaveAdver() == true) {
+              await FlutterBackgroundService().startService();
+              isRunning = await checkBackgroundService();
+            }
+
+            if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
               // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
               await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
@@ -271,15 +285,20 @@ class NotificationHandler {
         case navigationScreenId:
         default:
           NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
-
           if (dataMessage != null) {
             dataMessage['isWebView'] = true;
-            FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
-          } else {
-            FlutterBackgroundService().invoke("closeOverlay");
           }
-
-          if (navigatorKeyMain.currentContext != null) {
+          if (Platform.isAndroid) {
+            if (dataMessage != null) {
+              FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+            } else {
+              FlutterBackgroundService().invoke("closeOverlay");
+            }
+          }
+          if (Platform.isIOS) {
+            if (navigatorKeyMain.currentContext == null) {
+              await DeviceApps.openApp('com.app.abeeofferwal');
+            }
             final data = jsonDecode(dataMessage['data']);
             data['advertiseIdx'] = data['idx'];
             Routings().navigate(
@@ -408,7 +427,16 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 // NotificationHandler.instant.initializeFcmNotification();
     try {
       final dataTemp = jsonDecode(message.data['data']);
-      if (dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") {
+      bool isRunning = true;
+
+      if (Platform.isAndroid) {
+        isRunning = await FlutterBackgroundService().isRunning();
+      }
+      if (isRunning == false && LocalStoreService.instant.getAccessToken().isNotEmpty == true && LocalStoreService.instant.getSaveAdver() == true) {
+        await FlutterBackgroundService().startService();
+        isRunning = await checkBackgroundService();
+      }
+      if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
         await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
         const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
@@ -525,4 +553,14 @@ class CountAdver {
   //   //   _localStore.setCountAdvertisement(data);
   //   // }
   // }
+}
+
+Future<bool> checkBackgroundService() async {
+  bool isRunning = await FlutterBackgroundService().isRunning();
+  await Future.delayed(const Duration(seconds: 2));
+  if (isRunning == false) {
+    return checkBackgroundService();
+  } else {
+    return isRunning;
+  }
 }

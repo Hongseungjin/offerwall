@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
@@ -249,8 +252,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 });
 
                 FlutterBackgroundService().invoke("closeOverlay");
-                DeviceApps.openApp('com.app.abeeofferwal');
-
+                await DeviceApps.openApp('com.app.abeeofferwal');
                 final dataTemp = jsonDecode(dataEvent['data']);
 
                 TrueOverlayService().missionOfferWallOutside(
@@ -273,42 +275,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
   // }
 
   void onVerticalDragEnd() async {
-    // // double deviceWith = double.parse(await LocalStoreService().getSizeDevice());
-    // // print('deviceWithdeviceWith $deviceHeight');
-
-    // // print('upupupuasdasdpupu $dy');
-    // if (dy != null && dyStart != null && dy! < (deviceHeight / 7)
-
-    //     ///300
-    //     // dyStart!
-    //     ) {
-    //   // print('upupupupupup$dataEvent');
-    //   if (dataEvent != null) {
-    //     dataEvent['isWebView'] = true;
-    //     FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-    //   } else {
-    //     FlutterBackgroundService().invoke("closeOverlay");
-    //   }
-    // }
-
-    // if (dy != null && dyStart != null && dy! > (deviceHeight - deviceHeight / 7)
-    //     //  > dyStart!
-    //     ) {
-    //   // print('downnnn$dataEvent');
-    //   if (dataEvent != null) {
-    //     try {
-    //       TrueOverlauService().saveKeep(advertiseIdx: (jsonDecode(dataEvent['data']))['idx'], token: tokenSdk);
-    //       dataEvent['isToast'] = true;
-    //       FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-    //     } catch (e) {
-    //       // print("errrrr$e");
-    //       FlutterBackgroundService().invoke("closeOverlay");
-    //     }
-    //   } else {
-    //     FlutterBackgroundService().invoke("closeOverlay");
-    //   }
-    // }
-    // debugPrint("${heightScreen * .15}");
     if (dy! > (heightScreen - heightScreen * .2)) {
       NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
@@ -336,10 +302,12 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     } else {
       if (dy! < heightScreen * .2) {
-        NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
+
           FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+          await DeviceApps.openApp('com.app.abeeofferwal');
         } else {
           FlutterBackgroundService().invoke("closeOverlay");
         }

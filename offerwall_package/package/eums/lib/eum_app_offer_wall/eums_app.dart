@@ -214,14 +214,19 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     await LocalStoreService.instant.setAccessToken(data['token']);
     await LocalStoreService.instant.setSizeDevice(height);
-    FlutterBackgroundService().configure(
-        iosConfiguration: IosConfiguration(),
-        androidConfiguration: AndroidConfiguration(
-            onStart: onStart,
-            autoStart: false,
-            isForegroundMode: true,
-            initialNotificationTitle: "인천e음",
-            initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+    final autoStart = LocalStoreService.instant.getSaveAdver();
+    final isRunging = await FlutterBackgroundService().isRunning();
+
+    if (isRunging == false) {
+      FlutterBackgroundService().configure(
+          iosConfiguration: IosConfiguration(),
+          androidConfiguration: AndroidConfiguration(
+              onStart: onStart,
+              autoStart: autoStart,
+              isForegroundMode: true,
+              initialNotificationTitle: "인천e음",
+              initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+    }
     // openAppSkd(context);
     return const MyHomeScreen();
   }

@@ -135,7 +135,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if (isStartBackground) {
       bool isRunning = await FlutterBackgroundService().isRunning();
       if (!isRunning) {
-        FlutterBackgroundService().startService();
+        LoadingDialog.instance.show();
+        await FlutterBackgroundService().startService();
+        LoadingDialog.instance.hide();
       }
     }
     if (Platform.isAndroid) {
@@ -573,6 +575,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     // setState(() {
                     //   isdisable = !isdisable;
                     // });
+                    LoadingDialog.instance.show();
                     setState(() {
                       isStartBackground = value;
                     });
@@ -593,13 +596,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         await EumsOfferWallServiceApi().createTokenNotifi(token: token);
                         bool isRunning = await FlutterBackgroundService().isRunning();
                         if (!isRunning) {
-                          FlutterBackgroundService().startService();
+                          await FlutterBackgroundService().startService();
                         }
                       } else {
                         isStartBackground = false;
                         setState(() {});
                       }
                     }
+                    LoadingDialog.instance.hide();
                   },
                 )
                 // WidgetAnimationClick(
@@ -680,8 +684,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   Future<bool> _checkPermissionLocationBackground() async {
-
-
     if (await Permission.locationAlways.status != PermissionStatus.granted) {
       // Timer.periodic(const Duration(seconds: 2), (timer) async {
       //   timer.cancel();

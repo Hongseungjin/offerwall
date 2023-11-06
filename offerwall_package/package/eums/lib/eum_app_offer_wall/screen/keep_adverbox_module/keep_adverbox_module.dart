@@ -468,6 +468,7 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
               urlLink: widget.data['url_link'],
               // uriImage: widget.data[''],
               title: widget.data['name'],
+
               report: InkWell(
                   onTap: () async {
                     final result = await Routings().navigate(

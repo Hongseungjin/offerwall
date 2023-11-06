@@ -461,7 +461,7 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
               ),
               const SizedBox(height: 5),
               Text(
-                '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}',
+                widget.tab == 0 ? '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}' : '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}',
                 style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value - 2, color: HexColor('#707070')),
               )
 

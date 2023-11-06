@@ -161,6 +161,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       checkSetting: checkToken,
                       title: '벌 광고 활성화',
                       onChange: (value) async {
+                        LoadingDialog.instance.show();
+
                         setState(() {
                           checkToken = value;
                         });
@@ -182,10 +184,11 @@ class _SettingScreenState extends State<SettingScreen> {
                           await EumsOfferWallServiceApi().createTokenNotifi(token: token);
                           bool isRunning = await FlutterBackgroundService().isRunning();
                           if (!isRunning) {
-                            FlutterBackgroundService().startService();
+                            await FlutterBackgroundService().startService();
                           }
                           EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
                         }
+                        LoadingDialog.instance.hide();
                       },
                     ),
                     const SizedBox(height: 30),

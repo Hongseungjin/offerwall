@@ -69,6 +69,8 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     // debugPrint("xxxxxx");
     return controller != null
         ? WebViewWidget(
@@ -130,8 +132,6 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
                   //   },
                   // ),
                   child: CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.fitHeight,
                       imageUrl: widget.urlLink,
                       placeholder: (context, url) => const Padding(
                             padding: EdgeInsets.symmetric(vertical: 30),
@@ -142,7 +142,11 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
                           ),
                       imageBuilder: (context, imageProvider) {
                         widget.onDone.call();
-                        return Image(image: imageProvider);
+                        return Image(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                          width: width,
+                        );
                       },
                       errorWidget: (context, url, error) {
                         return Image.asset(Assets.logo.path, package: "eums", height: 100);
