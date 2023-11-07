@@ -29,8 +29,6 @@ class EumsApp {
       receivePort.sendPort.send(event?['data']);
       await FlutterOverlayWindow.shareData(event?['data']);
     } else {
-      receivePortToast.sendPort.send("close");
-
       if (event?['data']['isToast'] != null) {
         await FlutterOverlayWindow.showOverlay(
           height: 300,
@@ -56,6 +54,8 @@ class EumsApp {
   }
 
   jobQueue(event) async {
+    debugPrint("=====> jobQueue");
+    receivePortToast.sendPort.send("close");
     // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
     bool isActive = await FlutterOverlayWindow.isActive();
     if (isActive == true) {
@@ -69,6 +69,8 @@ class EumsApp {
   }
 
   closeOverlay() async {
+    debugPrint("=====> closeOverlay");
+
     bool isActive = await FlutterOverlayWindow.isActive();
     if (isActive == true) {
       await FlutterOverlayWindow.closeOverlay();

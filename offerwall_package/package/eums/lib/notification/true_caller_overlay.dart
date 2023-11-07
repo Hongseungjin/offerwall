@@ -32,6 +32,7 @@ String kPortName = 'overlay_port';
 String kPortNameToast = 'overlay_port_toast';
 final receivePort = ReceivePort();
 final receivePortToast = ReceivePort();
+Timer? timer;
 
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
@@ -59,8 +60,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   String messageToast = "";
 
-  Timer? timer;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -70,6 +69,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     receivePortToast.listen((event) {
       try {
         if (timer != null) {
+          debugPrint("=====> receivePortToast");
           timer!.cancel();
         }
         // printWrapped('overlayListener $event');
@@ -97,6 +97,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         });
 
         if (isToast == true) {
+          debugPrint("=====> receivePort");
           timer?.cancel();
           timer = Timer(const Duration(seconds: 10), () async {
             await EumsApp.instant.closeOverlay();
