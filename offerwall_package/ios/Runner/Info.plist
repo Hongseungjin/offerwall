@@ -87,6 +87,8 @@
 	<false/>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	
 </dict>
 </plist>

@@ -2,14 +2,12 @@
 
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
 import 'package:get/instance_manager.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
-import 'package:eums/common/local_store/local_store.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
@@ -158,7 +156,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(height: 15),
                     _buildCheckSetting(
                       checkSetting: checkToken,
-                      title: '벌 광고 활성화',
+                      // title: '벌 광고 활성화',
+                      title: '캐릭터 광고 활성화',
                       onChange: (value) async {
                         LoadingDialog.instance.show();
 
@@ -205,7 +204,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     const SizedBox(height: 7),
                     Text(
-                      '벌 광고를 받지 않을 시간을 설정합니다.',
+                      // '벌 광고를 받지 않을 시간을 설정합니다.',
+                      '캐릭터 광고를 받을 시간을 설정합니다.',
                       style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 20),

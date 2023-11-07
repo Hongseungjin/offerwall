@@ -563,7 +563,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: Text(
-                    isStartBackground ? '벌 광고 활성화 중입니다' : '벌 광고 비활성화 중입니다',
+                    // isStartBackground ? '벌 광고 활성화 중입니다' : '벌 광고 비활성화 중입니다',
+                    isStartBackground ? '캐릭터 광고 활성화 중입니다' : '캐릭터 광고 비활성화 중입니다',
                     maxLines: 2,
                     style: AppStyle.medium.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
                   ),
