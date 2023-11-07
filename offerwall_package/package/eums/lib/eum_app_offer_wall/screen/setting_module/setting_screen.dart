@@ -157,7 +157,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(height: 15),
                     _buildCheckSetting(
                       checkSetting: checkToken,
-                      title: '벌 광고 활성화',
+                      // title: '벌 광고 활성화',
+                      title: '캐릭터 광고 활성화',
                       onChange: (value) async {
                         LoadingDialog.instance.show();
 
@@ -204,7 +205,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                     const SizedBox(height: 7),
                     Text(
-                      '벌 광고를 받지 않을 시간을 설정합니다.',
+                      // '벌 광고를 받지 않을 시간을 설정합니다.',
+                      '캐릭터 광고를 받을 시간을 설정합니다.',
                       style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
                     ),
                     const SizedBox(height: 20),
