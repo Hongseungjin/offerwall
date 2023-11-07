@@ -10,7 +10,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_expansion_title.dart';
 
