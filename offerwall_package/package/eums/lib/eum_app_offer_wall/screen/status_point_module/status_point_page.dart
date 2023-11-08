@@ -1,3 +1,4 @@
+import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/instance_manager.dart';
@@ -195,9 +196,7 @@ class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProv
                               const SizedBox(width: 8),
                               Text(
                                 Constants.formatMoney(
-                                    state.dataTotalPoint != null
-                                        ? state.dataTotalPoint[_tabController.index == 0 ? 'totalPoint' : 'offerWallPoint']
-                                        : 0,
+                                    _tabController.index == 0 ? (state.dataTotalPoint != null ? state.dataTotalPoint['totalPoint'] : 0) : 0,
                                     suffix: _tabController.index == 0 ? '원' : "P"),
                                 style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                               ),
@@ -408,13 +407,11 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
                         String? title;
                         String? date;
                         int? point;
+                        String? adType;
 
                         try {
-                          title = widget.tab == 0
-                              ? state.dataPoint[index]['advertise'] != null
-                                  ? state.dataPoint[index]['advertise']['name']
-                                  : ''
-                              : state.dataPointOutsideAdvertising[index]['reason'];
+                          adType = state.dataPoint[index]['ad_type'] ?? '';
+                          title = widget.tab == 0 ? state.dataPoint[index]['title'] ?? '' : state.dataPointOutsideAdvertising[index]['reason'];
 
                           date = widget.tab == 0
                               ? state.dataPoint[index] != null
@@ -424,12 +421,12 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
 
                           point = widget.tab == 0
                               ? state.dataPoint[index] != null
-                                  ? state.dataPoint[index]['user_point']
+                                  ? state.dataPoint[index]['point']
                                   : ''
                               : state.dataPointOutsideAdvertising[index]['point'];
                         } catch (ex) {}
 
-                        return _buildItem(title: title, date: date, point: point);
+                        return _buildItem(title: title, date: date, point: point, adType: adType);
                       }),
                     ),
                   ),
@@ -440,7 +437,18 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
     );
   }
 
-  _buildItem({String? title, String? date, int? point}) {
+  _buildItem({String? title, String? date, int? point, String? adType}) {
+    String body = "";
+    if (widget.tab == 0) {
+      if (adType?.isNotEmpty == true) {
+        if (adType == "bee") {
+          body = '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}';
+        } else {
+          body = '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}';
+        }
+      }
+    }
+
     return Row(
       children: [
         Container(
@@ -461,13 +469,16 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
               ),
               const SizedBox(height: 5),
               Text(
-                widget.tab == 0 ? '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}' : '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}',
+                body,
                 style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value - 2, color: HexColor('#707070')),
               )
 
               ///  오퍼월 광고
             ],
           ),
+        ),
+        const SizedBox(
+          width: 10,
         ),
         Text(
           Constants.formatMoney(point ?? 0, suffix: 'P'),

@@ -12,6 +12,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eums_library.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 const String keepID = 'id_1';
 
@@ -304,7 +305,9 @@ class NotificationHandler {
           }
           if (Platform.isIOS) {
             if (navigatorKeyMain.currentContext == null) {
-              await DeviceApps.openApp('com.app.abeeofferwal');
+              PackageInfo packageInfo = await PackageInfo.fromPlatform();
+              String packageName = packageInfo.packageName;
+              await DeviceApps.openApp(packageName);
             }
             final data = jsonDecode(dataMessage['data']);
             data['advertiseIdx'] = data['idx'];

@@ -12,7 +12,7 @@ part 'status_point_state.dart';
 class StatusPointBloc extends Bloc<StatusPointEvent, StatusPointState> {
   StatusPointBloc()
       : _eumsOfferWallService = EumsOfferWallServiceApi(),
-        super(StatusPointState()) {
+        super(const StatusPointState()) {
     on<StatusPointEvent>(_onStatusPointToState);
   }
   final EumsOfferWallService _eumsOfferWallService;
@@ -79,8 +79,8 @@ class StatusPointBloc extends Bloc<StatusPointEvent, StatusPointState> {
     emit(state.copyWith(loadListPointStatus: LoadListPointStatus.loading));
 
     try {
-      dynamic data = await _eumsOfferWallService.getPointOffWall(month: event.month, year: event.year);
-      emit(state.copyWith(loadListPointStatus: LoadListPointStatus.success, dataPointOutsideAdvertising: data));
+      // dynamic data = await _eumsOfferWallService.getPointOffWall(month: event.month, year: event.year);
+      emit(state.copyWith(loadListPointStatus: LoadListPointStatus.success, dataPointOutsideAdvertising: []));
     } catch (ex) {
       emit(state.copyWith(loadListPointStatus: LoadListPointStatus.failure));
     }
