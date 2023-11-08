@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:eums/common/local_store/hive_local.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,6 +20,7 @@ class EumsApp {
   }
 
   showOverlay(event) async {
+    await HiveLocal.instant.setIsToast(false);
     if (event?['data'] != null && event?['data']['isWebView'] != null) {
       await FlutterOverlayWindow.showOverlay(
         overlayTitle: event?['data']['title'],
@@ -30,13 +32,15 @@ class EumsApp {
       await FlutterOverlayWindow.shareData(event?['data']);
     } else {
       if (event?['data']['isToast'] != null) {
+        await HiveLocal.instant.setIsToast(true);
+
         await FlutterOverlayWindow.showOverlay(
           height: 300,
           width: WindowSize.matchParent,
           alignment: OverlayAlignment.bottomCenter,
         );
       } else {
-        await LocalStoreService.instant.setDataShare(dataShare: event);
+        // await LocalStoreService.instant.setDataShare(dataShare: event);
         await FlutterOverlayWindow.showOverlay(
           enableDrag: true,
           height: 300,
@@ -48,21 +52,35 @@ class EumsApp {
       }
       event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
       event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+
       receivePort.sendPort.send(event?['data']);
       await FlutterOverlayWindow.shareData(event?['data']);
     }
   }
 
   jobQueue(event) async {
-    debugPrint("=====> jobQueue");
-    receivePortToast.sendPort.send("close");
     // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
     bool isActive = await FlutterOverlayWindow.isActive();
     if (isActive == true) {
-      await FlutterOverlayWindow.closeOverlay();
-      await Future.delayed(const Duration(milliseconds: 1000));
-      await showOverlay(event);
+      final toast = HiveLocal.instant.getIsToast();
+      if (toast == true) {
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+          final toast = HiveLocal.instant.getIsToast();
+          if (toast == false) {
+            timer.cancel();
+            await Future.delayed(const Duration(milliseconds: 1000));
+            await showOverlay(event);
+          }
+        });
+      } else {
+        debugPrint("=====> jobQueue - isActive");
+        await FlutterOverlayWindow.closeOverlay();
+        await Future.delayed(const Duration(milliseconds: 1000));
+        await showOverlay(event);
+      }
     } else {
+      debugPrint("=====> jobQueue - null");
+
       await Future.delayed(const Duration(milliseconds: 1000));
       await showOverlay(event);
     }

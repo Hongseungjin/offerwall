@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
+import 'package:eums/common/local_store/hive_local.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
@@ -29,10 +29,7 @@ import 'package:eums/eums_library.dart';
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 
 String kPortName = 'overlay_port';
-String kPortNameToast = 'overlay_port_toast';
 final receivePort = ReceivePort();
-final receivePortToast = ReceivePort();
-Timer? timer;
 
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
@@ -60,26 +57,16 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   String messageToast = "";
 
+  Timer? timer;
+
   @override
   void initState() {
     // TODO: implement initState
     // print('inittt overlay');
     initCallbackDrag();
     WidgetsBinding.instance.addObserver(this);
-    receivePortToast.listen((event) {
-      try {
-        if (timer != null) {
-          debugPrint("=====> receivePortToast");
-          timer!.cancel();
-        }
-        // printWrapped('overlayListener $event');
-        // printWrapped('overlayListener $deviceHeight');
-      } catch (e) {
-        // print('errorrrrrr $e');
-        rethrow;
-      }
-    });
-    receivePort.listen((event) {
+
+    receivePort.listen((event) async {
       try {
         setState(() {
           dataEvent = event;
@@ -97,13 +84,17 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         });
 
         if (isToast == true) {
-          debugPrint("=====> receivePort");
-          timer?.cancel();
           timer = Timer(const Duration(seconds: 10), () async {
-            await EumsApp.instant.closeOverlay();
+            final toast = HiveLocal.instant.getIsToast();
+            if (toast == true) {
+              await HiveLocal.instant.setIsToast(false);
+              await FlutterOverlayWindow.closeOverlay();
+            }
           });
+        } else {
+          timer?.cancel();
         }
-
+        debugPrint("xxxx: receivePort.listen -- isToast: $isToast");
         // printWrapped('overlayListener $event');
         // printWrapped('overlayListener $deviceHeight');
       } catch (e) {
@@ -112,7 +103,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     });
     IsolateNameServer.registerPortWithName(receivePort.sendPort, kPortName);
-    IsolateNameServer.registerPortWithName(receivePortToast.sendPort, kPortName);
 
     FlutterOverlayWindow.overlayListener.listen((event) async {
       try {
@@ -128,9 +118,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           checkSave = dataTemp['isScrap'] ?? false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
-
-        // printWrapped('overlayListener $event');
-        // printWrapped('overlayListener $deviceHeight');
+        debugPrint("xxxx: FlutterOverlayWindow.overlayListener");
       } catch (e) {
         // print('errorrrrrr $e');
         rethrow;

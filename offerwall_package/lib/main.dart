@@ -1,4 +1,5 @@
 // import 'package:device_preview/device_preview.dart';
+import 'package:eums/common/local_store/hive_local.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ void overlayMain() async {
   // ));
 
   await LocalStoreService.instant.init();
+  await HiveLocal.instant.init();
 
   runApp(
     const MyAppOverlay(),
@@ -59,7 +61,6 @@ class MyAppOverlay extends StatefulWidget {
 }
 
 class _MyAppOverlayState extends State<MyAppOverlay> {
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -116,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-    LocalStoreService.instant.setDataShare(dataShare: null);
+    // LocalStoreService.instant.setDataShare(dataShare: null);
   }
 
   @override
@@ -252,7 +253,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 LocalStoreService.instant.preferences.setString("memGen", textEditingController2.text);
                 LocalStoreService.instant.preferences.setString("memBirth", dateTime);
                 LocalStoreService.instant.preferences.setString("memRegion", textEditingController4.text);
-                await LocalStoreService.instant.setDataShare(dataShare: null);
+                // await LocalStoreService.instant.setDataShare(dataShare: null);
                 // ignore: use_build_context_synchronously
                 final child = await EumsAppOfferWallService.instance.openSdkTest(context,
                     memId: textEditingController1.text,
