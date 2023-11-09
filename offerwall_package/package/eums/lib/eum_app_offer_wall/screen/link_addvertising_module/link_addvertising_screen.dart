@@ -33,89 +33,97 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
           child: const Icon(Icons.arrow_back_ios_outlined, color: AppColor.dark, size: 25),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 32),
-            // Image.asset(
-            //   Assets.text.path,
-            //   package: "eums",
-            // ),
-            //  Image.asset(
-            //   Assets.watch_point.path,
-            //   package: "eums",
-            // ),
-            Assets.icons.text.image(),
-            Assets.icons.watchPoint.image(),
-           
-            // Center(
-            //   child: Text(
-            //     '제휴 및 광고 문의',
-            //     style:
-            //         AppStyle.bold.copyWith(color: AppColor.black, fontSize: 32),
-            //   ),
-            // ),
-            const SizedBox(height: 12),
-            // Image.asset(
-            //   Assets.note_text.path,
-            //   package: "eums",
-            // ),
-            Assets.icons.noteText.image(),
-            // Center(
-            //   child: RichText(
-            //       textAlign: TextAlign.center,
-            //       text: TextSpan(
-            //           text: '포인트',
-            //           style: AppStyle.medium
-            //               .copyWith(color: AppColor.red, fontSize: 16),
-            //           children: [
-            //             TextSpan(
-            //               text: '광고주는 를 쌓고광고주는 ',
-            //               style: AppStyle.medium
-            //                   .copyWith(color: AppColor.black, fontSize: 16),
-            //             )
-            //           ])),
-            // ),
-            const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              decoration: BoxDecoration(color: HexColor('#fdd000').withOpacity(.2), borderRadius: BorderRadius.circular(10)),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buidItem(
-                      callback: () {},
-                      title: '고객센터',
-                      widget: SizedBox(
-                        width: MediaQuery.of(context).size.width - 150,
-                        child: Text(
-                          '1833-8590 / abee@abee.co.kr',
-                          style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value - 2),
-                        ),
-                      )),
-                  _buidItem(
-                      callback: () {},
-                      title: '업무시간',
-                      widget: SizedBox(
-                        width: MediaQuery.of(context).size.width - 150,
-                        child: RichText(
-                            text: TextSpan(
-                                text: '09:00 ~ 18:00',
+                  const SizedBox(height: 32),
+                  // Image.asset(
+                  //   Assets.text.path,
+                  //   package: "eums",
+                  // ),
+                  //  Image.asset(
+                  //   Assets.watch_point.path,
+                  //   package: "eums",
+                  // ),
+                  Assets.icons.text.image(),
+                  Assets.icons.watchPoint.image(),
+
+                  // Center(
+                  //   child: Text(
+                  //     '제휴 및 광고 문의',
+                  //     style:
+                  //         AppStyle.bold.copyWith(color: AppColor.black, fontSize: 32),
+                  //   ),
+                  // ),
+                  const SizedBox(height: 12),
+                  // Image.asset(
+                  //   Assets.note_text.path,
+                  //   package: "eums",
+                  // ),
+                  Assets.icons.noteText.image(),
+                  // Center(
+                  //   child: RichText(
+                  //       textAlign: TextAlign.center,
+                  //       text: TextSpan(
+                  //           text: '포인트',
+                  //           style: AppStyle.medium
+                  //               .copyWith(color: AppColor.red, fontSize: 16),
+                  //           children: [
+                  //             TextSpan(
+                  //               text: '광고주는 를 쌓고광고주는 ',
+                  //               style: AppStyle.medium
+                  //                   .copyWith(color: AppColor.black, fontSize: 16),
+                  //             )
+                  //           ])),
+                  // ),
+                  const SizedBox(height: 32),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(color: HexColor('#fdd000').withOpacity(.2), borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      children: [
+                        _buidItem(
+                            callback: () {},
+                            title: '고객센터',
+                            widget: SizedBox(
+                              width: MediaQuery.of(context).size.width - 150,
+                              child: Text(
+                                '1833-8590 / abee@abee.co.kr',
                                 style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value - 2),
-                                children: [
-                              TextSpan(
-                                text: '(점심시간 : 12:00 ~ 13:00)',
-                                style: AppStyle.bold.copyWith(color: AppColor.grey5D, fontSize: controllerGet.fontSizeObx.value - 2),
-                              )
-                            ])),
-                      )),
+                              ),
+                            )),
+                        _buidItem(
+                            callback: () {},
+                            title: '업무시간',
+                            widget: SizedBox(
+                              width: MediaQuery.of(context).size.width - 150,
+                              child: RichText(
+                                  text: TextSpan(
+                                      text: '09:00 ~ 18:00',
+                                      style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value - 2),
+                                      children: [
+                                    TextSpan(
+                                      text: '(점심시간 : 12:00 ~ 13:00)',
+                                      style: AppStyle.bold.copyWith(color: AppColor.grey5D, fontSize: controllerGet.fontSizeObx.value - 2),
+                                    )
+                                  ])),
+                            )),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
-            Spacer(),
-            WidgetAnimationClick(
+          ),
+          // const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: WidgetAnimationClick(
               onTap: () {
                 _launchURL();
               },
@@ -130,9 +138,8 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -163,7 +170,7 @@ class _LinkAddvertisingScreenState extends State<LinkAddvertisingScreen> {
   Widget _buidItem({required VoidCallback callback, String? title, Widget? widget}) {
     return InkWell(
       onTap: callback,
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
         // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         // decoration: BoxDecoration(
