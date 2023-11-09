@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   HomeInitState? homeInit;
   HomeBannerState? homeBannerState;
   List<HomeListDataOfferWallState?> homeListDataOfferWallStates = [null, null];
+  bool showToast = false;
 
   @override
   void initState() {
@@ -108,11 +109,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
       // _permissionNotification();
-      var status = await Permission.locationAlways.status;
-      if (!status.isGranted) {
-        AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
-      } else {
-        AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+      if (showToast == true) {
+        var status = await Permission.locationAlways.status;
+        if (!status.isGranted) {
+          AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
+        } else {
+          AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+        }
       }
     }));
   }
@@ -733,6 +736,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               onAccept: () async {
                 var status = await Permission.locationAlways.request();
                 if (status.isPermanentlyDenied) {
+                  showToast = true;
                   await Geolocator.openLocationSettings();
                 } else {
                   if (!status.isGranted) {

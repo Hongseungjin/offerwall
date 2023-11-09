@@ -9,6 +9,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,7 @@ public class FlutterOverlayWindowPlugin implements
     private BasicMessageChannel<Object> messenger;
     private Result pendingResult;
     final int REQUEST_CODE_FOR_OVERLAY_PERMISSION = 1248;
-
+    private Toast toast = null;
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.context = flutterPluginBinding.getApplicationContext();
@@ -109,7 +110,11 @@ public class FlutterOverlayWindowPlugin implements
                 result.success(true);
             }
             return;
-        } else {
+        } else if(call.method.equals("showToast")){
+            String message = call.argument("message");
+            toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+            toast.show();
+        }else {
             result.notImplemented();
         }
 
