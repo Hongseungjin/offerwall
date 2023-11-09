@@ -6,8 +6,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/method_native/host_api.dart';
 import 'package:eums/common/rx_bus.dart';
+import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
+import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
@@ -103,6 +106,15 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       blocs.first.add(HomeListDataOfferWallEvent(category: category, filter: filter));
       blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
     });
+    WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
+      // _permissionNotification();
+      var status = await Permission.locationAlways.status;
+      if (!status.isGranted) {
+        AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
+      } else {
+        AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+      }
+    }));
   }
 
   @override
@@ -576,12 +588,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     // setState(() {
                     //   isdisable = !isdisable;
                     // });
-                    LoadingDialog.instance.show();
-                    setState(() {
-                      isStartBackground = value;
-                    });
+
                     await LocalStoreService.instant.setSaveAdver(isStartBackground);
-                    if (!isStartBackground) {
+                    if (!value) {
                       String? token = await NotificationHandler.instant.getToken();
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                       // FlutterBackgroundService().invoke("stopService");
@@ -602,9 +611,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       } else {
                         isStartBackground = false;
                         setState(() {});
+                        return;
                       }
                     }
-                    LoadingDialog.instance.hide();
+                    setState(() {
+                      isStartBackground = value;
+                    });
                   },
                 )
                 // WidgetAnimationClick(
@@ -686,25 +698,57 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   Future<bool> _checkPermissionLocationBackground() async {
     if (await Permission.locationAlways.status != PermissionStatus.granted) {
-      // Timer.periodic(const Duration(seconds: 2), (timer) async {
-      //   timer.cancel();
       try {
-        Map<Permission, PermissionStatus> statuses = await [
-          Permission.location,
-          Permission.locationAlways,
-        ].request();
-
-        if (statuses[Permission.locationAlways] == PermissionStatus.permanentlyDenied ||
-            statuses[Permission.locationAlways] == PermissionStatus.denied) {
-          await Geolocator.openLocationSettings();
-          return false;
-          // return _checkPermissionLocationBackground();
+        var status = await Permission.locationWhenInUse.status;
+        if (!status.isGranted) {
+          var status = await Permission.locationWhenInUse.request();
+          if (status.isGranted) {
+            var status = await Permission.locationAlways.status;
+            if (!status.isGranted) {
+              // ignore: use_build_context_synchronously
+              await WidgetDialogLocation.show(
+                context,
+                onAccept: () async {
+                  var status = await Permission.locationAlways.request();
+                  if (!status.isGranted) {
+                    AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
+                  } else {
+                    AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+                  }
+                },
+              );
+            }
+            if (status.isPermanentlyDenied) {
+              await Geolocator.openLocationSettings();
+            }
+          } else {
+            _checkPermissionLocationBackground();
+          }
+        } else {
+          var status = await Permission.locationAlways.status;
+          if (!status.isGranted) {
+            // ignore: use_build_context_synchronously
+            await WidgetDialogLocation.show(
+              context,
+              onAccept: () async {
+                var status = await Permission.locationAlways.request();
+                if (status.isPermanentlyDenied) {
+                  await Geolocator.openLocationSettings();
+                } else {
+                  if (!status.isGranted) {
+                    AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
+                  } else {
+                    AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+                  }
+                }
+              },
+            );
+          }
         }
       } catch (e) {
         return false;
       }
       return false;
-      // });
     } else {
       return true;
     }
