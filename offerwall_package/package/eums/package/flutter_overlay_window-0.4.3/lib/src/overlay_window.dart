@@ -8,12 +8,9 @@ class FlutterOverlayWindow {
   FlutterOverlayWindow._();
 
   static final StreamController _controller = StreamController();
-  static const MethodChannel _channel =
-      MethodChannel("x-slayer/overlay_channel");
-  static const MethodChannel _overlayChannel =
-      MethodChannel("x-slayer/overlay");
-  static const BasicMessageChannel _overlayMessageChannel =
-      BasicMessageChannel("x-slayer/overlay_messenger", JSONMessageCodec());
+  static const MethodChannel _channel = MethodChannel("x-slayer/overlay_channel");
+  static const MethodChannel _overlayChannel = MethodChannel("x-slayer/overlay");
+  static const BasicMessageChannel _overlayMessageChannel = BasicMessageChannel("x-slayer/overlay_messenger", JSONMessageCodec());
 
   /// Open overLay content
   ///
@@ -54,6 +51,15 @@ class FlutterOverlayWindow {
     );
   }
 
+  static showToast({required String message}) {
+    _channel.invokeMethod(
+      'showToast',
+      {
+        "message": message,
+      },
+    );
+  }
+
   /// Check if overlay permission is granted
   static Future<bool> isPermissionGranted() async {
     try {
@@ -77,8 +83,8 @@ class FlutterOverlayWindow {
 
   /// Closes overlay if open
   static Future<bool?> closeOverlay() async {
-    final bool? _res = await _channel.invokeMethod('closeOverlay');
-    return _res;
+    final bool? res = await _channel.invokeMethod('closeOverlay');
+    return res;
   }
 
   /// Broadcast data to and from overlay app
@@ -97,27 +103,26 @@ class FlutterOverlayWindow {
 
   /// Update the overlay flag while the overlay in action
   static Future<bool?> updateFlag(OverlayFlag flag) async {
-    final bool? _res = await _overlayChannel
-        .invokeMethod<bool?>('updateFlag', {'flag': flag.name});
-    return _res;
+    final bool? res = await _overlayChannel.invokeMethod<bool?>('updateFlag', {'flag': flag.name});
+    return res;
   }
 
   /// Update the overlay size in the screen
   static Future<bool?> resizeOverlay(int width, int height) async {
-    final bool? _res = await _overlayChannel.invokeMethod<bool?>(
+    final bool? res = await _overlayChannel.invokeMethod<bool?>(
       'resizeOverlay',
       {
         'width': width,
         'height': height,
       },
     );
-    return _res;
+    return res;
   }
 
   /// Check if the current overlay is active
   static Future<bool> isActive() async {
-    final bool? _res = await _channel.invokeMethod<bool?>('isOverlayActive');
-    return _res ?? false;
+    final bool? res = await _channel.invokeMethod<bool?>('isOverlayActive');
+    return res ?? false;
   }
 
   /// Dispose overlay stream
