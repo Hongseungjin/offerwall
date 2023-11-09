@@ -37,7 +37,6 @@ class MyHomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
   bool showAction = false;
-  Timer? timer;
   dynamic dataUser;
 
   Future<void> _registerEventBus() async {
@@ -136,17 +135,19 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   settingBattery() async {
     if (Platform.isAndroid) {
-      bool? isBatteryOptimizationDisabled = await getBatteryOptimization();
+      await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+      bool? isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
       if (isBatteryOptimizationDisabled == null || !isBatteryOptimizationDisabled) {
-        timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-          bool? isBatteryOptimizationDisabled = await getBatteryOptimization();
-          if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
-            timer.cancel();
-          }
+        Timer.periodic(const Duration(seconds: 3), (timer) async {
+          timer.cancel();
+          settingBattery();
+
+          // bool? isBatteryOptimizationDisabled = await getBatteryOptimization();
+          // if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
+          //   timer.cancel();
+          // }
           // _checkPermissionLocationBackground();
         });
-      } else {
-        // _checkPermissionLocationBackground();
       }
     }
   }

@@ -115,6 +115,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
         } else {
           AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+          await LocalStoreService.instant.setSaveAdver(true);
+          setState(() {
+            isStartBackground = true;
+          });
         }
       }
     }));
@@ -278,9 +282,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             backgroundColor: AppColor.white,
             leading: WidgetAnimationClick(
               onTap: () {
-                hostApi.cancel();
-                // MethodOfferwallChannel.instant.back();
-                // Navigator.pop(context);
+                final isDebug = LocalStoreService.instant.preferences.getBool('isDebug') ?? false;
+                if (isDebug == false) {
+                  hostApi.cancel();
+                } else {
+                  Navigator.pop(context);
+                }
               },
               child: const Icon(
                 Icons.arrow_back_ios,
@@ -592,7 +599,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     //   isdisable = !isdisable;
                     // });
 
-                    await LocalStoreService.instant.setSaveAdver(isStartBackground);
                     if (!value) {
                       String? token = await NotificationHandler.instant.getToken();
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
@@ -617,6 +623,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         return;
                       }
                     }
+                    await LocalStoreService.instant.setSaveAdver(value);
                     setState(() {
                       isStartBackground = value;
                     });
@@ -717,11 +724,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
                   } else {
                     AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+
+                    await LocalStoreService.instant.setSaveAdver(true);
+                    setState(() {
+                      isStartBackground = true;
+                    });
                   }
                 },
               );
             }
             if (status.isPermanentlyDenied) {
+              showToast = true;
               await Geolocator.openLocationSettings();
             }
           } else {
@@ -743,6 +756,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
                   } else {
                     AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+                    await LocalStoreService.instant.setSaveAdver(true);
+                    setState(() {
+                      isStartBackground = true;
+                    });
                   }
                 }
               },

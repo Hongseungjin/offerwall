@@ -1,3 +1,4 @@
+import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
 
@@ -16,25 +17,31 @@ class WidgetDialogLocation {
             style: StyleFont.regular(),
           ),
           actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Cancel'),
-              onPressed: () {
+            WidgetAnimationClick(
+              onTap: () {
                 onCancel?.call();
                 Navigator.of(context).pop(false);
               },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+              child: const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w400, fontSize: 16),
+                ),
               ),
-              child: const Text('Enable'),
-              onPressed: () {
+            ),
+            WidgetAnimationClick(
+              onTap: () {
                 onAccept.call();
                 Navigator.of(context).pop(true);
               },
+              child: const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "Enable",
+                  style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w700, fontSize: 16),
+                ),
+              ),
             ),
           ],
         );

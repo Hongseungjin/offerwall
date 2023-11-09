@@ -4,7 +4,6 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
-import 'package:eums/common/local_store/hive_local.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
@@ -57,8 +56,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   String messageToast = "";
 
-  Timer? timer;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -83,18 +80,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           deviceWidth = event['deviceWidth'] ?? 0;
         });
 
-        if (isToast == true) {
-          timer = Timer(const Duration(seconds: 10), () async {
-            final toast = HiveLocal.instant.getIsToast();
-            if (toast == true) {
-              await HiveLocal.instant.setIsToast(false);
-              await FlutterOverlayWindow.closeOverlay();
-            }
-          });
-        } else {
-          timer?.cancel();
-        }
-        debugPrint("xxxx: receivePort.listen -- isToast: $isToast");
         // printWrapped('overlayListener $event');
         // printWrapped('overlayListener $deviceHeight');
       } catch (e) {

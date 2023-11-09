@@ -3,7 +3,7 @@
 # Run `pod lib lint eums.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'eums'
+  s.name             = 'flutter_overlay_window'
   s.version          = '0.0.1'
   s.summary          = 'A new Flutter plugin project.'
   s.description      = <<-DESC
@@ -17,8 +17,6 @@ A new Flutter plugin project.
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
   # s.platform = :ios, '12.0'
-  s.dependency 'Firebase/Core'
-  s.dependency 'Firebase'
   s.dependency 'Toast-Swift', '~> 5.0.1'
   s.static_framework = true
 

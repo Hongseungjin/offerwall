@@ -1,5 +1,4 @@
 // import 'package:device_preview/device_preview.dart';
-import 'package:eums/common/local_store/hive_local.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,6 @@ void overlayMain() async {
   // ));
 
   await LocalStoreService.instant.init();
-  await HiveLocal.instant.init();
 
   runApp(
     const MyAppOverlay(),
@@ -107,6 +105,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
+
+    LocalStoreService.instant.preferences.setBool("isDebug", true);
   }
 
   setDeviceWidth() {

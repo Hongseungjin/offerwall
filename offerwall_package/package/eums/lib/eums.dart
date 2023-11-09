@@ -7,7 +7,6 @@
 // }
 
 import 'package:eums/common/const/values.dart';
-import 'package:eums/common/local_store/hive_local.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:flutter/material.dart';
 
@@ -39,8 +38,6 @@ class Eums {
 
     await Firebase.initializeApp();
     await LocalStoreService.instant.init();
-
-    await HiveLocal.instant.init();
 
     print("============ Firebase.initializeApp ========= ");
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:eums/common/local_store/hive_local.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -20,7 +19,6 @@ class EumsApp {
   }
 
   showOverlay(event) async {
-    await HiveLocal.instant.setIsToast(false);
     if (event?['data'] != null && event?['data']['isWebView'] != null) {
       await FlutterOverlayWindow.showOverlay(
         overlayTitle: event?['data']['title'],
@@ -32,13 +30,12 @@ class EumsApp {
       await FlutterOverlayWindow.shareData(event?['data']);
     } else {
       if (event?['data']['isToast'] != null) {
-        await HiveLocal.instant.setIsToast(true);
-
-        await FlutterOverlayWindow.showOverlay(
-          height: 300,
-          width: WindowSize.matchParent,
-          alignment: OverlayAlignment.bottomCenter,
-        );
+        FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
+        // await FlutterOverlayWindow.showOverlay(
+        //   height: 300,
+        //   width: WindowSize.matchParent,
+        //   alignment: OverlayAlignment.bottomCenter,
+        // );
       } else {
         // await LocalStoreService.instant.setDataShare(dataShare: event);
         await FlutterOverlayWindow.showOverlay(
@@ -62,22 +59,10 @@ class EumsApp {
     // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
     bool isActive = await FlutterOverlayWindow.isActive();
     if (isActive == true) {
-      final toast = HiveLocal.instant.getIsToast();
-      if (toast == true) {
-        Timer.periodic(const Duration(seconds: 1), (timer) async {
-          final toast = HiveLocal.instant.getIsToast();
-          if (toast == false) {
-            timer.cancel();
-            await Future.delayed(const Duration(milliseconds: 1000));
-            await showOverlay(event);
-          }
-        });
-      } else {
-        debugPrint("=====> jobQueue - isActive");
-        await FlutterOverlayWindow.closeOverlay();
-        await Future.delayed(const Duration(milliseconds: 1000));
-        await showOverlay(event);
-      }
+      debugPrint("=====> jobQueue - isActive");
+      await FlutterOverlayWindow.closeOverlay();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await showOverlay(event);
     } else {
       debugPrint("=====> jobQueue - null");
 
@@ -283,7 +268,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       Size size = view.physicalSize;
       double height = size.height;
       // await LocalStoreService.instant.init();
-      LocalStoreService.instant.setSizeDevice(height);
+      await LocalStoreService.instant.setSizeDevice(height);
     } catch (e) {
       print("=====> error: $e");
     }

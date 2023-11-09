@@ -234,54 +234,20 @@ class NotificationHandler {
               // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
               await EumsApp.instant.jobQueue({'data': dataToast});
             } else {
-              const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-                categoryIdentifier: darwinNotificationCategoryPlain,
-              );
-              NotificationDetails notificationDetails = const NotificationDetails(
-                iOS: iosNotificationDetails,
-              );
-              flutterLocalNotificationsPlugin.show(
-                NotificationHandler.instant.notificationId + 1,
-                'Eums success',
-                '광고가 KEEP 되었습니다',
-                notificationDetails,
-              );
-
-              Future.delayed(
-                const Duration(seconds: 2),
-                () {
-                  NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId + 1);
-                },
-              );
+              _methodToastIOS(title: "Eums success", body: "광고가 KEEP 되었습니다");
             }
           } catch (ex) {
-            dynamic dataToast = {};
-            dataToast['isToast'] = true;
-            dataToast['isWebView'] = null;
-            dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
             if (Platform.isAndroid) {
+              dynamic dataToast = {};
+              dataToast['isToast'] = true;
+              dataToast['isWebView'] = null;
+              dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
               // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
               await EumsApp.instant.jobQueue({'data': dataToast});
             } else {
-              const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-                categoryIdentifier: darwinNotificationCategoryPlain,
-              );
-              NotificationDetails notificationDetails = const NotificationDetails(
-                iOS: iosNotificationDetails,
-              );
-              flutterLocalNotificationsPlugin.show(
-                NotificationHandler.instant.notificationId + 1,
-                'Eums failure',
-                '일일 저장량을 초과했습니다.',
-                notificationDetails,
-              );
-
-              Future.delayed(
-                const Duration(seconds: 2),
-                () {
-                  NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId + 1);
-                },
-              );
+              // 'Eums failure',
+              // '일일 저장량을 초과했습니다.',
+              _methodToastIOS(title: "Eums failure", body: "일일 저장량을 초과했습니다.");
             }
           }
           break;
@@ -323,6 +289,29 @@ class NotificationHandler {
           break;
       }
     }
+  }
+
+  void _methodToastIOS({required String title, required String body}) {
+    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+      categoryIdentifier: darwinNotificationCategoryPlain,
+    );
+    NotificationDetails notificationDetails = const NotificationDetails(
+      iOS: iosNotificationDetails,
+    );
+    flutterLocalNotificationsPlugin.show(
+      NotificationHandler.instant.notificationId + 1,
+      // 'Eums failure',
+      // '일일 저장량을 초과했습니다.',
+      title, body,
+      notificationDetails,
+    );
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId + 1);
+      },
+    );
   }
 
   // onSelectNotification(NotificationResponse notificationResponse) async {
@@ -429,7 +418,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
-    
+
   if (message.from == "/topics/eums") {
     // FlutterBackgroundService().invoke('locationCurrent');
     EumsApp.instant.locationCurrent();
@@ -473,9 +462,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
           // CountAdver().initCount();
           // FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-       
-          await EumsApp.instant.jobQueue({'data': message.data});
 
+          await EumsApp.instant.jobQueue({'data': message.data});
         }
 
         NotificationHandler.instant.flutterLocalNotificationsPlugin.show(

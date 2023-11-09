@@ -1,6 +1,5 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:eums/common/method_native/host_handle.dart';
-import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
@@ -78,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-    LocalStoreService.instant.setDataShare(dataShare: null);
+    // LocalStoreService.instant.setDataShare(dataShare: null);
   }
 
   @override
@@ -181,7 +180,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("=>>>>>>>>>>> AppMainScreen - build");
 
     return ValueListenableBuilder<bool>(
       valueListenable: showMain,
