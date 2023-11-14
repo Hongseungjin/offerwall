@@ -114,7 +114,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       if (Platform.isAndroid) {
         settingBattery();
       }
-      String? token = await NotificationHandler.instant.getToken();
+      String? token = await NotificationHandler.getToken();
       if (token != null) {
         await LocalStoreService.instant.setDeviceToken(token);
         // await EumsOfferWallServiceApi().createTokenNotifi(token: token);

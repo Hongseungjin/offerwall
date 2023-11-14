@@ -108,8 +108,11 @@ public class FlutterOverlayWindowPlugin implements
                 i.putExtra(OverlayService.INTENT_EXTRA_IS_CLOSE_WINDOW, true);
                 context.startService(i);
                 result.success(true);
+                return;
             }
+            result.success(false);
             return;
+//            return;
         } else if(call.method.equals("showToast")){
             String message = call.argument("message");
             toast = Toast.makeText(context, message, Toast.LENGTH_LONG);

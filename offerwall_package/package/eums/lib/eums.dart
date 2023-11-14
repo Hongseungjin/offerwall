@@ -5,7 +5,6 @@
 //     return EumsPlatform.instance.getPlatformVersion();
 //   }
 // }
-
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +34,10 @@ class Eums {
 
   Future initMaterial({required Widget home, Future Function()? onRun}) async {
     WidgetsFlutterBinding.ensureInitialized();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     await Firebase.initializeApp();
+
     await LocalStoreService.instant.init();
 
     print("============ Firebase.initializeApp ========= ");
@@ -45,32 +46,12 @@ class Eums {
 
     await onRun?.call();
 
+  
     runApp(
-      // DevicePreview(
-      //   enabled: true,
-      //   builder: (context) => MaterialApp(
-      //     debugShowCheckedModeBanner: false,
-      //     // home: MyHomePage(),
-      //     useInheritedMediaQuery: true,
-      //     locale: DevicePreview.locale(context),
-      //     builder: DevicePreview.appBuilder,
-      //     theme: ThemeData.light(),
-      //     darkTheme: ThemeData.dark(),
-
-      //     home: MyInitPageEum(child: home),
-      //   ),
-      // ),
       MaterialApp(
         debugShowCheckedModeBanner: false,
-        // useInheritedMediaQuery: true,
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
-        // theme: ThemeData.light(),
-        // darkTheme: ThemeData.dark(),
-
         home: home,
         navigatorKey: navigatorKeyMain,
-
         builder: (context, child) {
           return Overlay(
             initialEntries: [
@@ -81,7 +62,7 @@ class Eums {
       ),
     );
 
-    var details = await NotificationHandler.instant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
       NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
     }

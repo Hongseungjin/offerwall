@@ -17,9 +17,16 @@ dependencies:
   # # endregion
 
   # region Package notification
-  firebase_messaging: ^14.6.3
-  flutter_local_notifications: ^15.1.0+1
-  firebase_core: ^2.14.0
+  # firebase_messaging: ^14.6.3
+  firebase_messaging: 14.7.4
+  # flutter_local_notifications: ^15.1.0+1
+  flutter_local_notifications: 16.1.0
+  # firebase_core: ^2.14.0
+  firebase_core: 2.22.0
+
+
+  flutter_background_service:
+    path: package/flutter_background_service/packages/flutter_background_service
 
   flutter_overlay_window:
     path: package/flutter_overlay_window-0.4.3
@@ -71,6 +78,8 @@ dependencies:
   app_settings: ^5.1.1
   hive:
   path_provider: ^2.1.1
+  lottie: ^2.3.2
+  shimmer: ^3.0.0
 
 
   flutter_component:
@@ -154,6 +163,8 @@ flutter:
     - assets/icons/
     - assets/flutter_i18n/
     - assets/fonts/
+    - assets/lotties/
+
   fonts:
     - family: NotoSansKR-Regular
       fonts:

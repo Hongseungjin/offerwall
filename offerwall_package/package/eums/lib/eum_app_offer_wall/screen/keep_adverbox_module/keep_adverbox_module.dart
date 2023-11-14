@@ -401,7 +401,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
       return;
     }
     if (state.saveScrapStatus == SaveScrapStatus.success) {
-      AppAlert.showSuccess("Success");
+      // AppAlert.showSuccess("Success");
+      AppAlert.showSuccess("광고 스크랩을 완료하였습니다", type: AppAlertType.bottom);
     }
   }
 

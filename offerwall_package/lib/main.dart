@@ -9,32 +9,10 @@ import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_
 import 'package:eums/eums_library.dart';
 import 'package:intl/intl.dart';
 
-void main() async {
-  // SdkEums.instant.init(onRun: () async {
-  //   await Firebase.initializeApp();
-
-  //   NotificationHandler.instant.initializeFcmNotification();
-
-  //   runApp(MaterialApp(
-  //     debugShowCheckedModeBanner: false,
-  //     // home: MyHomePage(),
-  //     home: DevicePreview(
-  //       // child: ,
-  //       enabled: false,
-  //       // tools: [
-  //       //   ...DevicePreview.defaultTools,
-  //       //   // const CustomPlugin(),
-  //       // ],
-  //       builder: (context) => const MyHomePage(),
-  //     ),
-  //   ));
-  // });
-  await Eums.instant.initMaterial(home: const MyHomePage());
-
-  // runApp(const MaterialApp(
-  //   debugShowCheckedModeBanner: false,
-  //   home: MyHomePage(),
-  // ));
+void main() {
+  Eums.instant.initMaterial(
+    home: const MyHomePage(),
+  );
 }
 
 @pragma("vm:entry-point")
@@ -270,22 +248,3 @@ class _AppMainScreenState extends State<AppMainScreen> {
     );
   }
 }
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key});
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-
-
-
-
-

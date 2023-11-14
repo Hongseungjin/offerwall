@@ -519,6 +519,16 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsLottiesGen {
+  const $AssetsLottiesGen();
+
+  /// File path: assets/lotties/icon_logo.json
+  String get iconLogo => 'assets/lotties/icon_logo.json';
+
+  /// List of all assets
+  List<String> get values => [iconLogo];
+}
+
 class Assets {
   Assets._();
 
@@ -526,6 +536,7 @@ class Assets {
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage logo = AssetGenImage('assets/logo.png');
+  static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
   static const AssetGenImage saveAdvertise =
       AssetGenImage('assets/save_advertise.png');
   static const AssetGenImage watchAdsNow =
@@ -560,7 +571,7 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
-    String package = 'eums',
+    String package="eums",
     FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
@@ -618,7 +629,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package,
+    String package="eums",
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

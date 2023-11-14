@@ -3,6 +3,7 @@ import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class WidgetSwipCheckBox extends StatefulWidget {
   WidgetSwipCheckBox({super.key, required this.valueDefault, required this.onChange});
   bool valueDefault;

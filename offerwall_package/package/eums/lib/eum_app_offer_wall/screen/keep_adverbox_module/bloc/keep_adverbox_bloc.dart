@@ -113,7 +113,9 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
   _mapDeleteScrapAdverboxToState(DeleteScrap event, emit) async {
     try {
       await _eumsOfferWallService.deleteScrap(idx: event.idx);
-      AppAlert.showSuccess("Deleted");
+      // AppAlert.showSuccess("Deleted");
+
+      AppAlert.showSuccess("광고 스크랩을 해제하였습니다", type: AppAlertType.bottom);
     } catch (e) {}
   }
 

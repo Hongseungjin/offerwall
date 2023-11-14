@@ -22,7 +22,7 @@
             "cwd": "offerwall_package",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release" 
         },
         {
             "name": "flutter_offerwall_module",

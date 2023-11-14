@@ -167,7 +167,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         await LocalStoreService.instant.setSaveAdver(checkToken);
 
                         if (!checkToken) {
-                          String? token = await NotificationHandler.instant.getToken();
+                          String? token = await NotificationHandler.getToken();
                           await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
                           // FlutterBackgroundService().invoke("stopService");
                           EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});

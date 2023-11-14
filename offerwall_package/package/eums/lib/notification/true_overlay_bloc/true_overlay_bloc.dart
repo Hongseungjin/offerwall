@@ -12,9 +12,8 @@ class TrueOverlayService {
     if (adType == 'bee') {
       await dio.post('${Constants.baseUrl}point/advertises/mission-complete',
           data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
-    }else{
-      await dio.post('${Constants.baseUrl}point/region/mission-complete',
-          data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
+    } else {
+      await dio.post('${Constants.baseUrl}point/region/mission-complete', data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
     }
     return;
   }

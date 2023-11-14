@@ -1,18 +1,21 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'constants.dart';
 import 'interceptors/interceptors.dart';
-import 'local_store/local_store.dart';
-import 'local_store/local_store_service.dart';
 
 class BaseApi {
   // LocalStore localStore = LocalStoreService();
+
+  
+
   Dio? dio;
 
   BaseApi()
       : dio = Dio(BaseOptions(
           baseUrl: Constants.baseUrl,
+          headers: {
+            'Connection': 'keep-alive',
+            'Accept': '*/*',
+          },
           connectTimeout: const Duration(milliseconds: Constants.connectTimeout),
           receiveTimeout: const Duration(milliseconds: Constants.receiveTimeout),
         )) {

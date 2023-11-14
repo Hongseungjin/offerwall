@@ -33,7 +33,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     namespace "com.app.abeeofferwal"
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -59,6 +59,11 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+
+        // Replace this with the value to use for android:foregroundServiceType
+        // eg 'camera', 'connectedDevice', 'location', etc
+        manifestPlaceholders['foregroundServiceType'] = 'specialUse'
+
         // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
 

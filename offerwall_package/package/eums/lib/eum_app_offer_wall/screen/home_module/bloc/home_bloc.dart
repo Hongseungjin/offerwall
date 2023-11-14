@@ -86,27 +86,27 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   // }
 
   FutureOr<void> _onHomeInitEvent(HomeInitEvent event, Emitter<HomeState> emit) async {
-    LoadingDialog.instance.show();
+    // LoadingDialog.instance.show();
     try {
       final totalPoint = await _eumsOfferWallService.getTotalPoint();
       final account = await _eumsOfferWallService.userInfo();
       await LocalStoreService.instant.setDataUser(account);
-      LoadingDialog.instance.hide();
+      // LoadingDialog.instance.hide();
       emit(HomeInitState(account: account, totalPoint: totalPoint));
     } catch (e) {
-      LoadingDialog.instance.hide();
+      // LoadingDialog.instance.hide();
       AppAlert.showError("$e");
     }
   }
 
   FutureOr<void> _onHomeBannerEvent(HomeBannerEvent event, Emitter<HomeState> emit) async {
-    LoadingDialog.instance.show();
+    // LoadingDialog.instance.show();
     try {
       final bannerList = await _eumsOfferWallService.getBanner(type: event.type);
-      LoadingDialog.instance.hide();
+      // LoadingDialog.instance.hide();
       emit(HomeBannerState(bannerList: bannerList));
     } catch (e) {
-      LoadingDialog.instance.hide();
+      // LoadingDialog.instance.hide();
       AppAlert.showError("$e");
     }
   }

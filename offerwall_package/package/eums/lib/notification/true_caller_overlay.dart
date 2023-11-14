@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 import 'dart:ui';
@@ -24,6 +23,7 @@ import 'package:eums/eum_app_offer_wall/widget/custom_webview_overlay.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:eums/eums_library.dart';
+import 'package:lottie/lottie.dart';
 
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 
@@ -103,9 +103,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           checkSave = dataTemp['isScrap'] ?? false;
           deviceWidth = event['deviceWidth'] ?? 0;
         });
-        debugPrint("xxxx: FlutterOverlayWindow.overlayListener");
       } catch (e) {
-        // print('errorrrrrr $e');
         rethrow;
       }
     });
@@ -174,11 +172,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                       },
                     ),
                   ],
-                  child: isToast
-                      ? _buildWidgetToast()
-                      : isWebView
-                          ? _buildWebView()
-                          : _buildWidget(context)))),
+                  child:
+                      // isToast
+                      //     ? _buildWidgetToast()
+                      //     :
+                      isWebView ? _buildWebView() : _buildWidget(context)))),
     );
   }
 
@@ -251,10 +249,10 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                 final data = (jsonDecode(dataEvent['data']));
                 if (checkSave) {
                   TrueOverlayService().saveScrap(advertiseIdx: data['idx'], token: tokenSdk!, adType: data['ad_type']!);
-                  AppAlert.showSuccess("Success");
+                  AppAlert.showSuccess("광고 스크랩을 완료하였습니다", type: AppAlertType.bottom);
                 } else {
                   TrueOverlayService().deleteScrap(advertiseIdx: data['idx'], token: tokenSdk);
-                  AppAlert.showSuccess("Deleted");
+                  AppAlert.showSuccess("광고 스크랩을 해제하였습니다", type: AppAlertType.bottom);
                 }
               } catch (e) {
                 // FlutterBackgroundService().invoke("closeOverlay");
@@ -311,7 +309,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   void onVerticalDragEnd() async {
     if (dy! > (heightScreen - heightScreen * .2)) {
-      NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+      await flutterLocalNotificationsPlugin.cancel(notificationId);
 
       try {
         final data = (jsonDecode(dataEvent['data']));
@@ -340,7 +338,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     } else {
       if (dy! < heightScreen * .2) {
-        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+        await flutterLocalNotificationsPlugin.cancel(notificationId);
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 
@@ -356,43 +354,43 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     }
   }
 
-  Widget _buildWidgetToast() {
-    return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: [
-            // Center(
-            //   // child: Image.asset(
-            //   //   Assets.alertOverlay.path,
-            //   //   package: "eums",
-            //   //   width: MediaQuery.of(context).size.width - 150,
-            //   //   // height: 10,
-            //   // ),
-            //   child: Assets.icons.alertOverlay.image(
-            //     width: MediaQuery.of(context).size.width - 150,
-            //   ),
-            // ),
-            Center(
-              child: Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.black87),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Assets.icons.logo.image(width: 40, height: 40, fit: BoxFit.cover),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 16),
-                        child: Text(dataEvent['messageToast'], style: StyleFont.medium().copyWith(color: Colors.white)),
-                      ),
-                    ],
-                  )),
-            ),
-            const SizedBox(
-              height: 16,
-            )
-          ],
-        ));
-  }
+  // Widget _buildWidgetToast() {
+  //   return Scaffold(
+  //       backgroundColor: Colors.transparent,
+  //       body: Column(
+  //         children: [
+  //           // Center(
+  //           //   // child: Image.asset(
+  //           //   //   Assets.alertOverlay.path,
+  //           //   //   package: "eums",
+  //           //   //   width: MediaQuery.of(context).size.width - 150,
+  //           //   //   // height: 10,
+  //           //   // ),
+  //           //   child: Assets.icons.alertOverlay.image(
+  //           //     width: MediaQuery.of(context).size.width - 150,
+  //           //   ),
+  //           // ),
+  //           Center(
+  //             child: Container(
+  //                 padding: const EdgeInsets.all(3),
+  //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.black87),
+  //                 child: Row(
+  //                   mainAxisSize: MainAxisSize.min,
+  //                   children: [
+  //                     Assets.icons.logo.image(width: 40, height: 40, fit: BoxFit.cover),
+  //                     Padding(
+  //                       padding: const EdgeInsets.only(left: 5, right: 16),
+  //                       child: Text(dataEvent['messageToast'], style: StyleFont.medium().copyWith(color: Colors.white)),
+  //                     ),
+  //                   ],
+  //                 )),
+  //           ),
+  //           const SizedBox(
+  //             height: 16,
+  //           )
+  //         ],
+  //       ));
+  // }
 
   Widget _buildWidget(BuildContext context) {
     return BlocProvider<AccumulateMoneyBloc>(
@@ -400,33 +398,18 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         child: Scaffold(
           backgroundColor: Colors.transparent,
           key: globalKey,
-          body: Container(
-            constraints: BoxConstraints.tight(const Size(300.0, 200.0)),
-            // child: InkWell(
-            //   onTap: openWebView,
-            //   onVerticalDragStart: (details) {
-            //     print('start ${details.localPosition.dy}');
-            //     dyStart = details.localPosition.dy;
-            //   },
-            //   onVerticalDragEnd: onVerticalDragEnd,
-            //   onVerticalDragUpdate: (details) {
-            //     print('update ${details.localPosition.dy}');
-            //     dy = details.localPosition.dy;
-            //   },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Assets.icons.iconLogo.image(
-                width: 100,
-                height: 100,
-              ),
-              // child: Image.asset(
-              //   Assets.icon_logo.path,
-              //   package: "eums",
-              //   width: 100,
-              //   height: 100,
-              // ),
-            ),
+          body: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Lottie.asset(Assets.lotties.iconLogo, package: 'eums', fit: BoxFit.cover),
+            // child: Assets.icons.iconLogo.image(
+            //   width: 100,
+            //   height: 100,
             // ),
+            // child: Image.asset(
+            //   Assets.icon_logo.path,
+            //   package: "eums",
+            //   width: 100,
+            //   height: 100,
             // ),
           ),
         ));

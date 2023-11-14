@@ -6,12 +6,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/method_native/host_api.dart';
 import 'package:eums/common/rx_bus.dart';
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
+import 'package:eums/eum_app_offer_wall/widget/loading/widget_shimmer_item_loading.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
 import 'package:geolocator/geolocator.dart';
@@ -100,9 +103,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      blocMain
-        ..add(HomeInitEvent())
-        ..add(HomeBannerEvent(type: 'main'));
+      blocMain.add(HomeInitEvent());
+      blocMain.add(HomeBannerEvent(type: 'main'));
 
       blocs.first.add(HomeListDataOfferWallEvent(category: category, filter: filter));
       blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
@@ -115,10 +117,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
         } else {
           AppAlert.showSuccess("위치 권한이 부여되었습니다.");
-          await LocalStoreService.instant.setSaveAdver(true);
-          setState(() {
-            isStartBackground = true;
-          });
+          eventActiveOfferWall();
         }
       }
     }));
@@ -145,6 +144,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
+  eventActiveOfferWall() async {
+    await LocalStoreService.instant.setSaveAdver(true);
+    setState(() {
+      isStartBackground = true;
+    });
+    String? token = LocalStoreService.instant.getDeviceToken();
+    await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    bool isRunning = await FlutterBackgroundService().isRunning();
+    if (!isRunning) {
+      await FlutterBackgroundService().startService();
+    }
+    EumsApp.instant.locationCurrent();
+  }
+
   void _unregisterEventBus() {
     RxBus.destroy();
   }
@@ -152,20 +165,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   checkPermission() async {
     isStartBackground = LocalStoreService.instant.getSaveAdver();
     if (isStartBackground) {
-      // bool isRunning = await FlutterBackgroundService().isRunning();
-      // if (!isRunning) {
-      //   LoadingDialog.instance.show();
-      //   await FlutterBackgroundService().startService();
-      //   LoadingDialog.instance.hide();
-      // }
+      bool isRunning = await FlutterBackgroundService().isRunning();
+      if (!isRunning) {
+        // LoadingDialog.instance.show();
+        await FlutterBackgroundService().startService();
+        // LoadingDialog.instance.hide();
+      }
     }
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
-
       if (!status) {
         await FlutterOverlayWindow.requestPermission();
       } else {}
-      LocalStoreService.instant.setAccessToken(LocalStoreService.instant.getAccessToken());
+      await LocalStoreService.instant.setAccessToken(LocalStoreService.instant.getAccessToken());
     }
   }
 
@@ -600,9 +612,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     // });
 
                     if (!value) {
-                      String? token = await NotificationHandler.instant.getToken();
+                      String? token = await NotificationHandler.getToken();
                       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                      // FlutterBackgroundService().invoke("stopService");
+                      FlutterBackgroundService().invoke("stopService");
                     } else {
                       final checkBackgroundLocation = await _checkPermissionLocationBackground();
                       if (checkBackgroundLocation == true) {
@@ -613,10 +625,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         // localStore?.setCountAdvertisement(data);
                         String? token = LocalStoreService.instant.getDeviceToken();
                         await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                        // bool isRunning = await FlutterBackgroundService().isRunning();
-                        // if (!isRunning) {
-                        //   await FlutterBackgroundService().startService();
-                        // }
+                        bool isRunning = await FlutterBackgroundService().isRunning();
+                        if (!isRunning) {
+                          await FlutterBackgroundService().startService();
+                        }
+                        EumsApp.instant.locationCurrent();
                       } else {
                         isStartBackground = false;
                         setState(() {});
@@ -629,75 +642,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     });
                   },
                 )
-                // WidgetAnimationClick(
-                //   onTap: () async {
-                //     setState(() {
-                //       isdisable = !isdisable;
-                //     });
-                //     localStore.setSaveAdver(isdisable);
-                //     if (isdisable) {
-                //       String? token = await FirebaseMessaging.instance.getToken();
-
-                //       await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                //       FlutterBackgroundService().invoke("stopService");
-                //     } else {
-                //       dynamic data = <String, dynamic>{
-                //         'count': 0,
-                //         'date': Constants.formatTime(DateTime.now().toIso8601String()),
-                //       };
-                //       // localStore?.setCountAdvertisement(data);
-                //       String? token = await FirebaseMessaging.instance.getToken();
-                //       await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                //       bool isRunning = await FlutterBackgroundService().isRunning();
-                //       if (!isRunning) {
-                //         FlutterBackgroundService().startService();
-                //       }
-                //     }
-                //   },
-                //   child: Container(
-                //     padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                //     width: 34,
-                //     decoration: BoxDecoration(
-                //         color: !isdisable ? AppColor.orange2 : AppColor.white,
-                //         borderRadius: BorderRadius.circular(12),
-                //         border: Border.all(color: !isdisable ? Colors.transparent : AppColor.color70)),
-                //     child: Row(
-                //       children: [
-                //         isdisable
-                //             ? Container(
-                //                 decoration: const BoxDecoration(
-                //                   shape: BoxShape.circle,
-                //                   color: AppColor.color70,
-                //                 ),
-                //                 padding: const EdgeInsets.all(4),
-                //                 child: Image.asset(
-                //                   Assets.check.path,
-                //                   package: "eums",
-                //                   height: 7,
-                //                   color: Colors.transparent,
-                //                 ),
-                //               )
-                //             : const SizedBox(),
-                //         const Spacer(),
-                //         isdisable
-                //             ? const SizedBox()
-                //             : Container(
-                //                 decoration: const BoxDecoration(
-                //                   shape: BoxShape.circle,
-                //                   color: AppColor.white,
-                //                 ),
-                //                 padding: const EdgeInsets.all(4),
-                //                 child: Image.asset(
-                //                   Assets.check.path,
-                //                   package: "eums",
-                //                   height: 7,
-                //                   color: Colors.transparent,
-                //                 ),
-                //               ),
-                //       ],
-                //     ),
-                //   ),
-                // )
               ],
             ),
           )
@@ -724,11 +668,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
                   } else {
                     AppAlert.showSuccess("위치 권한이 부여되었습니다.");
-
-                    await LocalStoreService.instant.setSaveAdver(true);
-                    setState(() {
-                      isStartBackground = true;
-                    });
+                    eventActiveOfferWall();
                   }
                 },
               );
@@ -738,7 +678,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               await Geolocator.openLocationSettings();
             }
           } else {
-            _checkPermissionLocationBackground();
+            showToast = true;
+            await Geolocator.openLocationSettings();
           }
         } else {
           var status = await Permission.locationAlways.status;
@@ -756,10 +697,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
                   } else {
                     AppAlert.showSuccess("위치 권한이 부여되었습니다.");
-                    await LocalStoreService.instant.setSaveAdver(true);
-                    setState(() {
-                      isStartBackground = true;
-                    });
+                    eventActiveOfferWall();
                   }
                 }
               },
@@ -798,62 +736,67 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   _buildUIBannerImage({List? dataBanner}) {
     return ValueListenableBuilder(
         valueListenable: _currentPageNotifier,
-        builder: (context, value, child) => Stack(
-              children: [
-                SizedBox(
-                  // height: 164,
-                  width: MediaQuery.of(context).size.width,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      scrollDirection: Axis.horizontal,
-                      enlargeCenterPage: true,
-                      viewportFraction: 1,
-                      onPageChanged: (int index, CarouselPageChangedReason c) {
-                        _currentPageNotifier.value = index;
-                      },
-                    ),
-                    items: (dataBanner ?? []).map((i) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return WidgetAnimationClick(
-                            onTap: () {
-                              Routings().navigate(
-                                  context,
-                                  CustomWebViewBanner(
-                                    urlLink: i['deep_link_url'],
-                                  ));
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                  // height: 164,
-                                  width: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover,
-                                  imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
-                                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) {
-                                    return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                                  }),
-                            ),
-                          );
+        builder: (context, value, child) => WidgetShimmerItemLoading(
+              enabled: dataBanner == null,
+              child: Stack(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    // height: 164,
+                    width: MediaQuery.of(context).size.width,
+
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        scrollDirection: Axis.horizontal,
+                        enlargeCenterPage: true,
+                        viewportFraction: 1,
+                        onPageChanged: (int index, CarouselPageChangedReason c) {
+                          _currentPageNotifier.value = index;
                         },
-                      );
-                    }).toList(),
+                      ),
+                      items: (dataBanner ?? []).map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return WidgetAnimationClick(
+                              onTap: () {
+                                Routings().navigate(
+                                    context,
+                                    CustomWebViewBanner(
+                                      urlLink: i['deep_link_url'],
+                                    ));
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                    // height: 164,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.cover,
+                                    imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+                                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) {
+                                      return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
+                                    }),
+                              ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-                Positioned(
-                  top: 12,
-                  right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
+                  Positioned(
+                    top: 12,
+                    right: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ));
   }
 }
