@@ -535,6 +535,8 @@ class Assets {
   static const $AssetsFlutterI18nGen flutterI18n = $AssetsFlutterI18nGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const AssetGenImage imagePermisstionLocation =
+      AssetGenImage('assets/image_permisstion_location.png');
   static const AssetGenImage logo = AssetGenImage('assets/logo.png');
   static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
   static const AssetGenImage saveAdvertise =
@@ -543,7 +545,8 @@ class Assets {
       AssetGenImage('assets/watch_ads_now.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [logo, saveAdvertise, watchAdsNow];
+  List<AssetGenImage> get values =>
+      [imagePermisstionLocation, logo, saveAdvertise, watchAdsNow];
 }
 
 class AssetGenImage {
@@ -571,7 +574,7 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
-    String package="eums",
+    String package = 'eums',
     FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
@@ -629,7 +632,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String package="eums",
+    String package = 'eums',
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

@@ -19,8 +19,8 @@ const String keepID = 'id_1';
 
 const String navigationScreenId = 'id_2';
 
-const String notificationChannelId = 'eums_background';
-const String darwinNotificationCategoryPlain = 'EUMS_OFFERWALL';
+const String notificationChannelId = 'EUMS_OFFERWALL';
+const String notificationChannelIdBackground = 'EUMS_OFFERWALL_BACKGROUND';
 
 bool checkOnClick = false;
 
@@ -31,13 +31,13 @@ int notificationId = 999;
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 late NotificationDetails notificationDetails;
 const AndroidNotificationChannel _channel = AndroidNotificationChannel(
-  darwinNotificationCategoryPlain,
-  darwinNotificationCategoryPlain,
+  notificationChannelId,
+  notificationChannelId,
 );
 
 final List<DarwinNotificationCategory> darwinNotificationCategories = <DarwinNotificationCategory>[
   DarwinNotificationCategory(
-    darwinNotificationCategoryPlain,
+    notificationChannelId,
     actions: <DarwinNotificationAction>[
       DarwinNotificationAction.plain(
         keepID,
@@ -61,11 +61,11 @@ final List<DarwinNotificationCategory> darwinNotificationCategories = <DarwinNot
 ];
 showNotificationLocal({required String title, required String message, required dynamic data}) {
   const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-    categoryIdentifier: darwinNotificationCategoryPlain,
+    categoryIdentifier: notificationChannelId,
   );
   const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
-    darwinNotificationCategoryPlain,
-    darwinNotificationCategoryPlain,
+    notificationChannelId,
+    notificationChannelId,
     color: Color(0xffFF8E29),
     importance: Importance.max,
     priority: Priority.high,
@@ -140,16 +140,15 @@ class NotificationHandler {
 
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsDarwin);
 
-    // if (Platform.isIOS) {
     await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.requestPermissions(
           alert: true,
           badge: true,
           sound: true,
         );
+
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(_channel);
-    // }
 
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
@@ -310,7 +309,7 @@ class NotificationHandler {
 
   void _methodToastIOS({required String title, required String body}) {
     const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-      categoryIdentifier: darwinNotificationCategoryPlain,
+      categoryIdentifier: notificationChannelId,
     );
     NotificationDetails notificationDetails = const NotificationDetails(
       iOS: iosNotificationDetails,

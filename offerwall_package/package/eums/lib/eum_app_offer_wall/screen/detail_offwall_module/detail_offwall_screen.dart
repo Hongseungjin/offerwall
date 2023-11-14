@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:devicelocale/devicelocale.dart';
@@ -259,7 +261,12 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
           builder: (context, state) {
             if (state.dataDetailOffWall != null) {
               point = state.dataDetailOffWall['reward'] ?? 0;
-              urlApi = state.dataDetailOffWall['api'] ?? '';
+              if (Platform.isAndroid) {
+                urlApi = state.dataDetailOffWall['api'] ?? '';
+              }
+              if (Platform.isIOS) {
+                urlApi = state.dataDetailOffWall['api_ios'] ?? '';
+              }
               dataOfferWallVisit = state.dataDetailOffWall;
               title = state.dataDetailOffWall['title'] ?? "";
               thumbnail = state.dataDetailOffWall["sub_thumbnail"] ?? "";

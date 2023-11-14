@@ -60,10 +60,6 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
 
-        // Replace this with the value to use for android:foregroundServiceType
-        // eg 'camera', 'connectedDevice', 'location', etc
-        manifestPlaceholders['foregroundServiceType'] = 'specialUse'
-
         // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
 

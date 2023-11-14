@@ -26,7 +26,7 @@ dependencies:
 
 
   flutter_background_service:
-    path: package/flutter_background_service/packages/flutter_background_service
+    path: package/flutter_background_service
 
   flutter_overlay_window:
     path: package/flutter_overlay_window-0.4.3

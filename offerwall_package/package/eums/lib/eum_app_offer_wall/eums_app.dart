@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:eums/common/const/values.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -347,9 +348,9 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     await LocalStoreService.instant.setSizeDevice(height);
 
     final autoStart = LocalStoreService.instant.getSaveAdver();
-    final isRunging = await FlutterBackgroundService().isRunning();
+    final isRunning = await FlutterBackgroundService().isRunning();
 
-    if (isRunging == false) {
+    if (isRunning == false) {
       FlutterBackgroundService().configure(
           iosConfiguration: IosConfiguration(
             autoStart: autoStart,
@@ -362,6 +363,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
               onStart: onStart,
               autoStart: autoStart,
               isForegroundMode: true,
+              notificationChannelId: notificationChannelId,
               initialNotificationTitle: "인천e음",
               initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
     }

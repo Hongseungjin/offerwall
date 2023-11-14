@@ -315,11 +315,10 @@ class _MyPageState extends State<MyPage> {
                             break;
                           case 9:
                             Routings().navigate(context, const SettingFontSizeScreen());
-                            print("asdlkasdaajsd");
+                        
                             break;
 
                           case 10:
-                            print("asdsssslkajsd");
                             Routings().navigate(context, const UsingTermScreen());
                             break;
                           case 11:
@@ -367,7 +366,7 @@ List listItemMy = [
   {"id": 6, "area": "기타", "subArea": "1:1 문의", "urlImage": Assets.icons.inquiry1.path},
   {"id": 7, "area": "기타", "subArea": "자주 묻는 질문", "urlImage": Assets.icons.frequentlyAQ.path},
   {"id": 8, "area": "서비스 이용 관련", "subArea": "제휴 및 광고 문의", "urlImage": Assets.icons.frequentluasq.path},
-  {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.icons.serviceInfo.path},
+  // {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.icons.serviceInfo.path},
   {"id": 10, "area": "서비스 이용 관련", "subArea": "이용약관", "urlImage": Assets.icons.termofuser.path},
   {"id": 11, "area": "서비스 이용 관련", "subArea": "설정", "urlImage": Assets.icons.setting.path}
 ];

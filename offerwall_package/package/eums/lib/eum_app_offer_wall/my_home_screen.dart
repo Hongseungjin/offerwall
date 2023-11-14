@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:disable_battery_optimization/disable_battery_optimization.dart';
+import 'package:eums/common/const/values.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
+import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
+import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,9 +68,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     }
   }
 
-  Future<Position> _determinePosition() async {
+  _determinePosition() async {
     bool serviceEnabled;
-    LocationPermission permission;
+    // LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // return Future.error('Location services are disabled.');
@@ -75,20 +78,78 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       return _determinePosition();
       // return Future.error('Location services are disabled.');
     } else {
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          // return Future.error('Location permissions are denied');
-          return _determinePosition();
+      // permission = await Geolocator.checkPermission();
+      // if (permission == LocationPermission.denied) {
+      //   permission = await Geolocator.requestPermission();
+      //   if (permission == LocationPermission.denied) {
+      //     // return Future.error('Location permissions are denied');
+      //     return _determinePosition();
+      //   }
+      // }
+
+      // if (permission == LocationPermission.deniedForever) {
+      //   return _determinePosition();
+      //   // return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      // }
+      var locationWhenInUse = await Permission.locationWhenInUse.request();
+      if (locationWhenInUse.isGranted) {
+        if (await Permission.locationAlways.status != PermissionStatus.granted) {
+          // ignore: use_build_context_synchronously
+          final result = await WidgetDialogLocation.show(
+            navigatorKeyMain.currentState!.context,
+            onCancel: () {
+              Future.delayed(
+                const Duration(seconds: 3),
+                () {
+                  _determinePosition();
+                },
+              );
+              return false;
+            },
+            onAccept: () async {
+              return true;
+            },
+          );
+          if (result == true) {
+            var locationAlways = await Permission.locationAlways.request();
+            if (locationAlways == PermissionStatus.permanentlyDenied) {
+              await Geolocator.openLocationSettings();
+            } else {
+              if (locationAlways.isGranted) {
+                _permissionNotification();
+              } else {
+                _determinePosition();
+              }
+            }
+
+            // var status = await Permission.locationAlways.request();
+            // if (status.isPermanentlyDenied == true) {
+            //   await Geolocator.openLocationSettings();
+            // } else {
+            //   if (status.isDenied == true) {
+            //     Future.delayed(
+            //       const Duration(seconds: 3),
+            //       () {
+            //         _determinePosition();
+            //       },
+            //     );
+            //   } else {
+            //     debugPrint("xxxx");
+            //     _permissionNotification();
+            //   }
+            //   // return (await Geolocator.getCurrentPosition());
+            // }
+            // if (!status.isGranted) {
+            //   AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
+            // } else {
+            //   AppAlert.showSuccess("위치 권한이 부여되었습니다.");
+            //   // eventActiveOfferWall();
+            // }
+          }
         }
       }
 
-      if (permission == LocationPermission.deniedForever) {
-        return _determinePosition();
-        // return Future.error('Location permissions are permanently denied, we cannot request permissions.');
-      }
-      return await Geolocator.getCurrentPosition();
+      return true;
     }
   }
 
@@ -98,9 +159,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   @override
   void initState() {
     _registerEventBus();
-    _determinePosition().then((value) {
-      _permissionNotification();
-    });
     SettingFontSize().initSetingFontSize(controllerGet);
 
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
@@ -111,6 +169,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Firebase.initializeApp();
       await LocalStoreService.instant.init();
+
+      _determinePosition();
+
       if (Platform.isAndroid) {
         settingBattery();
       }
