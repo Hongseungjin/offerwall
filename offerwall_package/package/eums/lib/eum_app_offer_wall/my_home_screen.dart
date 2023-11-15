@@ -42,6 +42,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   bool showAction = false;
   dynamic dataUser;
 
+  bool showDialogLocation = false;
+
   Future<void> _registerEventBus() async {
     RxBus.register<ShowAction>().listen((event) {
       if (showAction) {
@@ -69,6 +71,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   }
 
   _determinePosition() async {
+    if (showDialogLocation == true) return;
+    showDialogLocation = true;
     bool serviceEnabled;
     // LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -93,20 +97,24 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       // }
       var locationWhenInUse = await Permission.locationWhenInUse.request();
       if (locationWhenInUse.isGranted) {
+        debugPrint("xxxx");
         if (await Permission.locationAlways.status != PermissionStatus.granted) {
           // ignore: use_build_context_synchronously
           final result = await WidgetDialogLocation.show(
             navigatorKeyMain.currentState!.context,
             onCancel: () {
+              showDialogLocation = false;
               Future.delayed(
                 const Duration(seconds: 3),
                 () {
                   _determinePosition();
                 },
               );
+
               return false;
             },
             onAccept: () async {
+              showDialogLocation = true;
               return true;
             },
           );
@@ -147,6 +155,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
             // }
           }
         }
+      } else {
+        await Geolocator.openLocationSettings();
       }
 
       return true;
@@ -185,6 +195,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
       // _permissionNotification();
+      _determinePosition();
     }));
   }
 

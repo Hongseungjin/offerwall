@@ -59,6 +59,9 @@ class $AssetsIconsGen {
   AssetGenImage get adarchive =>
       const AssetGenImage('assets/icons/adarchive.png');
 
+  /// File path: assets/icons/add.svg
+  SvgGenImage get add => const SvgGenImage('assets/icons/add.svg');
+
   /// File path: assets/icons/adpopcorn.png
   AssetGenImage get adpopcorn =>
       const AssetGenImage('assets/icons/adpopcorn.png');
@@ -323,6 +326,9 @@ class $AssetsIconsGen {
   AssetGenImage get receivePoint =>
       const AssetGenImage('assets/icons/receive_point.png');
 
+  /// File path: assets/icons/remove.svg
+  SvgGenImage get remove => const SvgGenImage('assets/icons/remove.svg');
+
   /// File path: assets/icons/report.png
   AssetGenImage get report => const AssetGenImage('assets/icons/report.png');
 
@@ -417,6 +423,7 @@ class $AssetsIconsGen {
         polygon,
         adSync,
         adarchive,
+        add,
         adpopcorn,
         adscrap,
         advertisingBox,
@@ -492,6 +499,7 @@ class $AssetsIconsGen {
         pointDialog,
         question,
         receivePoint,
+        remove,
         report,
         resLinkBanner,
         reward,
@@ -537,6 +545,8 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage imagePermisstionLocation =
       AssetGenImage('assets/image_permisstion_location.png');
+  static const AssetGenImage imagePermisstionLocationIos =
+      AssetGenImage('assets/image_permisstion_location_ios.png');
   static const AssetGenImage logo = AssetGenImage('assets/logo.png');
   static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
   static const AssetGenImage saveAdvertise =
@@ -545,8 +555,13 @@ class Assets {
       AssetGenImage('assets/watch_ads_now.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [imagePermisstionLocation, logo, saveAdvertise, watchAdsNow];
+  List<AssetGenImage> get values => [
+        imagePermisstionLocation,
+        imagePermisstionLocationIos,
+        logo,
+        saveAdvertise,
+        watchAdsNow
+      ];
 }
 
 class AssetGenImage {

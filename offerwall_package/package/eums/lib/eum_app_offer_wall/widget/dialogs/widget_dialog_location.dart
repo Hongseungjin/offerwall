@@ -1,6 +1,6 @@
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
+import 'dart:io';
+
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +24,16 @@ class WidgetDialogLocation {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ClipRRect(borderRadius: BorderRadius.circular(12), child: Assets.imagePermisstionLocation.image()),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Platform.isAndroid ? Assets.imagePermisstionLocation.image() : Assets.imagePermisstionLocationIos.image(),
+                    ),
                     const SizedBox(
                       height: 16,
                     ),
                     Text(
                       '선호하는 것에 따라 광고를 수신하려면 항상 위치 권한을 허용해야 합니다.',
-                      style: StyleFont.regular().copyWith(height: 1.5),
+                      style: StyleFont.regular().copyWith(height: 1.3),
                     ),
                     const SizedBox(
                       height: 24,

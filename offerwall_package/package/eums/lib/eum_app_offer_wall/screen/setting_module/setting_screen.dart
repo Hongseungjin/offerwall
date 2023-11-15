@@ -2,6 +2,7 @@
 
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_slider_range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
@@ -40,6 +41,8 @@ class _SettingScreenState extends State<SettingScreen> {
   String? version;
   final controllerGet = Get.put(SettingFontSize());
 
+  double _value = 0;
+
   @override
   void initState() {
     // localStore = LocalStoreService();
@@ -47,6 +50,7 @@ class _SettingScreenState extends State<SettingScreen> {
     endDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 23, 59);
     checkBoolTime();
     checkVersionApp();
+    getSize();
 
     super.initState();
   }
@@ -54,6 +58,28 @@ class _SettingScreenState extends State<SettingScreen> {
   checkBoolTime() async {
     checkTime = LocalStoreService.instant.getBoolTime();
     checkToken = LocalStoreService.instant.getSaveAdver();
+  }
+
+  getSize() async {
+    switch ((double.parse(LocalStoreService.instant.getSizeText())).toInt()) {
+      case 14:
+        _value = 0;
+        break;
+      case 16:
+        _value = 1;
+        break;
+      case 18:
+        _value = 2;
+        break;
+      case 20:
+        _value = 3;
+        break;
+      case 22:
+        _value = 4;
+        break;
+      default:
+    }
+    setState(() {});
   }
 
   @override
@@ -141,147 +167,177 @@ class _SettingScreenState extends State<SettingScreen> {
               style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value),
             ),
           ),
-          body: Column(
-            children: [
-              const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '마케팅 알림',
-                      style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
-                    ),
-                    const SizedBox(height: 15),
-                    _buildCheckSetting(
-                      checkSetting: checkToken,
-                      // title: '벌 광고 활성화',
-                      title: '캐릭터 광고 활성화',
-                      onChange: (value) async {
-                        LoadingDialog.instance.show();
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '마케팅 알림',
+                        style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
+                      ),
+                      const SizedBox(height: 15),
+                      _buildCheckSetting(
+                        checkSetting: checkToken,
+                        // title: '벌 광고 활성화',
+                        title: '캐릭터 광고 활성화',
+                        onChange: (value) async {
+                          LoadingDialog.instance.show();
 
-                        setState(() {
-                          checkToken = value;
-                        });
-                        await LocalStoreService.instant.setSaveAdver(checkToken);
+                          setState(() {
+                            checkToken = value;
+                          });
+                          await LocalStoreService.instant.setSaveAdver(checkToken);
 
-                        if (!checkToken) {
-                          String? token = await NotificationHandler.getToken();
-                          await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                          // FlutterBackgroundService().invoke("stopService");
-                          EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
-                        } else {
-                          // dynamic data = <String, dynamic>{
-                          //   'count': 0,
-                          //   'date': Constants.formatTime(
-                          //       DateTime.now().toIso8601String()),
-                          // };
-                          // localStore?.setCountAdvertisement(data);
-                          String? token = LocalStoreService.instant.getDeviceToken();
-                          await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                          // bool isRunning = await FlutterBackgroundService().isRunning();
-                          // if (!isRunning) {
-                          //   await FlutterBackgroundService().startService();
-                          // }
-                          EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
-                        }
-                        LoadingDialog.instance.hide();
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    _buildCheckSetting(
-                      checkSetting: checkTime,
-                      title: '광고 시간대 설정',
-                      onChange: (value) async {
-                        setState(() {
-                          checkTime = value;
-                        });
-                        await LocalStoreService.instant.setBoolTime(checkTime);
+                          if (!checkToken) {
+                            String? token = await NotificationHandler.getToken();
+                            await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                            // FlutterBackgroundService().invoke("stopService");
+                            EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
+                          } else {
+                            // dynamic data = <String, dynamic>{
+                            //   'count': 0,
+                            //   'date': Constants.formatTime(
+                            //       DateTime.now().toIso8601String()),
+                            // };
+                            // localStore?.setCountAdvertisement(data);
+                            String? token = LocalStoreService.instant.getDeviceToken();
+                            await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                            // bool isRunning = await FlutterBackgroundService().isRunning();
+                            // if (!isRunning) {
+                            //   await FlutterBackgroundService().startService();
+                            // }
+                            EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
+                          }
+                          LoadingDialog.instance.hide();
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      _buildCheckSetting(
+                        checkSetting: checkTime,
+                        title: '광고 시간대 설정',
+                        onChange: (value) async {
+                          setState(() {
+                            checkTime = value;
+                          });
+                          await LocalStoreService.instant.setBoolTime(checkTime);
 
-                        globalKey.currentContext?.read<SettingBloc>().add(EnableOrDisbleSetting(enableOrDisble: checkTime));
-                      },
-                    ),
-                    const SizedBox(height: 7),
-                    Text(
-                      // '벌 광고를 받지 않을 시간을 설정합니다.',
-                      '캐릭터 광고를 받을 시간을 설정합니다.',
-                      style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
-                    ),
-                    const SizedBox(height: 20),
-                    if (checkTime) ...{
+                          globalKey.currentContext?.read<SettingBloc>().add(EnableOrDisbleSetting(enableOrDisble: checkTime));
+                        },
+                      ),
+                      const SizedBox(height: 7),
+                      Text(
+                        // '벌 광고를 받지 않을 시간을 설정합니다.',
+                        '캐릭터 광고를 받을 시간을 설정합니다.',
+                        style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value),
+                      ),
+                      const SizedBox(height: 20),
+                      if (checkTime) ...{
+                        Row(
+                          children: [
+                            _buildSelectDate(dateNumber: 1, title: '시작 시간'),
+                            _buildSelectDate(dateNumber: 2, title: '종료 시간'),
+                          ],
+                        ),
+                      }
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Divider(
+                  thickness: 5,
+                  height: 0,
+                  color: HexColor('#e5e5e5'),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 16, bottom: 5),
+                  child: Text(
+                    "글자 크기 변경",
+                    style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                  ),
+                ),
+                WidgetSliderRange(
+                  onChange: (value) {
+                    setState(() {
+                      _value = value;
+                    });
+                    controllerGet.increaseSize(_value);
+                  },
+                  valueDefault: _value,
+                  maxValue: 4,
+                  minValue: 0,
+                ),
+                const SizedBox(height: 16),
+                Divider(
+                  thickness: 5,
+                  height: 0,
+                  color: HexColor('#e5e5e5'),
+                ),
+                Divider(
+                  height: 1,
+                  thickness: 5,
+                  color: HexColor('#f4f4f4'),
+                ),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Row(
                         children: [
-                          _buildSelectDate(dateNumber: 1, title: '시작 시간'),
-                          _buildSelectDate(dateNumber: 2, title: '종료 시간'),
+                          Text('정보 수신 동의', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
+                          const Spacer(),
+                          Text(
+                            '동의',
+                            style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            size: 16,
+                          )
                         ],
                       ),
-                    }
-                  ],
+                      const SizedBox(height: 8),
+                      Text('2018/07/29', style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
+                      const SizedBox(height: 31),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('버전정보', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
+                          const Spacer(),
+                          Expanded(
+                            child: Text(
+                              '최신 버전을 사용 중입니다.',
+                              style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text('Ver ${version ?? ''}',
+                          style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              Divider(
-                thickness: 5,
-                height: 0,
-                color: HexColor('#e5e5e5'),
-              ),
-              Divider(
-                height: 1,
-                thickness: 5,
-                color: HexColor('#f4f4f4'),
-              ),
-              const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text('정보 수신 동의', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
-                        const Spacer(),
-                        Text(
-                          '동의',
-                          style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          size: 16,
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text('2018/07/29', style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
-                    const SizedBox(height: 31),
-                    Row(
-                      children: [
-                        Text('버전정보', style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value)),
-                        const Spacer(),
-                        Text(
-                          '최신 버전을 사용 중입니다.',
-                          style: AppStyle.bold.copyWith(color: HexColor('#f4a43b'), fontSize: controllerGet.fontSizeObx.value),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text('Ver ${version ?? ''}',
-                        style: AppStyle.regular.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value)),
-                  ],
+                const SizedBox(height: 40),
+                Divider(
+                  thickness: 5,
+                  height: 0,
+                  color: HexColor('#e5e5e5'),
                 ),
-              ),
-              const SizedBox(height: 40),
-              Divider(
-                thickness: 5,
-                height: 0,
-                color: HexColor('#e5e5e5'),
-              ),
-              Divider(
-                height: 1,
-                thickness: 5,
-                color: HexColor('#f4f4f4'),
-              ),
-            ],
+                Divider(
+                  height: 1,
+                  thickness: 5,
+                  color: HexColor('#f4f4f4'),
+                ),
+              ],
+            ),
           ),
         );
       },

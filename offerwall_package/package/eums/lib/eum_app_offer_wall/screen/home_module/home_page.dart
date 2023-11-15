@@ -34,7 +34,7 @@ import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
-import 'package:eums/eum_app_offer_wall/widget/custom_animation_click.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';

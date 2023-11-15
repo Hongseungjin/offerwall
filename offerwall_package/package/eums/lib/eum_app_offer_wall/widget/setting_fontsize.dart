@@ -7,18 +7,21 @@ class SettingFontSize extends GetxController {
   RxDouble fontSizeObx = RxDouble(14);
 
   initSetingFontSize(SettingFontSize controllerGet) async {
-    double value = 1.obs.toDouble();
+    double value = 0.obs.toDouble();
     switch ((double.parse(LocalStoreService.instant.getSizeText())).toInt()) {
       case 14:
-        value = 1;
+        value = 0;
         break;
       case 16:
-        value = 2;
+        value = 1;
         break;
       case 18:
-        value = 3;
+        value = 2;
         break;
       case 20:
+        value = 3;
+        break;
+      case 22:
         value = 4;
         break;
       default:
@@ -29,18 +32,20 @@ class SettingFontSize extends GetxController {
   increaseSize(num numberSizeInCrease) {
     fontSizeObx.value = 14.obs.toDouble();
     switch (numberSizeInCrease) {
-      case 1:
+      case 0:
         fontSizeObx.value = 14;
-
         break;
-      case 2:
+      case 1:
         fontSizeObx.value += 2;
         break;
-      case 3:
+      case 2:
         fontSizeObx.value += 4;
         break;
-      case 4:
+      case 3:
         fontSizeObx.value += 6;
+        break;
+      case 4:
+        fontSizeObx.value += 8;
         break;
       default:
     }
