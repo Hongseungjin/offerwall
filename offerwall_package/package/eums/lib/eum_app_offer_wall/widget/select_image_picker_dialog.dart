@@ -5,7 +5,7 @@ import '../utils/appStyle.dart';
 
 class SelectImgPickerDialog extends StatefulWidget {
   const SelectImgPickerDialog({
-    Key? key,
+    super.key,
     this.openCameraTap,
     this.chooseImgTap,
   });
@@ -13,13 +13,11 @@ class SelectImgPickerDialog extends StatefulWidget {
   final Function? openCameraTap;
   final Function? chooseImgTap;
 
-  static void show(BuildContext context,
-      {Function? openCameraTap, Function? chooseImgTap, Function? cancelTap}) {
+  static void show(BuildContext context, {Function? openCameraTap, Function? chooseImgTap, Function? cancelTap}) {
     showGeneralDialog(
         context: context,
-        barrierDismissible: true,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        // barrierDismissible: false,
+        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: Colors.black.withOpacity(0.7),
         transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (buildContext, animation, secondaryAnimation) {
@@ -37,76 +35,71 @@ class SelectImgPickerDialog extends StatefulWidget {
 class _SelectImgPickerDialogState extends State<SelectImgPickerDialog> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          Positioned(
-              bottom: MediaQuery.of(context).padding.bottom,
-              left: 0,
-              child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8))),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          if (widget.openCameraTap != null) {
-                            widget.openCameraTap!();
-                          }
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          child: Text(
-                            '사진촬영',
-                            style: AppStyle.bold
-                                .copyWith(color: AppColor.black, fontSize: 16),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Material(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            Positioned(
+                bottom: MediaQuery.of(context).padding.bottom,
+                left: 0,
+                child: Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            if (widget.openCameraTap != null) {
+                              widget.openCameraTap!();
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                              '사진촬영',
+                              style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
+                            ),
                           ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          if (widget.chooseImgTap != null) {
-                            widget.chooseImgTap!();
-                          }
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          child: Text('사진 선택',
-                              style: AppStyle.bold.copyWith(
-                                  color: AppColor.black, fontSize: 16)),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            if (widget.chooseImgTap != null) {
+                              widget.chooseImgTap!();
+                            }
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            width: MediaQuery.of(context).size.width,
+                            child: Text('사진 선택', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16)),
+                          ),
                         ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          width: MediaQuery.of(context).size.width,
-                          child: Text('취소',
-                              style: AppStyle.bold.copyWith(
-                                  color: AppColor.black, fontSize: 16)),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            width: MediaQuery.of(context).size.width,
+                            child: Text('취소', style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16)),
+                          ),
                         ),
-                      ),
-                    ],
-                  )))
-        ],
+                      ],
+                    )))
+          ],
+        ),
       ),
     );
   }
 }
 
-typedef void OnPickImageCallback(
-    double? maxWidth, double? maxHeight, int? quality);
+typedef OnPickImageCallback = void Function(double? maxWidth, double? maxHeight, int? quality);

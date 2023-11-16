@@ -40,8 +40,6 @@ android {
     }
 }
 
-
-
 dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -60,3 +58,4 @@ dependencies {
     profileImplementation 'com.example.flutter_offerwall_module:flutter_profile:1.0'
     releaseImplementation 'com.example.flutter_offerwall_module:flutter_release:1.0'
 }
+

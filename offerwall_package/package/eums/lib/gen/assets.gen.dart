@@ -527,6 +527,12 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  $AssetsImagesInstructsGen get instructs => const $AssetsImagesInstructsGen();
+}
+
 class $AssetsLottiesGen {
   const $AssetsLottiesGen();
 
@@ -535,6 +541,54 @@ class $AssetsLottiesGen {
 
   /// List of all assets
   List<String> get values => [iconLogo];
+}
+
+class $AssetsImagesInstructsGen {
+  const $AssetsImagesInstructsGen();
+
+  /// File path: assets/images/instructs/instruct1_1.png
+  AssetGenImage get instruct11 =>
+      const AssetGenImage('assets/images/instructs/instruct1_1.png');
+
+  /// File path: assets/images/instructs/instruct1_2.png
+  AssetGenImage get instruct12 =>
+      const AssetGenImage('assets/images/instructs/instruct1_2.png');
+
+  /// File path: assets/images/instructs/instruct2_1.png
+  AssetGenImage get instruct21 =>
+      const AssetGenImage('assets/images/instructs/instruct2_1.png');
+
+  /// File path: assets/images/instructs/instruct2_2.png
+  AssetGenImage get instruct22 =>
+      const AssetGenImage('assets/images/instructs/instruct2_2.png');
+
+  /// File path: assets/images/instructs/instruct3_1.png
+  AssetGenImage get instruct31 =>
+      const AssetGenImage('assets/images/instructs/instruct3_1.png');
+
+  /// File path: assets/images/instructs/instruct3_2.png
+  AssetGenImage get instruct32 =>
+      const AssetGenImage('assets/images/instructs/instruct3_2.png');
+
+  /// File path: assets/images/instructs/instruct4_1.png
+  AssetGenImage get instruct41 =>
+      const AssetGenImage('assets/images/instructs/instruct4_1.png');
+
+  /// File path: assets/images/instructs/instruct4_2.png
+  AssetGenImage get instruct42 =>
+      const AssetGenImage('assets/images/instructs/instruct4_2.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        instruct11,
+        instruct12,
+        instruct21,
+        instruct22,
+        instruct31,
+        instruct32,
+        instruct41,
+        instruct42
+      ];
 }
 
 class Assets {
@@ -547,6 +601,7 @@ class Assets {
       AssetGenImage('assets/image_permisstion_location.png');
   static const AssetGenImage imagePermisstionLocationIos =
       AssetGenImage('assets/image_permisstion_location_ios.png');
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const AssetGenImage logo = AssetGenImage('assets/logo.png');
   static const $AssetsLottiesGen lotties = $AssetsLottiesGen();
   static const AssetGenImage saveAdvertise =
@@ -589,7 +644,8 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
-    String package = 'eums',
+    // String? package,
+    String package = "eums",
     FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
@@ -647,7 +703,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String package = 'eums',
+    String package = "eums",
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

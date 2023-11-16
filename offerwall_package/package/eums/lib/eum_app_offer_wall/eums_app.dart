@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:eums/common/const/values.dart';
@@ -9,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/eums_library.dart';
+import 'package:queue/queue.dart';
 
 import '../common/local_store/local_store_service.dart';
 
@@ -16,73 +18,74 @@ class EumsApp {
   EumsApp._();
   static EumsApp instant = EumsApp._();
 
-  void printWrapped(String text) {
-    final pattern = RegExp('.{1,800}');
-    pattern.allMatches(text).forEach((match) => print(match.group(0)));
-  }
+  // void printWrapped(String text) {
+  //   final pattern = RegExp('.{1,800}');
+  //   pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  // }
 
-  showOverlay(event) async {
-    if (event?['data'] != null && event?['data']['isWebView'] != null) {
-      await FlutterOverlayWindow.showOverlay(
-        overlayTitle: event?['data']['title'],
-        overlayContent: event?['data']['body'],
-      );
-      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-      receivePort.sendPort.send(event?['data']);
-      await FlutterOverlayWindow.shareData(event?['data']);
-    } else {
-      if (event?['data']['isToast'] != null) {
-        FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
-        // await FlutterOverlayWindow.closeOverlay();
+  // showOverlay(event) async {
+  //   if (event?['data'] != null && event?['data']['isWebView'] != null) {
+  //     await FlutterOverlayWindow.showOverlay(
+  //       overlayTitle: event?['data']['title'],
+  //       overlayContent: event?['data']['body'],
+  //     );
+  //     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+  //     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+  //     receivePort.sendPort.send(event?['data']);
+  //     // await FlutterOverlayWindow.shareData(event?['data']);
+  //   } else {
+  //     if (event?['data']['isToast'] != null) {
+  //       FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
+  //       return;
+  //       // await FlutterOverlayWindow.closeOverlay();
 
-        // await FlutterOverlayWindow.showOverlay(
-        //   height: 300,
-        //   width: WindowSize.matchParent,
-        //   alignment: OverlayAlignment.bottomCenter,
-        // );
-      } else {
-        // await LocalStoreService.instant.setDataShare(dataShare: event);
-        double height = 420;
+  //       // await FlutterOverlayWindow.showOverlay(
+  //       //   height: 300,
+  //       //   width: WindowSize.matchParent,
+  //       //   alignment: OverlayAlignment.bottomCenter,
+  //       // );
+  //     } else {
+  //       // await LocalStoreService.instant.setDataShare(dataShare: event);
+  //       double height = 420;
 
-        await FlutterOverlayWindow.showOverlay(
-          enableDrag: true,
-          height: height.toInt(),
-          width: height.toInt(),
-          alignment: OverlayAlignment.center,
-          overlayTitle: event?['data']['title'],
-          overlayContent: event?['data']['body'],
-        );
-      }
-      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+  //       await FlutterOverlayWindow.showOverlay(
+  //         enableDrag: true,
+  //         height: height.toInt(),
+  //         width: height.toInt(),
+  //         alignment: OverlayAlignment.center,
+  //         overlayTitle: event?['data']['title'],
+  //         overlayContent: event?['data']['body'],
+  //       );
+  //     }
+  //     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+  //     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
 
-      receivePort.sendPort.send(event?['data']);
-      await FlutterOverlayWindow.shareData(event?['data']);
-    }
-  }
+  //     receivePort.sendPort.send(event?['data']);
+  //     await FlutterOverlayWindow.shareData(event?['data']);
+  //   }
+  // }
 
-  jobQueue(event) async {
-    // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
-    // bool isActive = await FlutterOverlayWindow.isActive();
-    // if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await showOverlay(event);
-    // } else {
-    //   // await Future.delayed(const Duration(milliseconds: 1000));
-    //   await showOverlay(event);
-    // }
-  }
+  // jobQueue(event) async {
+  //   // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+  //   // bool isActive = await FlutterOverlayWindow.isActive();
+  //   // if (isActive == true) {
+  //   await FlutterOverlayWindow.closeOverlay();
+  //   await Future.delayed(const Duration(milliseconds: 1000));
+  //   await showOverlay(event);
+  //   // } else {
+  //   //   // await Future.delayed(const Duration(milliseconds: 1000));
+  //   //   await showOverlay(event);
+  //   // }
+  // }
 
-  closeOverlay() async {
-    debugPrint("=====> closeOverlay");
+  // closeOverlay() async {
+  //   debugPrint("=====> closeOverlay");
 
-    // bool isActive = await FlutterOverlayWindow.isActive();
-    // if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-    // }
-  }
+  //   // bool isActive = await FlutterOverlayWindow.isActive();
+  //   // if (isActive == true) {
+  //   await FlutterOverlayWindow.closeOverlay();
+  //   // }
+  // }
 
   locationCurrent() async {
     if (await Permission.locationAlways.status == PermissionStatus.granted) {
@@ -96,69 +99,68 @@ class EumsApp {
   }
 }
 
-// void printWrapped(String text) {
-//   final pattern = RegExp('.{1,800}');
-//   pattern.allMatches(text).forEach((match) => print(match.group(0)));
-// }
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}');
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
 
-// showOverlay(event) async {
-//   if (event?['data'] != null && event?['data']['isWebView'] != null) {
-//     await FlutterOverlayWindow.showOverlay(
-//       overlayTitle: event?['data']['title'],
-//       overlayContent: event?['data']['body'],
-//     );
-//     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-//     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-//     receivePort.sendPort.send(event?['data']);
-//     await FlutterOverlayWindow.shareData(event?['data']);
-//   } else {
-//     receivePort.sendPort.send(event?['data']);
-//     if (event?['data']['isToast'] != null) {
-//       await FlutterOverlayWindow.showOverlay(
-//         height: 300,
-//         width: WindowSize.matchParent,
-//         alignment: OverlayAlignment.bottomCenter,
-//       );
-//       // _timer = Timer(const Duration(seconds: 4), () async {
-//       //   await FlutterOverlayWindow.closeOverlay();
-//       // });
-//     } else {
-//       await LocalStoreService.instant.setDataShare(dataShare: event);
-//       await FlutterOverlayWindow.showOverlay(
-//         enableDrag: true,
-//         height: 300,
-//         width: 300,
-//         alignment: OverlayAlignment.center,
-//         overlayTitle: event?['data']['title'],
-//         overlayContent: event?['data']['body'],
-//       );
-//     }
-//     event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-//     event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-//     receivePort.sendPort.send(event?['data']);
-//     await FlutterOverlayWindow.shareData(event?['data']);
-//   }
-// }
+showOverlay(event) async {
+  if (event?['data'] != null && event?['data']['isWebView'] != null) {
+    await FlutterOverlayWindow.showOverlay(
+      overlayTitle: event?['data']['title'],
+      overlayContent: event?['data']['body'],
+    );
+    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+    await FlutterOverlayWindow.shareData(event?['data']);
+  } else {
+    if (event?['data']['isToast'] != null) {
+      FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
 
-// jobQueue(event) async {
-//   // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
-//   bool isActive = await FlutterOverlayWindow.isActive();
-//   if (isActive == true) {
-//     await FlutterOverlayWindow.closeOverlay();
-//     await Future.delayed(const Duration(milliseconds: 1000));
-//     await showOverlay(event);
-//   } else {
-//     await Future.delayed(const Duration(milliseconds: 1000));
-//     await showOverlay(event);
-//   }
-// }
+      // await FlutterOverlayWindow.showOverlay(
+      //   height: 300,
+      //   width: WindowSize.matchParent,
+      //   alignment: OverlayAlignment.bottomCenter,
+      // );
+      // _timer = Timer(const Duration(seconds: 4), () async {
+      //   await FlutterOverlayWindow.closeOverlay();
+      // });
+    } else {
+      // await LocalStoreService.instant.setDataShare(dataShare: event);
+      await FlutterOverlayWindow.showOverlay(
+        enableDrag: true,
+        height: 420,
+        width: 420,
+        alignment: OverlayAlignment.center,
+        overlayTitle: event?['data']['title'],
+        overlayContent: event?['data']['body'],
+      );
+    }
+    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+    await FlutterOverlayWindow.shareData(event?['data']);
+  }
+}
 
-// closeOverlay() async {
-//   bool isActive = await FlutterOverlayWindow.isActive();
-//   if (isActive == true) {
-//     await FlutterOverlayWindow.closeOverlay();
-//   }
-// }
+jobQueue(event) async {
+  // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+  bool isActive = await FlutterOverlayWindow.isActive();
+  if (isActive == true) {
+    await FlutterOverlayWindow.closeOverlay();
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await showOverlay(event);
+  } else {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    await showOverlay(event);
+  }
+}
+
+closeOverlay() async {
+  bool isActive = await FlutterOverlayWindow.isActive();
+  if (isActive == true) {
+    await FlutterOverlayWindow.closeOverlay();
+  }
+}
 
 // locationCurrent() async {
 //   if (await Permission.locationAlways.status == PermissionStatus.granted) {
@@ -195,33 +197,33 @@ Future<void> onStart(ServiceInstance service) async {
 
   await LocalStoreService.instant.init();
 
-  // Queue queue = Queue();
+  Queue queue = Queue();
   // // registerDeviceToken();
   try {
-    //   service.on('showOverlay').listen((event) async {
-    //     if (Platform.isAndroid) {
-    //       queue.add(() async => await jobQueue(event));
-    //       // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-    //     } else {}
-    //   });
+    service.on('showOverlay').listen((event) async {
+      if (Platform.isAndroid) {
+        queue.add(() async => await jobQueue(event));
+        // NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+      } else {}
+    });
 
-    //   service.on('closeOverlay').listen((event) async {
-    //     // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-    //     queue.add(() async => await closeOverlay());
-    //   });
+    service.on('closeOverlay').listen((event) async {
+      // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+      queue.add(() async => await closeOverlay());
+    });
 
     service.on('stopService').listen((event) async {
       // print("eventStop");
-      // queue.add(() async => await closeOverlay());
-      // String? token = await FirebaseMessaging.instance.getToken();
-      // // print('deviceToken $token');
-      // // if (token != null && token.isNotEmpty) {
-      // //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-      // // }
+      queue.add(() async => await closeOverlay());
+      String? token = await FirebaseMessaging.instance.getToken();
+      // print('deviceToken $token');
       // if (token != null && token.isNotEmpty) {
-      //   await LocalStoreService.instant.setDeviceToken("");
       //   await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
       // }
+      if (token != null && token.isNotEmpty) {
+        await LocalStoreService.instant.setDeviceToken("");
+        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+      }
       service.stopSelf();
     });
 

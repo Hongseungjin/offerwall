@@ -8,7 +8,7 @@ import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_
 import 'package:eums/eums_library.dart';
 
 void main() async {
-  await Eums.instant.initMaterial(home: const MyHomePage());
+  Eums.instant.initMaterial(home: const MyHomePage());
 }
 
 @pragma("vm:entry-point")
@@ -180,7 +180,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return ValueListenableBuilder<bool>(
       valueListenable: showMain,
       builder: (context, value, child) {

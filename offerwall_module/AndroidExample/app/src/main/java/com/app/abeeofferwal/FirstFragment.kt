@@ -38,8 +38,8 @@ class FirstFragment : Fragment() {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 
             var data: Api.OfferWall = Api.OfferWall()
-//            data.memId= "abee997"
-            data.memId= "abeetest01"
+            data.memId= "abee997"
+//            data.memId= "abeetest01"
             data.memGen= "w"
             data.memBirth= "2000-01-01"
             data.memRegion= "인천_서"

@@ -9,6 +9,7 @@ import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/utils/widget_loading_animated.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:eums/eums_library.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
@@ -124,17 +125,21 @@ class _ListViewHomeState extends State<ListViewHome> {
                   children: [
                     ...List.generate(
                         (widget.stateClients[widget.tab]?.listData ?? []).length,
-                        (index) => WidgetAnimationClick(
-                            onTap: () {
-                              Routings().navigate(
-                                  context,
-                                  DetailOffWallScreen(
-                                    title: widget.stateClients[widget.tab]?.listData![index]['title'],
-                                    xId: widget.stateClients[widget.tab]?.listData![index]['idx'],
-                                    type: widget.stateClients[widget.tab]?.listData![index]['type'],
-                                  ));
-                            },
-                            child: _buildItemRow(data: widget.stateClients[widget.tab]?.listData![index]))),
+                        (index) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: WidgetAnimationClickV2(
+                                  borderRadius: BorderRadius.circular(10),
+                                  onTap: () {
+                                    Routings().navigate(
+                                        context,
+                                        DetailOffWallScreen(
+                                          title: widget.stateClients[widget.tab]?.listData![index]['title'],
+                                          xId: widget.stateClients[widget.tab]?.listData![index]['idx'],
+                                          type: widget.stateClients[widget.tab]?.listData![index]['type'],
+                                        ));
+                                  },
+                                  child: _buildItemRow(data: widget.stateClients[widget.tab]?.listData![index])),
+                            )),
                     if (widget.stateClients[widget.tab]?.loading == true && widget.stateClients[widget.tab]?.lastItem == false)
                       const WidgetLoadingAnimated()
                   ],
@@ -154,7 +159,9 @@ class _ListViewHomeState extends State<ListViewHome> {
                   countRow: 2,
                   data: widget.stateClients[widget.tab]?.listData ?? [],
                   buildItem: (index) {
-                    return WidgetAnimationClick(
+                    return WidgetAnimationClickV2(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
                         onTap: () {
                           Routings().navigate(
                               context,
@@ -276,62 +283,69 @@ class _ListViewHomeState extends State<ListViewHome> {
         break;
       default:
     }
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.3)), borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-              child: CachedNetworkImage(
-                  width: width,
-                  height: width / 2,
-                  // height: 200,
-                  fit: BoxFit.cover,
-                  imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) {
-                    return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                  }),
+    return Container(
+      // margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.3)), borderRadius: BorderRadius.circular(10)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            child: CachedNetworkImage(
+                width: width,
+                height: width / 2,
+                // height: 200,
+                fit: BoxFit.cover,
+                imageUrl: '${Constants.baseUrlImage}${data?['thumbnail']}',
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) {
+                  return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
+                }),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              data?['title'] ?? "",
+              // maxLines: 2,
+              style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 2 + controllerGet.fontSizeObx.value),
             ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                data?['title'] ?? "",
-                // maxLines: 2,
-                style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 2 + controllerGet.fontSizeObx.value),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: width / 1.8 - 10,
-                    child: Text(
-                      title,
-                      style: AppStyle.regular.copyWith(color: HexColor('#666666'), fontSize: controllerGet.fontSizeObx.value),
-                    ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: width / 1.8 - 10,
+                  child: Text(
+                    title,
+                    style: AppStyle.regular.copyWith(color: HexColor('#666666'), fontSize: controllerGet.fontSizeObx.value),
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: HexColor('#fdd000')),
-                    child: Text(
-                      '포인트받기',
-                      style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                    ),
-                  )
-                ],
-              ),
+                ),
+                const Spacer(),
+                WidgetAnimationClickV2(
+                  borderRadius: BorderRadius.circular(5),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  color: HexColor('#fdd000'),
+                  onTap: () {
+                    Routings().navigate(
+                        context,
+                        DetailOffWallScreen(
+                          title: data!['title'],
+                          xId: data['idx'],
+                          type: data['type'],
+                        ));
+                  },
+                  child: Text(
+                    '포인트받기',
+                    style: AppStyle.regular.copyWith(fontSize: controllerGet.fontSizeObx.value),
+                  ),
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

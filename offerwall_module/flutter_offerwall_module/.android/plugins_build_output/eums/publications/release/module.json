@@ -27,7 +27,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
           }
         }
       ],
@@ -35,11 +35,11 @@
         {
           "name": "eums_release-1.0.aar",
           "url": "eums_release-1.0.aar",
-          "size": 46979,
-          "sha512": "0a0fcd4073d8c519b0f60425e97781b006a4083d782aa542b7b4985f760a844bc2b022eae6e27172fb3021eee770964a18f3fc57036f6ca1360b1bf183497817",
-          "sha256": "178ca7f00df3968372aef24967ab52bdb6d0692b603fabed2d086f07f3702242",
-          "sha1": "b219afe1066c44c08b91d05d39f381896247e57c",
-          "md5": "93a633dcf496f87c50cfe0da641f8a18"
+          "size": 46874,
+          "sha512": "7962a73f00b6e791ba636f4bc7a0fb8103490bac06e60fc9a013db3efbcc192a085d4d64e7b9c1e8c50aec427c17e4465163cd004b3c037356034d53eba00696",
+          "sha256": "19ccbc1dc304f5386519472f9e2fe9762d5b38a708ebbc5e759c86e49999c0f2",
+          "sha1": "76277c784a52cb533cc7758888494bfc142acdba",
+          "md5": "d626633b2d365c5a67b96ea2d332638f"
         }
       ]
     },
@@ -56,7 +56,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_release",
           "version": {
-            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
           }
         },
         {
@@ -219,11 +219,11 @@
         {
           "name": "eums_release-1.0.aar",
           "url": "eums_release-1.0.aar",
-          "size": 46979,
-          "sha512": "0a0fcd4073d8c519b0f60425e97781b006a4083d782aa542b7b4985f760a844bc2b022eae6e27172fb3021eee770964a18f3fc57036f6ca1360b1bf183497817",
-          "sha256": "178ca7f00df3968372aef24967ab52bdb6d0692b603fabed2d086f07f3702242",
-          "sha1": "b219afe1066c44c08b91d05d39f381896247e57c",
-          "md5": "93a633dcf496f87c50cfe0da641f8a18"
+          "size": 46874,
+          "sha512": "7962a73f00b6e791ba636f4bc7a0fb8103490bac06e60fc9a013db3efbcc192a085d4d64e7b9c1e8c50aec427c17e4465163cd004b3c037356034d53eba00696",
+          "sha256": "19ccbc1dc304f5386519472f9e2fe9762d5b38a708ebbc5e759c86e49999c0f2",
+          "sha1": "76277c784a52cb533cc7758888494bfc142acdba",
+          "md5": "d626633b2d365c5a67b96ea2d332638f"
         }
       ]
     }

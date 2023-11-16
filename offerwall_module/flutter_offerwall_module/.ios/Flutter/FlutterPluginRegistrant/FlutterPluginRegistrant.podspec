@@ -31,6 +31,7 @@ Depends on all your plugins, and provides a function to register them.
   s.dependency 'flutter_component'
   s.dependency 'flutter_inappwebview'
   s.dependency 'flutter_local_notifications'
+  s.dependency 'flutter_overlay_window'
   s.dependency 'geolocator_apple'
   s.dependency 'image_picker_ios'
   s.dependency 'just_audio'

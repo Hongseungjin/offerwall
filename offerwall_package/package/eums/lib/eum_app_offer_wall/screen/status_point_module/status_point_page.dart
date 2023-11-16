@@ -1,3 +1,4 @@
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -275,22 +276,25 @@ class _StatusPointPageState extends State<StatusPointPage> with SingleTickerProv
                     ]),
                   ),
                 ),
-                InkWell(
-                    onTap: () {
-                      dynamic offerset = globalKey.currentContext?.read<StatusPointBloc>().state.dataPoint.length;
-                      _onLoading(offerset);
-                    },
-                    child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: Colors.white, borderRadius: BorderRadius.circular(8), border: Border.all(color: HexColor('#e5e5e5'))),
-                        child: Text(
-                          "더보기",
-                          textAlign: TextAlign.center,
-                          style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
-                        )))
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: WidgetAnimationClickV2(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: HexColor('#e5e5e5')),
+                      onTap: () {
+                        dynamic offerset = globalKey.currentContext?.read<StatusPointBloc>().state.dataPoint.length;
+                        _onLoading(offerset);
+                      },
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            "더보기",
+                            textAlign: TextAlign.center,
+                            style: AppStyle.bold.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value),
+                          ))),
+                )
               ],
             );
           },

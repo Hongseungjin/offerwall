@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -27,6 +28,7 @@ import 'package:eums/gen/assets.gen.dart';
 
 import '../../../common/rx_bus.dart';
 import 'bloc/my_page_bloc.dart';
+import 'instruct_page.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({
@@ -154,14 +156,15 @@ class _MyPageState extends State<MyPage> {
                         ],
                       ),
                     ),
-                    WidgetAnimationClick(
-                      onTap: () {
-                        Routings().navigate(context, StatusPointPage(account: dataUser));
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: WidgetAnimationClickV2(
+                        color: HexColor('#fdd000'),
+                        borderRadius: BorderRadius.circular(10),
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(10)),
+                        onTap: () {
+                          Routings().navigate(context, StatusPointPage(account: dataUser));
+                        },
                         child: Row(
                           children: [
                             Container(
@@ -200,51 +203,51 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  _buildUIBannerImage({List? dataBanner}) {
-    return Stack(
-      children: [
-        CarouselSlider(
-          options: CarouselOptions(
-            autoPlay: true,
-            scrollDirection: Axis.horizontal,
-            enlargeCenterPage: true,
-            viewportFraction: 1,
-            onPageChanged: (int index, CarouselPageChangedReason c) {
-              setState(() {});
-              _currentPageNotifier.value = index;
-            },
-          ),
-          items: (dataBanner ?? []).map((i) {
-            return Builder(
-              builder: (BuildContext context) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
-                      }),
-                );
-              },
-            );
-          }).toList(),
-        ),
-        Positioned(
-          top: 12,
-          right: 16,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
-          ),
-        ),
-      ],
-    );
-  }
+  // _buildUIBannerImage({List? dataBanner}) {
+  //   return Stack(
+  //     children: [
+  //       CarouselSlider(
+  //         options: CarouselOptions(
+  //           autoPlay: true,
+  //           scrollDirection: Axis.horizontal,
+  //           enlargeCenterPage: true,
+  //           viewportFraction: 1,
+  //           onPageChanged: (int index, CarouselPageChangedReason c) {
+  //             setState(() {});
+  //             _currentPageNotifier.value = index;
+  //           },
+  //         ),
+  //         items: (dataBanner ?? []).map((i) {
+  //           return Builder(
+  //             builder: (BuildContext context) {
+  //               return ClipRRect(
+  //                 borderRadius: BorderRadius.circular(8),
+  //                 child: CachedNetworkImage(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     height: 200,
+  //                     fit: BoxFit.cover,
+  //                     imageUrl: 'https://abee997.co.kr/admin/uploads/banner/${i['img_url']}',
+  //                     placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+  //                     errorWidget: (context, url, error) {
+  //                       return Image.asset(Assets.logo.path, package: "eums", width: 30, height: 30);
+  //                     }),
+  //               );
+  //             },
+  //           );
+  //         }).toList(),
+  //       ),
+  //       Positioned(
+  //         top: 12,
+  //         right: 16,
+  //         child: Container(
+  //           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+  //           decoration: BoxDecoration(color: Colors.grey.withOpacity(.5), borderRadius: BorderRadius.circular(12)),
+  //           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text('${_currentPageNotifier.value + 1}/${dataBanner?.length ?? 0}')]),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   _buildAreaItem({dynamic data}) {
     return Column(
@@ -267,7 +270,10 @@ class _MyPageState extends State<MyPage> {
             direction: Axis.horizontal,
             children: List.generate(
                 data.length,
-                (index) => WidgetAnimationClick(
+                (index) => WidgetAnimationClickV2(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      border: Border.all(color: HexColor('#e5e5e5')),
+                      borderRadius: BorderRadius.circular(5),
                       onTap: () {
                         switch (data[index]['id']) {
                           case 1:
@@ -313,10 +319,12 @@ class _MyPageState extends State<MyPage> {
                             //       },
                             //     ));
                             break;
-                          // case 9:
-                          //   Routings().navigate(context, const SettingFontSizeScreen());
-                        
-                          //   break;
+                          case 9:
+
+                            // Routings().navigate(context, const SettingFontSizeScreen());
+                            Routings().navigate(context, const InstructPage());
+
+                            break;
 
                           case 10:
                             Routings().navigate(context, const UsingTermScreen());
@@ -328,10 +336,8 @@ class _MyPageState extends State<MyPage> {
                           default:
                         }
                       },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                        decoration: BoxDecoration(border: Border.all(color: HexColor('#e5e5e5')), borderRadius: BorderRadius.circular(5)),
-                        width: (MediaQuery.of(context).size.width - 45) / 2,
+                      child: SizedBox(
+                        width: (MediaQuery.of(context).size.width / 2 - 32 - 24),
                         child: Row(
                           children: [
                             Expanded(
@@ -366,7 +372,7 @@ List listItemMy = [
   {"id": 6, "area": "기타", "subArea": "1:1 문의", "urlImage": Assets.icons.inquiry1.path},
   {"id": 7, "area": "기타", "subArea": "자주 묻는 질문", "urlImage": Assets.icons.frequentlyAQ.path},
   {"id": 8, "area": "서비스 이용 관련", "subArea": "제휴 및 광고 문의", "urlImage": Assets.icons.frequentluasq.path},
-  // {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.icons.serviceInfo.path},
+  {"id": 9, "area": "서비스 이용 관련", "subArea": "서비스 이용 안내", "urlImage": Assets.icons.serviceInfo.path},
   {"id": 10, "area": "서비스 이용 관련", "subArea": "이용약관", "urlImage": Assets.icons.termofuser.path},
   {"id": 11, "area": "서비스 이용 관련", "subArea": "설정", "urlImage": Assets.icons.setting.path}
 ];

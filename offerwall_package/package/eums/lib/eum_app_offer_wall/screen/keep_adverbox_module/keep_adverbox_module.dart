@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/instance_manager.dart';
@@ -264,7 +265,10 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                     ],
                                   ),
                                 ),
-                                WidgetAnimationClick(
+                                WidgetAnimationClickV2(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                                  color: HexColor('#fdd000'),
+                                  borderRadius: BorderRadius.circular(5),
                                   onTap: () {
                                     Routings().navigate(
                                         context,
@@ -277,13 +281,9 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                           // typePoint: data[index]['typePoint'],
                                         ));
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                                    decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(5)),
-                                    child: Text(
-                                      '광고보기',
-                                      style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
-                                    ),
+                                  child: Text(
+                                    '광고보기',
+                                    style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value),
                                   ),
                                 )
                               ],

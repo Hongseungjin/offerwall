@@ -11,15 +11,16 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-//        flatDir {
-//            dirs 'libs'
-//        }
+//       flatDir {
+//           dirs 'libs'
+//       }
         maven {
-            url '/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_module/AndroidExample/app/libs/host/outputs/repo'
+            url '/Volumes/coi-ssd/Github/GreenApp/offerwall/offerwall_module/AndroidExample/app/libs/offerwall/host/outputs/repo'
         }
         maven {
             url "$storageUrl/download.flutter.io"
         }
+
     }
 }
 rootProject.name = "Android Example"

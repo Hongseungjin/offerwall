@@ -27,7 +27,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_debug",
           "version": {
-            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
           }
         }
       ],
@@ -35,11 +35,11 @@
         {
           "name": "firebase_core_debug-1.0.aar",
           "url": "firebase_core_debug-1.0.aar",
-          "size": 30707,
-          "sha512": "2213e885882e1e3a7a0b91b9866ceda289621660d75e93c7dec1c5db6dfdba85e1dd3905f9a64f248955ba735e02c38355d1bae005d2bb088dbd78282f7603ea",
-          "sha256": "fdf3fd3e24f6904deaa71380cd756a763d09a1864a73e843fe0af37366707044",
-          "sha1": "47554d5fb1ccca5862f3991f74f3b53baedeea43",
-          "md5": "a1a24b77e2e7f49c4c19c5c48e60c6f0"
+          "size": 31933,
+          "sha512": "73d053f22b6fd48771df85d9f2faedeecaaf3d814bf7e2a01d27b78636f63ac78c9757937ccb7bc733c8d610491c7f65d83cc1abc5001f64489a308d5959ce94",
+          "sha256": "03d4f61e9fd12e6c202e1c8ea92d0a19a6712dbbef2dc7b5e1366ccc2a1a5a56",
+          "sha1": "30465516bfa585e6e0dd1ffcbe85906a63bf54ae",
+          "md5": "132c0929506f03618091b54f0279ab0c"
         }
       ]
     },
@@ -56,7 +56,7 @@
           "group": "io.flutter",
           "module": "flutter_embedding_debug",
           "version": {
-            "requires": "1.0.0-767d8c75e898091b925519803830fc2721658d07"
+            "requires": "1.0.0-a794cf2681c6c9fe7b260e0e84de96298dc9c18b"
           }
         },
         {
@@ -78,7 +78,7 @@
           "group": "androidx.annotation",
           "module": "annotation",
           "version": {
-            "requires": "1.7.0"
+            "requires": "1.1.0"
           }
         }
       ],
@@ -86,11 +86,11 @@
         {
           "name": "firebase_core_debug-1.0.aar",
           "url": "firebase_core_debug-1.0.aar",
-          "size": 30707,
-          "sha512": "2213e885882e1e3a7a0b91b9866ceda289621660d75e93c7dec1c5db6dfdba85e1dd3905f9a64f248955ba735e02c38355d1bae005d2bb088dbd78282f7603ea",
-          "sha256": "fdf3fd3e24f6904deaa71380cd756a763d09a1864a73e843fe0af37366707044",
-          "sha1": "47554d5fb1ccca5862f3991f74f3b53baedeea43",
-          "md5": "a1a24b77e2e7f49c4c19c5c48e60c6f0"
+          "size": 31933,
+          "sha512": "73d053f22b6fd48771df85d9f2faedeecaaf3d814bf7e2a01d27b78636f63ac78c9757937ccb7bc733c8d610491c7f65d83cc1abc5001f64489a308d5959ce94",
+          "sha256": "03d4f61e9fd12e6c202e1c8ea92d0a19a6712dbbef2dc7b5e1366ccc2a1a5a56",
+          "sha1": "30465516bfa585e6e0dd1ffcbe85906a63bf54ae",
+          "md5": "132c0929506f03618091b54f0279ab0c"
         }
       ]
     }

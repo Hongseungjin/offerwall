@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -226,12 +227,12 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                      behavior: HitTestBehavior.translucent,
+                  WidgetAnimationClickV2(
+                      padding: const EdgeInsets.all(16),
                       onTap: () {
                         widget.onClose();
                       },
-                      child: Container(padding: const EdgeInsets.all(16), child: const Icon(Icons.arrow_back, color: Colors.black, size: 24))),
+                      child: const Icon(Icons.arrow_back, color: Colors.black, size: 24)),
                   Flexible(
                     child: Text(
                       widget.title ?? '',
@@ -286,16 +287,14 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
                   //         color: AppColor.black)),
                   ValueListenableBuilder(
                     valueListenable: showButton,
-                    builder: (context, value, child) => InkWell(
+                    builder: (context, value, child) => WidgetAnimationClickV2(
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      borderRadius: BorderRadius.circular(4),
+                      color: !showButton.value ? Colors.grey.shade300 : AppColor.red,
                       onTap: !showButton.value ? null : widget.mission,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4), color: !showButton.value ? AppColor.grey.withOpacity(0.5) : AppColor.red),
-                        child: Text(
-                          '포인트 적립하기',
-                          style: AppStyle.medium.copyWith(color: !showButton.value ? AppColor.grey : AppColor.white),
-                        ),
+                      child: Text(
+                        '포인트 적립하기',
+                        style: AppStyle.medium.copyWith(color: !showButton.value ? AppColor.black : AppColor.white),
                       ),
                     ),
                   ),

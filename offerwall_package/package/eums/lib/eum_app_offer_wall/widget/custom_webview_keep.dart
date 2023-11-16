@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:eums/common/const/values.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -113,10 +113,8 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
       ),
       body: Column(
         children: [
-       
           Expanded(
             child: WidgetImageOfferWall(
-              
               scrollController: _scrollController,
               urlLink: widget.urlLink,
               onDone: () {
@@ -148,17 +146,15 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
                 ValueListenableBuilder(
                   valueListenable: showButton,
                   builder: (context, value, child) {
-                    return InkWell(
+                    return WidgetAnimationClickV2(
+                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                      borderRadius: BorderRadius.circular(4),
+                      color: !showButton.value ? Colors.grey.shade300 : AppColor.red,
                       onTap: !showButton.value ? null : widget.mission,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        decoration:
-                            BoxDecoration(borderRadius: BorderRadius.circular(4), color: !showButton.value ? HexColor('#cccccc') : AppColor.red),
-                        child: Text(
-                          '포인트 적립하기',
-                          style: AppStyle.medium
-                              .copyWith(fontSize: controllerGet.fontSizeObx.value, color: !showButton.value ? AppColor.grey : AppColor.white),
-                        ),
+                      child: Text(
+                        '포인트 적립하기',
+                        style: AppStyle.medium
+                            .copyWith(fontSize: controllerGet.fontSizeObx.value, color: !showButton.value ? AppColor.black : AppColor.white),
                       ),
                     );
                   },

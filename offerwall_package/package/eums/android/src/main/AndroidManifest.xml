@@ -56,6 +56,7 @@
         <category android:name="android.intent.category.BROWSABLE" />
       </intent-filter>
     </activity>
+
    
    
     <meta-data android:name="partner_id" android:value="15395-20230512-881" />

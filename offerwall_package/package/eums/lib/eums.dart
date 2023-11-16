@@ -34,7 +34,6 @@ class Eums {
 
   Future initMaterial({required Widget home, Future Function()? onRun}) async {
     WidgetsFlutterBinding.ensureInitialized();
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     await Firebase.initializeApp();
 
@@ -62,7 +61,7 @@ class Eums {
       ),
     );
 
-    var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    var details = await NotificationHandler.instant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
       NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
     }

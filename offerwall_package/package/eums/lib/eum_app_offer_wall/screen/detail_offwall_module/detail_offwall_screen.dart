@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -250,7 +251,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
           elevation: 0,
           centerTitle: true,
           title: Text(widget.title ?? '', style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black)),
-          leading: InkWell(
+          leading: WidgetAnimationClickV2(
             onTap: () {
               Navigator.of(context).pop();
             },
@@ -347,49 +348,52 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
                           ),
                         ),
                         const SizedBox(height: 16),
-                        InkWell(
-                          onTap: () {
-                            // debugPrint("xxxx: ${widget.type}");
-                            if (widget.type == 'install') {
-                              checkInstallApp();
-                            } else if (widget.type == 'visit') {
-                              print("visit?");
-                              Routings().navigate(
-                                  context,
-                                  VisitOfferWallScren(
-                                    data: state.dataDetailOffWall,
-                                    voidCallBack: _fetchData,
-                                  ));
-                            } else if (widget.type == 'join') {
-                              Routings().navigate(
-                                  context,
-                                  JoinOfferWallScreen(
-                                    data: state.dataDetailOffWall,
-                                    onCallBack: _joinOfferWall,
-                                  ));
-                            } else if (widget.type == 'shopping') {
-                              Routings().navigate(
-                                  context,
-                                  PurchaseOfferwallInternalScreen(
-                                    data: state.dataDetailOffWall,
-                                  ));
-                            } else if (widget.type == 'subscribe') {
-                              Routings().navigate(
-                                  context,
-                                  RegisterLinkScreen(
-                                    data: state.dataDetailOffWall,
-                                  ));
-                            }
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: WidgetAnimationClickV2(
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: AppColor.yellow),
-                            child: Text(
-                              '참여하고 포인트 받기',
-                              style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black),
-                              textAlign: TextAlign.center,
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColor.yellow,
+                            onTap: () {
+                              // debugPrint("xxxx: ${widget.type}");
+                              if (widget.type == 'install') {
+                                checkInstallApp();
+                              } else if (widget.type == 'visit') {
+                                print("visit?");
+                                Routings().navigate(
+                                    context,
+                                    VisitOfferWallScren(
+                                      data: state.dataDetailOffWall,
+                                      voidCallBack: _fetchData,
+                                    ));
+                              } else if (widget.type == 'join') {
+                                Routings().navigate(
+                                    context,
+                                    JoinOfferWallScreen(
+                                      data: state.dataDetailOffWall,
+                                      onCallBack: _joinOfferWall,
+                                    ));
+                              } else if (widget.type == 'shopping') {
+                                Routings().navigate(
+                                    context,
+                                    PurchaseOfferwallInternalScreen(
+                                      data: state.dataDetailOffWall,
+                                    ));
+                              } else if (widget.type == 'subscribe') {
+                                Routings().navigate(
+                                    context,
+                                    RegisterLinkScreen(
+                                      data: state.dataDetailOffWall,
+                                    ));
+                              }
+                            },
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                '참여하고 포인트 받기',
+                                style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
                           ),
                         ),

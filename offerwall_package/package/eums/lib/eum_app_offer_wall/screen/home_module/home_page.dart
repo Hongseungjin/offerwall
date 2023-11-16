@@ -9,16 +9,14 @@ import 'package:eums/common/rx_bus.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/screen/my_page_module/instruct_page.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
-import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
 import 'package:eums/eum_app_offer_wall/widget/loading/widget_shimmer_item_loading.dart';
-import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/constants.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
@@ -33,7 +31,6 @@ import 'package:eums/eum_app_offer_wall/screen/using_term_module/using_term_scre
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/appStyle.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
-import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
@@ -288,7 +285,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: AppColor.white,
-            leading: WidgetAnimationClick(
+            leading: WidgetAnimationClickV2(
               onTap: () {
                 final isDebug = LocalStoreService.instant.preferences.getBool('isDebug') ?? false;
                 if (isDebug == false) {
@@ -323,19 +320,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ],
             ),
             actions: [
-              WidgetAnimationClick(
+              WidgetAnimationClickV2(
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                 onTap: () {
                   Routings().navigate(context, const MyPage());
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  // child: Image.asset(Assets.my_page.path, package: "eums", height: 24),
-                  child: Assets.icons.myPage.image(height: 24),
-                ),
+                child: Assets.icons.myPage.image(height: 24),
               ),
-              const SizedBox(
-                width: 25,
-              )
             ],
           ),
           // key: globalKey,
@@ -364,7 +355,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                             Routings().navigate(context, const ScrapAdverBoxScreen());
                                             break;
                                           case 3:
-                                            Routings().navigate(context, const UsingTermScreen());
+                                            // Routings().navigate(context, const UsingTermScreen());
+                                            Routings().navigate(context, const InstructPage());
+
                                             break;
                                           default:
                                         }
@@ -614,18 +607,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     } else {
                       // final checkBackgroundLocation = await _checkPermissionLocationBackground();
                       // if (checkBackgroundLocation == true) {
-                        // dynamic data = <String, dynamic>{
-                        //   'count': 0,
-                        //   'date': Constants.formatTime(DateTime.now().toIso8601String()),
-                        // };
-                        // localStore?.setCountAdvertisement(data);
-                        String? token = LocalStoreService.instant.getDeviceToken();
-                        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                        bool isRunning = await FlutterBackgroundService().isRunning();
-                        if (!isRunning) {
-                          await FlutterBackgroundService().startService();
-                        }
-                        EumsApp.instant.locationCurrent();
+                      // dynamic data = <String, dynamic>{
+                      //   'count': 0,
+                      //   'date': Constants.formatTime(DateTime.now().toIso8601String()),
+                      // };
+                      // localStore?.setCountAdvertisement(data);
+                      String? token = LocalStoreService.instant.getDeviceToken();
+                      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                      bool isRunning = await FlutterBackgroundService().isRunning();
+                      if (!isRunning) {
+                        await FlutterBackgroundService().startService();
+                      }
+                      EumsApp.instant.locationCurrent();
                       // } else {
                       //   isStartBackground = false;
                       //   setState(() {});
@@ -710,22 +703,21 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   // }
 
   Widget _buildUiIcon({String? title, String? urlImage, Function()? onTap}) {
-    return WidgetAnimationClick(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
-            decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#888888').withOpacity(0.3)),
-            child: Image.asset(urlImage ?? '', package: "eums", height: 50),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title ?? '',
-            style: AppStyle.regular12.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value - 2),
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        WidgetAnimationClickV2(
+          onTap: onTap,
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 9),
+          borderRadius: BorderRadius.circular(100),
+          color: HexColor('#888888').withOpacity(0.3),
+          child: Image.asset(urlImage ?? '', package: "eums", height: 50),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          title ?? '',
+          style: AppStyle.regular12.copyWith(color: Colors.black, fontSize: controllerGet.fontSizeObx.value - 2),
+        )
+      ],
     );
   }
 
@@ -754,7 +746,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       items: (dataBanner ?? []).map((i) {
                         return Builder(
                           builder: (BuildContext context) {
-                            return WidgetAnimationClick(
+                            return WidgetAnimationClickV2(
+                              radius: 100,
+                              borderRadius: BorderRadius.circular(8),
                               onTap: () {
                                 Routings().navigate(
                                     context,

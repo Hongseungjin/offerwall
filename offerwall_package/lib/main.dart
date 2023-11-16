@@ -1,6 +1,7 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
@@ -225,7 +226,9 @@ class _AppMainScreenState extends State<AppMainScreen> {
             const SizedBox(
               height: 16,
             ),
-            InkWell(
+            WidgetAnimationClickV2(
+              color: AppColor.blue1,
+              padding: const EdgeInsets.all(20),
               onTap: () async {
                 LocalStoreService.instant.preferences.setString("memId", textEditingController1.text);
                 LocalStoreService.instant.preferences.setString("memGen", textEditingController2.text);
@@ -240,7 +243,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                     memRegion: textEditingController4.text);
                 Routings().navigate(context, child);
               },
-              child: Container(color: AppColor.blue1, padding: const EdgeInsets.all(20), child: const Text('go to sdk')),
+              child: const Text('go to sdk'),
             ),
           ],
         ),

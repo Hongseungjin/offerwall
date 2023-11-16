@@ -78,6 +78,12 @@
 @import flutter_local_notifications;
 #endif
 
+#if __has_include(<flutter_overlay_window/FlutterOverlayWindowPlugin.h>)
+#import <flutter_overlay_window/FlutterOverlayWindowPlugin.h>
+#else
+@import flutter_overlay_window;
+#endif
+
 #if __has_include(<geolocator_apple/GeolocatorPlugin.h>)
 #import <geolocator_apple/GeolocatorPlugin.h>
 #else
@@ -165,6 +171,7 @@
   [FlutterComponentPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterComponentPlugin"]];
   [InAppWebViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"InAppWebViewFlutterPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
+  [FlutterOverlayWindowPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterOverlayWindowPlugin"]];
   [GeolocatorPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeolocatorPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [JustAudioPlugin registerWithRegistrar:[registry registrarForPlugin:@"JustAudioPlugin"]];

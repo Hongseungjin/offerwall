@@ -17,6 +17,7 @@ attr fontProviderSystemFontFamily
 attr fontStyle
 attr fontVariationSettings
 attr fontWeight
+attr lStar
 attr nestedScrollViewStyle
 attr placeholderActivityName
 attr primaryActivityName
@@ -31,6 +32,9 @@ attr splitRatio
 attr ttcIndex
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
+color call_notification_answer_color
+color call_notification_decline_color
+color ic_launcher_background
 color notification_action_color_filter
 color notification_icon_bg_color
 color ripple_material_light
@@ -58,6 +62,12 @@ dimen notification_subtext_size
 dimen notification_top_pad
 dimen notification_top_pad_large_text
 drawable ic_bg_service_small
+drawable ic_call_answer
+drawable ic_call_answer_low
+drawable ic_call_answer_video
+drawable ic_call_answer_video_low
+drawable ic_call_decline
+drawable ic_call_decline_low
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -66,6 +76,7 @@ drawable notification_bg_low_pressed
 drawable notification_bg_normal
 drawable notification_bg_normal_pressed
 drawable notification_icon_background
+drawable notification_oversize_large_icon_bg
 drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
@@ -113,7 +124,9 @@ id async
 id blocking
 id chronometer
 id dialog_button
+id edit_text_id
 id forever
+id hide_ime_id
 id icon
 id icon_group
 id info
@@ -146,14 +159,24 @@ id text
 id text2
 id time
 id title
+id view_tree_lifecycle_owner
 integer status_bar_notification_info_maxnum
 layout custom_dialog
+layout ime_base_split_test_activity
+layout ime_secondary_split_test_activity
 layout notification_action
 layout notification_action_tombstone
 layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
+string call_notification_answer_action
+string call_notification_answer_video_action
+string call_notification_decline_action
+string call_notification_hang_up_action
+string call_notification_incoming_text
+string call_notification_ongoing_text
+string call_notification_screening_text
 string status_bar_notification_info_overflow
 style TextAppearance_Compat_Notification
 style TextAppearance_Compat_Notification_Info
@@ -165,7 +188,7 @@ style Widget_Compat_NotificationActionText
 styleable ActivityFilter activityAction activityName
 styleable ActivityRule alwaysExpand
 styleable Capability queryPatterns shortcutMatchRequired
-styleable ColorStateListItem alpha android_alpha android_color
+styleable ColorStateListItem alpha android_alpha android_color android_lStar lStar
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery fontProviderSystemFontFamily
 styleable FontFamilyFont android_font android_fontStyle android_fontVariationSettings android_fontWeight android_ttcIndex font fontStyle fontVariationSettings fontWeight ttcIndex
 styleable GradientColor android_centerColor android_centerX android_centerY android_endColor android_endX android_endY android_gradientRadius android_startColor android_startX android_startY android_tileMode android_type

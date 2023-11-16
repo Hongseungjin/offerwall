@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:dio/dio.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -271,24 +272,27 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
               children: [
                 const SizedBox(height: 16),
                 _buildTilte('STEP 1   ', '아래의 버튼을 눌러 구독해주세요'),
-                InkWell(
-                  onTap: () {
-                    Routings().navigate(
-                        context,
-                        CustomInappWebView(
-                          urlLink: widget.data['api'],
-                          onClose: () {},
-                        ));
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: WidgetAnimationClickV2(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(color: HexColor('#fdd000'), borderRadius: BorderRadius.circular(10)),
-                    child: Text(
-                      '구독하러 가기',
-                      textAlign: TextAlign.center,
-                      style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 2 + controllerGet.fontSizeObx.value),
+                    color: HexColor('#fdd000'),
+                    borderRadius: BorderRadius.circular(10),
+                    onTap: () {
+                      Routings().navigate(
+                          context,
+                          CustomInappWebView(
+                            urlLink: widget.data['api'],
+                            onClose: () {},
+                          ));
+                    },
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(
+                        '구독하러 가기',
+                        textAlign: TextAlign.center,
+                        style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 2 + controllerGet.fontSizeObx.value),
+                      ),
                     ),
                   ),
                 ),
@@ -353,28 +357,31 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                InkWell(
-                  onTap: () {
-                    _addImages();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: WidgetAnimationClickV2(
+                    border: Border.all(color: AppColor.color70),
+                    borderRadius: BorderRadius.circular(12),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(border: Border.all(color: AppColor.color70), borderRadius: BorderRadius.circular(12)),
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Image.asset(Assets.camera.path, package: "eums", height: 24, width: 24),
-                          Assets.icons.camera.image(height: 24, width: 24),
-                          const SizedBox(width: 10),
-                          SizedBox(
-                              child: Text(files.isNotEmpty ? urlImage : '이미지 업로드 하기',
-                                  style: AppStyle.medium.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
-                                  overflow: TextOverflow.clip)),
-                        ],
+                    onTap: () {
+                      _addImages();
+                    },
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Image.asset(Assets.camera.path, package: "eums", height: 24, width: 24),
+                            Assets.icons.camera.image(height: 24, width: 24),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                                child: Text(files.isNotEmpty ? urlImage : '이미지 업로드 하기',
+                                    style: AppStyle.medium.copyWith(color: AppColor.black, fontSize: controllerGet.fontSizeObx.value),
+                                    overflow: TextOverflow.clip)),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -399,30 +406,33 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
               ],
             ),
             // const Divider(thickness: 10),
-            InkWell(
-              onTap: () {
-                String lang = '';
-                if (_languages?[0] == 'ko-KR') {
-                  lang = 'kor';
-                } else {
-                  lang = 'eng';
-                }
-                if (urlImage != '') {
-                  print("htmlWeb$htmlWeb");
-                  globalKey.currentContext
-                      ?.read<RegisterLinkBloc>()
-                      .add(MissionOfferWallRegisterLink(files: fileImage, xId: widget.data['idx'], lang: lang, html: htmlWeb));
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: WidgetAnimationClickV2(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(color: AppColor.yellow, borderRadius: BorderRadius.circular(10)),
-                child: Text(
-                  '참여하고 캐시 받기',
-                  textAlign: TextAlign.center,
-                  style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
+                color: AppColor.yellow,
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {
+                  String lang = '';
+                  if (_languages?[0] == 'ko-KR') {
+                    lang = 'kor';
+                  } else {
+                    lang = 'eng';
+                  }
+                  if (urlImage != '') {
+                    print("htmlWeb$htmlWeb");
+                    globalKey.currentContext
+                        ?.read<RegisterLinkBloc>()
+                        .add(MissionOfferWallRegisterLink(files: fileImage, xId: widget.data['idx'], lang: lang, html: htmlWeb));
+                  }
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    '참여하고 캐시 받기',
+                    textAlign: TextAlign.center,
+                    style: AppStyle.bold.copyWith(color: AppColor.black, fontSize: 16),
+                  ),
                 ),
               ),
             ),

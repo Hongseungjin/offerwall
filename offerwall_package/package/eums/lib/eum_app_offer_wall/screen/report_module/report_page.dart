@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -122,16 +123,16 @@ class _ReportPageState extends State<ReportPage> {
       }
       if (widget.checkOverlay) {
         // LoadingDialog.instance.hide();
-        // FlutterBackgroundService().invoke("closeOverlay");
-        await EumsApp.instant.closeOverlay();
+        FlutterBackgroundService().invoke("closeOverlay");
+        // await EumsApp.instant.closeOverlay();
         await Future.delayed(const Duration(seconds: 1));
         dynamic dataToast = {};
         dataToast['isToast'] = true;
         dataToast['isWebView'] = null;
         // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
         dataToast['messageToast'] = "Report success";
-        // FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
-        await EumsApp.instant.jobQueue({'data': dataToast});
+        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        // await EumsApp.instant.jobQueue({'data': dataToast});
       } else {
         // AppAlert.showSuccess(context, fToast, 'Success');
         AppAlert.showSuccess('Success');
