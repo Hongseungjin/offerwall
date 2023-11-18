@@ -26,6 +26,10 @@ dependencies:
   # firebase_core: 2.22.0
 
 
+  # disable_battery_optimization: ^1.1.0+1
+  disable_battery_optimization:
+    path: package/Disable-Battery-Optimizations-1.1.0-1
+  # flutter_background_service: 3.0.1
   flutter_background_service:
     path: package/flutter_background_service
 
@@ -71,7 +75,7 @@ dependencies:
   wakelock: ^0.6.2
   # flutter_background_service: ^3.0.1
   devicelocale: ^0.6.0
-  disable_battery_optimization: ^1.1.0+1
+  
   permission_handler: 10.4.1
   # permission_handler: ^10.4.3
   cron: ^0.5.1

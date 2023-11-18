@@ -253,6 +253,13 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
                 color: Colors.white,
                 child: WidgetImageOfferWall(
                   scrollController: _scrollController,
+                  onScrollWebView: () {
+                    if (!isRunning) {
+                      isRunning = true;
+                      timerController.start();
+                    }
+                    start5s();
+                  },
                   urlLink: widget.urlLink ?? '',
                   onDone: () {
                     if (timerController.value == 0) {

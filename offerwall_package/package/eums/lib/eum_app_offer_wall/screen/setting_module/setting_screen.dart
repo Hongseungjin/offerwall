@@ -1,9 +1,13 @@
 // import 'package:flutter/cupertino.dart';
 
+import 'dart:io';
+
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_slider_range.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
 import 'package:get/instance_manager.dart';
@@ -187,33 +191,40 @@ class _SettingScreenState extends State<SettingScreen> {
                         // title: '벌 광고 활성화',
                         title: '캐릭터 광고 활성화',
                         onChange: (value) async {
-                          LoadingDialog.instance.show();
+                          try {
+                            setState(() {
+                              checkToken = value;
+                            });
+                            LoadingDialog.instance.show();
 
-                          setState(() {
-                            checkToken = value;
-                          });
-                          await LocalStoreService.instant.setSaveAdver(checkToken);
+                            await LocalStoreService.instant.setSaveAdver(checkToken);
 
-                          if (!checkToken) {
-                            String? token = await NotificationHandler.getToken();
-                            await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                            // FlutterBackgroundService().invoke("stopService");
-                            EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
-                          } else {
-                            // dynamic data = <String, dynamic>{
-                            //   'count': 0,
-                            //   'date': Constants.formatTime(
-                            //       DateTime.now().toIso8601String()),
-                            // };
-                            // localStore?.setCountAdvertisement(data);
-                            String? token = LocalStoreService.instant.getDeviceToken();
-                            await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                            // bool isRunning = await FlutterBackgroundService().isRunning();
-                            // if (!isRunning) {
-                            //   await FlutterBackgroundService().startService();
-                            // }
-                            EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
-                          }
+                            if (!checkToken) {
+                              String? token = await NotificationHandler.getToken();
+                              EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                              if (Platform.isAndroid) {
+                                FlutterBackgroundService().invoke("stopService");
+                                await Future.delayed(const Duration(milliseconds: 2500));
+                              }
+                              EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': false});
+                            } else {
+                              // dynamic data = <String, dynamic>{
+                              //   'count': 0,
+                              //   'date': Constants.formatTime(
+                              //       DateTime.now().toIso8601String()),
+                              // };
+                              // localStore?.setCountAdvertisement(data);
+                              String? token = LocalStoreService.instant.getDeviceToken();
+                              EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                              bool isRunning = await FlutterBackgroundService().isRunning();
+                              if (!isRunning) {
+                                await FlutterBackgroundService().startService();
+                              }
+                              EumsApp.instant.locationCurrent();
+                              EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
+                            }
+                            // ignore: empty_catches
+                          } catch (e) {}
                           LoadingDialog.instance.hide();
                         },
                       ),

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
@@ -43,81 +44,81 @@ class CustomWebView extends StatefulWidget {
 }
 
 class _CustomWebViewState extends State<CustomWebView> {
-  late final WebViewController _controller;
+  // late final WebViewController _controller;
   bool isLoading = true;
   bool showButton = false;
   final controllerGet = Get.put(SettingFontSize());
 
-  String getProperHtml(String content) {
-    String start1 = 'https:';
-    int startIndex1 = content.indexOf(start1);
-    String iframeTag1 = content.substring(startIndex1 + 6);
-    content = iframeTag1.replaceAll(iframeTag1, "http:$iframeTag1");
-    return content;
-  }
+  // String getProperHtml(String content) {
+  //   String start1 = 'https:';
+  //   int startIndex1 = content.indexOf(start1);
+  //   String iframeTag1 = content.substring(startIndex1 + 6);
+  //   content = iframeTag1.replaceAll(iframeTag1, "http:$iframeTag1");
+  //   return content;
+  // }
 
-  double deviceWith = 0;
-  getDeviceWidth() async {
-    deviceWith = double.parse(LocalStoreService.instant.getDeviceWidth());
-    print('deviceWithdeviceWith $deviceWith');
-  }
+  // double deviceWith = 0;
+  // getDeviceWidth() async {
+  //   deviceWith = double.parse(LocalStoreService.instant.getDeviceWidth());
+  //   print('deviceWithdeviceWith $deviceWith');
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDeviceWidth();
+    // getDeviceWidth();
 
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
+    // late final PlatformWebViewControllerCreationParams params;
+    // if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+    //   params = WebKitWebViewControllerCreationParams(
+    //     allowsInlineMediaPlayback: true,
+    //     mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+    //   );
+    // } else {
+    //   params = const PlatformWebViewControllerCreationParams();
+    // }
 
-    final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
-    controller
-      ..setJavaScriptMode(JavaScriptMode.disabled)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {},
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {
-            setState(() {
-              isLoading = false;
-            });
-          },
-          onUrlChange: (change) {},
-          onWebResourceError: (WebResourceError error) {
-            print("errorerror$error");
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith(getProperHtml(widget.urlLink))) {
-              return NavigationDecision.prevent;
-            }
+    // final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
+    // controller
+    //   ..setJavaScriptMode(JavaScriptMode.disabled)
+    //   ..setBackgroundColor(const Color(0x00000000))
+    //   ..setNavigationDelegate(
+    //     NavigationDelegate(
+    //       onProgress: (int progress) {},
+    //       onPageStarted: (String url) {},
+    //       onPageFinished: (String url) {
+    //         setState(() {
+    //           isLoading = false;
+    //         });
+    //       },
+    //       onUrlChange: (change) {},
+    //       onWebResourceError: (WebResourceError error) {
+    //         print("errorerror$error");
+    //       },
+    //       onNavigationRequest: (NavigationRequest request) {
+    //         if (request.url.startsWith(getProperHtml(widget.urlLink))) {
+    //           return NavigationDecision.prevent;
+    //         }
 
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..addJavaScriptChannel(
-        'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        },
-      )
-      ..loadRequest(Uri.parse(getProperHtml(widget.urlLink ?? '')));
-    if (controller.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
-    }
-    _controller = controller;
+    //         return NavigationDecision.navigate;
+    //       },
+    //     ),
+    //   )
+    //   ..addJavaScriptChannel(
+    //     'Toaster',
+    //     onMessageReceived: (JavaScriptMessage message) {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(content: Text(message.message)),
+    //       );
+    //     },
+    //   )
+    //   ..loadRequest(Uri.parse(getProperHtml(widget.urlLink ?? '')));
+    // if (controller.platform is AndroidWebViewController) {
+    //   AndroidWebViewController.enableDebugging(true);
+    //   (controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
+    // }
+    // _controller = controller;
   }
 
   @override
@@ -146,37 +147,51 @@ class _CustomWebViewState extends State<CustomWebView> {
         ),
         actions: [widget.actions ?? const SizedBox()],
       ),
-      body: Stack(
-        children: [
-          if (!!widget.showImage) ...[
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  CachedNetworkImage(
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                      imageUrl: widget.urlLink,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) {
-                        return Image.asset(Assets.logo.path, package: "eums", height: 16);
-                      }),
-                  SizedBox(
-                    height: MediaQuery.of(context).padding.bottom + 70,
-                  )
-                ],
-              ),
-            )
-          ] else ...[
-            Container(color: AppColor.white, child: WebViewWidget(controller: _controller)),
-            Visibility(
-              visible: isLoading,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          ],
-        ],
+      body: WidgetImageOfferWall(
+        scrollController: ScrollController(),
+        onScrollWebView: () {},
+        urlLink: widget.urlLink,
+        // urlLink: "https://m.daum.net/",
+        // urlLink: "https://m.naver.com/",
+        // urlLink: "https://m.coupang.com/nm/",
+        onDone: () {
+          // if (timerController.value == 0) {
+          //   timerController.start();
+          //   start5s();
+          // }
+        },
       ),
+      // body: Stack(
+      //   children: [
+      //     if (!!widget.showImage) ...[
+      //       SingleChildScrollView(
+      //         child: Column(
+      //           children: [
+      //             CachedNetworkImage(
+      //                 width: MediaQuery.of(context).size.width,
+      //                 fit: BoxFit.cover,
+      //                 imageUrl: widget.urlLink,
+      //                 placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+      //                 errorWidget: (context, url, error) {
+      //                   return Image.asset(Assets.logo.path, package: "eums", height: 16);
+      //                 }),
+      //             SizedBox(
+      //               height: MediaQuery.of(context).padding.bottom + 70,
+      //             )
+      //           ],
+      //         ),
+      //       )
+      //     ] else ...[
+      //       Container(color: AppColor.white, child: WebViewWidget(controller: _controller)),
+      //       Visibility(
+      //         visible: isLoading,
+      //         child: const Center(
+      //           child: CircularProgressIndicator(),
+      //         ),
+      //       ),
+      //     ],
+      //   ],
+      // ),
     );
   }
 }

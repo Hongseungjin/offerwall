@@ -108,6 +108,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       // LoadingDialog.instance.hide();
       AppAlert.showError("$e");
+      emit(HomeBannerState(bannerList: []));
+
     }
   }
 

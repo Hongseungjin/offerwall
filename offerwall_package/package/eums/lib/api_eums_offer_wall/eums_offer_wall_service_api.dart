@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eums/common/api.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 
 import 'eums_offer_wall_service.dart';
 
@@ -341,5 +342,23 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   Future updateLocation({lat, log}) async {
     dynamic data = <String, dynamic>{"longitude": log, "latitude": lat};
     await api.put('user/location', data: data);
+  }
+
+  @override
+  startBackgroundFirebaseMessage() async {
+    try {
+      final deviceToken = await NotificationHandler.getToken();
+      final firebaseKey = LocalStoreService.instant.preferences.getString(LocalStoreService.instant.firebaseKey);
+      final result = await Dio(BaseOptions(headers: {"Authorization": "key=$firebaseKey", "Content-Type": "application/json"})).post(
+        "https://fcm.googleapis.com/fcm/send",
+        data: {
+          "to": deviceToken,
+          "content_available": true,
+        },
+      );
+      print("startBackgroundFirebaseMessage===> ${result.statusCode}");
+    } catch (e) {
+      rethrow;
+    }
   }
 }

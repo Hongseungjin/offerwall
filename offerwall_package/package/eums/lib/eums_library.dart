@@ -13,6 +13,7 @@ export 'package:eums/eum_app_offer_wall/eums_app_i.dart';
 export 'package:eums/eum_app_offer_wall/my_home_screen.dart';
 // export 'package:eums/eum_app_offer_wall/notification_handler.dart';
 export 'package:eums/notification/true_caller_overlay.dart';
+export 'package:package_info_plus/package_info_plus.dart';
 // export adds contents of another Library to this Library's namespace
 // here we are adding all content (accessible from outside the library) from
 // the material library

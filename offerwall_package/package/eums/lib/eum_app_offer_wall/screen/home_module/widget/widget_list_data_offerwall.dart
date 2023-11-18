@@ -242,6 +242,7 @@ class _ListViewHomeState extends State<ListViewHome> {
           ),
           const SizedBox(height: 4),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text('60% ', style: AppStyle.bold.copyWith(color: HexColor('#ff7169'), fontSize: 2 + controllerGet.fontSizeObx.value)),
               Text(Constants.formatMoney(data['reward'], suffix: '원'),

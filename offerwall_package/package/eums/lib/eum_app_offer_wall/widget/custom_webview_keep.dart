@@ -116,7 +116,17 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
           Expanded(
             child: WidgetImageOfferWall(
               scrollController: _scrollController,
+              onScrollWebView: () {
+                if (!isRunning) {
+                  isRunning = true;
+                  timerController.start();
+                }
+                start5s();
+              },
               urlLink: widget.urlLink,
+              // urlLink: "https://m.daum.net/",
+              // urlLink: "https://m.naver.com/",
+              // urlLink: "https://m.coupang.com/nm/",
               onDone: () {
                 if (timerController.value == 0) {
                   timerController.start();

@@ -20,6 +20,8 @@ class HomeListDataOfferWallEvent extends HomeEvent {
   }
   
 }
+
+
 // abstract class HomeEvent extends Equatable {}
 
 // class ListOfferWall extends HomeEvent {

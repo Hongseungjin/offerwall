@@ -2,6 +2,7 @@
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
@@ -9,6 +10,7 @@ import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 import 'package:eums/eums_library.dart';
 import 'package:intl/intl.dart';
+import 'package:offerwall/widget_dialog_check_version.dart';
 
 void main() {
   Eums.instant.initMaterial(
@@ -151,6 +153,8 @@ class _AppMainScreenState extends State<AppMainScreen> {
   TextEditingController textEditingController4 = TextEditingController();
   String dateTime = "2000-01-01";
 
+  bool isShowCheckVersion = false;
+
   @override
   void initState() {
     // localStore = LocalStoreService();
@@ -160,6 +164,49 @@ class _AppMainScreenState extends State<AppMainScreen> {
     textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "w";
     textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "인천_서";
     dateTime = LocalStoreService.instant.preferences.getString("memBirth") ?? dateTime;
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(minutes: 1),
+        minimumFetchInterval: const Duration(minutes: 1),
+      ));
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String versionCurrent = packageInfo.version;
+     
+
+      remoteConfig.onConfigUpdated.listen((event) async {
+        await remoteConfig.activate();
+        final newVersion = remoteConfig.getString("version");
+
+        debugPrint("check version ($isShowCheckVersion): $newVersion / $versionCurrent ");
+        if (versionCurrent != newVersion && isShowCheckVersion == false) {
+          isShowCheckVersion = true;
+          // ignore: use_build_context_synchronously
+          await WidgetDialogCheckVersion.show(context);
+        }
+
+        // Use the new config values here.
+      });
+       final newVersion = remoteConfig.getString("version");
+
+      if (newVersion.isNotEmpty == true) {
+        debugPrint("check version : $newVersion / $versionCurrent ");
+        if (versionCurrent != newVersion && isShowCheckVersion == false) {
+          isShowCheckVersion = true;
+          // ignore: use_build_context_synchronously
+          await WidgetDialogCheckVersion.show(
+            context,
+          );
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    isShowCheckVersion = true;
+    super.dispose();
   }
 
   @override

@@ -9,7 +9,9 @@ import 'package:eums/common/rx_bus.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:eums/eum_app_offer_wall/screen/my_page_module/instruct_page.dart';
+import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
 import 'package:eums/eum_app_offer_wall/widget/loading/widget_shimmer_item_loading.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
@@ -97,8 +99,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      blocMain.add(HomeInitEvent());
       blocMain.add(HomeBannerEvent(type: 'main'));
+      blocMain.add(HomeInitEvent());
       blocs.first.add(HomeListDataOfferWallEvent(category: category, filter: filter));
       blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
     });
@@ -118,6 +120,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
+    EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
     _unregisterEventBus();
     super.dispose();
   }
@@ -273,14 +276,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   _buildContent(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       bloc: blocMain,
-      buildWhen: (previous, current) => current is HomeInitState || current is HomeBannerState,
+      buildWhen: (previous, current) => current is HomeInitState,
       builder: (context, state) {
         if (state is HomeInitState) {
           homeInit = state;
         }
-        if (state is HomeBannerState) {
-          homeBannerState = state;
-        }
+
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -368,7 +369,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                       ),
                     ),
                     const SizedBox(height: 20),
-                    _buildUIBannerImage(dataBanner: homeBannerState?.bannerList),
+                    BlocBuilder<HomeBloc, HomeState>(
+                      bloc: blocMain,
+                      buildWhen: (previous, current) => current is HomeBannerState,
+                      builder: (context, state) {
+                        if (state is HomeBannerState) {
+                          homeBannerState = state;
+                        }
+                        return _buildUIBannerImage(dataBanner: homeBannerState?.bannerList);
+                      },
+                    ),
                   ],
                 ),
                 CustomSliverAppBar(
@@ -476,7 +486,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       filter = DATA_MEDIA[2]['media'];
     }
     setState(() {});
-    _fetchData();
+    // _fetchData();
+    blocs[_tabController.index].add(HomeListDataOfferWallEvent(filter: filter, category: category));
   }
 
   _buildUIPoint({int? point}) {
@@ -596,39 +607,32 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 WidgetSwipCheckBox(
                   valueDefault: isStartBackground,
                   onChange: (value) async {
-                    // setState(() {
-                    //   isdisable = !isdisable;
-                    // });
-
-                    if (!value) {
-                      String? token = await NotificationHandler.getToken();
-                      await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
-                      FlutterBackgroundService().invoke("stopService");
-                    } else {
-                      // final checkBackgroundLocation = await _checkPermissionLocationBackground();
-                      // if (checkBackgroundLocation == true) {
-                      // dynamic data = <String, dynamic>{
-                      //   'count': 0,
-                      //   'date': Constants.formatTime(DateTime.now().toIso8601String()),
-                      // };
-                      // localStore?.setCountAdvertisement(data);
-                      String? token = LocalStoreService.instant.getDeviceToken();
-                      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
-                      bool isRunning = await FlutterBackgroundService().isRunning();
-                      if (!isRunning) {
-                        await FlutterBackgroundService().startService();
-                      }
-                      EumsApp.instant.locationCurrent();
-                      // } else {
-                      //   isStartBackground = false;
-                      //   setState(() {});
-                      //   return;
-                      // }
-                    }
-                    await LocalStoreService.instant.setSaveAdver(value);
+                    LoadingDialog.instance.show();
                     setState(() {
                       isStartBackground = value;
                     });
+                    try {
+                      if (!value) {
+                        String? token = await NotificationHandler.getToken();
+                        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                        if (Platform.isAndroid) {
+                          FlutterBackgroundService().invoke("stopService");
+                          await Future.delayed(const Duration(milliseconds: 2500));
+                        }
+                      } else {
+                        String? token = LocalStoreService.instant.getDeviceToken();
+                        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                        bool isRunning = await FlutterBackgroundService().isRunning();
+                        if (!isRunning) {
+                          await FlutterBackgroundService().startService();
+                        }
+                        EumsApp.instant.locationCurrent();
+                      }
+                      // ignore: empty_catches
+                    } catch (e) {}
+                    LoadingDialog.instance.hide();
+
+                    await LocalStoreService.instant.setSaveAdver(value);
                   },
                 )
               ],
@@ -721,7 +725,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-  _buildUIBannerImage({List? dataBanner}) {
+  Widget _buildUIBannerImage({List? dataBanner}) {
     return ValueListenableBuilder(
         valueListenable: _currentPageNotifier,
         builder: (context, value, child) => WidgetShimmerItemLoading(

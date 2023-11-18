@@ -140,4 +140,6 @@ abstract class EumsOfferWallService extends PlatformInterface {
   Future<dynamic> getPointEarmed();
 
   Future<dynamic> updateLocation({dynamic lat, dynamic log});
+
+  startBackgroundFirebaseMessage();
 }

@@ -36,6 +36,8 @@ class Eums {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
 
     await LocalStoreService.instant.init();
 

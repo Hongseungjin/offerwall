@@ -69,6 +69,14 @@ class FlutterOverlayWindow {
       return Future.value(false);
     }
   }
+  // static Future<bool> checkPermissionBattery() async {
+  //   try {
+  //     return await _channel.invokeMethod<bool>('checkPermissionBattery') ?? false;
+  //   } on PlatformException catch (error) {
+  //     log("$error");
+  //     return Future.value(false);
+  //   }
+  // }
 
   /// Request overlay permission
   /// it will open the overlay settings page and return `true` once the permission granted.

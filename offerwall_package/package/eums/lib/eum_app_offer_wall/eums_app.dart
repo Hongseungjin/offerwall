@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:eums/common/const/values.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -144,6 +145,7 @@ showOverlay(event) async {
 
 jobQueue(event) async {
   // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+
   bool isActive = await FlutterOverlayWindow.isActive();
   if (isActive == true) {
     await FlutterOverlayWindow.closeOverlay();
@@ -192,9 +194,7 @@ Future<void> onStart(ServiceInstance service) async {
   // print('onStart');
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
-
   await Firebase.initializeApp();
-
   await LocalStoreService.instant.init();
 
   Queue queue = Queue();
@@ -224,7 +224,7 @@ Future<void> onStart(ServiceInstance service) async {
         await LocalStoreService.instant.setDeviceToken("");
         await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
       }
-      service.stopSelf();
+      await service.stopSelf();
     });
 
     //   service.on('locationCurrent').listen((event) async {
@@ -258,13 +258,13 @@ Future<void> onStart(ServiceInstance service) async {
 //   }
 // }
 
-// @pragma('vm:entry-point')
-// Future<bool> onIosBackground(ServiceInstance service) async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   DartPluginRegistrant.ensureInitialized();
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
 
-//   return true;
-// }
+  return true;
+}
 
 class EumsAppOfferWall extends EumsAppOfferWallService {
   // LocalStore localStore = LocalStoreService();
@@ -278,24 +278,25 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       await LocalStoreService.instant.setSizeDevice(height);
 
       final autoStart = LocalStoreService.instant.getSaveAdver();
-      final isRunging = await FlutterBackgroundService().isRunning();
+      // final isRunning = await FlutterBackgroundService().isRunning();
 
-      if (isRunging == false) {
-        FlutterBackgroundService().configure(
-            iosConfiguration: IosConfiguration(
+      // if (isRunning == false) {
+      FlutterBackgroundService().configure(
+          iosConfiguration: IosConfiguration(
+            autoStart: autoStart,
+            onBackground: (service) async {
+              return true;
+            },
+            onForeground: onStart,
+          ),
+          androidConfiguration: AndroidConfiguration(
+              onStart: onStart,
               autoStart: autoStart,
-              onBackground: (service) async {
-                return true;
-              },
-              onForeground: onStart,
-            ),
-            androidConfiguration: AndroidConfiguration(
-                onStart: onStart,
-                autoStart: autoStart,
-                isForegroundMode: true,
-                initialNotificationTitle: "인천e음",
-                initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-      }
+              autoStartOnBoot: autoStart,
+              isForegroundMode: true,
+              initialNotificationTitle: "인천e음",
+              initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+      // }
     } catch (e) {
       print("=====> error: $e");
     }
@@ -348,27 +349,30 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     await LocalStoreService.instant.setAccessToken(data['token']);
     await LocalStoreService.instant.setSizeDevice(height);
+    await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey,
+        "AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp");
 
     final autoStart = LocalStoreService.instant.getSaveAdver();
-    final isRunning = await FlutterBackgroundService().isRunning();
 
-    if (isRunning == false) {
-      FlutterBackgroundService().configure(
-          iosConfiguration: IosConfiguration(
+    // final isRunning = await FlutterBackgroundService().isRunning();
+
+    // if (isRunning == false) {
+    FlutterBackgroundService().configure(
+        iosConfiguration: IosConfiguration(
+          autoStart: autoStart,
+          onBackground: (service) async {
+            return true;
+          },
+          onForeground: onStart,
+        ),
+        androidConfiguration: AndroidConfiguration(
+            onStart: onStart,
             autoStart: autoStart,
-            onBackground: (service) async {
-              return true;
-            },
-            onForeground: onStart,
-          ),
-          androidConfiguration: AndroidConfiguration(
-              onStart: onStart,
-              autoStart: autoStart,
-              isForegroundMode: true,
-              notificationChannelId: notificationChannelId,
-              initialNotificationTitle: "인천e음",
-              initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
-    }
+            autoStartOnBoot: autoStart,
+            isForegroundMode: true,
+            initialNotificationTitle: "인천e음",
+            initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
+    // }
     // openAppSkd(context);
     return const MyHomeScreen();
   }

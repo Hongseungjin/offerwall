@@ -28,7 +28,6 @@ import 'package:lottie/lottie.dart';
 
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
 
-
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
 
@@ -215,6 +214,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           children: [
             InkWell(
                 onTap: () async {
+                  await FlutterOverlayWindow.updateFlag(OverlayFlag.focusPointer);
                   await Routings().navigate(
                       context,
                       ReportPage(
@@ -223,6 +223,8 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                         data: (jsonDecode(dataEvent['data'])),
                         deleteAdver: true,
                       ));
+                  await FlutterOverlayWindow.updateFlag(OverlayFlag.defaultFlag);
+
                   // if (result == true) {
                   //   // ignore: use_build_context_synchronously
                   //   AppAlert.showSuccess("Success");

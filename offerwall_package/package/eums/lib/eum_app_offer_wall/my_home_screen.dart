@@ -6,7 +6,6 @@ import 'package:disable_battery_optimization/disable_battery_optimization.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
-import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -207,20 +206,34 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   settingBattery() async {
     if (Platform.isAndroid) {
-      await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
-      bool? isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
-      if (isBatteryOptimizationDisabled == null || !isBatteryOptimizationDisabled) {
-        Timer.periodic(const Duration(seconds: 3), (timer) async {
+      Timer.periodic(const Duration(seconds: 3), (timer) async {
+        final isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
+        if (isBatteryOptimizationDisabled != true) {
+          await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+        }
+        final isAutoLaunchBattery = await DisableBatteryOptimization.isAutoStartEnabled;
+        if (isAutoLaunchBattery != true) {
+          await DisableBatteryOptimization.showEnableAutoStartSettings("OfferWall", "Allow auto launch");
+        } else {
           timer.cancel();
-          settingBattery();
+        }
+      });
 
-          // bool? isBatteryOptimizationDisabled = await getBatteryOptimization();
-          // if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
-          //   timer.cancel();
-          // }
-          // _checkPermissionLocationBackground();
-        });
-      }
+      // await DisableBatteryOptimization.showDisableBatteryOptimizationSettings();
+      // bool? isBatteryOptimizationDisabled = await DisableBatteryOptimization.isBatteryOptimizationDisabled;
+      // if (isBatteryOptimizationDisabled == null || !isBatteryOptimizationDisabled) {
+      //   Timer.periodic(const Duration(seconds: 3), (timer) async {
+      //     timer.cancel();
+      //     settingBattery();
+
+      //     // bool? isBatteryOptimizationDisabled = await getBatteryOptimization();
+      //     // if (isBatteryOptimizationDisabled != null && !!isBatteryOptimizationDisabled) {
+      //     //   timer.cancel();
+      //     // }
+      //     // _checkPermissionLocationBackground();
+      //   });
+      // }
+      // await DisableBatteryOptimization.showEnableAutoStartSettings("Enable Auto Start", "Follow the steps and enable the auto start of this app");
     }
   }
 

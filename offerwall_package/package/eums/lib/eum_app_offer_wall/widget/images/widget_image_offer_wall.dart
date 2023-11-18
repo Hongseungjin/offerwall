@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eums/gen/assets.gen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WidgetImageOfferWall extends StatefulWidget {
-  const WidgetImageOfferWall({super.key, required this.urlLink, required this.onDone, required this.scrollController});
+  const WidgetImageOfferWall({super.key, required this.urlLink, required this.onDone, required this.scrollController, required this.onScrollWebView});
   final String urlLink;
   final Function() onDone;
+  final Function() onScrollWebView;
   final ScrollController scrollController;
 
   @override
@@ -18,11 +21,15 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
   bool canScroll = true;
   WebViewController? controller;
 
+  String? linkWeb;
+
+  ValueNotifier<double> progress = ValueNotifier(0.0);
+
   @override
   void initState() {
     super.initState();
     if (!widget.urlLink.contains(".png") && !widget.urlLink.contains(".jpg")) {
-      final linkWeb = getProperHtml(widget.urlLink);
+      linkWeb = getProperHtml(widget.urlLink);
       controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(const Color(0x00000000))
@@ -30,11 +37,16 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
           NavigationDelegate(
             onProgress: (int progress) {
               // Update loading bar.
+              this.progress.value = progress / 100;
             },
             onPageStarted: (String url) {},
             onPageFinished: (String url) {
               // isRunning = true;
               // timerController.start();
+              if (url != linkWeb) {
+                linkWeb = url;
+                controller?.loadRequest(Uri.parse(url));
+              }
               widget.onDone.call();
             },
             onWebResourceError: (WebResourceError error) {
@@ -49,7 +61,7 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
             },
           ),
         )
-        ..loadRequest(Uri.parse(linkWeb));
+        ..loadRequest(Uri.parse(linkWeb!));
     }
   }
 
@@ -68,13 +80,55 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
   }
 
   @override
+  void dispose() {
+    controller?.clearCache();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
     // debugPrint("xxxxxx");
     return controller != null
-        ? WebViewWidget(
-            controller: controller!,
+        ? Stack(
+            children: [
+              WebViewWidget(
+                controller: controller!,
+                gestureRecognizers: {
+                  Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer()
+                      ..onDown = (_) {
+                        debugPrint("xxxx");
+                        widget.onScrollWebView.call();
+                      }
+                      ..onEnd = (details) {
+                        debugPrint("yyyy");
+                      },
+                  ),
+                },
+              ),
+              ValueListenableBuilder<double>(
+                valueListenable: progress,
+                builder: (context, value, child) {
+                  if (value < 1.0) {
+                    return Container(
+                      color: Colors.black.withOpacity(.1),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          value: progress.value,
+                          color: const Color(0xfffcc900),
+                        )),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              )
+            ],
           )
         : SingleChildScrollView(
             controller: widget.scrollController,

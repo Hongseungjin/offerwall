@@ -48,6 +48,8 @@ class LoggingInterceptor extends Interceptor {
         final cloneReq = await api.request(error.requestOptions.path,
             options: opts, data: error.requestOptions.data, queryParameters: error.requestOptions.queryParameters);
         return handler.resolve(cloneReq);
+      } else {
+        return handler.next(error);
       }
     }
     return handler.next(error);

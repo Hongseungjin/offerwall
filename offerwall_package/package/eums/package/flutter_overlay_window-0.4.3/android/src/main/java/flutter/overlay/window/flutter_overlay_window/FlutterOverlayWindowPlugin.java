@@ -2,10 +2,12 @@ package flutter.overlay.window.flutter_overlay_window;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -59,7 +61,24 @@ public class FlutterOverlayWindowPlugin implements
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         pendingResult = result;
-        if (call.method.equals("checkPermission")) {
+        if (call.method.equals("checkPermissionBattery")) {
+//                try{
+//                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        Intent intent = new Intent();
+//                        String packageName = context.getPackageName();
+//                        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+//                        if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+//                            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+//                            intent.setData(Uri.parse("package:" + packageName));
+//                            context.startService(intent);
+//                        }
+//                    }
+//                }catch (Exception e){
+//                    result.error("open app failure", e.getMessage(),e);
+//                }
+            result.success(true);
+
+        } else if (call.method.equals("checkPermission")) {
             result.success(checkOverlayPermission());
         } else if (call.method.equals("requestPermission")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

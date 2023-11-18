@@ -141,6 +141,9 @@ class FlutterBackgroundServiceAndroid extends FlutterBackgroundServicePlatform {
       ),
     );
   }
+  
+  
+  
 }
 
 class AndroidServiceInstance extends ServiceInstance {
@@ -227,4 +230,5 @@ class AndroidServiceInstance extends ServiceInstance {
     final result = await _channel.invokeMethod('openApp');
     return result ?? false;
   }
+ 
 }

@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,6 +20,7 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -276,9 +278,12 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
             }
 
             if (method.equalsIgnoreCase("setAutoStartOnBootMode")) {
+
+
                 JSONObject arg = (JSONObject) call.arguments;
                 boolean value = arg.getBoolean("value");
                 config.setAutoStartOnBoot(value);
+
                 result.success(true);
                 return;
             }
@@ -345,6 +350,7 @@ public class BackgroundService extends Service implements MethodChannel.MethodCa
                 return;
 
             }
+
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
             e.printStackTrace();

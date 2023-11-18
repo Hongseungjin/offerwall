@@ -445,10 +445,16 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
     String body = "";
     if (widget.tab == 0) {
       if (adType?.isNotEmpty == true) {
-        if (adType == "bee") {
-          body = '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}';
-        } else {
-          body = '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}';
+        switch (adType) {
+          case "bee":
+            body = '찾아가는 광고 ${Constants.formatTimeDayPoint(date)}';
+            break;
+          case "region":
+            body = '동네 광고 ${Constants.formatTimeDayPoint(date)}';
+            break;
+          default:
+            body = '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}';
+            break;
         }
       }
     }

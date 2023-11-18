@@ -20,7 +20,6 @@ const String keepID = 'id_1';
 const String navigationScreenId = 'id_2';
 
 const String notificationChannelId = 'EUMS_OFFERWALL';
-// const String notificationChannelIdBackground = 'EUMS_OFFERWALL_BACKGROUND';
 
 bool checkOnClick = false;
 
@@ -58,6 +57,9 @@ class NotificationHandler {
   final AndroidNotificationChannel _channel = const AndroidNotificationChannel(
     notificationChannelId,
     notificationChannelId,
+    playSound: false,
+    enableVibration: false,
+    enableLights: false,
   );
 
   final List<DarwinNotificationCategory> darwinNotificationCategories = <DarwinNotificationCategory>[
@@ -144,15 +146,18 @@ class NotificationHandler {
       sound: false,
     );
 
-    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-      categoryIdentifier: notificationChannelId,
-    );
+    const DarwinNotificationDetails iosNotificationDetails =
+        DarwinNotificationDetails(categoryIdentifier: notificationChannelId, presentSound: false);
     const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
       notificationChannelId,
       notificationChannelId,
       color: Color(0xffFF8E29),
-      importance: Importance.max,
+      importance: Importance.high,
       priority: Priority.high,
+      playSound: false,
+      enableVibration: false,
+      enableLights: false,
+      ongoing: true,
       actions: <AndroidNotificationAction>[
         AndroidNotificationAction(keepID, 'KEEP 하기'),
         AndroidNotificationAction(
@@ -185,7 +190,7 @@ class NotificationHandler {
             debugPrint("${message.toMap()}");
             final dataTemp = jsonDecode(message.data['data']);
 
-            if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region")) {
+            if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
               await flutterLocalNotificationsPlugin.cancel(notificationId);
 
               if (Platform.isAndroid) {
@@ -203,7 +208,7 @@ class NotificationHandler {
       },
     );
 
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {
@@ -344,7 +349,7 @@ class NotificationHandler {
   //       ));
   // }
 
-  static getToken() async {
+  static Future<String?> getToken() async {
     String? token;
     // if (Platform.isIOS) {
     //   token = await _fcm.getAPNSToken();
@@ -420,7 +425,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
-  // await NotificationHandler.instant.initializeFcmNotification();
 
   if (message.data['updateLocation'] == "true") {
     debugPrint("topics/eums : ${message.toMap()}");
@@ -436,14 +440,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         await FlutterBackgroundService().startService();
         isRunning = await checkBackgroundService();
       }
+
       if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
         await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
 
         const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
           notificationChannelId,
           notificationChannelId,
-          importance: Importance.max,
+          importance: Importance.high,
           priority: Priority.high,
+          enableVibration: false,
+          enableLights: false,
+          playSound: false,
+          ongoing: true,
           color: Color(0xffFF8E29),
           actions: <AndroidNotificationAction>[
             AndroidNotificationAction(keepID, 'KEEP 하기'),
@@ -456,14 +465,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
         const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
           categoryIdentifier: notificationChannelId,
+          presentSound: false,
         );
         const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
         if (Platform.isAndroid) {
           FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
         }
-        NotificationHandler.instant.flutterLocalNotificationsPlugin
-            .show(notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
+        try {
+          NotificationHandler.instant.flutterLocalNotificationsPlugin
+              .show(notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails, payload: jsonEncode(message.data));
+        } catch (e) {
+          rethrow;
+        }
       }
       // ignore: empty_catches
     } catch (e) {
