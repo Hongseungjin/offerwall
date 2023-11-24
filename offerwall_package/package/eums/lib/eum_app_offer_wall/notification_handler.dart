@@ -214,7 +214,6 @@ class NotificationHandler {
     );
 
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
-    // FirebaseMessaging.(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {

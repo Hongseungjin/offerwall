@@ -58,7 +58,7 @@
 
 ### Handle Code
 
-- Mở trang cần nhiệm vụ subscribe
+- Mở trang nhiệm vụ subscribe
   
 ![Alt text](./image_offerwall/subscribe/image_code1.png)
 
