@@ -37,3 +37,13 @@
 - Khi xử lý thành công gọi lên service để xác nhận
 
 ![Alt text](./image_offerwall/visit/image_code2.png)
+
+## Offerwall type `shopping`
+
+### Handle UI
+
+![Alt text](./image_offerwall/shopping/image1.png) -> ![Alt text](./image_offerwall/shopping/image2.png) -> ![Alt text](./image_offerwall/shopping/image3.png) -> ![Alt text](./image_offerwall/shopping/image4.png) -> ![Alt text](./image_offerwall/shopping/image5.png)
+
+### Handle Code
+
+![Alt text](./image_offerwall/shopping/image_code1.png)

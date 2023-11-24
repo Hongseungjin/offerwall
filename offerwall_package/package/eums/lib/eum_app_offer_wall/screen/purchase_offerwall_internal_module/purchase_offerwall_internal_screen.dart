@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/events/event_static_component.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:eums/common/events/rx_events.dart';
-import 'package:eums/common/rx_bus.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
@@ -120,12 +118,10 @@ class _PurchaseOfferwallInternalScreenState extends State<PurchaseOfferwallInter
                 return NavigationActionPolicy.CANCEL;
               }
             }
-
             return NavigationActionPolicy.ALLOW;
           },
-
           onLoadStop: (controller, url) async {
-            print("loadStop${url}");
+            print("loadStop$url");
             var html = await webView?.evaluateJavascript(source: "window.document.getElementsByTagName('html')[0].outerHTML;");
             printWrapped("loadStopurl$html");
             try {

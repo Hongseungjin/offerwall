@@ -278,7 +278,7 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   }
 
   Widget _buildContent(BuildContext context) {
-    print("controllerGet.fontSizeObx.value${controllerGet.fontSizeObx.value}");
+    // print("controllerGet.fontSizeObx.value${controllerGet.fontSizeObx.value}");
     return Scaffold(
         key: globalKey,
         backgroundColor: AppColor.white,
@@ -310,161 +310,169 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
             }
             return state.dataDetailOffWall == null
                 ? const SizedBox()
-                : SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
-                              imageUrl: state.dataDetailOffWall != null ? "${Constants.baseUrlImage}$thumbnail" : "",
-                              placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                              errorWidget: (context, url, error) {
-                                return Assets.logo.image(package: 'eums');
-                              }),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                : Column(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                state.dataDetailOffWall != null ? state.dataDetailOffWall['title'] : "",
-                                maxLines: 1,
-                                style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: CachedNetworkImage(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.cover,
+                                    imageUrl: state.dataDetailOffWall != null ? "${Constants.baseUrlImage}$thumbnail" : "",
+                                    placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                                    errorWidget: (context, url, error) {
+                                      return Assets.logo.image(package: 'eums');
+                                    }),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                Constants.formatMoney(state.dataDetailOffWall != null ? state.dataDetailOffWall['reward'] : 0, suffix: 'P'),
-                                style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: HexColor('#f4a43b')),
-                              )
-                            ],
-                          ),
-                        ),
-                        // const Divider(
-                        //   color: AppColor.colorC9,
-                        //   thickness: 8,
-                        // ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          child: Text(
-                            '적립 방법',
-                            style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: AppColor.black),
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                            ),
-                            child: buidlHtml(html: state.dataDetailOffWall != null ? state.dataDetailOffWall['description'] : '')),
-                        const SizedBox(height: 16),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          color: HexColor('#f9f9f9'),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                // '적립 방법',
-                                '주의사항',
-                                style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: AppColor.black),
-                              ),
-                              const SizedBox(height: 8),
+                              const SizedBox(height: 12),
                               Padding(
-                                padding: const EdgeInsets.only(left: 16),
-                                child: buidlHtml(html: state.dataDetailOffWall != null ? state.dataDetailOffWall['precaution'] : ''),
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      state.dataDetailOffWall != null ? state.dataDetailOffWall['title'] : "",
+                                      maxLines: 1,
+                                      style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      Constants.formatMoney(state.dataDetailOffWall != null ? state.dataDetailOffWall['reward'] : 0, suffix: 'P'),
+                                      style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: HexColor('#f4a43b')),
+                                    )
+                                  ],
+                                ),
                               ),
+                              // const Divider(
+                              //   color: AppColor.colorC9,
+                              //   thickness: 8,
+                              // ),
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                child: Text(
+                                  '적립 방법',
+                                  style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: AppColor.black),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: buidlHtml(html: state.dataDetailOffWall != null ? state.dataDetailOffWall['description'] : '')),
+                              const SizedBox(height: 16),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                color: HexColor('#f9f9f9'),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      // '적립 방법',
+                                      '주의사항',
+                                      style: AppStyle.bold.copyWith(fontSize: 4 + controllerGet.fontSizeObx.value, color: AppColor.black),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 16),
+                                      child: buidlHtml(html: state.dataDetailOffWall != null ? state.dataDetailOffWall['precaution'] : ''),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // InkWell(
+                              //   onTap: () {
+                              //     Routing().navigate(context, RequestScreen());
+                              //   },
+                              //   child: Container(
+                              //     margin: const EdgeInsets.symmetric(horizontal: 16),
+                              //     padding: const EdgeInsets.symmetric(vertical: 16),
+                              //     width: MediaQuery.of(context).size.width,
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(8),
+                              //         color: AppColor.colorC9.withOpacity(0.5)),
+                              //     child: Text(
+                              //       AppString.earningInquiry,
+                              //       style: AppStyle.medium.copyWith(
+                              //           fontSize: 16, color: AppColor.black),
+                              //       textAlign: TextAlign.center,
+                              //     ),
+                              //   ),
+                              // ),
+                              const SizedBox(height: 16),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: WidgetAnimationClickV2(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColor.yellow,
-                            onTap: () async {
-                              debugPrint("xxxx: ${widget.type}");
-                              if (widget.type == 'install') {
-                                final isInstalled = await checkInstallApp();
-                                if (isInstalled == false) {
-                                  launchUrl(
-                                    Uri.parse(urlApi),
-                                  );
-                                } else {
-                                  // ignore: use_build_context_synchronously
-                                  // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
-                                  AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
-                                  check();
-                                }
-                              } else if (widget.type == 'visit') {
-                                print("visit?");
-                                Routings().navigate(
-                                    context,
-                                    VisitOfferWallScren(
-                                      data: state.dataDetailOffWall,
-                                      voidCallBack: _fetchData,
-                                    ));
-                              } else if (widget.type == 'join') {
-                                Routings().navigate(
-                                    context,
-                                    JoinOfferWallScreen(
-                                      data: state.dataDetailOffWall,
-                                      onCallBack: _joinOfferWall,
-                                    ));
-                              } else if (widget.type == 'shopping') {
-                                Routings().navigate(
-                                    context,
-                                    PurchaseOfferwallInternalScreen(
-                                      data: state.dataDetailOffWall,
-                                    ));
-                              } else if (widget.type == 'subscribe') {
-                                Routings().navigate(
-                                    context,
-                                    RegisterLinkScreen(
-                                      data: state.dataDetailOffWall,
-                                    ));
+                      ),
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        child: WidgetAnimationClickV2(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          borderRadius: BorderRadius.circular(8),
+                          color: AppColor.yellow,
+                          onTap: () async {
+                            debugPrint("xxxx: ${widget.type}");
+                            if (widget.type == 'install') {
+                              final isInstalled = await checkInstallApp();
+                              if (isInstalled == false) {
+                                launchUrl(
+                                  Uri.parse(urlApi),
+                                );
+                              } else {
+                                // ignore: use_build_context_synchronously
+                                // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+                                AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
+                                check();
                               }
-                            },
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: Text(
-                                '참여하고 포인트 받기',
-                                style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black),
-                                textAlign: TextAlign.center,
-                              ),
+                            } else if (widget.type == 'visit') {
+                              print("visit?");
+                              Routings().navigate(
+                                  context,
+                                  VisitOfferWallScren(
+                                    data: state.dataDetailOffWall,
+                                    voidCallBack: _fetchData,
+                                  ));
+                            } else if (widget.type == 'join') {
+                              Routings().navigate(
+                                  context,
+                                  JoinOfferWallScreen(
+                                    data: state.dataDetailOffWall,
+                                    onCallBack: _joinOfferWall,
+                                  ));
+                            } else if (widget.type == 'shopping') {
+                              Routings().navigate(
+                                  context,
+                                  PurchaseOfferwallInternalScreen(
+                                    data: state.dataDetailOffWall,
+                                  ));
+                            } else if (widget.type == 'subscribe') {
+                              Routings().navigate(
+                                  context,
+                                  RegisterLinkScreen(
+                                    data: state.dataDetailOffWall,
+                                  ));
+                            }
+                          },
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                              '참여하고 포인트 받기',
+                              style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
-                        // InkWell(
-                        //   onTap: () {
-                        //     Routing().navigate(context, RequestScreen());
-                        //   },
-                        //   child: Container(
-                        //     margin: const EdgeInsets.symmetric(horizontal: 16),
-                        //     padding: const EdgeInsets.symmetric(vertical: 16),
-                        //     width: MediaQuery.of(context).size.width,
-                        //     decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(8),
-                        //         color: AppColor.colorC9.withOpacity(0.5)),
-                        //     child: Text(
-                        //       AppString.earningInquiry,
-                        //       style: AppStyle.medium.copyWith(
-                        //           fontSize: 16, color: AppColor.black),
-                        //       textAlign: TextAlign.center,
-                        //     ),
-                        //   ),
-                        // ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                      ),
+                    ],
                   );
           },
         ));
