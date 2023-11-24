@@ -30,10 +30,10 @@
 
 ### Handle Code
 
-- Open webview
+- Mở màn hình thực hiện nhiệm vụ
 
 ![Alt text](./image_offerwall/visit/image_code1.png)
 
-- Handle success call service
+- Khi xử lý thành công gọi lên service để xác nhận
 
 ![Alt text](./image_offerwall/visit/image_code2.png)
