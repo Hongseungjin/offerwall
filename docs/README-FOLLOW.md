@@ -26,7 +26,7 @@
 
 ### Handle UI
 
-![Alt text](./image_offerwall/visit/image1.png) -> ![Alt text](./image_offerwall/visit/image2.png)  -> ![Alt text](./image_offerwall/visit/image3.png)
+![Alt text](./image_offerwall/visit/image1.jpg) -> ![Alt text](./image_offerwall/visit/image2.jpg)  -> ![Alt text](./image_offerwall/visit/image3.jpg)
 
 ### Handle Code
 
