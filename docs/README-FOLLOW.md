@@ -73,3 +73,19 @@
 - Khi xử lý thành công gọi lên service để xác nhận
 
 ![Alt text](./image_offerwall/subscribe/image_code4.png)
+
+## Offerwall type `join`
+
+### Handle UI
+
+![Alt text](./image_offerwall/join/image1.png) -> ![Alt text](./image_offerwall/join/image2.png) -> ![Alt text](./image_offerwall/join/image3.png) -> ![Alt text](./image_offerwall/join/image4.png)
+
+### Handle Code
+
+- Mở trang cần nhiệm vụ subscribe
+  
+![Alt text](./image_offerwall/join/image_code1.png)
+
+- Khi xử lý thành công gọi lên service để xác nhận
+
+![Alt text](./image_offerwall/join/image_code2.png)

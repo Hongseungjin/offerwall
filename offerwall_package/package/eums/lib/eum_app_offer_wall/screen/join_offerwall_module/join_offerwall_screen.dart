@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_component/flutter_component.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:eums/common/events/events.dart';
-import 'package:eums/common/rx_bus.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
@@ -157,6 +155,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               } else {
                 // print("ahihi");
               }
+              return null;
             },
             shouldOverrideUrlLoading: (controller, navigationAction) async {
               var uri = navigationAction.request.url!;
@@ -175,13 +174,12 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               return NavigationActionPolicy.ALLOW;
             },
             shouldInterceptAjaxRequest: (controller, ajaxRequest) async {
-              printWrapped("ajaxRequest${ajaxRequest}");
+              printWrapped("ajaxRequest$ajaxRequest");
               return ajaxRequest;
             },
 
             onLoadStop: (controller, url) async {
               var html = await webView?.evaluateJavascript(source: "window.document.getElementsByTagName('html')[0].outerHTML;");
-
               // printWrapped("loadStopurl $html");
               if (html.contains('승인은 영업일 기준 3일 이내에 완료되며, 문자 메시지로 통보애 드립니다.')) {
                 webView?.canGoBack().then((value) {
