@@ -46,4 +46,6 @@
 
 ### Handle Code
 
+- Xử lý webview bắt sự kiện mua sắm
+  
 ![Alt text](./image_offerwall/shopping/image_code1.png)
