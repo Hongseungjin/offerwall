@@ -13,3 +13,12 @@
 - Check install
 
 ![Alt text](./image_offerwall/install/image_code1.jpg)
+
+- Nếu chưa được cài đặt thì chuyển màn hình đến store 
+
+![Alt text](./image_offerwall/install/image_code3.jpg)
+
+
+- Khi hoàn thành nhiệm vụ call lên service để xác nhận
+
+![Alt text](./image_offerwall/install/image_code2.jpg)
