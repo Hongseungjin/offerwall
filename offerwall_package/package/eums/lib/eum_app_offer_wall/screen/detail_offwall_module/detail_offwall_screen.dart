@@ -82,9 +82,12 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     bool isInstalled = false;
     try {
       String packageName = "";
+      //Check Platform android
       if (Platform.isAndroid) {
         packageName = uri.queryParameters['id'] ?? '';
-      } else if (Platform.isIOS) {
+      } else
+      //Check Platform android
+      if (Platform.isIOS) {
         try {
           int indexID = uri.path.indexOf("/id");
           final appStoreId = uri.path.substring(indexID + 3);
@@ -92,13 +95,11 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
           final dataJson = jsonDecode(response.body);
           packageName = ((dataJson['results'] as List).first as Map)['bundleId'];
         } catch (e) {
+          // Show errors on the screen if any
           AppAlert.showError('$e');
-
-          // rethrow;
           return false;
         }
       }
-      // isInstalled = await DeviceApps.isAppInstalled(packageName);
       final appName = await EumsPlatformInterface.instance.getAppNameByPackage(packageName);
       if (appName.isNotEmpty == true) {
         isInstalled = true;
@@ -106,9 +107,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
         isInstalled = false;
       }
     } catch (e) {
-      // AppAlert.showError(context, fToast, '$e');
+      // Show errors on the screen if any
       AppAlert.showError('$e');
-      // rethrow;
       return false;
     }
 
