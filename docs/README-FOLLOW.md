@@ -10,6 +10,12 @@
   
 ![Alt text](./image_offerwall/install/image1.jpg)
 
+<p float="left">
+  <img src="./image_offerwall/install/image1.jpg" width="100" />
+  <img src="./image_offerwall/install/image1.jpg" width="100" />
+  <img src="./image_offerwall/install/image1.jpg" width="100" />
+</p>
+
 #### Step 2
 
 - Thực hiện nhiệm vụ
