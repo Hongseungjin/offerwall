@@ -64,10 +64,13 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future deleteScrap({idx}) async {
+  Future deleteScrap({required int adsIdx, required String adType}) async {
     await api.delete(
-      'advertises/delete-crap/$idx',
-    );
+      'advertises/delete-crap',
+    data:{
+      'adsIdx': adsIdx,
+      'ad_type': adType,
+    } );
   }
 
   @override
@@ -201,15 +204,16 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   Future missionOfferWallInternal({offerWallIdx, urlImage, lang, html}) async {
     // nội bộ
     FormData formData = FormData.fromMap({
-      'image': urlImage != null
-          ? await MultipartFile.fromFile(
-              urlImage.path,
-            )
-          : null,
+      if (urlImage != null)
+        'image': await MultipartFile.fromFile(
+          urlImage.path,
+        ),
       'offerwall_idx': offerWallIdx,
-      'lang': lang,
-      'html': html
+      if (lang != null) 'lang': lang,
+      if (html != null) 'html': html
     });
+    
+
     await api.post('point/offerwall/mission-complete', data: formData);
     return;
   }
@@ -344,21 +348,6 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     await api.put('user/location', data: data);
   }
 
-  @override
-  startBackgroundFirebaseMessage() async {
-    try {
-      final deviceToken = await NotificationHandler.getToken();
-      final firebaseKey = LocalStoreService.instant.preferences.getString(LocalStoreService.instant.firebaseKey);
-      final result = await Dio(BaseOptions(headers: {"Authorization": "key=$firebaseKey", "Content-Type": "application/json"})).post(
-        "https://fcm.googleapis.com/fcm/send",
-        data: {
-          "to": deviceToken,
-          "content_available": true,
-        },
-      );
-      print("startBackgroundFirebaseMessage===> ${result.statusCode}");
-    } catch (e) {
-      rethrow;
-    }
-  }
+
+  
 }

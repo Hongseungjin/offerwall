@@ -17,19 +17,25 @@ dependencies:
   # # endregion
 
   # region Package notification
-  # firebase_messaging: ^14.6.3
-  firebase_messaging: 14.6.8
-  # firebase_messaging: 14.7.4
-  flutter_local_notifications: ^15.1.0+1
-  # flutter_local_notifications: 16.1.0
-  firebase_core: ^2.14.0
+  firebase_messaging: ^14.7.5
+  # firebase_messaging: 14.6.8
+  # firebase_messaging: 
+  #   path: package/firebase_messaging
+  
+  # firebase_messaging: 11.4.4
+  # firebase_core_platform_interface: 4.5.1
+  # flutter_local_notifications: ^15.1.0+1
+  flutter_local_notifications: ^16.1.0
+  # firebase_core: ^2.14.0
+  firebase_core: 
   # firebase_core: 2.22.0
-
 
   # disable_battery_optimization: ^1.1.0+1
   disable_battery_optimization:
     path: package/Disable-Battery-Optimizations-1.1.0-1
   # flutter_background_service: 3.0.1
+  # flutter_background_service_android: 6.0.1
+  # flutter_background_service: 5.0.1
   flutter_background_service:
     path: package/flutter_background_service
 
@@ -87,6 +93,7 @@ dependencies:
   path_provider: ^2.1.1
   lottie: ^2.3.2
   shimmer: ^3.0.0
+  http: 
 
 
   flutter_component:

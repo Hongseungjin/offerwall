@@ -5,6 +5,7 @@ import 'package:eums/eum_app_offer_wall/screen/visit_offerwall_module/bloc/visit
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_inappweb.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 
 import '../../../common/events/rx_events.dart';
 
@@ -53,7 +54,8 @@ class _VisitOfferWallScrenState extends State<VisitOfferWallScren> {
       return;
     }
     if (state.visitOfferWallInternalStatus == VisitOfferWallInternalStatus.success) {
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       LoadingDialog.instance.hide();
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'], voidCallback: () {
         Navigator.pop(context);

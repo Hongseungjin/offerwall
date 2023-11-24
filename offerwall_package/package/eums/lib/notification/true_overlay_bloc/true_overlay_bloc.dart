@@ -32,7 +32,14 @@ class TrueOverlayService {
     return;
   }
 
-  Future deleteScrap({advertiseIdx, token}) async {
-    await dio.delete('${Constants.baseUrl}advertises/delete-crap/$advertiseIdx', options: Options(headers: {"authorization": 'Bearer $token'}));
+  Future deleteScrap({required int advertiseIdx, required String adType, token}) async {
+    await dio.delete(
+      '${Constants.baseUrl}advertises/delete-crap',
+      data: {
+        'adsIdx': advertiseIdx,
+        'ad_type': adType,
+      },
+      options: Options(headers: {"authorization": 'Bearer $token'}),
+    );
   }
 }

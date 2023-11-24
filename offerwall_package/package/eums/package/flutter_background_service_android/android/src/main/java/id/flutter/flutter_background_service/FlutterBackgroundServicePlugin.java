@@ -5,12 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -144,7 +140,6 @@ public class FlutterBackgroundServicePlugin implements FlutterPlugin, MethodCall
                 result.success(isServiceRunning());
                 return;
             }
-
 
             result.notImplemented();
         } catch (Exception e) {

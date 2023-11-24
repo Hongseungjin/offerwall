@@ -40,9 +40,9 @@ class PushLinkImage {
   dynamic data;
 }
 
-class UpdateUser {
-  UpdateUser();
-}
+// class UpdateUser {
+//   UpdateUser();
+// }
 
 class ShareData {
   ShareData();

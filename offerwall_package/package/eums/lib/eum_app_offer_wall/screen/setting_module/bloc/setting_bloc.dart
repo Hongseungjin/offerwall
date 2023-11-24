@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:meta/meta.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -31,8 +32,12 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
 
   _mapEnableOrDisbleSettingToState(EnableOrDisbleSetting event, emit) async {
     try {
+      LoadingDialog.instance.show();
       await _eumsOfferWallService.enableOrDisebleSettingTime(enable: event.enableOrDisble);
-    } catch (ex) {}
+      add(GetSettingTime());
+    } catch (ex) {
+      LoadingDialog.instance.hide();
+    }
   }
 
   _mapSettingTimeToState(SettingTime event, emit) async {
@@ -49,6 +54,8 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     emit(state.copyWith(settingStatus: SettingStatus.loading));
     try {
       dynamic dataSettingTime = await _eumsOfferWallService.getSettingTime();
+      LoadingDialog.instance.hide();
+
       emit(state.copyWith(settingStatus: SettingStatus.success, dataSetting: dataSettingTime));
     } catch (ex) {
       emit(state.copyWith(settingStatus: SettingStatus.failure));

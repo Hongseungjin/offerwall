@@ -1,13 +1,19 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:devicelocale/devicelocale.dart';
+import 'package:dio/dio.dart';
+import 'package:eums/common/api.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
+import 'package:eums/eums_library.dart';
+import 'package:eums/eums_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/instance_manager.dart';
 import 'package:eums/common/constants.dart';
@@ -23,6 +29,7 @@ import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
 import 'package:eums/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../common/routing.dart';
 import '../../utils/appColor.dart';
@@ -74,18 +81,38 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     Uri uri = Uri.parse(urlApi);
     bool isInstalled = false;
     try {
-      isInstalled = await DeviceApps.isAppInstalled(uri.queryParameters['id'] ?? '');
+      String packageName = "";
+      if (Platform.isAndroid) {
+        packageName = uri.queryParameters['id'] ?? '';
+      } else if (Platform.isIOS) {
+        try {
+          int indexID = uri.path.indexOf("/id");
+          final appStoreId = uri.path.substring(indexID + 3);
+          var response = await http.get(Uri.parse('https://itunes.apple.com/lookup?id=$appStoreId'));
+          final dataJson = jsonDecode(response.body);
+          packageName = ((dataJson['results'] as List).first as Map)['bundleId'];
+        } catch (e) {
+          AppAlert.showError('$e');
+
+          // rethrow;
+          return false;
+        }
+      }
+      // isInstalled = await DeviceApps.isAppInstalled(packageName);
+      final appName = await EumsPlatformInterface.instance.getAppNameByPackage(packageName);
+      if (appName.isNotEmpty == true) {
+        isInstalled = true;
+      } else {
+        isInstalled = false;
+      }
     } catch (e) {
       // AppAlert.showError(context, fToast, '$e');
       AppAlert.showError('$e');
+      // rethrow;
+      return false;
     }
-    if (isInstalled == false) {
-      launch(urlApi);
-    } else {
-      // ignore: use_build_context_synchronously
-      // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
-      AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
-    }
+
+    return isInstalled;
   }
 
   @override
@@ -102,14 +129,20 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   }
 
   check() async {
-    Uri uri = Uri.parse(urlApi);
-    List<Application> apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeSystemApps: true);
-    for (var app in apps) {
-      if (app.packageName == uri.queryParameters['id']) {
-        globalKey.currentContext?.read<DetailOffWallBloc>().add(MissionCompleteOfferWall(xId: widget.xId));
-      }
+    // Uri uri = Uri.parse(urlApi);
+    // // List<Application> apps = await DeviceApps.getInstalledApplications(onlyAppsWithLaunchIntent: true, includeSystemApps: true);
+    // List<Application> apps = await DeviceApps.getInstalledApplications();
+    // for (var app in apps) {
+    //   if (app.packageName == uri.queryParameters['id']) {
+    //     globalKey.currentContext?.read<DetailOffWallBloc>().add(MissionCompleteOfferWall(xId: widget.xId));
+    //   }
 
-      // TODO Backend operation
+    //   // TODO Backend operation
+    // }
+
+    final checkInstalled = await checkInstallApp();
+    if (checkInstalled == true) {
+      globalKey.currentContext?.read<DetailOffWallBloc>().add(MissionCompleteOfferWall(xId: widget.xId));
     }
   }
 
@@ -176,7 +209,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     }
     if (state.visitOfferWallInternalStatus == VisitOfferWallInternalStatus.success) {
       LoadingDialog.instance.hide();
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context, data: dataOfferWallVisit['reward'], voidCallback: () {});
     }
   }
@@ -192,7 +226,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     }
     if (state.joinOfferWallInternalStatus == JoinOfferWallInternalStatus.success) {
       LoadingDialog.instance.hide();
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context, data: dataOfferWallVisit['reward'], voidCallback: () {
         // Navigator.pop(context);
       });
@@ -212,7 +247,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     if (state.missionCompleteOfferWallStatus == MissionCompleteOfferWallStatus.success) {
       LoadingDialog.instance.hide();
       DialogUtils.showDialogMissingPoint(context, data: point, voidCallback: () {});
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
     }
   }
 
@@ -354,10 +390,20 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             borderRadius: BorderRadius.circular(8),
                             color: AppColor.yellow,
-                            onTap: () {
-                              // debugPrint("xxxx: ${widget.type}");
+                            onTap: () async {
+                              debugPrint("xxxx: ${widget.type}");
                               if (widget.type == 'install') {
-                                checkInstallApp();
+                                final isInstalled = await checkInstallApp();
+                                if (isInstalled == false) {
+                                  launchUrl(
+                                    Uri.parse(urlApi),
+                                  );
+                                } else {
+                                  // ignore: use_build_context_synchronously
+                                  // AppAlert.showError(context, fToast, '이미 설치되어 있는 앱은 참여불가능합니다');
+                                  AppAlert.showError('이미 설치되어 있는 앱은 참여불가능합니다');
+                                  check();
+                                }
                               } else if (widget.type == 'visit') {
                                 print("visit?");
                                 Routings().navigate(

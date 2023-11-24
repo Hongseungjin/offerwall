@@ -59,7 +59,7 @@ class ScrapAdverboxBloc extends Bloc<ScrapAdverboxEvent, ScrapAdverboxState> {
   _mapSaveScrapdverboxToState(DeleteScrapdverbox event, emit) async {
     emit(state.copyWith(deleteScrapAdverboxStatus: DeleteScrapAdverboxStatus.loading));
     try {
-      await _eumsOfferWallService.deleteScrap(idx: event.idx);
+      await _eumsOfferWallService.deleteScrap(adsIdx: event.adsIdx, adType: event.adType);
       emit(state.copyWith(
         deleteScrapAdverboxStatus: DeleteScrapAdverboxStatus.success,
       ));

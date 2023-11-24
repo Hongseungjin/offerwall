@@ -28,10 +28,18 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>FIRMessagingAutoRegisterEnabledflag</key>
+	<true/>
 	<key>FLTEnableImpeller</key>
 	<false/>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<true/>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<true/>
+	<key>FirebaseMessagingAutoInitEnabled</key>
+	<true/>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -65,8 +73,6 @@
 	<string>Allows access camera to take photo.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
-	<key>FirebaseCrashlyticsCollectionEnabled</key>
-	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -89,7 +95,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FirebaseMessagingAutoInitEnabled</key>
-	<true/>
 </dict>
 </plist>

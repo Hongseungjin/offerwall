@@ -119,7 +119,6 @@ class FlutterBackgroundServiceIOS extends FlutterBackgroundServicePlatform {
       ),
     );
   }
-  
 }
 
 class IOSServiceInstance extends ServiceInstance {

@@ -1,8 +1,10 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
@@ -160,12 +162,21 @@ class _AppMainScreenState extends State<AppMainScreen> {
     // localStore = LocalStoreService();
     super.initState();
 
-    textEditingController1.text = LocalStoreService.instant.preferences.getString("memId") ?? "abee997";
-    textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "w";
-    textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "인천_서";
-    dateTime = LocalStoreService.instant.preferences.getString("memBirth") ?? dateTime;
+    if (kDebugMode) {
+      textEditingController1.text = LocalStoreService.instant.preferences.getString("memId") ?? "abee997";
+      textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "w";
+      textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "인천_서";
+      dateTime = LocalStoreService.instant.preferences.getString("memBirth") ?? dateTime;
+    }else{
+      textEditingController1.text = LocalStoreService.instant.preferences.getString("memId") ?? "";
+      textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "";
+      textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "";
+      dateTime = LocalStoreService.instant.preferences.getString("memBirth") ?? dateTime;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await NotificationHandler.instant.initializeFcmNotification();
+
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.setConfigSettings(RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
@@ -173,26 +184,26 @@ class _AppMainScreenState extends State<AppMainScreen> {
       ));
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String versionCurrent = packageInfo.version;
-     
 
-      remoteConfig.onConfigUpdated.listen((event) async {
-        await remoteConfig.activate();
-        final newVersion = remoteConfig.getString("version");
+      // remoteConfig.onConfigUpdated.listen((event) async {
+      //   await remoteConfig.activate();
+      //   final newVersion = remoteConfig.getString("version");
 
-        debugPrint("check version ($isShowCheckVersion): $newVersion / $versionCurrent ");
-        if (versionCurrent != newVersion && isShowCheckVersion == false) {
-          isShowCheckVersion = true;
-          // ignore: use_build_context_synchronously
-          await WidgetDialogCheckVersion.show(context);
-        }
+      //   debugPrint("check version ($isShowCheckVersion): $newVersion / $versionCurrent ");
+      //   if (_checkNumberVersion(currentVersion: versionCurrent, newVersion: newVersion) == false && isShowCheckVersion == false) {
+      //     isShowCheckVersion = true;
+      //     // ignore: use_build_context_synchronously
+      //     await WidgetDialogCheckVersion.show(context);
+      //   }
 
-        // Use the new config values here.
-      });
-       final newVersion = remoteConfig.getString("version");
+      //   // Use the new config values here.
+      // });
+      await remoteConfig.fetchAndActivate();
+      final newVersion = remoteConfig.getString("version");
 
       if (newVersion.isNotEmpty == true) {
         debugPrint("check version : $newVersion / $versionCurrent ");
-        if (versionCurrent != newVersion && isShowCheckVersion == false) {
+        if (_checkNumberVersion(currentVersion: versionCurrent, newVersion: newVersion) == false && isShowCheckVersion == false) {
           isShowCheckVersion = true;
           // ignore: use_build_context_synchronously
           await WidgetDialogCheckVersion.show(
@@ -201,6 +212,24 @@ class _AppMainScreenState extends State<AppMainScreen> {
         }
       }
     });
+  }
+
+  _checkNumberVersion({required String newVersion, required String currentVersion}) {
+    List<int> versionCurrent = currentVersion.split(".").map((e) => int.parse(e.toString())).toList();
+    List<int> versionNew = newVersion.split(".").map((e) => int.parse(e.toString())).toList();
+
+    if (versionCurrent[0] < versionNew[0]) {
+      return false;
+    } else {
+      if (versionCurrent[1] < versionNew[1]) {
+        return false;
+      } else {
+        if (versionCurrent[2] < versionNew[2]) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   @override
@@ -277,6 +306,11 @@ class _AppMainScreenState extends State<AppMainScreen> {
               color: AppColor.blue1,
               padding: const EdgeInsets.all(20),
               onTap: () async {
+                if (textEditingController1.text.isEmpty == true ||
+                    textEditingController2.text.isEmpty == true ||
+                    textEditingController4.text.isEmpty == true) {
+                  return;
+                }
                 LocalStoreService.instant.preferences.setString("memId", textEditingController1.text);
                 LocalStoreService.instant.preferences.setString("memGen", textEditingController2.text);
                 LocalStoreService.instant.preferences.setString("memBirth", dateTime);

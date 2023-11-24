@@ -17,7 +17,7 @@ class Eums {
 
   static final Eums instant = Eums._();
 
-  EumsPermission permission = EumsPermission.instant;
+  // EumsPermission permission = EumsPermission.instant;
 
   void init({required Function() onRun}) async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -36,18 +36,16 @@ class Eums {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
 
     await LocalStoreService.instant.init();
 
     print("============ Firebase.initializeApp ========= ");
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-    await NotificationHandler.instant.initializeFcmNotification();
+    
 
     await onRun?.call();
 
-  
     runApp(
       MaterialApp(
         debugShowCheckedModeBanner: false,

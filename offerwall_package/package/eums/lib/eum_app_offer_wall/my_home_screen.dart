@@ -96,7 +96,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       // }
       var locationWhenInUse = await Permission.locationWhenInUse.request();
       if (locationWhenInUse.isGranted) {
-        debugPrint("xxxx");
+        // debugPrint("xxxx");
         if (await Permission.locationAlways.status != PermissionStatus.granted) {
           // ignore: use_build_context_synchronously
           final result = await WidgetDialogLocation.show(
@@ -169,7 +169,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-
+    NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});

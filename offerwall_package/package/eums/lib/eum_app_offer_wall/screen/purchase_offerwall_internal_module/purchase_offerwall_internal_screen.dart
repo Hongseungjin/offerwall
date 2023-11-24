@@ -2,6 +2,7 @@ import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:eums/common/events/rx_events.dart';
 import 'package:eums/common/rx_bus.dart';
@@ -76,7 +77,8 @@ class _PurchaseOfferwallInternalScreenState extends State<PurchaseOfferwallInter
     }
     if (state.puschaseOfferWallInternalStatus == PuschaseOfferWallInternalStatus.success) {
       LoadingDialog.instance.hide();
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'], voidCallback: () {
         Navigator.pop(context);
       });

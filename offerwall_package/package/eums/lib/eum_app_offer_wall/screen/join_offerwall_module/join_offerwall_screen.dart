@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/flutter_component.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:eums/common/events/events.dart';
 import 'package:eums/common/rx_bus.dart';
@@ -74,7 +75,8 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
     }
     if (state.joinOfferWallStatus == JoinOfferWallStatus.success) {
       LoadingDialog.instance.hide();
-      RxBus.post(UpdateUser());
+      // RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'], voidCallback: () {
         Navigator.pop(context);
       });
@@ -119,7 +121,7 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
               webView = controller;
               webView?.loadUrl(urlRequest: URLRequest(url: Uri.parse(myUrl)));
 
-              print("chang12312312e");
+              // print("chang12312312e");
             },
             onLoadStart: (controller, url) {},
             iosOnDidReceiveServerRedirectForProvisionalNavigation: (controller) {},
@@ -147,19 +149,19 @@ class _JoinOfferWallScreenState extends State<JoinOfferWallScreen> {
                   checkJoin = true;
                 });
 
-                print("ahihi123123");
+                // print("ahihi123123");
 
                 // globalKey.currentContext
                 //     ?.read<JoinOfferwallInternalBloc>()
                 //     .add(JoinOffWall(xId: widget.data['idx'], lang: lang));
               } else {
-                print("ahihi");
+                // print("ahihi");
               }
             },
             shouldOverrideUrlLoading: (controller, navigationAction) async {
               var uri = navigationAction.request.url!;
 
-              print("uriuriuriuri$uri");
+              // print("uriuriuriuri$uri");
               if (!["http", "https", "file", "chrome", "data", "javascript", "about"].contains(uri.scheme)) {
                 if (await canLaunchUrl(uri)) {
                   await launchUrl(

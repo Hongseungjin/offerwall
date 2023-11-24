@@ -12,9 +12,11 @@ class WidgetAnimationClickV2 extends StatefulWidget {
     this.borderRadius,
     this.radius,
     this.border,
+    this.onTapLong,
   });
   final Widget child;
   final Function()? onTap;
+  final Function()? onTapLong;
   final EdgeInsetsGeometry? padding;
   final Color? color;
   final BorderRadius? borderRadius;
@@ -37,9 +39,12 @@ class _WidgetAnimationClickV2State extends State<WidgetAnimationClickV2> with Si
         child: InkWell(
           splashColor: Colors.grey.withOpacity(.7),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(100),
+          onLongPress: () {
+            widget.onTapLong?.call();
+          },
           onTap: () {
             timer?.cancel();
-            timer = Timer(const Duration(milliseconds: 600), () {
+            timer = Timer(const Duration(milliseconds: 300), () {
               widget.onTap?.call();
             });
           },

@@ -8,6 +8,7 @@ import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:image_picker/image_picker.dart';
@@ -96,7 +97,8 @@ class _RegisterLinkScreenState extends State<RegisterLinkScreen> {
       return;
     }
     if (state.registerLinkStatus == RegisterLinkStatus.success) {
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       LoadingDialog.instance.hide();
       DialogUtils.showDialogMissingPoint(context, data: widget.data['reward'], voidCallback: () {
         Navigator.pop(context);

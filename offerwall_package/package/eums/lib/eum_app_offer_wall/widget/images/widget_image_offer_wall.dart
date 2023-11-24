@@ -100,11 +100,11 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
                   Factory<VerticalDragGestureRecognizer>(
                     () => VerticalDragGestureRecognizer()
                       ..onDown = (_) {
-                        debugPrint("xxxx");
+                        // debugPrint("xxxx");
                         widget.onScrollWebView.call();
                       }
                       ..onEnd = (details) {
-                        debugPrint("yyyy");
+                        // debugPrint("yyyy");
                       },
                   ),
                 },

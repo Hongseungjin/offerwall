@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/const/values.dart';
@@ -92,7 +93,7 @@ class NotificationHandler {
     var initializationSettingsAndroid = const AndroidInitializationSettings('drawable/ic_bg_service_small');
 
     final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
-      requestAlertPermission: false,
+      requestAlertPermission: true,
       requestBadgePermission: false,
       requestSoundPermission: false,
       onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
@@ -131,23 +132,26 @@ class NotificationHandler {
     // try {
     //   await _fcm.requestPermission(alert: false);
     // } catch (e) {}
-    // await FirebaseMessaging.instance.requestPermission(
-    //   alert: true,
-    //   announcement: false,
-    //   badge: true,
-    //   carPlay: false,
-    //   criticalAlert: false,
-    //   provisional: false,
-    //   sound: true,
-    // );
+    await FirebaseMessaging.instance.requestPermission(
+      alert: false,
+      announcement: false,
+      badge: false,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: true,
+      sound: false,
+    );
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: false,
       sound: false,
     );
 
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(categoryIdentifier: notificationChannelId, presentSound: false);
+    const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
+      categoryIdentifier: notificationChannelId,
+      presentSound: false,
+      interruptionLevel: InterruptionLevel.active,
+    );
     const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
       notificationChannelId,
       notificationChannelId,
@@ -157,7 +161,7 @@ class NotificationHandler {
       playSound: false,
       enableVibration: false,
       enableLights: false,
-      ongoing: true,
+      // ongoing: true,
       actions: <AndroidNotificationAction>[
         AndroidNotificationAction(keepID, 'KEEP 하기'),
         AndroidNotificationAction(
@@ -171,6 +175,7 @@ class NotificationHandler {
       (RemoteMessage message) async {
         if (message.data['updateLocation'] == "true") {
           // FlutterBackgroundService().invoke('locationCurrent');
+          debugPrint("xxxx FirebaseMessaging.onMessage.listen =>>> ");
           EumsApp.instant.locationCurrent();
         } else {
           try {
@@ -208,10 +213,12 @@ class NotificationHandler {
       },
     );
 
-    // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    // FirebaseMessaging.(firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {
+        debugPrint("xxx");
         // final data = message.data;
         // data['isWebView'] = true;
         // FlutterBackgroundService().invoke("showOverlay", {'data': data});
@@ -351,11 +358,12 @@ class NotificationHandler {
 
   static Future<String?> getToken() async {
     String? token;
-    // if (Platform.isIOS) {
-    //   token = await _fcm.getAPNSToken();
-    // } else {
-    token = await FirebaseMessaging.instance.getToken();
-    // }
+    if (Platform.isIOS) {
+      await FirebaseMessaging.instance.getAPNSToken();
+      token = await FirebaseMessaging.instance.getToken();
+    } else {
+      token = await FirebaseMessaging.instance.getToken();
+    }
     await LocalStoreService.instant.setDeviceToken(token);
     debugPrint('device-token: $token');
     return token;
@@ -421,16 +429,31 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
 }
 
 @pragma('vm:entry-point')
+Future<bool> iosBackground(ServiceInstance serviceInstance) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  debugPrint("xxxx-iosBackground =====>");
+  return true;
+}
+
+@pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
+  // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+
+  // NotificationHandler.instant.initializeFcmNotification();
+  // await FlutterBackgroundService().startService();
+  // FlutterBackgroundService().invoke("showNotification", message.data);
 
   if (message.data['updateLocation'] == "true") {
     debugPrint("topics/eums : ${message.toMap()}");
     EumsApp.instant.locationCurrent();
   } else {
     try {
+      debugPrint("xxxx--message: ${message.toMap()}");
+
       final dataTemp = jsonDecode(message.data['data']);
       bool isRunning = true;
       if (Platform.isAndroid) {
@@ -452,21 +475,24 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           enableVibration: false,
           enableLights: false,
           playSound: false,
-          ongoing: true,
+          // ongoing: true,
           color: Color(0xffFF8E29),
           actions: <AndroidNotificationAction>[
-            AndroidNotificationAction(keepID, 'KEEP 하기'),
+            AndroidNotificationAction(
+              keepID,
+              'KEEP 하기',
+              cancelNotification: true,
+            ),
             AndroidNotificationAction(
               navigationScreenId,
               '광고 시청하기',
+              cancelNotification: true,
             ),
           ],
         );
 
-        const DarwinNotificationDetails iosNotificationDetails = DarwinNotificationDetails(
-          categoryIdentifier: notificationChannelId,
-          presentSound: false,
-        );
+        const DarwinNotificationDetails iosNotificationDetails =
+            DarwinNotificationDetails(categoryIdentifier: notificationChannelId, presentSound: false, interruptionLevel: InterruptionLevel.active);
         const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
 
         if (Platform.isAndroid) {
@@ -483,7 +509,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     } catch (e) {
       // "reason" will append the word "thrown" in the
       // Crashlytics console.
-      print("$e");
+      print("xxxxx-notification:$e");
     }
   }
 }

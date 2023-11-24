@@ -9,6 +9,7 @@
 import UIKit
 import Flutter
 import FirebaseCore
+import FirebaseMessaging
 //import UserNotifications
 import flutter_local_notifications
 import flutter_background_service_ios
@@ -39,9 +40,11 @@ import flutter_background_service_ios
     //            print("ERROR")
     //        }
     //    }
-    
-    
-    
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken : Data){
+//        print("X__APNS: \(String(describing: deviceToken))")
+        Messaging.messaging().apnsToken = deviceToken;
+        Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
+    }
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -54,9 +57,11 @@ import flutter_background_service_ios
             UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
         }
         SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
-        GeneratedPluginRegistrant.register(with: self)
-        //    AppAllOfferwallSDK.initialize()
         
+        GeneratedPluginRegistrant.register(with: self)
+        UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
+        //    AppAllOfferwallSDK.initialize()
+//        UIApplication.shared.setMinimumBackgroundFetchInterval(5)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     //   override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {

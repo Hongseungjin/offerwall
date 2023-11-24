@@ -70,10 +70,11 @@ class SaveScrap extends KeepAdverboxEvent {
 }
 
 class DeleteScrap extends KeepAdverboxEvent {
-  DeleteScrap({required this.idx});
+  DeleteScrap( {required this.adsIdx, required this.adType});
 
-  final int idx;
+  final int adsIdx;
+  final String adType;
 
   @override
-  List<Object?> get props => [idx];
+  List<Object?> get props => [adsIdx];
 }

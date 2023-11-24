@@ -4,6 +4,7 @@ import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 import 'package:get/instance_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:eums/common/constants.dart';
@@ -91,7 +92,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
         elevation: 1,
         centerTitle: true,
         title: Text('광고 보관함', style: AppStyle.bold.copyWith(fontSize: 2 + controllerGet.fontSizeObx.value, color: AppColor.black)),
-        leading: InkWell(
+        leading: WidgetAnimationClickV2(
           onTap: () {
             Navigator.of(context).pop();
           },
@@ -192,13 +193,19 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                 color: const Color(0xfff4f4f4),
               ),
               // const Divider(),
-              data != null
+
+              (data != null)
                   ? Wrap(
                       children: List.generate(data.length, (index) {
                         return Container(
-                          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: HexColor('#f4f4f4')))),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                          child: WidgetAnimationClick(
+                          decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color: HexColor('#f4f4f4'))),
+                          ),
+                          child: WidgetAnimationClickV2(
+                            borderRadius: BorderRadius.circular(0),
+
+                            // border: Border(bottom: BorderSide(color: HexColor('#f4f4f4'))),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                             onTap: () {
                               Routings().navigate(
                                   context,
@@ -377,6 +384,10 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
             listener: _listenFetchData,
           ),
           BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
+            listenWhen: (previous, current) => previous.deleteCrapStatus != current.deleteCrapStatus,
+            listener: _listDeleteCrap,
+          ),
+          BlocListener<KeepAdverboxBloc, KeepAdverboxState>(
             listenWhen: (previous, current) => previous.adverKeepStatus != current.adverKeepStatus,
             listener: _listenPointFetchData,
           ),
@@ -402,6 +413,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
     }
     if (state.saveScrapStatus == SaveScrapStatus.success) {
       // AppAlert.showSuccess("Success");
+      RxBus.post(RefreshDataKeep());
+
       AppAlert.showSuccess("광고 스크랩을 완료하였습니다", type: AppAlertType.bottom);
     }
   }
@@ -416,7 +429,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
       return;
     }
     if (state.adverKeepStatus == AdverKeepStatus.success) {
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
       RxBus.post(RefreshDataKeep());
       Navigator.pop(context);
       // AppAlert.showSuccess(context, fToast, "Success");
@@ -434,7 +448,8 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
       return;
     }
     if (state.saveKeepStatus == SaveKeepStatus.success) {
-      RxBus.post(UpdateUser());
+      EventStaticComponent.instance.call(key: "UpdateUser");
+      // RxBus.post(UpdateUser());
     }
   }
 
@@ -500,7 +515,9 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
                         ?.read<KeepAdverboxBloc>()
                         .add(SaveScrap(advertiseIdx: widget.data['advertiseIdx'], adType: widget.data['ad_type']));
                   } else {
-                    globalKey.currentContext?.read<KeepAdverboxBloc>().add(DeleteScrap(idx: widget.data['idx']));
+                    globalKey.currentContext
+                        ?.read<KeepAdverboxBloc>()
+                        .add(DeleteScrap(adsIdx: widget.data['advertiseIdx'], adType: widget.data['ad_type']));
                   }
                 },
                 child: Container(
@@ -523,5 +540,21 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
             );
           },
         ));
+  }
+
+  void _listDeleteCrap(BuildContext context, KeepAdverboxState state) {
+    if (state.deleteCrapStatus == DeleteCrapStatus.loading) {
+      // EasyLoading.show();
+      return;
+    }
+    if (state.deleteCrapStatus == DeleteCrapStatus.failure) {
+      // EasyLoading.dismiss();
+      return;
+    }
+    if (state.deleteCrapStatus == DeleteCrapStatus.success) {
+      RxBus.post(RefreshDataKeep());
+      // Navigator.pop(context);
+      // AppAlert.showSuccess(context, fToast, "Success");
+    }
   }
 }

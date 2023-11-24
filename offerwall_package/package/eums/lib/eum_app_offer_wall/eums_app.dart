@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -7,6 +8,7 @@ import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -200,6 +202,16 @@ Future<void> onStart(ServiceInstance service) async {
   Queue queue = Queue();
   // // registerDeviceToken();
   try {
+    // if (Platform.isIOS) {
+    //   Timer.periodic(const Duration(seconds: 15), (timer) async {
+    //     try {
+    //       await EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
+    //     } catch (ex) {
+    //       rethrow;
+    //     }
+    //   });
+    // }
+
     service.on('showOverlay').listen((event) async {
       if (Platform.isAndroid) {
         queue.add(() async => await jobQueue(event));
@@ -258,13 +270,6 @@ Future<void> onStart(ServiceInstance service) async {
 //   }
 // }
 
-@pragma('vm:entry-point')
-Future<bool> onIosBackground(ServiceInstance service) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  DartPluginRegistrant.ensureInitialized();
-
-  return true;
-}
 
 class EumsAppOfferWall extends EumsAppOfferWallService {
   // LocalStore localStore = LocalStoreService();
@@ -294,6 +299,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
               autoStart: autoStart,
               autoStartOnBoot: autoStart,
               isForegroundMode: true,
+              notificationChannelId: notificationChannelId,
               initialNotificationTitle: "인천e음",
               initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
       // }
@@ -360,14 +366,13 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(
           autoStart: autoStart,
-          onBackground: (service) async {
-            return true;
-          },
+          onBackground: iosBackground,
           onForeground: onStart,
         ),
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
             autoStart: autoStart,
+            notificationChannelId: notificationChannelId,
             autoStartOnBoot: autoStart,
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",

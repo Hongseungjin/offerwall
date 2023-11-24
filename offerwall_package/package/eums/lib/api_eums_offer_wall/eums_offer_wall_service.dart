@@ -98,7 +98,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   ///스크랩 광고 삭제
   ///[advertiseIdx] 광고 아이디
-  Future<dynamic> deleteScrap({int? idx});
+  Future<dynamic> deleteScrap({required int adsIdx, required String adType});
 
   /// 내부 오퍼월 미션
   ///  [offerWallIdx] 광고 아이디
@@ -141,5 +141,4 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   Future<dynamic> updateLocation({dynamic lat, dynamic log});
 
-  startBackgroundFirebaseMessage();
 }

@@ -82,9 +82,9 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus? mode) {
                   return mode == LoadStatus.loading
-                      ? Center(
+                      ? const Center(
                           child: Column(
-                          children: const [
+                          children: [
                             Text(' '),
                             CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                           ],
@@ -133,8 +133,9 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                     context,
                                                     DetailScrapScreen(
                                                       url: state.dataScrapAdverbox[index]['url_link'],
-                                                      // adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
-                                                      adIdx: state.dataScrapAdverbox[index]['idx'],
+                                                      adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                      adType: state.dataScrapAdverbox[index]['ad_type'],
+                                                      // adIdx: state.dataScrapAdverbox[index]['idx'],
                                                     ));
                                               }
                                             },
@@ -173,8 +174,9 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
                                                           context,
                                                           DetailScrapScreen(
                                                             url: state.dataScrapAdverbox[index]['url_link'],
-                                                            // adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
-                                                            adIdx: state.dataScrapAdverbox[index]['idx'],
+                                                            adIdx: state.dataScrapAdverbox[index]['advertiseIdx'],
+                                                            adType: state.dataScrapAdverbox[index]['ad_type'],
+                                                            // adIdx: state.dataScrapAdverbox[index]['idx'],
                                                           ));
                                                     }
                                                   },
@@ -293,10 +295,11 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
 }
 
 class DetailScrapScreen extends StatefulWidget {
-  const DetailScrapScreen({Key? key, this.url, this.adIdx}) : super(key: key);
+  const DetailScrapScreen({Key? key, this.url, required this.adIdx, required this.adType}) : super(key: key);
 
   final String? url;
-  final dynamic adIdx;
+  final int adIdx;
+  final String adType;
 
   @override
   State<DetailScrapScreen> createState() => _DetailScrapScreenState();
@@ -331,9 +334,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
               colorIconBack: AppColor.white,
               actions: InkWell(
                 onTap: () {
-                  globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(
-                        idx: widget.adIdx,
-                      ));
+                  globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(adsIdx: widget.adIdx, adType: widget.adType));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(17.0),
@@ -368,7 +369,7 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
       // EasyLoading.dismiss();
       Navigator.pop(context);
       // AppAlert.showSuccess(context, fToast, "Success");
-      AppAlert.showSuccess( "Success");
+      AppAlert.showSuccess("Success");
     }
   }
 }

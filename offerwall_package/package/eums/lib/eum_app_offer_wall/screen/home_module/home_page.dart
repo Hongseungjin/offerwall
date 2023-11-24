@@ -120,15 +120,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
     _unregisterEventBus();
     super.dispose();
   }
 
   Future<void> _registerEventBus() async {
-    RxBus.register<UpdateUser>().listen((event) {
-      _fetchData();
-    });
+    // RxBus.register<UpdateUser>().listen((event) {
+    //   _fetchData();
+    // });
+    EventStaticComponent.instance.add(
+      key: "UpdateUser",
+      event: (params, key) {
+        _fetchData();
+      },
+    );
     EventStaticComponent.instance.add(
       key: "isStartBackground",
       event: (params, key) {
@@ -167,6 +172,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         await FlutterBackgroundService().startService();
         // LoadingDialog.instance.hide();
       }
+      String? token = LocalStoreService.instant.getDeviceToken();
+      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
     }
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
@@ -474,8 +481,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     // ));
     blocMain.add(HomeInitEvent());
     blocMain.add(HomeBannerEvent(type: 'main'));
-    blocs[_tabController.index]
-        .add(HomeListDataOfferWallEvent(filter: filter, category: category, stateClient: homeListDataOfferWallStates[_tabController.index]));
+    blocs[_tabController.index].add(HomeListDataOfferWallEvent(filter: filter, category: category));
   }
 
   void _filterMedia(String? value) {

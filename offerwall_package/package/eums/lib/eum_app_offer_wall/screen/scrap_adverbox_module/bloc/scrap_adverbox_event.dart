@@ -25,10 +25,11 @@ class LoadMoreScrapAdverbox extends ScrapAdverboxEvent {
 }
 
 class DeleteScrapdverbox extends ScrapAdverboxEvent {
-  DeleteScrapdverbox({required this.idx});
-  final int idx;
+  DeleteScrapdverbox({required this.adsIdx, required this.adType});
+  final int adsIdx;
+  final String adType;
   @override
-  List<Object?> get props => [idx];
+  List<Object?> get props => [adsIdx, adType];
 }
 
 class LikeScrap extends ScrapAdverboxEvent {

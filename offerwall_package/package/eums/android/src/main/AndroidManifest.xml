@@ -3,7 +3,11 @@
   package="com.example.eums"
   xmlns:tools="http://schemas.android.com/tools"
 >
-
+ <queries>
+        <package android:name="com.example.store" />
+        <package android:name="com.example.services" />
+    </queries>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -29,6 +33,7 @@
   <uses-permission
     android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE"
   />
+  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
   <uses-permission
     android:minSdkVersion="34"
     android:name="android.permission.USE_EXACT_ALARM"
@@ -36,7 +41,10 @@
   <application android:usesCleartextTraffic="true">
 
 
-  
+  <receiver
+      android:exported="false"
+      android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+    />
     <service
       android:name="flutter.overlay.window.flutter_overlay_window.OverlayService"
       android:exported="false"
