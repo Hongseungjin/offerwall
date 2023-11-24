@@ -49,3 +49,27 @@
 - Xử lý webview bắt sự kiện mua sắm
   
 ![Alt text](./image_offerwall/shopping/image_code1.png)
+
+## Offerwall type `subscribe`
+
+### Handle UI
+
+![Alt text](./image_offerwall/subscribe/image5.png) -> ![Alt text](./image_offerwall/subscribe/image1.png) -> ![Alt text](./image_offerwall/subscribe/image2.png) -> ![Alt text](./image_offerwall/subscribe/image3.png) -> ![Alt text](./image_offerwall/subscribe/image4.png)
+
+### Handle Code
+
+- Mở trang cần nhiệm vụ subscribe
+  
+![Alt text](./image_offerwall/subscribe/image_code1.png)
+
+- Mở trang cần subscribe
+
+![Alt text](./image_offerwall/subscribe/image_code2.png)
+
+- Gửi hình ảnh xác mình đã subscribe
+
+![Alt text](./image_offerwall/subscribe/image_code3.png)
+
+- Khi xử lý thành công gọi lên service để xác nhận
+
+![Alt text](./image_offerwall/subscribe/image_code4.png)
