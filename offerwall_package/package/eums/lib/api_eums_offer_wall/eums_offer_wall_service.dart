@@ -82,7 +82,7 @@ abstract class EumsOfferWallService extends PlatformInterface {
 
   /// KEEP광고 저장
   ///[advertiseIdx]광고 아이디
-  Future<dynamic> saveKeep({required int advertiseIdx, required String adType});
+  Future<bool> saveKeep({required int advertiseIdx, required String adType});
 
   ///KEEP광고 삭제
   ///[advertiseIdx] 광고 아이디

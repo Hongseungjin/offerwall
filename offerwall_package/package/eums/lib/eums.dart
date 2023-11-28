@@ -12,6 +12,13 @@ import 'package:flutter/material.dart';
 import 'eum_app_offer_wall/notification_handler.dart';
 import 'eums_library.dart';
 
+// const FirebaseOptions ios = FirebaseOptions(
+//   apiKey: 'AIzaSyAWVPR4iDrpxJPBQt91iHK_GuDiLfH2iMI',
+//   appId: '1:739452302790:ios:528a2614ed11223240aec7',
+//   messagingSenderId: '739452302790',
+//   projectId: 'e-ums-24291',
+// );
+
 class Eums {
   Eums._();
 
@@ -39,10 +46,9 @@ class Eums {
 
     await LocalStoreService.instant.init();
 
-    print("============ Firebase.initializeApp ========= ");
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    await NotificationHandler.instant.initializeFcmNotification();
 
-    
+    print("============ Firebase.initializeApp ========= ");
 
     await onRun?.call();
 
@@ -61,9 +67,12 @@ class Eums {
       ),
     );
 
-    var details = await NotificationHandler.instant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
-      NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
-    }
+    try {
+      var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+      if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
+        NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
+      }
+    // ignore: empty_catches
+    } catch (e) {}
   }
 }

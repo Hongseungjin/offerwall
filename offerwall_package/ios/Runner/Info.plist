@@ -33,46 +33,44 @@
 	<key>FLTEnableImpeller</key>
 	<false/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
-	<true/>
-	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
 	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<false/>
+	<key>FirebaseScreenReportingEnabled</key>
 	<true/>
-	<key>FirebaseMessagingAutoInitEnabled</key>
-	<true/>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAllowsArbitraryLoads</key>
+	<true/>
+	<key>NSAllowsArbitraryLoadsInWebContent</key>
+	<true/>
+	<key>NSAllowsLocalNetworking</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>tankfactory.com</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSExceptionRequiresForwardSecrecy</key>
-				<false/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
-		</dict>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
 	</dict>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
+	<string>$(PRODUCT_NAME) camera description.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to microphone.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>$(PRODUCT_NAME) needs access to location when in the background, send notifications according to your location.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>$(PRODUCT_NAME) needs access to location when in the background, send notifications according to your location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>$(PRODUCT_NAME) needs access to location when open.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allows access camera to take photo.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>앱 추적 동의 팝업 창에 노출됩니다.</string>
+	<string>$(PRODUCT_NAME) Allows access camera to take photo.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -85,13 +83,18 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

@@ -44,8 +44,12 @@ class KeepAdverboxBloc extends Bloc<KeepAdverboxEvent, KeepAdverboxState> {
     emit(state.copyWith(saveKeepStatus: SaveKeepStatus.initial));
 
     try {
-      await _eumsOfferWallService.saveKeep(advertiseIdx: event.id, adType: event.adType);
-      emit(state.copyWith(saveKeepStatus: SaveKeepStatus.success));
+      final result = await _eumsOfferWallService.saveKeep(advertiseIdx: event.id, adType: event.adType);
+      if (result == true) {
+        emit(state.copyWith(saveKeepStatus: SaveKeepStatus.success));
+      } else {
+        emit(state.copyWith(saveKeepStatus: SaveKeepStatus.failure));
+      }
     } catch (ex) {
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.failure));
     }

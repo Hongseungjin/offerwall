@@ -1,6 +1,6 @@
 name: eums
 description: A new Flutter plugin project.
-version: 0.0.1
+version: 0.0.2
 homepage:
 
 environment:
@@ -20,7 +20,7 @@ dependencies:
   firebase_messaging: ^14.7.5
   # firebase_messaging: 14.6.8
   # firebase_messaging: 
-  #   path: package/firebase_messaging
+  #   path: /Volumes/coi-ssd/source test/flutterfire-master/packages/firebase_messaging/firebase_messaging
   
   # firebase_messaging: 11.4.4
   # firebase_core_platform_interface: 4.5.1
@@ -66,10 +66,10 @@ dependencies:
   flutter_easyloading: ^3.0.5
   rxdart: ^0.27.7
   cached_network_image: ^3.2.0
-  webview_flutter: ^4.0.7
+  webview_flutter: 4.4.1
   get: any
-  webview_flutter_android: ^3.7.1
-  webview_flutter_wkwebview: ^3.7.2
+  # webview_flutter_android: ^3.7.1
+  # webview_flutter_wkwebview: ^3.7.2
   # webview_flutter_wkwebview: ^3.4.4
   flutter_widget_from_html: ^0.9.0
   # fluttertoast: 8.1.1

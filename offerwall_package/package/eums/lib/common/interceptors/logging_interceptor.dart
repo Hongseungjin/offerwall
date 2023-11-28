@@ -42,7 +42,7 @@ class LoggingInterceptor extends Interceptor {
       print('path: ${error.requestOptions.path}');
       print('header: ${error.requestOptions.headers}');
       print('---------------------------------------');
-      if (error.type == DioExceptionType.connectionTimeout) {
+      if (error.type == DioExceptionType.connectionTimeout && error.requestOptions.path.contains("user/location")==false) {
         Dio api = BaseApi().buildDio();
         final opts = Options(method: error.requestOptions.method, headers: error.requestOptions.headers);
         final cloneReq = await api.request(error.requestOptions.path,

@@ -65,12 +65,10 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
 
   @override
   Future deleteScrap({required int adsIdx, required String adType}) async {
-    await api.delete(
-      'advertises/delete-crap',
-    data:{
+    await api.delete('advertises/delete-crap', data: {
       'adsIdx': adsIdx,
       'ad_type': adType,
-    } );
+    });
   }
 
   @override
@@ -212,7 +210,6 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
       if (lang != null) 'lang': lang,
       if (html != null) 'html': html
     });
-    
 
     await api.post('point/offerwall/mission-complete', data: formData);
     return;
@@ -235,13 +232,16 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future saveKeep({required int advertiseIdx, required String adType}) async {
+  Future<bool> saveKeep({required int advertiseIdx, required String adType}) async {
     try {
       dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
       final response = await api.post('advertises/save-keep-advertise', data: data);
-      return response;
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return true;
+      }
+      return false;
     } catch (e) {
-      rethrow;
+      return false;
     }
   }
 
@@ -347,7 +347,4 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     dynamic data = <String, dynamic>{"longitude": log, "latitude": lat};
     await api.put('user/location', data: data);
   }
-
-
-  
 }

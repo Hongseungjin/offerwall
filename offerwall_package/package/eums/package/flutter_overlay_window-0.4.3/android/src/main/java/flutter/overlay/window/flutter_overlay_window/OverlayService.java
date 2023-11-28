@@ -42,6 +42,10 @@ import io.flutter.embedding.engine.FlutterEngineCache;
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.JSONMessageCodec;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.view.FlutterMain;
+import io.flutter.FlutterInjector;
+import io.flutter.embedding.engine.FlutterEngineGroup;
+import io.flutter.embedding.engine.dart.DartExecutor;
 
 public class OverlayService extends Service implements View.OnTouchListener {
     private final int DEFAULT_NAV_BAR_HEIGHT_DP = 48;
@@ -55,8 +59,11 @@ public class OverlayService extends Service implements View.OnTouchListener {
     public static boolean isRunning = false;
     private WindowManager windowManager = null;
     private FlutterView flutterView;
-    private MethodChannel flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
-    private BasicMessageChannel<Object> overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+//    private MethodChannel flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
+//private BasicMessageChannel<Object> overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+
+    private MethodChannel flutterChannel = null;
+    private BasicMessageChannel<Object> overlayMessageChannel = null;
     private int clickableFlag = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
@@ -87,6 +94,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        validateDartExecutor();
         mResources = getApplicationContext().getResources();
         boolean isCloseWindow = intent.getBooleanExtra(INTENT_EXTRA_IS_CLOSE_WINDOW, false);
         if (isCloseWindow) {
@@ -115,6 +124,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
         flutterView.setFocusable(true);
         flutterView.setFocusableInTouchMode(true);
         flutterView.setBackgroundColor(Color.TRANSPARENT);
+
+
         flutterChannel.setMethodCallHandler((call, result) -> {
             if (call.method.equals("updateFlag")) {
                 String flag = call.argument("flag").toString();
@@ -160,6 +171,21 @@ public class OverlayService extends Service implements View.OnTouchListener {
         return START_STICKY;
     }
 
+    public void validateDartExecutor() {
+        try {
+            flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
+            overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+        } catch (Exception e) {
+            FlutterEngineGroup enn = new FlutterEngineGroup(getApplicationContext());
+            DartExecutor.DartEntrypoint dEntry = new DartExecutor.DartEntrypoint(
+                    FlutterInjector.instance().flutterLoader().findAppBundlePath(),
+                    "overlayMain");
+            FlutterEngine engine = enn.createAndRunEngine(getApplicationContext(), dEntry);
+            FlutterEngineCache.getInstance().put(OverlayConstants.CACHED_TAG, engine);
+            flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
+            overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     private int screenHeight() {
@@ -245,7 +271,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
 //       }
 //       PendingIntent pendingIntent = PendingIntent.getActivity(this,
 //               0, notificationIntent, pendingFlags);
-    //    final int notifyIcon = getDrawableResourceId("mipmap", "launcher");
+////        final int notifyIcon = getDrawableResourceId("mipmap", "launcher");
 //       final int notifyIcon = getDrawableResourceId("drawable", "ic_bg_service_small");
 //       Notification notification = new NotificationCompat.Builder(this, OverlayConstants.CHANNEL_ID)
 //               .setContentTitle(WindowSetup.overlayTitle)
@@ -289,6 +315,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
     public boolean onTouch(View view, MotionEvent event) {
         if (windowManager != null && WindowSetup.enableDrag) {
             WindowManager.LayoutParams params = (WindowManager.LayoutParams) flutterView.getLayoutParams();
+
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     dragging = false;
@@ -297,6 +324,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
 
                     height = windowManager.getDefaultDisplay().getHeight();
                     width = windowManager.getDefaultDisplay().getWidth();
+
                     flutterChannel.invokeMethod("START_DRAG", lastY);
                     break;
                 case MotionEvent.ACTION_MOVE:

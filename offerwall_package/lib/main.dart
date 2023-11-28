@@ -1,4 +1,5 @@
 // import 'package:device_preview/device_preview.dart';
+
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
@@ -14,20 +15,25 @@ import 'package:eums/eums_library.dart';
 import 'package:intl/intl.dart';
 import 'package:offerwall/widget_dialog_check_version.dart';
 
-void main() {
-  Eums.instant.initMaterial(
+void main() async {
+  await Eums.instant.initMaterial(
     home: const MyHomePage(),
+    onRun: () async {
+      // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    },
   );
 }
 
 @pragma("vm:entry-point")
 void overlayMain() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
   //   statusBarColor: Colors.black,
   // ));
 
   await LocalStoreService.instant.init();
+  // await NotificationHandler.instant.initializeFcmNotification();
 
   runApp(
     const MyAppOverlay(),
@@ -167,7 +173,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
       textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "w";
       textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "인천_서";
       dateTime = LocalStoreService.instant.preferences.getString("memBirth") ?? dateTime;
-    }else{
+    } else {
       textEditingController1.text = LocalStoreService.instant.preferences.getString("memId") ?? "";
       textEditingController2.text = LocalStoreService.instant.preferences.getString("memGen") ?? "";
       textEditingController4.text = LocalStoreService.instant.preferences.getString("memRegion") ?? "";
@@ -175,8 +181,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await NotificationHandler.instant.initializeFcmNotification();
-
       final remoteConfig = FirebaseRemoteConfig.instance;
       await remoteConfig.setConfigSettings(RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
@@ -218,18 +222,18 @@ class _AppMainScreenState extends State<AppMainScreen> {
     List<int> versionCurrent = currentVersion.split(".").map((e) => int.parse(e.toString())).toList();
     List<int> versionNew = newVersion.split(".").map((e) => int.parse(e.toString())).toList();
 
-    if (versionCurrent[0] < versionNew[0]) {
-      return false;
+    if (versionCurrent[0] > versionNew[0]) {
+      return true;
     } else {
-      if (versionCurrent[1] < versionNew[1]) {
-        return false;
+      if (versionCurrent[1] > versionNew[1]) {
+        return true;
       } else {
-        if (versionCurrent[2] < versionNew[2]) {
-          return false;
+        if (versionCurrent[2] > versionNew[2]) {
+          return true;
         }
       }
     }
-    return true;
+    return false;
   }
 
   @override

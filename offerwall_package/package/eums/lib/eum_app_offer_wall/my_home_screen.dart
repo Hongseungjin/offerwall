@@ -94,6 +94,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       //   return _determinePosition();
       //   // return Future.error('Location permissions are permanently denied, we cannot request permissions.');
       // }
+
       var locationWhenInUse = await Permission.locationWhenInUse.request();
       if (locationWhenInUse.isGranted) {
         // debugPrint("xxxx");
@@ -128,30 +129,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                 _determinePosition();
               }
             }
-
-            // var status = await Permission.locationAlways.request();
-            // if (status.isPermanentlyDenied == true) {
-            //   await Geolocator.openLocationSettings();
-            // } else {
-            //   if (status.isDenied == true) {
-            //     Future.delayed(
-            //       const Duration(seconds: 3),
-            //       () {
-            //         _determinePosition();
-            //       },
-            //     );
-            //   } else {
-            //     debugPrint("xxxx");
-            //     _permissionNotification();
-            //   }
-            //   // return (await Geolocator.getCurrentPosition());
-            // }
-            // if (!status.isGranted) {
-            //   AppAlert.showError("위치 권한이 아직 부여되지 않았습니다.");
-            // } else {
-            //   AppAlert.showSuccess("위치 권한이 부여되었습니다.");
-            //   // eventActiveOfferWall();
-            // }
           }
         }
       } else {
@@ -169,7 +146,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-    NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+    flutterLocalNotificationsPlugin.cancelAll();
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
@@ -179,7 +156,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       await Firebase.initializeApp();
       await LocalStoreService.instant.init();
 
-      _determinePosition();
+      await _determinePosition();
 
       if (Platform.isAndroid) {
         settingBattery();
@@ -190,11 +167,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
         // await EumsOfferWallServiceApi().createTokenNotifi(token: token);
       }
       print("TOKEN======> $token");
-      FirebaseMessaging.instance.subscribeToTopic('eums');
+      await FirebaseMessaging.instance.subscribeToTopic('eums');
+      await FirebaseMessaging.instance.subscribeToTopic('com.app.offerwall');
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
       // _permissionNotification();
-      _determinePosition();
+      await _determinePosition();
     }));
   }
 

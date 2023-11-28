@@ -108,61 +108,77 @@ void printWrapped(String text) {
 }
 
 showOverlay(event) async {
-  if (event?['data'] != null && event?['data']['isWebView'] != null) {
-    await FlutterOverlayWindow.showOverlay(
-      overlayTitle: event?['data']['title'],
-      overlayContent: event?['data']['body'],
-    );
-    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-    await FlutterOverlayWindow.shareData(event?['data']);
-  } else {
-    if (event?['data']['isToast'] != null) {
-      FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
-
-      // await FlutterOverlayWindow.showOverlay(
-      //   height: 300,
-      //   width: WindowSize.matchParent,
-      //   alignment: OverlayAlignment.bottomCenter,
-      // );
-      // _timer = Timer(const Duration(seconds: 4), () async {
-      //   await FlutterOverlayWindow.closeOverlay();
-      // });
-    } else {
-      // await LocalStoreService.instant.setDataShare(dataShare: event);
+  try {
+    if (event?['data'] != null && event?['data']['isWebView'] == true) {
+      TrueCallOverlay.showDetailOfferwall = true;
       await FlutterOverlayWindow.showOverlay(
-        enableDrag: true,
-        height: 420,
-        width: 420,
-        alignment: OverlayAlignment.center,
         overlayTitle: event?['data']['title'],
         overlayContent: event?['data']['body'],
       );
+      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+      await FlutterOverlayWindow.shareData(event?['data']);
+    } else {
+      if (event?['data']['isToast'] != null) {
+        FlutterOverlayWindow.showToast(message: event?['data']['messageToast'] ?? '');
+
+        // await FlutterOverlayWindow.showOverlay(
+        //   height: 300,
+        //   width: WindowSize.matchParent,
+        //   alignment: OverlayAlignment.bottomCenter,
+        // );
+        // _timer = Timer(const Duration(seconds: 4), () async {
+        //   await FlutterOverlayWindow.closeOverlay();
+        // });
+      } else {
+        // await LocalStoreService.instant.setDataShare(dataShare: event);
+        await FlutterOverlayWindow.showOverlay(
+          enableDrag: true,
+          height: 420,
+          width: 420,
+          alignment: OverlayAlignment.center,
+          overlayTitle: event?['data']['title'],
+          overlayContent: event?['data']['body'],
+        );
+      }
+      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+      await FlutterOverlayWindow.shareData(event?['data']);
     }
-    event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-    event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
-    await FlutterOverlayWindow.shareData(event?['data']);
+  } catch (e) {
+    rethrow;
   }
 }
 
 jobQueue(event) async {
-  // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
+  try {
+    // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(NotificationHandler.instant.notificationId);
 
-  bool isActive = await FlutterOverlayWindow.isActive();
-  if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await showOverlay(event);
-  } else {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    await showOverlay(event);
+    bool isActive = await FlutterOverlayWindow.isActive();
+    if (isActive == true) {
+      if (TrueCallOverlay.showDetailOfferwall == false) {
+        await FlutterOverlayWindow.closeOverlay();
+        await Future.delayed(const Duration(milliseconds: 1000));
+        await showOverlay(event);
+      }
+    } else {
+      TrueCallOverlay.showDetailOfferwall = false;
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await showOverlay(event);
+    }
+  } catch (e) {
+    rethrow;
   }
 }
 
 closeOverlay() async {
-  bool isActive = await FlutterOverlayWindow.isActive();
-  if (isActive == true) {
-    await FlutterOverlayWindow.closeOverlay();
+  try {
+    bool isActive = await FlutterOverlayWindow.isActive();
+    if (isActive == true) {
+      await FlutterOverlayWindow.closeOverlay();
+    }
+  } catch (e) {
+    required;
   }
 }
 
@@ -270,7 +286,6 @@ Future<void> onStart(ServiceInstance service) async {
 //   }
 // }
 
-
 class EumsAppOfferWall extends EumsAppOfferWallService {
   // LocalStore localStore = LocalStoreService();
   @override
@@ -299,7 +314,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
               autoStart: autoStart,
               autoStartOnBoot: autoStart,
               isForegroundMode: true,
-              notificationChannelId: notificationChannelId,
               initialNotificationTitle: "인천e음",
               initialNotificationContent: "eum 캐시 혜택 서비스가 실행중입니다"));
       // }
@@ -372,7 +386,6 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
         androidConfiguration: AndroidConfiguration(
             onStart: onStart,
             autoStart: autoStart,
-            notificationChannelId: notificationChannelId,
             autoStartOnBoot: autoStart,
             isForegroundMode: true,
             initialNotificationTitle: "인천e음",

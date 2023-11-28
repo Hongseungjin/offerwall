@@ -10,9 +10,9 @@ import UIKit
 import Flutter
 import FirebaseCore
 import FirebaseMessaging
+import flutter_background_service_ios
 //import UserNotifications
 import flutter_local_notifications
-import flutter_background_service_ios
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate
@@ -40,31 +40,44 @@ import flutter_background_service_ios
     //            print("ERROR")
     //        }
     //    }
-    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken : Data){
-//        print("X__APNS: \(String(describing: deviceToken))")
-        Messaging.messaging().apnsToken = deviceToken;
-        Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
-    }
+    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         FirebaseApp.configure()
+        // This is required to make any communication available in the action isolate.
         FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
             GeneratedPluginRegistrant.register(with: registry)
         }
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
-        }
-        SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
         
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+        }
+        //UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
         GeneratedPluginRegistrant.register(with: self)
-        UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
+        
+        SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
         //    AppAllOfferwallSDK.initialize()
-//        UIApplication.shared.setMinimumBackgroundFetchInterval(5)
+        //        UIApplication.shared.setMinimumBackgroundFetchInterval(5)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-    //   override func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    //        print(error)
-    //    }
+    
+    override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken : Data){
+        //        print("X__APNS: \(String(describing: deviceToken))")
+        //        Messaging.messaging().apnsToken = deviceToken;
+        // This is required to make any communication available in the action isolate.
+        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+            GeneratedPluginRegistrant.register(with: registry)
+        }
+        
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+        }
+        
+        Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
+        //        Messaging.messaging().isAutoInitEnabled = true
+    }
+    
 }
+

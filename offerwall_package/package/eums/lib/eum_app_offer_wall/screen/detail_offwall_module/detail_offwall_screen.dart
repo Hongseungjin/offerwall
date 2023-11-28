@@ -60,6 +60,8 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
   String? thumbnail;
   final controllerGet = Get.put(SettingFontSize());
 
+  final urlGetPackageName = "https://itunes.apple.com/lookup?id=";
+
   Future<void> _getPreferredLanguages() async {
     try {
       final languages = await Devicelocale.preferredLanguages;
@@ -86,12 +88,12 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
       if (Platform.isAndroid) {
         packageName = uri.queryParameters['id'] ?? '';
       } else
-      //Check Platform android
+      //Check Platform ios
       if (Platform.isIOS) {
         try {
           int indexID = uri.path.indexOf("/id");
           final appStoreId = uri.path.substring(indexID + 3);
-          var response = await http.get(Uri.parse('https://itunes.apple.com/lookup?id=$appStoreId'));
+          var response = await http.get(Uri.parse('$urlGetPackageName$appStoreId'));
           final dataJson = jsonDecode(response.body);
           packageName = ((dataJson['results'] as List).first as Map)['bundleId'];
         } catch (e) {
@@ -136,7 +138,6 @@ class _DetailOffWallScreenState extends State<DetailOffWallScreen> with WidgetsB
     //   if (app.packageName == uri.queryParameters['id']) {
     //     globalKey.currentContext?.read<DetailOffWallBloc>().add(MissionCompleteOfferWall(xId: widget.xId));
     //   }
-
     //   // TODO Backend operation
     // }
 

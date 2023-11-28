@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
@@ -197,6 +198,21 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
               (data != null)
                   ? Wrap(
                       children: List.generate(data.length, (index) {
+                        final dataTime = DateTime.parse(data[index]['regist_date']).toLocal();
+                        final dateStart = dataTime.add(const Duration(hours: 48));
+                        final timeRemaining = dateStart.difference(DateTime.now().add(const Duration(days: 1, hours: 23)));
+                        String? countRemaining = "만료됨";
+                        if (timeRemaining.inDays > 0) {
+                          countRemaining = "${timeRemaining.inDays} 일 ${timeRemaining.inHours - 24} 시간 ";
+                        } else {
+                          if (timeRemaining.inHours > 0) {
+                            countRemaining = "${timeRemaining.inHours} 시간 ${timeRemaining.inMinutes - (timeRemaining.inHours * 60)} 분";
+                          } else {
+                            if (timeRemaining.inMinutes > 0) {
+                              countRemaining = "${timeRemaining.inMinutes} 분";
+                            }
+                          }
+                        }
                         return Container(
                           decoration: BoxDecoration(
                             border: Border(bottom: BorderSide(color: HexColor('#f4f4f4'))),
@@ -206,8 +222,10 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
 
                             // border: Border(bottom: BorderSide(color: HexColor('#f4f4f4'))),
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                            onTap: () {
-                              Routings().navigate(
+                            onTap: () async {
+                              showDetailOfferwall = true;
+
+                              await Routings().navigate(
                                   context,
                                   DetailKeepScreen(
                                     data: data[index],
@@ -217,6 +235,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                     // idx: data[index]['idx'],
                                     // typePoint: data[index]['typePoint'],
                                   ));
+                              showDetailOfferwall = false;
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,15 +272,10 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                                                   .copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
                                               children: [
                                             TextSpan(
-                                              text: ' 2',
+                                              text: countRemaining,
                                               style:
                                                   AppStyle.bold.copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
                                             ),
-                                            TextSpan(
-                                              text: ' 일',
-                                              style: AppStyle.regular
-                                                  .copyWith(color: HexColor('#888888'), fontSize: controllerGet.fontSizeObx.value - 2),
-                                            )
                                           ])),
                                       const SizedBox(height: 4),
                                       Text(
@@ -370,6 +384,11 @@ class _DetailKeepScreenState extends State<DetailKeepScreen> {
         }
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

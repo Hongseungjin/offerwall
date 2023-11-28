@@ -31,6 +31,8 @@ import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart'
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
 
+  static bool showDetailOfferwall = false;
+
   @override
   State<TrueCallOverlay> createState() => _TrueCallOverlayState();
 }
@@ -197,121 +199,123 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
     String url = '';
     try {
       url = (jsonDecode(dataEvent['data']))['url_link'];
+      return CustomWebViewOverlay(
+        title: '${(jsonDecode(dataEvent['data']))['name']}',
+        // key: webViewKey,
+        showImage: !isWebView,
+        // showMission: true,
+        deviceWidth: deviceWidth,
+        actions: Row(
+          children: [
+            InkWell(
+                onTap: () async {
+                  await FlutterOverlayWindow.updateFlag(OverlayFlag.focusPointer);
+                  // ignore: use_build_context_synchronously
+                  await Routings().navigate(
+                      context,
+                      ReportPage(
+                        checkOverlay: true,
+                        paddingTop: kToolbarHeight + MediaQuery.of(context).padding.bottom,
+                        data: (jsonDecode(dataEvent['data'])),
+                        deleteAdver: true,
+                      ));
+                  await FlutterOverlayWindow.updateFlag(OverlayFlag.defaultFlag);
+
+                  // if (result == true) {
+                  //   // ignore: use_build_context_synchronously
+                  //   AppAlert.showSuccess("Success");
+                  // }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12, right: 16),
+                  // child: Image.asset(Assets.report.path, package: "eums", height: 30),
+                  child: Assets.icons.report.image(height: 30),
+                )),
+            // Container(
+            //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+            //   padding: const EdgeInsets.symmetric(vertical: 5),
+            //   child: ClipRRect(
+            //     borderRadius: BorderRadius.circular(12),
+            //     child: CachedNetworkImage(
+            //         width: MediaQuery.of(context).size.width - 64,
+            //         fit: BoxFit.cover,
+            //         imageUrl: Constants.baseUrlImage + (jsonDecode(dataEvent['data']))['advertiseSponsor']['image'],
+            //         placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+            //         errorWidget: (context, url, error) {
+            //           return Image.asset(Assets.logo.path, package: "eums", height: 16);
+            //         }),
+            //   ),
+            // ),
+          ],
+        ),
+        onClose: () async {
+          FlutterBackgroundService().invoke("closeOverlay");
+        },
+        bookmark: InkWell(
+            onTap: () async {
+              setState(() {
+                checkSave = !checkSave;
+              });
+              try {
+                final data = (jsonDecode(dataEvent['data']));
+                if (checkSave) {
+                  await TrueOverlayService().saveScrap(advertiseIdx: data['idx'], token: tokenSdk!, adType: data['ad_type']!);
+                  AppAlert.showSuccess("광고 스크랩을 완료하였습니다", type: AppAlertType.bottom);
+                } else {
+                  await TrueOverlayService().deleteScrap(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk);
+                  AppAlert.showSuccess("광고 스크랩을 해제하였습니다", type: AppAlertType.bottom);
+                }
+              } catch (e) {
+                FlutterBackgroundService().invoke("closeOverlay");
+                rethrow;
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Image.asset(!checkSave ? Assets.icons.deleteKeep.path : Assets.icons.saveKeep.path,
+                  package: "eums", height: 18, color: AppColor.black),
+            )
+            // checkSave
+            //     ? Image.asset(Assets.saveKeep.path,
+            //         package: "eums", height: 30, color: AppColor.black)
+            //     : Image.asset(Assets.deleteKeep.path,
+            //         package: "eums", height: 30, color: AppColor.black),
+            ),
+        mission: () {
+          if (dataEvent != null && dataEvent['data'] != null) {
+            DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
+              try {
+                setState(() {
+                  isWebView = false;
+                  checkSave = false;
+                });
+
+                // FlutterBackgroundService().invoke("closeOverlay");
+
+                await DeviceApps.openApp('com.app.abeeofferwal');
+                final dataTemp = jsonDecode(dataEvent['data']);
+
+                TrueOverlayService().missionOfferWallOutside(
+                    advertiseIdx: dataTemp['idx'], pointType: dataTemp['typePoint'], token: tokenSdk, adType: dataTemp['ad_type']);
+                FlutterBackgroundService().invoke("closeOverlay");
+                // EumsApp.instant.closeOverlay();
+              } catch (e) {
+                // print(e);
+                FlutterBackgroundService().invoke("closeOverlay");
+                // await EumsApp.instant.closeOverlay();
+              }
+            });
+          }
+        },
+        urlLink: url,
+      );
     } catch (e) {
       // print(e);
       FlutterBackgroundService().invoke("closeOverlay");
+      return const SizedBox();
       // EumsApp.instant.closeOverlay();
     }
-    return CustomWebViewOverlay(
-      title: '${(jsonDecode(dataEvent['data']))['name']}',
-      // key: webViewKey,
-      showImage: !isWebView,
-      // showMission: true,
-      deviceWidth: deviceWidth,
-      actions: Row(
-        children: [
-          InkWell(
-              onTap: () async {
-                await FlutterOverlayWindow.updateFlag(OverlayFlag.focusPointer);
-                await Routings().navigate(
-                    context,
-                    ReportPage(
-                      checkOverlay: true,
-                      paddingTop: kToolbarHeight + MediaQuery.of(context).padding.bottom,
-                      data: (jsonDecode(dataEvent['data'])),
-                      deleteAdver: true,
-                    ));
-                await FlutterOverlayWindow.updateFlag(OverlayFlag.defaultFlag);
-
-                // if (result == true) {
-                //   // ignore: use_build_context_synchronously
-                //   AppAlert.showSuccess("Success");
-                // }
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 16),
-                // child: Image.asset(Assets.report.path, package: "eums", height: 30),
-                child: Assets.icons.report.image(height: 30),
-              )),
-          // Container(
-          //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
-          //   padding: const EdgeInsets.symmetric(vertical: 5),
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(12),
-          //     child: CachedNetworkImage(
-          //         width: MediaQuery.of(context).size.width - 64,
-          //         fit: BoxFit.cover,
-          //         imageUrl: Constants.baseUrlImage + (jsonDecode(dataEvent['data']))['advertiseSponsor']['image'],
-          //         placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-          //         errorWidget: (context, url, error) {
-          //           return Image.asset(Assets.logo.path, package: "eums", height: 16);
-          //         }),
-          //   ),
-          // ),
-        ],
-      ),
-      onClose: () async {
-        FlutterBackgroundService().invoke("closeOverlay");
-      },
-      bookmark: InkWell(
-          onTap: () {
-            setState(() {
-              checkSave = !checkSave;
-            });
-            try {
-              final data = (jsonDecode(dataEvent['data']));
-              if (checkSave) {
-                TrueOverlayService().saveScrap(advertiseIdx: data['idx'], token: tokenSdk!, adType: data['ad_type']!);
-                AppAlert.showSuccess("광고 스크랩을 완료하였습니다", type: AppAlertType.bottom);
-              } else {
-                TrueOverlayService().deleteScrap(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk);
-                AppAlert.showSuccess("광고 스크랩을 해제하였습니다", type: AppAlertType.bottom);
-              }
-            } catch (e) {
-              FlutterBackgroundService().invoke("closeOverlay");
-              rethrow;
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(shape: BoxShape.circle, color: HexColor('#eeeeee')),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Image.asset(!checkSave ? Assets.icons.deleteKeep.path : Assets.icons.saveKeep.path,
-                package: "eums", height: 18, color: AppColor.black),
-          )
-          // checkSave
-          //     ? Image.asset(Assets.saveKeep.path,
-          //         package: "eums", height: 30, color: AppColor.black)
-          //     : Image.asset(Assets.deleteKeep.path,
-          //         package: "eums", height: 30, color: AppColor.black),
-          ),
-      mission: () {
-        if (dataEvent != null && dataEvent['data'] != null) {
-          DialogUtils.showDialogRewardPoint(context, data: jsonDecode(dataEvent['data']), voidCallback: () async {
-            try {
-              setState(() {
-                isWebView = false;
-                checkSave = false;
-              });
-
-              // FlutterBackgroundService().invoke("closeOverlay");
-
-              await DeviceApps.openApp('com.app.abeeofferwal');
-              final dataTemp = jsonDecode(dataEvent['data']);
-
-              TrueOverlayService().missionOfferWallOutside(
-                  advertiseIdx: dataTemp['idx'], pointType: dataTemp['typePoint'], token: tokenSdk, adType: dataTemp['ad_type']);
-              FlutterBackgroundService().invoke("closeOverlay");
-              // EumsApp.instant.closeOverlay();
-            } catch (e) {
-              // print(e);
-              FlutterBackgroundService().invoke("closeOverlay");
-              // await EumsApp.instant.closeOverlay();
-            }
-          });
-        }
-      },
-      urlLink: url,
-    );
   }
 
   // openWebView() {
@@ -321,27 +325,38 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   void onVerticalDragEnd() async {
     if (dy! > (heightScreen - heightScreen * .2)) {
-      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
+      await flutterLocalNotificationsPlugin.cancel(notificationId);
 
       try {
+        FlutterBackgroundService().invoke("closeOverlay");
         final data = (jsonDecode(dataEvent['data']));
-        await TrueOverlayService().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk!);
-        // FlutterBackgroundService().invoke("closeOverlay");
 
-        dynamic dataToast = {};
-        dataToast['isToast'] = true;
-        dataToast['isWebView'] = null;
-        // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
-        dataToast['messageToast'] = "광고가 KEEP 추가";
-        FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
-        // await EumsApp.instant.jobQueue({'data': dataToast});
+        final result = await TrueOverlayService().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type'], token: tokenSdk!);
+        // FlutterBackgroundService().invoke("closeOverlay");
+        if (result == true) {
+          dynamic dataToast = {};
+          dataToast['isToast'] = true;
+          dataToast['isWebView'] = false;
+          // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
+          dataToast['messageToast'] = "광고가 KEEP 추가";
+          FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+          // await EumsApp.instant.jobQueue({'data': dataToast});
+        } else {
+          dynamic dataToast = {};
+          dataToast['isToast'] = true;
+          dataToast['isWebView'] = false;
+          // dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
+          dataToast['messageToast'] = "일일저장량 초과 했습니다";
+          FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
+        }
 
         // ignore: empty_catches
       } catch (e) {
         dynamic dataToast = {};
         dataToast['isToast'] = true;
-        dataToast['isWebView'] = null;
-        dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
+        dataToast['isWebView'] = false;
+        // dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
+        dataToast['messageToast'] = "ERROR";
         FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
         // await EumsApp.instant.jobQueue({'data': dataToast});
 
@@ -350,7 +365,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     } else {
       if (dy! < heightScreen * .2) {
-        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
+        await flutterLocalNotificationsPlugin.cancel(notificationId);
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 

@@ -34,16 +34,14 @@
 	<string>Allows access camera to take photo to update avatar.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Exchange data with nearby devices running the Yourapp.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Turning on location services allows us to show you when the store is nearby.</string>
+	
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Turning on location services allows us to show you when the store is nearby</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Turning on location services allows us to show you when the store is nearby.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Turning on location services allows us to show you when the store is nearby.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app needs access to the microphone</string>
+	
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allows access camera to take photo to update avatar.</string>
   <key>UIViewControllerBasedStatusBarAppearance</key>

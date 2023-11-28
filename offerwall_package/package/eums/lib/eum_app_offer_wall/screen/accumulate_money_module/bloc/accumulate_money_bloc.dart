@@ -54,7 +54,6 @@ class AccumulateMoneyBloc extends Bloc<AccumulateMoneyEvent, AccumulateMoneyStat
 
   _mapSaveKeepAdverToState(SaveKeepAdver event, emit) async {
     emit(state.copyWith(saveKeepStatus: SaveKeepStatus.loading));
-
     try {
       await _eumsOfferWallService.saveKeep(advertiseIdx: event.advertiseIdx, adType: event.adType);
       emit(state.copyWith(saveKeepStatus: SaveKeepStatus.success));
@@ -69,7 +68,7 @@ class AccumulateMoneyBloc extends Bloc<AccumulateMoneyEvent, AccumulateMoneyStat
   // }
 
   _mapGetOnOrOffAdverToState(GetOnOrOffAdver event, emit) async {
-    bool check = await LocalStoreService.instant.getSaveAdver();
+    bool check = LocalStoreService.instant.getSaveAdver();
     emit(state.copyWith(checkOnOffAdver: check));
   }
 

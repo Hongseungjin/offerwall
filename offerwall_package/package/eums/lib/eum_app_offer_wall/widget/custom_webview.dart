@@ -1,14 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
-import 'package:eums/common/local_store/local_store_service.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/widget/setting_fontsize.dart';
-import 'package:eums/gen/assets.gen.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import '../utils/appStyle.dart';
 
