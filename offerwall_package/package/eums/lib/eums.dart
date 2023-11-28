@@ -68,7 +68,7 @@ class Eums {
     );
 
     try {
-      var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+      var details = await NotificationHandler.instant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
       if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
         NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
       }

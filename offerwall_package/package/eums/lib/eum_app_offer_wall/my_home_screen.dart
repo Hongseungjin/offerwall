@@ -146,7 +146,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-    flutterLocalNotificationsPlugin.cancelAll();
+   NotificationHandler.instant. flutterLocalNotificationsPlugin.cancelAll();
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});

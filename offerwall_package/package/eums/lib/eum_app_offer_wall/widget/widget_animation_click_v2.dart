@@ -37,6 +37,7 @@ class _WidgetAnimationClickV2State extends State<WidgetAnimationClickV2> with Si
       child: Material(
         color: Colors.white,
         child: InkWell(
+          
           splashColor: Colors.grey.withOpacity(.7),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(100),
           onLongPress: () {

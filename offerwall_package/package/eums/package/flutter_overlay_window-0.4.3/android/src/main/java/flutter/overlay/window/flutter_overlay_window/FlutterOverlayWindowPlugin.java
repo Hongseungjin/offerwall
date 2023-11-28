@@ -169,8 +169,8 @@ public class FlutterOverlayWindowPlugin implements
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         // fix run overlay and share data when app killed
-        channel.setMethodCallHandler(null);
-        WindowSetup.messenger.setMessageHandler(null);
+//        channel.setMethodCallHandler(null);
+//        WindowSetup.messenger.setMessageHandler(null);
     }
 
     @Override

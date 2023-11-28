@@ -60,7 +60,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
     private WindowManager windowManager = null;
     private FlutterView flutterView;
 //    private MethodChannel flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
-//private BasicMessageChannel<Object> overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+//    private BasicMessageChannel<Object> overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
 
     private MethodChannel flutterChannel = null;
     private BasicMessageChannel<Object> overlayMessageChannel = null;
@@ -173,8 +173,12 @@ public class OverlayService extends Service implements View.OnTouchListener {
 
     public void validateDartExecutor() {
         try {
-            flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
-            overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+            if (flutterChannel == null) {
+                flutterChannel = new MethodChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.OVERLAY_TAG);
+            }
+            if (overlayMessageChannel == null) {
+                overlayMessageChannel = new BasicMessageChannel(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG).getDartExecutor(), OverlayConstants.MESSENGER_TAG, JSONMessageCodec.INSTANCE);
+            }
         } catch (Exception e) {
             FlutterEngineGroup enn = new FlutterEngineGroup(getApplicationContext());
             DartExecutor.DartEntrypoint dEntry = new DartExecutor.DartEntrypoint(

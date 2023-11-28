@@ -200,7 +200,7 @@ class _KeepAdverboxScreenState extends State<KeepAdverboxScreen> {
                       children: List.generate(data.length, (index) {
                         final dataTime = DateTime.parse(data[index]['regist_date']).toLocal();
                         final dateStart = dataTime.add(const Duration(hours: 48));
-                        final timeRemaining = dateStart.difference(DateTime.now().add(const Duration(days: 1, hours: 23)));
+                        final timeRemaining = dateStart.difference(DateTime.now());
                         String? countRemaining = "만료됨";
                         if (timeRemaining.inDays > 0) {
                           countRemaining = "${timeRemaining.inDays} 일 ${timeRemaining.inHours - 24} 시간 ";

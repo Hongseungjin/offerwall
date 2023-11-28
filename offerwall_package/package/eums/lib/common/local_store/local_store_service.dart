@@ -27,7 +27,7 @@ class LocalStoreService {
 
   Future<bool> hasAuthenticated() async {
     String accessToken = getAccessToken();
-    final account =  getLoggedAccount();
+    final account = getLoggedAccount();
     return accessToken.isNotEmpty && account != null;
   }
 
@@ -96,8 +96,12 @@ class LocalStoreService {
     await preferences.setString(SAVE_OR_NOT_ADVER, status.toString());
   }
 
-  // String? getDataShare() {
-  //   return preferences.getString(SAVE_DATA_SHARE);
+  // dynamic getDataShare() {
+  //   final data = preferences.getString(SAVE_DATA_SHARE);
+  //   if (data != null) {
+  //     return jsonDecode(data);
+  //   }
+  //   return null;
   //   // return preferences.getString(SAVE_DATA_SHARE) == 'true' ? true : false;
   // }
 
@@ -156,16 +160,16 @@ class LocalStoreService {
     await preferences.setString("boolTime", checkBool.toString());
   }
 
-  String getSizeDevice() {
-    return preferences.getString(
+  int getSizeDevice() {
+    return preferences.getInt(
           "sizeDevice",
         ) ??
-        '0.0';
+        0;
   }
 
-  Future setSizeDevice(dynamic sizeHeight) async {
+  Future setSizeDevice(int sizeHeight) async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setString("sizeDevice", jsonEncode(sizeHeight));
+    await preferences.setInt("sizeDevice", sizeHeight);
   }
 
   String getSizeText() {

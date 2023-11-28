@@ -33,7 +33,7 @@ class FlutterOverlayWindow {
     String overlayTitle = "overlay activated",
     String? overlayContent,
     bool enableDrag = false,
-    bool ensureOpenOnlyOneOverlay = true,
+    bool ensureOpenOnlyOneOverlay = false,
     PositionGravity positionGravity = PositionGravity.none,
   }) async {
     await _channel.invokeMethod(

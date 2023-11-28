@@ -27,6 +27,8 @@ import 'package:eums/eums_library.dart';
 import 'package:lottie/lottie.dart';
 
 import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart';
+// final ReceivePort receivePort = ReceivePort();
+// const String kPortName="isolate";
 
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
@@ -65,7 +67,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
     // receivePort.listen((event) async {
     //   try {
-    //     setState(() {
+    //       setState(() {
     //       dataEvent = event;
     //       tokenSdk = event['tokenSdk'] ?? '';
     //       deviceHeight = double.parse(event['sizeDevice'] ?? '0');
@@ -107,7 +109,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         setState(() {
           dataEvent = event;
           tokenSdk = event['tokenSdk'] ?? '';
-          deviceHeight = double.parse(event['sizeDevice'] ?? '0');
+          deviceHeight = double.parse((event['sizeDevice'] ?? 0).toString());
           isWebView = event['isWebView'] != null ? true : false;
           isToast = event['isToast'] != null ? true : false;
           messageToast = event['messageToast'] ?? '';
@@ -204,7 +206,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         // key: webViewKey,
         showImage: !isWebView,
         // showMission: true,
-        deviceWidth: deviceWidth,
         actions: Row(
           children: [
             InkWell(
@@ -215,7 +216,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
                       context,
                       ReportPage(
                         checkOverlay: true,
-                        paddingTop: kToolbarHeight + MediaQuery.of(context).padding.bottom,
+                        paddingTop: MediaQuery.of(context).padding.top,
                         data: (jsonDecode(dataEvent['data'])),
                         deleteAdver: true,
                       ));
@@ -325,7 +326,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   void onVerticalDragEnd() async {
     if (dy! > (heightScreen - heightScreen * .2)) {
-      await flutterLocalNotificationsPlugin.cancel(notificationId);
+      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
 
       try {
         FlutterBackgroundService().invoke("closeOverlay");
@@ -365,7 +366,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     } else {
       if (dy! < heightScreen * .2) {
-        await flutterLocalNotificationsPlugin.cancel(notificationId);
+        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 

@@ -111,12 +111,14 @@ showOverlay(event) async {
   try {
     if (event?['data'] != null && event?['data']['isWebView'] == true) {
       TrueCallOverlay.showDetailOfferwall = true;
+      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
+      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
       await FlutterOverlayWindow.showOverlay(
         overlayTitle: event?['data']['title'],
         overlayContent: event?['data']['body'],
+        height:  LocalStoreService.instant.getSizeDevice(),
       );
-      event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
-      event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
+
       await FlutterOverlayWindow.shareData(event?['data']);
     } else {
       if (event?['data']['isToast'] != null) {
@@ -131,7 +133,6 @@ showOverlay(event) async {
         //   await FlutterOverlayWindow.closeOverlay();
         // });
       } else {
-        // await LocalStoreService.instant.setDataShare(dataShare: event);
         await FlutterOverlayWindow.showOverlay(
           enableDrag: true,
           height: 420,
@@ -295,7 +296,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       Size size = view.physicalSize;
       double height = size.height;
       // await LocalStoreService.instant.init();
-      await LocalStoreService.instant.setSizeDevice(height);
+      await LocalStoreService.instant.setSizeDevice(height.toInt());
 
       final autoStart = LocalStoreService.instant.getSaveAdver();
       // final isRunning = await FlutterBackgroundService().isRunning();
@@ -368,7 +369,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
 
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     await LocalStoreService.instant.setAccessToken(data['token']);
-    await LocalStoreService.instant.setSizeDevice(height);
+    await LocalStoreService.instant.setSizeDevice(height.toInt());
     await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey,
         "AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp");
 

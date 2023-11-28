@@ -23,7 +23,7 @@ class CustomWebViewOverlay extends StatefulWidget {
   final Widget? actions;
   final Widget? bookmark;
   final bool showImage;
-  final double deviceWidth;
+  // final double deviceWidth;
   final double paddingTop;
   const CustomWebViewOverlay(
       {Key? key,
@@ -37,7 +37,7 @@ class CustomWebViewOverlay extends StatefulWidget {
       this.color = AppColor.white,
       this.actions,
       this.bookmark,
-      this.deviceWidth = 0,
+      // this.deviceWidth = 0,
       this.paddingTop = 100,
       this.showImage = false})
       : super(key: key);
@@ -207,16 +207,14 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
     //   child: );
     // final heightMargin = kToolbarHeight - MediaQuery.of(context).padding.bottom;
     final top = MediaQuery.of(context).padding.top;
-    final bottom = MediaQuery.of(context).padding.bottom;
+    // final bottom = MediaQuery.of(context).padding.bottom;
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.grey.shade500,
-        toolbarHeight: top + bottom,
-      ),
-      body: Container(
-        color: Colors.transparent,
-        child: Column(
+        backgroundColor: Colors.blue,
+        appBar: AppBar(
+          backgroundColor: Colors.grey.shade500,
+          toolbarHeight: 0,
+        ),
+        body: Column(
           children: [
             Container(
               margin: EdgeInsets.only(top: top),
@@ -275,7 +273,7 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 10, bottom: bottom + 10),
+              padding: const EdgeInsets.only(top: 10, bottom: 16),
               width:
                   // widget.deviceWidth > 0
                   //     ? widget.deviceWidth
@@ -355,9 +353,7 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
               ),
             )
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   // _buildButtonBack() {

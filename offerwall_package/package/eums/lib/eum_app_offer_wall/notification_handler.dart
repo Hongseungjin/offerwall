@@ -27,7 +27,6 @@ bool checkOnClick = false;
 bool showDetailOfferwall = false;
 
 int notificationId = 999;
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class ReceivedNotification {
   ReceivedNotification({
@@ -53,7 +52,10 @@ class NotificationHandler {
 
   final StreamController<String?> selectNotificationStream = StreamController<String?>.broadcast();
 
+  NotificationDetails? notificationDetails;
+
   // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   // final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -131,6 +133,8 @@ class NotificationHandler {
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
 
+    notificationDetails = getDetailNotification();
+
     // try {
     //   await _fcm.requestPermission(alert: false);
     // } catch (e) {}
@@ -177,6 +181,7 @@ class NotificationHandler {
 
             if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
               await flutterLocalNotificationsPlugin.cancel(notificationId);
+              notificationDetails ??= NotificationHandler.instant.getDetailNotification();
 
               if (Platform.isAndroid && showDetailOfferwall == false) {
                 try {
@@ -191,7 +196,7 @@ class NotificationHandler {
                 // await EumsApp.instant.jobQueue({'data': message.data});
               }
 
-              flutterLocalNotificationsPlugin.show(notificationId, '${message.data['title']}', '${message.data['body']}', getDetailNotification(),
+              flutterLocalNotificationsPlugin.show(notificationId, '${message.data['title']}', '${message.data['body']}', notificationDetails!,
                   payload: jsonEncode(message.data));
             }
             // ignore: empty_catches
@@ -375,7 +380,7 @@ class NotificationHandler {
     return token;
   }
 
-  static NotificationDetails getDetailNotification() {
+  NotificationDetails getDetailNotification() {
     const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
       notificationChannelId,
       notificationChannelId,
@@ -481,11 +486,18 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
+  // await NotificationHandler.instant.initializeFcmNotification();
   // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
 
   // await FlutterBackgroundService().startService();
   // FlutterBackgroundService().invoke("showNotification", message.data);
-
+  try {
+    if (NotificationHandler.instant.notificationDetails == null) {
+      await NotificationHandler.instant.initializeFcmNotification();
+      NotificationHandler.instant.notificationDetails = NotificationHandler.instant.getDetailNotification();
+    }
+    // ignore: empty_catches
+  } catch (e) {}
   if (message.data['updateLocation'] == "true") {
     debugPrint("topics/eums : ${message.toMap()}");
     // EumsApp.instant.locationCurrent();
@@ -511,9 +523,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
       if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
         try {
-          flutterLocalNotificationsPlugin.cancel(notificationId);
+          NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
         } catch (error) {
-          flutterLocalNotificationsPlugin.cancelAll();
+          NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
         }
 
         if (Platform.isAndroid) {
@@ -529,8 +541,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         }
 
         try {
-          flutterLocalNotificationsPlugin.show(
-              notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.getDetailNotification(),
+          NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
+              notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.instant.notificationDetails,
               payload: jsonEncode(message.data));
         } catch (e) {
           rethrow;
