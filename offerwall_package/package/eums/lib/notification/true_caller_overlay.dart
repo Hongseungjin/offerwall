@@ -162,11 +162,11 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     heightScreen = MediaQuery.of(context).size.height;
 
     return Material(
-      color: Colors.transparent,
+      color: isWebView ? Colors.white : Colors.transparent,
       child: MultiRepositoryProvider(
           providers: [RepositoryProvider<EumsOfferWallService>(create: (context) => EumsOfferWallServiceApi())],
           child: MultiBlocProvider(
@@ -326,7 +326,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
 
   void onVerticalDragEnd() async {
     if (dy! > (heightScreen - heightScreen * .2)) {
-      await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
+      await NotificationHandler.flutterLocalNotificationsPlugin.cancel(notificationId);
 
       try {
         FlutterBackgroundService().invoke("closeOverlay");
@@ -366,7 +366,7 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
       }
     } else {
       if (dy! < heightScreen * .2) {
-        await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
+        await NotificationHandler.flutterLocalNotificationsPlugin.cancel(notificationId);
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 

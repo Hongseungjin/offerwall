@@ -54,8 +54,9 @@ class NotificationHandler {
 
   NotificationDetails? notificationDetails;
 
+  static FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   // final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   // final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -138,18 +139,20 @@ class NotificationHandler {
     // try {
     //   await _fcm.requestPermission(alert: false);
     // } catch (e) {}
+
+    debugPrint("=====Firebase permission=====");
     await FirebaseMessaging.instance.requestPermission(
-      alert: false,
+      alert: true,
       announcement: false,
-      badge: false,
+      badge: true,
       carPlay: false,
       criticalAlert: false,
       provisional: false,
       sound: false,
     );
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-      alert: false,
-      badge: false,
+      alert: true,
+      badge: true,
       sound: false,
     );
     FirebaseMessaging.onMessage.listen(
@@ -177,6 +180,7 @@ class NotificationHandler {
             }
 
             debugPrint("${message.toMap()}");
+            if(message.data['data']==null) return;
             final dataTemp = jsonDecode(message.data['data']);
 
             if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
@@ -218,7 +222,7 @@ class NotificationHandler {
       },
     );
 
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
 
   Future<void> eventOpenNotification(NotificationResponse notificationResponse) async {
@@ -370,7 +374,8 @@ class NotificationHandler {
   static Future<String?> getToken() async {
     String? token;
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance.getAPNSToken();
+      final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      debugPrint("====apnsToken====> $apnsToken");
       token = await FirebaseMessaging.instance.getToken();
     } else {
       token = await FirebaseMessaging.instance.getToken();
@@ -478,84 +483,10 @@ Future<bool> iosBackground(ServiceInstance serviceInstance) async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
   debugPrint("xxxx-iosBackground =====>");
-  return true;
-}
 
-@pragma('vm:entry-point')
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await LocalStoreService.instant.init();
-  // await NotificationHandler.instant.initializeFcmNotification();
-  // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-
-  // await FlutterBackgroundService().startService();
-  // FlutterBackgroundService().invoke("showNotification", message.data);
-  try {
-    if (NotificationHandler.instant.notificationDetails == null) {
-      await NotificationHandler.instant.initializeFcmNotification();
-      NotificationHandler.instant.notificationDetails = NotificationHandler.instant.getDetailNotification();
-    }
-    // ignore: empty_catches
-  } catch (e) {}
-  if (message.data['updateLocation'] == "true") {
-    debugPrint("topics/eums : ${message.toMap()}");
-    // EumsApp.instant.locationCurrent();
-  } else {
-    try {
-      debugPrint("xxxx--message: ${message.toMap()}");
-      // EumsApp.instant.locationCurrent();
-
-      final dataTemp = jsonDecode(message.data['data']);
-      bool isRunning = true;
-      // if (Platform.isAndroid) {
-      //   isRunning = await FlutterBackgroundService().isRunning();
-      //   debugPrint("xxxx--isRunning: $isRunning");
-      //   if (isRunning == false && LocalStoreService.instant.getAccessToken().isNotEmpty == true && LocalStoreService.instant.getSaveAdver() == true) {
-      //     await FlutterBackgroundService().startService();
-      //     // isRunning = await checkBackgroundService();
-      //   }
-      // }
-
-      if (LocalStoreService.instant.getAccessToken().isNotEmpty == false || LocalStoreService.instant.getSaveAdver() == false) {
-        isRunning = false;
-      }
-
-      if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
-        try {
-          NotificationHandler.instant.flutterLocalNotificationsPlugin.cancel(notificationId);
-        } catch (error) {
-          NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
-        }
-
-        if (Platform.isAndroid) {
-          try {
-            final checkPermission = await FlutterOverlayWindow.isPermissionGranted();
-            if (checkPermission == true) {
-              debugPrint("xxxxx - checkPermission ===> $checkPermission");
-              FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-            }
-          } catch (e) {
-            rethrow;
-          }
-        }
-
-        try {
-          NotificationHandler.instant.flutterLocalNotificationsPlugin.show(
-              notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.instant.notificationDetails,
-              payload: jsonEncode(message.data));
-        } catch (e) {
-          rethrow;
-        }
-      }
-      // ignore: empty_catches
-    } catch (e) {
-      // "reason" will append the word "thrown" in the
-      // Crashlytics console.
-      print("xxxxx-notification:$e");
-      rethrow;
-    }
-  }
+  LocalStoreService.instant.preferences.reload();
+  return true;
 }
 
 Future<bool> checkBackgroundService() async {

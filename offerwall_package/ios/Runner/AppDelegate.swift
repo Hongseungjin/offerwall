@@ -54,10 +54,11 @@ import flutter_local_notifications
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
         }
-        //UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
-        GeneratedPluginRegistrant.register(with: self)
-        
         SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
+        
+        GeneratedPluginRegistrant.register(with: self)
+        UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
+        
         //    AppAllOfferwallSDK.initialize()
         //        UIApplication.shared.setMinimumBackgroundFetchInterval(5)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
@@ -65,19 +66,12 @@ import flutter_local_notifications
     
     override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken : Data){
         //        print("X__APNS: \(String(describing: deviceToken))")
-        //        Messaging.messaging().apnsToken = deviceToken;
-        // This is required to make any communication available in the action isolate.
-        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
-            GeneratedPluginRegistrant.register(with: registry)
-        }
-        
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
-        }
-        
+        Messaging.messaging().apnsToken = deviceToken;
         Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
-        //        Messaging.messaging().isAutoInitEnabled = true
+                Messaging.messaging().isAutoInitEnabled = true
     }
+    
+    
     
 }
 

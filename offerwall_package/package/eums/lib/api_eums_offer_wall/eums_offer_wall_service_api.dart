@@ -27,14 +27,14 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   }
 
   @override
-  Future createTokenNotifi({token}) async {
+  Future createTokenNotification({token}) async {
     dynamic data = <String, dynamic>{"deviceToken": token};
     await api.post('device-token', data: data);
     return;
   }
 
   @override
-  Future unRegisterTokenNotifi({token}) async {
+  Future unRegisterTokenNotification({token}) async {
     dynamic data = <String, dynamic>{"deviceToken": token};
     await api.delete('device-token', data: data);
     return;
@@ -346,5 +346,23 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
   Future updateLocation({lat, log}) async {
     dynamic data = <String, dynamic>{"longitude": log, "latitude": lat};
     await api.put('user/location', data: data);
+  }
+
+    @override
+  startBackgroundFirebaseMessage() async {
+    try {
+      final deviceToken = await NotificationHandler.getToken();
+      final firebaseKey = LocalStoreService.instant.preferences.getString(LocalStoreService.instant.firebaseKey);
+      final result = await Dio(BaseOptions(headers: {"Authorization": "key=$firebaseKey", "Content-Type": "application/json"})).post(
+        "https://fcm.googleapis.com/fcm/send",
+        data: {
+          "to": deviceToken,
+          "content_available": true,
+        },
+      );
+      print("startBackgroundFirebaseMessage===> ${result.statusCode}");
+    } catch (e) {
+      rethrow;
+    }
   }
 }

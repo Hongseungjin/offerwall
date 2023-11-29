@@ -121,6 +121,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     _unregisterEventBus();
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        debugPrint("Home_page===> dispose");
+        EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
+      },
+    );
     super.dispose();
   }
 
@@ -151,7 +158,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       isStartBackground = true;
     });
     String? token = LocalStoreService.instant.getDeviceToken();
-    await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+    await EumsOfferWallServiceApi().createTokenNotification(token: token);
     bool isRunning = await FlutterBackgroundService().isRunning();
     if (!isRunning) {
       await FlutterBackgroundService().startService();
@@ -173,7 +180,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         // LoadingDialog.instance.hide();
       }
       String? token = LocalStoreService.instant.getDeviceToken();
-      await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+      await EumsOfferWallServiceApi().createTokenNotification(token: token);
     }
     if (Platform.isAndroid) {
       final bool status = await FlutterOverlayWindow.isPermissionGranted();
@@ -620,14 +627,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     try {
                       if (!value) {
                         String? token = await NotificationHandler.getToken();
-                        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                        await EumsOfferWallServiceApi().unRegisterTokenNotification(token: token);
                         if (Platform.isAndroid) {
                           FlutterBackgroundService().invoke("stopService");
                           await Future.delayed(const Duration(milliseconds: 2500));
                         }
                       } else {
                         String? token = LocalStoreService.instant.getDeviceToken();
-                        await EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                        await EumsOfferWallServiceApi().createTokenNotification(token: token);
                         bool isRunning = await FlutterBackgroundService().isRunning();
                         if (!isRunning) {
                           await FlutterBackgroundService().startService();

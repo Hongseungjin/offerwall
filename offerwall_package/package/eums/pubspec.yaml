@@ -20,7 +20,7 @@ dependencies:
   firebase_messaging: ^14.7.5
   # firebase_messaging: 14.6.8
   # firebase_messaging: 
-  #   path: /Volumes/coi-ssd/source test/flutterfire-master/packages/firebase_messaging/firebase_messaging
+  #   path: package/firebase_messaging
   
   # firebase_messaging: 11.4.4
   # firebase_core_platform_interface: 4.5.1

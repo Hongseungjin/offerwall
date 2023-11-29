@@ -5,7 +5,7 @@ class Constants {
   static const String baseUrlImage = 'https://abee997.co.kr/admin/uploads/sponsor/';
   static const int connectTimeout = 15000; // 15 seconds
   static const int receiveTimeout = 15000; // 15 seconds
-  static const bool loggingInterceptorEnabled = true;
+  static const bool loggingInterceptorEnabled = false;
   static const int LIMIT_DATA = 10;
 
   static const String showDataAdver = 'showDataAdver';

@@ -206,18 +206,18 @@ class _CustomWebViewOverlayState extends State<CustomWebViewOverlay> with Widget
     //   // padding: EdgeInsets.only(top: widget.paddingTop),
     //   child: );
     // final heightMargin = kToolbarHeight - MediaQuery.of(context).padding.bottom;
-    final top = MediaQuery.of(context).padding.top;
+    // final top = MediaQuery.of(context).padding.top;
     // final bottom = MediaQuery.of(context).padding.bottom;
     return Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          backgroundColor: Colors.grey.shade500,
+          backgroundColor: Colors.transparent,
           toolbarHeight: 0,
         ),
         body: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: top),
+              margin: const EdgeInsets.only(top: kToolbarHeight),
               decoration: const BoxDecoration(
                 color: Colors.white,
                 border: Border(bottom: BorderSide(color: Colors.grey)),

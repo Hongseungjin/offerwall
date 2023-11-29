@@ -146,11 +146,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-   NotificationHandler.instant. flutterLocalNotificationsPlugin.cancelAll();
+  NotificationHandler. flutterLocalNotificationsPlugin.cancelAll();
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
-    print("======= MyHomeScreen init1 ======");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Firebase.initializeApp();

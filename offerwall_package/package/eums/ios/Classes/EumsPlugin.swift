@@ -2,32 +2,11 @@ import Flutter
 import UIKit
 import Toast_Swift
 
-public class EumsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelegate {
-    
-    
+public class EumsPlugin: NSObject, FlutterPlugin {
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "eums", binaryMessenger: registrar.messenger())
         let instance = EumsPlugin()
-        
-        // Define the custom actions.
-        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
-              title: "Accept",
-              options: [])
-        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
-              title: "Decline",
-              options: [])
-        // Define the notification type
-        let meetingInviteCategory =
-              UNNotificationCategory(identifier: "MEETING_INVITATION",
-              actions: [acceptAction, declineAction],
-              intentIdentifiers: [],
-              hiddenPreviewsBodyPlaceholder: "",
-              options: .customDismissAction)
-        // Register the notification type.
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.setNotificationCategories([meetingInviteCategory])
-        
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
@@ -64,45 +43,4 @@ public class EumsPlugin: NSObject, FlutterPlugin, UNUserNotificationCenterDelega
         result(FlutterMethodNotImplemented)
     }
     
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        // Get the meeting ID from the original notification.
-           let userInfo = response.notification.request.content.userInfo
-                
-           if response.notification.request.content.categoryIdentifier ==
-                      "MEETING_INVITATION" {
-              // Retrieve the meeting details.
-              let meetingID = userInfo["MEETING_ID"] as! String
-              let userID = userInfo["USER_ID"] as! String
-                    
-              switch response.actionIdentifier {
-              case "ACCEPT_ACTION":
-//                 sharedMeetingManager.acceptMeeting(user: userID,
-//                       meetingID: meetingID)
-                 break
-                        
-              case "DECLINE_ACTION":
-//                 sharedMeetingManager.declineMeeting(user: userID,
-//                       meetingID: meetingID)
-                 break
-                        
-              case UNNotificationDefaultActionIdentifier,
-                   UNNotificationDismissActionIdentifier:
-                 // Queue meeting-related notifications for later
-                 //  if the user does not act.
-//                 sharedMeetingManager.queueMeetingForDelivery(user: userID,
-//                       meetingID: meetingID)
-                 break
-                        
-              default:
-                 break
-              }
-           }
-           else {
-              // Handle other notification types...
-           }
-                
-           // Always call the completion handler when done.
-           completionHandler()
-    }
 }

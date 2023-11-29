@@ -201,7 +201,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
                             if (!checkToken) {
                               String? token = await NotificationHandler.getToken();
-                              EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+                              EumsOfferWallServiceApi().unRegisterTokenNotification(token: token);
                               if (Platform.isAndroid) {
                                 FlutterBackgroundService().invoke("stopService");
                                 await Future.delayed(const Duration(milliseconds: 2500));
@@ -215,7 +215,7 @@ class _SettingScreenState extends State<SettingScreen> {
                               // };
                               // localStore?.setCountAdvertisement(data);
                               String? token = LocalStoreService.instant.getDeviceToken();
-                              EumsOfferWallServiceApi().createTokenNotifi(token: token);
+                              EumsOfferWallServiceApi().createTokenNotification(token: token);
                               bool isRunning = await FlutterBackgroundService().isRunning();
                               if (!isRunning) {
                                 await FlutterBackgroundService().startService();

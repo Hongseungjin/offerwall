@@ -1,5 +1,6 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:eums/common/method_native/host_handle.dart';
+import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';

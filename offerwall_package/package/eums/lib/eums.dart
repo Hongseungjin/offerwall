@@ -68,11 +68,11 @@ class Eums {
     );
 
     try {
-      var details = await NotificationHandler.instant.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+      var details = await NotificationHandler.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
       if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
         NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
       }
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   }
 }

@@ -1,5 +1,8 @@
 // import 'package:device_preview/device_preview.dart';
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
@@ -14,12 +17,97 @@ import 'package:eums/eum_app_offer_wall/bloc/authentication_bloc/authentication_
 import 'package:eums/eums_library.dart';
 import 'package:intl/intl.dart';
 import 'package:offerwall/widget_dialog_check_version.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  debugPrint("======firebaseMessagingBackgroundHandler=====");
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+  await LocalStoreService.instant.init();
+  await LocalStoreService.instant.preferences.reload();
+  // await NotificationHandler.instant.initializeFcmNotification();
+  // await NotificationHandler.instant.flutterLocalNotificationsPlugin.cancelAll();
+
+  // await FlutterBackgroundService().startService();
+  // FlutterBackgroundService().invoke("showNotification", message.data);
+  try {
+    if (NotificationHandler.instant.notificationDetails == null) {
+      await NotificationHandler.instant.initializeFcmNotification();
+      NotificationHandler.instant.notificationDetails = NotificationHandler.instant.getDetailNotification();
+    }
+    // ignore: empty_catches
+  } catch (e) {}
+  if (message.data['updateLocation'] == "true") {
+    debugPrint("topics/eums : ${message.toMap()}");
+    // EumsApp.instant.locationCurrent();
+  } else {
+    try {
+      debugPrint("xxxx--message: ${message.toMap()}");
+      // EumsApp.instant.locationCurrent();
+      if (message.data['data'] == null) return;
+
+      final dataTemp = jsonDecode(message.data['data']);
+      bool isRunning = true;
+      if (Platform.isAndroid) {
+        isRunning = await FlutterBackgroundService().isRunning();
+      }
+
+      if (LocalStoreService.instant.getAccessToken().isNotEmpty == false || LocalStoreService.instant.getSaveAdver() == false) {
+        isRunning = false;
+      } else {
+        debugPrint("xxxx--isRunning: $isRunning");
+        if (isRunning == false) {
+          await FlutterBackgroundService().startService();
+          isRunning = await checkBackgroundService();
+        }
+      }
+
+      if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
+        try {
+          NotificationHandler.flutterLocalNotificationsPlugin.cancel(notificationId);
+        } catch (error) {
+          NotificationHandler.flutterLocalNotificationsPlugin.cancelAll();
+        }
+
+        if (Platform.isAndroid) {
+          try {
+            final checkPermission = await FlutterOverlayWindow.isPermissionGranted();
+            if (checkPermission == true) {
+              debugPrint("xxxxx - checkPermission ===> $checkPermission");
+              FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
+            }
+          } catch (e) {
+            rethrow;
+          }
+        }
+
+        try {
+          NotificationHandler.flutterLocalNotificationsPlugin.show(
+              notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.instant.notificationDetails,
+              payload: jsonEncode(message.data));
+        } catch (e) {
+          rethrow;
+        }
+      }
+      // ignore: empty_catches
+    } catch (e) {
+      // "reason" will append the word "thrown" in the
+      // Crashlytics console.
+      print("xxxxx-notification:$e");
+      rethrow;
+    }
+  }
+}
 
 void main() async {
+  debugPrint("======main=====");
+
   await Eums.instant.initMaterial(
     home: const MyHomePage(),
     onRun: () async {
-      // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     },
   );
 }

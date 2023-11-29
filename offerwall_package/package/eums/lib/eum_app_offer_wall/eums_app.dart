@@ -116,7 +116,7 @@ showOverlay(event) async {
       await FlutterOverlayWindow.showOverlay(
         overlayTitle: event?['data']['title'],
         overlayContent: event?['data']['body'],
-        height:  LocalStoreService.instant.getSizeDevice(),
+        height: (LocalStoreService.instant.getSizeDevice() + kToolbarHeight * 3).toInt(),
       );
 
       await FlutterOverlayWindow.shareData(event?['data']);
@@ -210,11 +210,13 @@ closeOverlay() async {
 
 @pragma('vm:entry-point')
 Future<void> onStart(ServiceInstance service) async {
-  // print('onStart');
+  print('======onStart======');
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
   await Firebase.initializeApp();
   await LocalStoreService.instant.init();
+  LocalStoreService.instant.preferences.reload();
+  // await NotificationHandler.instant.initializeFcmNotification();
 
   Queue queue = Queue();
   // // registerDeviceToken();
@@ -251,7 +253,7 @@ Future<void> onStart(ServiceInstance service) async {
       // }
       if (token != null && token.isNotEmpty) {
         await LocalStoreService.instant.setDeviceToken("");
-        await EumsOfferWallServiceApi().unRegisterTokenNotifi(token: token);
+        await EumsOfferWallServiceApi().unRegisterTokenNotification(token: token);
       }
       await service.stopSelf();
     });
@@ -367,9 +369,11 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     Size size = view.physicalSize;
     double height = size.height;
 
+    final padding = MediaQuery.of(context).padding;
+
     dynamic data = await EumsOfferWallService.instance.authConnect(memBirth: memBirth, memGen: memGen, memRegion: memRegion, memId: memId);
     await LocalStoreService.instant.setAccessToken(data['token']);
-    await LocalStoreService.instant.setSizeDevice(height.toInt());
+    await LocalStoreService.instant.setSizeDevice(height.toInt() + padding.top.toInt() + padding.bottom.toInt());
     await LocalStoreService.instant.preferences.setString(LocalStoreService.instant.firebaseKey,
         "AAAArCrKtcY:APA91bHDmRlnGIMV9TUWHBgdx_cW59irrr6GssIkX45DUSHiTXcfHV3b0MynCOxwUdm6VTTxhp7lz3dIqAbi0SnoUFnkXlK-0ncZMX-3a3oWV8ywqaEm9A9aGnX-k50SI19hzqOgprRp");
 
@@ -378,9 +382,11 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
     // final isRunning = await FlutterBackgroundService().isRunning();
 
     // if (isRunning == false) {
+    // debugPrint('======openSdkTest=====');
+    // debugPrint('======autoStart=====>$autoStart');
+
     FlutterBackgroundService().configure(
         iosConfiguration: IosConfiguration(
-          autoStart: autoStart,
           onBackground: iosBackground,
           onForeground: onStart,
         ),
