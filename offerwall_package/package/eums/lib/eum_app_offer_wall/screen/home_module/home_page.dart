@@ -10,6 +10,7 @@ import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
+import 'package:eums/eum_app_offer_wall/screen/charging_station_module/charging_station_screen.dart';
 import 'package:eums/eum_app_offer_wall/screen/my_page_module/instruct_page.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
 import 'package:eums/eum_app_offer_wall/widget/check_box/widget_swip_check_box.dart';
@@ -371,7 +372,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                             break;
                                           case 3:
                                             // Routings().navigate(context, const UsingTermScreen());
-                                            Routings().navigate(context, const InstructPage());
+                                            // Routings().navigate(context, const InstructPage());
+                                            Routings().navigate(
+                                                context,
+                                                ChargingStationScreen(
+                                                  tab: 1,
+                                                  dataAccount: homeInit!.account,
+                                                  callBack: (value) {
+                                                    // _tabController.animateTo(0);
+                                                  },
+                                                ));
 
                                             break;
                                           default:
@@ -581,7 +591,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           const SizedBox(height: 8),
           WidgetAnimationClick(
             onTap: () {
-              Routings().navigate(context, const InstructAppScreen());
+              Routings().navigate(context, const InstructPage());
+
+              // Routings().navigate(context, const InstructAppScreen());
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

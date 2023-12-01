@@ -16,14 +16,14 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // flatDir {
-        //     dirs project(':sdk_eums').file('libs')
-        //     dirs 'libs'
-        // }
-        // maven {
-        //     // [required] background_fetch
-        //     url "${project(':background_fetch').projectDir}/libs"
-        // }
+        flatDir {
+            dirs project(':sdk_eums').file('libs')
+            dirs 'libs'
+        }
+//         maven {
+//             // [required] background_fetch
+//             url "${project(':background_fetch').projectDir}/libs"
+//         }
     }
 }
 
