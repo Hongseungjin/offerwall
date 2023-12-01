@@ -316,7 +316,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
       if (versionCurrent[1] > versionNew[1]) {
         return true;
       } else {
-        if (versionCurrent[2] > versionNew[2]) {
+        if (versionCurrent[2] >= versionNew[2]) {
           return true;
         }
       }

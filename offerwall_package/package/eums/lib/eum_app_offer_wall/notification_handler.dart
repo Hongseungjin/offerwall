@@ -48,6 +48,8 @@ class NotificationHandler {
 
   static NotificationHandler instant = NotificationHandler._();
 
+  bool isCallKeep = false;
+
   final StreamController<ReceivedNotification> didReceiveLocalNotificationStream = StreamController<ReceivedNotification>.broadcast();
 
   final StreamController<String?> selectNotificationStream = StreamController<String?>.broadcast();
@@ -159,7 +161,7 @@ class NotificationHandler {
       (RemoteMessage message) async {
         if (message.data['updateLocation'] == "true") {
           // FlutterBackgroundService().invoke('locationCurrent');
-          debugPrint("xxxx FirebaseMessaging.onMessage.listen =>>> ");
+          // debugPrint("xxxx FirebaseMessaging.onMessage.listen =>>> ");
           EumsApp.instant.locationCurrent();
         } else {
           try {
@@ -179,8 +181,8 @@ class NotificationHandler {
               isRunning = false;
             }
 
-            debugPrint("${message.toMap()}");
-            if(message.data['data']==null) return;
+            // debugPrint("${message.toMap()}");
+            if (message.data['data'] == null) return;
             final dataTemp = jsonDecode(message.data['data']);
 
             if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
@@ -234,8 +236,13 @@ class NotificationHandler {
         switch (notificationResponse.actionId) {
           case keepID:
             try {
+              if (isCallKeep == true) return;
+              isCallKeep = true;
               final data = jsonDecode(dataMessage['data']);
+
               final result = await EumsOfferWallServiceApi().saveKeep(advertiseIdx: data['idx'], adType: data['ad_type']);
+              isCallKeep = false;
+
               if (result == true) {
                 if (Platform.isAndroid) {
                   dynamic dataToast = {};
@@ -253,10 +260,8 @@ class NotificationHandler {
                   dynamic dataToast = {};
                   dataToast['isToast'] = true;
                   dataToast['isWebView'] = false;
-                  // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
-                  dataToast['messageToast'] = "광고가 KEEP 추가";
+                  dataToast['messageToast'] = "일일저장량 초과 했습니다.";
                   FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
-                  // await EumsApp.instant.jobQueue({'data': dataToast});
                 } else {
                   _methodToastIOS(title: "Eums success", body: "광고가 KEEP 되었습니다");
                 }
@@ -424,8 +429,7 @@ class NotificationHandler {
 void notificationTapBackground(NotificationResponse notificationResponse) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await LocalStoreService.instant.init();
-  // await NotificationHandler.instant.initializeFcmNotification();
+  await LocalStoreService.instant.init(); // await NotificationHandler.instant.initializeFcmNotification();
   NotificationHandler.instant.eventOpenNotification(notificationResponse);
   // final String? payload = notificationResponse.payload;
   // if (notificationResponse.payload != null) {
