@@ -23,6 +23,6 @@ abstract class EumsPlatformInterface extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String> getAppNameByPackage(String? packageName);
+  Future<String> getAppNameByPackage(String packageName);
 
 }

@@ -4,6 +4,7 @@ import 'package:eums/eum_app_offer_wall/widget/images/widget_image_offer_wall.da
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_gif/flutter_gif.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';

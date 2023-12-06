@@ -127,7 +127,8 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
                 title: Text(
-                  '설정',
+                  // '설정',
+                  '마이페이지',
                   style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value),
                 ),
               ),
@@ -194,7 +195,31 @@ class _MyPageState extends State<MyPage> {
                     ),
                     // _buildUIBannerImage(dataBanner: state.listBanner),
                     _buildItem(),
-                    const SizedBox(height: 16)
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                      decoration: const BoxDecoration(color: Color(0xfff9f9f9)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "(주)더 아비",
+                            style: AppStyle.bold.copyWith(fontSize: controllerGet.fontSizeObx.value, color: const Color(0xff666666)),
+                          ),
+                          const SizedBox(height: 10),
+                          _buildRowText("대표이사", "공병기"),
+                          _buildRowText("사업자 등록번호", "468-88-01692"),
+                          _buildRowText("통신판매업신고", "2022-인천남동구-1729"),
+                          _buildRowText("주소", "인천 남동구 구월동 1134-12 태양빌딩 5층"),
+                          const SizedBox(height: 10),
+                          Text(
+                            "© Copyright THE A-BEE. All Rights Reserved",
+                            style: AppStyle.medium.copyWith(fontSize: controllerGet.fontSizeObx.value, color: const Color(0xff666666)),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -203,6 +228,30 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  Widget _buildRowText(String title, String body) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text(
+              title,
+              style: AppStyle.medium.copyWith(fontSize: controllerGet.fontSizeObx.value, color: const Color(0xff666666)),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              body,
+              style: AppStyle.medium.copyWith(fontSize: controllerGet.fontSizeObx.value, color: const Color(0xff666666)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   // _buildUIBannerImage({List? dataBanner}) {
   //   return Stack(
   //     children: [

@@ -71,6 +71,7 @@ class FlutterOverlayWindow {
       return Future.value(false);
     }
   }
+  
   // static Future<bool> checkPermissionBattery() async {
   //   try {
   //     return await _channel.invokeMethod<bool>('checkPermissionBattery') ?? false;

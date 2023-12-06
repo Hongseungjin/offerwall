@@ -8,6 +8,8 @@ import 'package:eums/common/const/values.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
+import 'package:eums/eum_app_offer_wall/utils/widget_loading_animated.dart';
+import 'package:eums/method_native/eums_method_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -45,6 +47,8 @@ class ReceivedNotification {
 class NotificationHandler {
   NotificationHandler._();
   // NotificationHandler();
+
+  OverlayEntry? _overlay;
 
   static NotificationHandler instant = NotificationHandler._();
 
@@ -191,6 +195,7 @@ class NotificationHandler {
 
               if (Platform.isAndroid && showDetailOfferwall == false) {
                 try {
+                  // showOverlay(message.data['data']);
                   final checkPermission = await FlutterOverlayWindow.isPermissionGranted();
                   if (checkPermission == true) {
                     debugPrint("xxxxx - checkPermission ===> $checkPermission");
@@ -290,8 +295,14 @@ class NotificationHandler {
             }
             if (Platform.isAndroid) {
               if (dataMessage != null) {
-                FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
+                // FlutterBackgroundService().invoke("showOverlay", {'data': dataMessage});
                 // await EumsApp.instant.jobQueue({'data': dataMessage});
+                final data = jsonDecode(dataMessage['data']);
+                data['advertiseIdx'] = data['idx'];
+                await LocalStoreService.instant.setDataShare(dataShare: data);
+                FlutterBackgroundService().invoke("closeOverlay");
+                await DeviceApps.openApp('com.app.abeeofferwal');
+                MethodChannelEums().openOverlay(data);
               } else {
                 FlutterBackgroundService().invoke("closeOverlay");
                 // await EumsApp.instant.closeOverlay();
@@ -320,7 +331,9 @@ class NotificationHandler {
             break;
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void _methodToastIOS({required String title, required String body}) {
@@ -423,6 +436,22 @@ class NotificationHandler {
     const NotificationDetails notificationDetails = NotificationDetails(iOS: iosNotificationDetails, android: androidNotificationDetails);
     return notificationDetails;
   }
+
+  // showOverlay(dynamic data) {
+  //   try {
+  //     if (_overlay == null) {
+  //       _overlay = OverlayEntry(
+  //         builder: (context) => ColoredBox(
+  //           color: Colors.transparent,
+  //           child: TrueCallOverlayMain(event: data),
+  //         ),
+  //       );
+  //       Overlay.of(navigatorKeyMain.currentState!.context).insert(_overlay!);
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 }
 
 @pragma('vm:entry-point')

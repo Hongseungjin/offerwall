@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
-import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
-import 'package:eums/gen/style_font.dart';
+import 'package:eums/eums_method_channel.dart';
+import 'package:eums/method_native/eums_method_channel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -16,7 +15,6 @@ import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/screen/accumulate_money_module/bloc/accumulate_money_bloc.dart';
 import 'package:eums/eum_app_offer_wall/screen/report_module/report_page.dart';
-import 'package:eums/eum_app_offer_wall/screen/watch_adver_module/bloc/watch_adver_bloc.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/utils/hex_color.dart';
 import 'package:eums/eum_app_offer_wall/widget/custom_dialog.dart';
@@ -33,7 +31,7 @@ import '../eum_app_offer_wall/bloc/authentication_bloc/authentication_bloc.dart'
 class TrueCallOverlay extends StatefulWidget {
   const TrueCallOverlay({Key? key}) : super(key: key);
 
-  static bool showDetailOfferwall = false;
+  // static bool showDetailOfferwall = false;
 
   @override
   State<TrueCallOverlay> createState() => _TrueCallOverlayState();
@@ -338,7 +336,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           dynamic dataToast = {};
           dataToast['isToast'] = true;
           dataToast['isWebView'] = false;
-          // dataToast['messageToast'] = "광고 보관 완료 후 3일 이내에 받아주세요";
           dataToast['messageToast'] = "광고가 KEEP 추가";
           FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
           // await EumsApp.instant.jobQueue({'data': dataToast});
@@ -346,7 +343,6 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
           dynamic dataToast = {};
           dataToast['isToast'] = true;
           dataToast['isWebView'] = false;
-          // dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
           dataToast['messageToast'] = "일일저장량 초과 했습니다";
           FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
         }
@@ -356,12 +352,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         dynamic dataToast = {};
         dataToast['isToast'] = true;
         dataToast['isWebView'] = false;
-        // dataToast['messageToast'] = "일일 저장량을 초과했습니다.";
         dataToast['messageToast'] = "ERROR";
         FlutterBackgroundService().invoke("showOverlay", {'data': dataToast});
-        // await EumsApp.instant.jobQueue({'data': dataToast});
 
-        // FlutterBackgroundService().invoke("closeOverlay");
         rethrow;
       }
     } else {
@@ -370,10 +363,33 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
         if (dataEvent != null) {
           dataEvent['isWebView'] = true;
 
-          FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
-          // await EumsApp.instant.jobQueue({'data': dataEvent});
+          // FlutterBackgroundService().invoke("showOverlay", {'data': dataEvent});
+          // await DeviceApps.openApp('com.app.abeeofferwal');
+          final data = jsonDecode(dataEvent['data']);
+          data['advertiseIdx'] = data['idx'];
+          await LocalStoreService.instant.setDataShare(dataShare: data);
 
+          FlutterBackgroundService().invoke("closeOverlay");
+
+          await MethodChannelEums().openOverlay(data);
           await DeviceApps.openApp('com.app.abeeofferwal');
+
+
+          // final data = jsonDecode(dataEvent['data']);
+          // data['advertiseIdx'] = data['idx'];
+          // await DeviceApps.openApp('com.app.abeeofferwal');
+
+          // await Future.delayed(
+          //   const Duration(seconds: 10),
+          //   () async {
+
+          //     await Routings().navigate(
+          //         navigatorKeyMain.currentContext!,
+          //         DetailKeepScreen(
+          //           data: data,
+          //         ));
+          //   },
+          // );
         } else {
           FlutterBackgroundService().invoke("closeOverlay");
           // await EumsApp.instant.closeOverlay();
@@ -441,5 +457,9 @@ class _TrueCallOverlayState extends State<TrueCallOverlay> with WidgetsBindingOb
             // ),
           ),
         ));
+  }
+
+  String? encodeQueryParameters(Map<String, String> params) {
+    return params.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&');
   }
 }

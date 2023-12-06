@@ -15,7 +15,7 @@ class EumsMethodChannel extends EumsPlatformInterface {
 
  
   @override
-  Future<String> getAppNameByPackage(String? packageName) async {
+  Future<String> getAppNameByPackage(String packageName) async {
     final appName = await methodChannel.invokeMethod<String>('getAppNameByPackageName', packageName);
     return appName ?? '';
   }

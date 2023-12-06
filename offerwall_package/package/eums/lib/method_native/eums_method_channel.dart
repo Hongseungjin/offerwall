@@ -14,4 +14,9 @@ class MethodChannelEums extends EumsPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+  @override
+  Future<bool?> openOverlay(dynamic data) async {
+    final isOpen = await methodChannel.invokeMethod<bool>('OPEN_OVERLAY',data );
+    return isOpen;
+  }
 }

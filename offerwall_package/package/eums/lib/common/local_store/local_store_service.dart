@@ -96,19 +96,23 @@ class LocalStoreService {
     await preferences.setString(SAVE_OR_NOT_ADVER, status.toString());
   }
 
-  // dynamic getDataShare() {
-  //   final data = preferences.getString(SAVE_DATA_SHARE);
-  //   if (data != null) {
-  //     return jsonDecode(data);
-  //   }
-  //   return null;
-  //   // return preferences.getString(SAVE_DATA_SHARE) == 'true' ? true : false;
-  // }
+  dynamic getDataShare() {
+    final data = preferences.getString(SAVE_DATA_SHARE);
+    if (data != null) {
+      return jsonDecode(data);
+    }
+    return null;
+    // return preferences.getString(SAVE_DATA_SHARE) == 'true' ? true : false;
+  }
 
-  // Future setDataShare({dynamic dataShare}) async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   await preferences.setString(SAVE_DATA_SHARE, jsonEncode(dataShare));
-  // }
+  Future setDataShare({dynamic dataShare}) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try {
+      await preferences.setString(SAVE_DATA_SHARE, jsonEncode(dataShare));
+    } catch (e) {
+      await preferences.remove(SAVE_DATA_SHARE);
+    }
+  }
 
   String? getDeviceToken() {
     return preferences.getString(SAVE_DEVICE_TOKEN);

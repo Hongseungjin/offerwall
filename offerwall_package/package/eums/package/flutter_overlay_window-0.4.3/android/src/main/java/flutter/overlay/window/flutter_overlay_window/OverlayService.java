@@ -19,10 +19,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -91,6 +94,7 @@ public class OverlayService extends Service implements View.OnTouchListener {
         notificationManager.cancel(OverlayConstants.NOTIFICATION_ID);
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -118,7 +122,21 @@ public class OverlayService extends Service implements View.OnTouchListener {
         Log.d("onStartCommand", "Service started");
         FlutterEngine engine = FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG);
         engine.getLifecycleChannel().appIsResumed();
-        flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext()));
+        flutterView = new FlutterView(getApplicationContext(), new FlutterTextureView(getApplicationContext())){
+            @Override
+            public boolean dispatchKeyEvent(@NonNull KeyEvent event) {
+                if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
+                    Toast.makeText(getApplicationContext(), "dispatchKeyEvent KeyEvent.KEYCODE_BACK", Toast.LENGTH_SHORT).show();
+                }
+                return super.dispatchKeyEvent(event);
+            }
+
+            @Override
+            public boolean onKeyDown(int keyCode, KeyEvent event) {
+                return super.onKeyDown(keyCode, event);
+            }
+        };
+
         flutterView.attachToFlutterEngine(FlutterEngineCache.getInstance().get(OverlayConstants.CACHED_TAG));
         flutterView.setFitsSystemWindows(true);
         flutterView.setFocusable(true);
@@ -266,6 +284,8 @@ public class OverlayService extends Service implements View.OnTouchListener {
     @Override
     public void onCreate() {
         createNotificationChannel();
+
+
 //       Intent notificationIntent = new Intent(this, FlutterOverlayWindowPlugin.class);
 //       int pendingFlags;
 //       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {

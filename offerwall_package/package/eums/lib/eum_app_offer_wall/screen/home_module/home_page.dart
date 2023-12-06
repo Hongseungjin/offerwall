@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
+      
       // _permissionNotification();
       // if (showToast == true) {
       //   var status = await Permission.locationAlways.status;
@@ -830,5 +831,6 @@ List uiIconList = [
     'title': '스크랩 광고',
     'icon': Assets.icons.iconAdvScrap.path,
   },
-  {'title': '이용안내', 'icon': Assets.icons.iconInfo.path}
+  // {'title': '이용안내', 'icon': Assets.icons.iconInfo.path}
+  {'title': '외부 충전소', 'icon': Assets.icons.charging.path}
 ];

@@ -1,45 +1,14 @@
-//import UIKit
-////import adlibrary
-////import Firebase
-//import FirebaseCore
-//import Flutter
-//import UserNotifications
-////import flutter_local_notifications
-
 import UIKit
 import Flutter
 import FirebaseCore
 import FirebaseMessaging
 import flutter_background_service_ios
-//import UserNotifications
+import UserNotifications
 import flutter_local_notifications
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate
-//, AppAllOfferwallSDKListener
 {
-    //    public func appAllOfferwallSDKCallback(_ result: Int32) {
-    //        switch(result) {
-    //        case AppAllOfferwallSDK_SUCCES:
-    //            AppAllOfferwallSDK.getInstance().showToast("성공")
-    //            break;
-    //
-    //        case AppAllOfferwallSDK_INVALID_USER_ID:
-    //            AppAllOfferwallSDK.getInstance().showToast("잘못된 유저 ID 입니다.")
-    //            break;
-    //
-    //        case AppAllOfferwallSDK_INVALID_KEY:
-    //            AppAllOfferwallSDK.getInstance().showToast("오퍼월 KEY를 확인해 주세요.")
-    //            break;
-    //
-    //        case AppAllOfferwallSDK_NOT_GET_ADID:
-    //            AppAllOfferwallSDK.getInstance().showToast("고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.")
-    //            break;
-    //
-    //        default:
-    //            print("ERROR")
-    //        }
-    //    }
     
     override func application(
         _ application: UIApplication,
@@ -59,8 +28,33 @@ import flutter_local_notifications
         GeneratedPluginRegistrant.register(with: self)
         UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
         
-        //    AppAllOfferwallSDK.initialize()
-        //        UIApplication.shared.setMinimumBackgroundFetchInterval(5)
+        
+//        // Define the custom actions.
+//        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
+//                                                title: "Accept",
+//                                                options: [])
+//        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
+//                                                 title: "Decline",
+//                                                 options: [])
+//        // Define the notification type
+//        let meetingInviteCategory =
+//        UNNotificationCategory(identifier: "MEETING_INVITATION",
+//                               actions: [acceptAction, declineAction],
+//                               intentIdentifiers: [],
+//                               hiddenPreviewsBodyPlaceholder: "",
+//                               options: .customDismissAction)
+//        
+//        let notificationCenter = UNUserNotificationCenter.current()
+//        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
+//        notificationCenter.requestAuthorization(options: options) { (granted, error) in
+//            if granted {
+//                application.registerForRemoteNotifications()
+//            }
+//        }
+//        // Register the notification type.
+//        notificationCenter.setNotificationCategories([meetingInviteCategory])
+        
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
@@ -68,10 +62,60 @@ import flutter_local_notifications
         //        print("X__APNS: \(String(describing: deviceToken))")
         Messaging.messaging().apnsToken = deviceToken;
         Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
-                Messaging.messaging().isAutoInitEnabled = true
+        Messaging.messaging().isAutoInitEnabled = true
     }
     
+    override func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        let userInfo = notification.request.content.userInfo
+        
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        // Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        // Define the custom actions.
+        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
+                                                title: "Accept",
+                                                options: [])
+        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
+                                                 title: "Decline",
+                                                 options: [])
+        // Define the notification type
+        let meetingInviteCategory =
+        UNNotificationCategory(identifier: "MEETING_INVITATION",
+                               actions: [acceptAction, declineAction],
+                               intentIdentifiers: [],
+                               hiddenPreviewsBodyPlaceholder: "",
+                               options: .customDismissAction)
+        
+       
+        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
+        center.requestAuthorization(options: options) { (granted, error) in
+            if granted {
+                DispatchQueue.main.async {
+                  UIApplication.shared.registerForRemoteNotifications()
+                }
+//                application.registerForRemoteNotifications()
+            }
+        }
+        // Register the notification type.
+        center.setNotificationCategories([meetingInviteCategory])
+        
+        // Print full message.
+        print(userInfo)
+        // Change this to your preferred presentation option
+        return [[.alert, .sound]]
+    }
     
+    override func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        let userInfo = response.notification.request.content.userInfo
+        
+        // ...
+        
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        // Messaging.messaging().appDidReceiveMessage(userInfo)
+        
+        // Print full message.
+        print(userInfo)
+    }
     
 }
 

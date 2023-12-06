@@ -5,11 +5,13 @@ import 'dart:io';
 
 import 'package:eums/common/routing.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
+import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
@@ -175,6 +177,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
   // LocalStore localStore = LocalStoreService();
   double deviceWidth(BuildContext context) => MediaQuery.of(context).size.width;
   double deviceHeight(BuildContext context) => MediaQuery.of(context).size.height;
+
+  // final MethodChannel mainChannel = const MethodChannel("com.app.abeeofferwal");
+  final MethodChannel eumsCallBackChannel = const MethodChannel('eums_call_back');
+
   @override
   void initState() {
     // checkOpenApp('initState');
@@ -184,6 +190,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
     WidgetsBinding.instance.addObserver(this);
 
     LocalStoreService.instant.preferences.setBool("isDebug", true);
+
+    // mainChannel.setMethodCallHandler((event) async {
+    //   debugPrint("xxxx===> ${event.method}");
+    // });
+    eumsCallBackChannel.setMethodCallHandler((call) async {
+      debugPrint("eumsCallBackChannel===> ${call.method}");
+      await LocalStoreService.instant.preferences.reload();
+
+      final dataShare = LocalStoreService.instant.getDataShare();
+      debugPrint("dataShare====> $dataShare");
+      if (dataShare != null) {
+        await LocalStoreService.instant.setDataShare(dataShare: null);
+        Routings().navigate(
+            navigatorKeyMain.currentContext!,
+            DetailKeepScreen(
+              data: dataShare,
+            ));
+      }
+    });
   }
 
   setDeviceWidth() {
@@ -277,19 +302,6 @@ class _AppMainScreenState extends State<AppMainScreen> {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String versionCurrent = packageInfo.version;
 
-      // remoteConfig.onConfigUpdated.listen((event) async {
-      //   await remoteConfig.activate();
-      //   final newVersion = remoteConfig.getString("version");
-
-      //   debugPrint("check version ($isShowCheckVersion): $newVersion / $versionCurrent ");
-      //   if (_checkNumberVersion(currentVersion: versionCurrent, newVersion: newVersion) == false && isShowCheckVersion == false) {
-      //     isShowCheckVersion = true;
-      //     // ignore: use_build_context_synchronously
-      //     await WidgetDialogCheckVersion.show(context);
-      //   }
-
-      //   // Use the new config values here.
-      // });
       await remoteConfig.fetchAndActivate();
       final newVersion = remoteConfig.getString("version");
 
@@ -338,6 +350,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
     // );
     return Scaffold(
       // key: globalKeyMain,
+      key: navigatorKeyMain,
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

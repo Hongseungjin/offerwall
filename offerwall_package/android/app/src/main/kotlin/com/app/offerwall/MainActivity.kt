@@ -1,27 +1,38 @@
 package com.app.abeeofferwal
 
-import android.os.Bundle
 //import android.widget.Toast
 //import com.kyad.adlibrary.AppAllOfferwallSDK
+import android.os.Bundle
+import android.view.KeyEvent
+import android.widget.Toast
+import com.example.eums.EumsPlugin
+import flutter.overlay.window.flutter_overlay_window.OverlayConstants
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 
-class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler
-//    AppAllOfferwallSDK.AppAllOfferwallSDKListener
-{
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 
-    // private var CHANNEL = "sdk_eums"
+//    private var flutterChannel: MethodChannel? = null
+//    private var CHANNEL = "com.app.abeeofferwal"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
+
+
+
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-//        val channel = MethodChannel(flutterEngine?.dartExecutor!!.binaryMessenger, CHANNEL)
-//
+//         channel = MethodChannel(flutterEngine?.dartExecutor!!.binaryMessenger, CHANNEL)
+
+//        flutterChannel = MethodChannel(
+//            flutterEngine?.dartExecutor!!.binaryMessenger,
+//            CHANNEL
+//        )
 //        channel.setMethodCallHandler { call, result ->
 //            val data = call.arguments
 //
@@ -32,10 +43,57 @@ class MainActivity: FlutterActivity(), MethodChannel.MethodCallHandler
 //        }
     }
 
+    //    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+//        if(event?.keyCode == KeyEvent.KEYCODE_BACK){
+//            Toast.makeText(this@MainActivity, "dispatchKeyEvent KeyEvent.KEYCODE_BACK", Toast.LENGTH_SHORT).show()
+//        }
+//        return super.dispatchKeyEvent(event)
+//
+//    }
+//
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        super.onKeyDown(keyCode, event)
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            try {
+//                if (OverlayService.isRunning) {
+//                    val i = Intent(context, OverlayService::class.java)
+//                    i.putExtra(OverlayService.INTENT_EXTRA_IS_CLOSE_WINDOW, true)
+//                    context.startService(i)
+//                }
+//            } catch (error: Exception) {
+//            }
+//            flutterChannel?.invokeMethod("KEYCODE_BACK", null)
+//            Toast.makeText(
+//                this@MainActivity,
+//                "dispatchKeyEvent KeyEvent.KEYCODE_BACK",
+//                Toast.LENGTH_SHORT
+//            ).show()
+        }
+        return true;
+
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+//        flutterChannel?.invokeMethod("KEYCODE_HOME", null)
+//
+//        Toast.makeText(
+//            this@MainActivity,
+//            "dispatchKeyEvent KeyEvent.HOME",
+//            Toast.LENGTH_SHORT
+//        ).show()
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-
+        EumsPlugin.channelCallBackMain = MethodChannel(
+            flutterEngine?.dartExecutor!!.binaryMessenger,
+            EumsPlugin.channelCallBack
+        )
+//        flutterChannel = MethodChannel(
+//            flutterEngine?.dartExecutor!!.binaryMessenger,
+//            CHANNEL
+//        )
 
     }
 

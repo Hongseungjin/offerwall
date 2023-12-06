@@ -51,7 +51,7 @@
         }
     }
     if ([@"AdpopcornIos" isEqualToString:call.method]) {
-       NSString *argumentsString = (NSString *)call.arguments; 
+        NSString *argumentsString = (NSString *)call.arguments;
         
         [AdPopcornOfferwall initialize];
         [AdPopcornOfferwall setAppKey:@"862529194" andHashKey:@"3538bf14739f419f"];
@@ -60,18 +60,18 @@
         [AdPopcornOfferwall shared].useIgaworksRewardServer= false;
         
         @try {
-        [AdPopcornOfferwall openOfferWallWithViewController: controller delegate:self userDataDictionaryForFilter:nil];
+            [AdPopcornOfferwall openOfferWallWithViewController: controller delegate:self userDataDictionaryForFilter:nil];
         }
         @catch (NSException * e) {
             NSLog(@"Exception: %@", e);
         }
     }
     if ([@"mafin" isEqualToString:call.method]) {
-       NSString *argumentsString = (NSString *)call.arguments; 
+        NSString *argumentsString = (NSString *)call.arguments;
         @try {
-        [NASWall initWithAppKey:@"b78fc3acdf538af49ba9676303f8d315" testMode:NO userId:argumentsString delegate:self];
-        [NASWall getAdList:argumentsString];
-        [NASWall openWallWithUserData:argumentsString];
+            [NASWall initWithAppKey:@"b78fc3acdf538af49ba9676303f8d315" testMode:NO userId:argumentsString delegate:self];
+            [NASWall getAdList:argumentsString];
+            [NASWall openWallWithUserData:argumentsString];
         }
         @catch (NSException * e) {
             NSLog(@"Exception: %@", e);

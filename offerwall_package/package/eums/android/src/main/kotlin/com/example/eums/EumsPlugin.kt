@@ -15,35 +15,49 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
 /** EumsPlugin */
- class EumsPlugin: FlutterPlugin, MethodCallHandler{
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+class EumsPlugin : FlutterPlugin, MethodCallHandler {
 
-  private var context: Context? = null
+    companion object {
+        val channelCallBack="eums_call_back";
+        var channelCallBackMain: MethodChannel?=null
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "eums")
-    channel.setMethodCallHandler(this)
-    context = flutterPluginBinding.applicationContext
-  }
+    }
+    /// The MethodChannel that will the communication between Flutter and native Android
+    ///
+    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// when the Flutter Engine is detached from the Activity
+    private lateinit var channel: MethodChannel
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    }else {
-        if(call.method== "getAppNameByPackageName"){
-            val packageName= call.arguments<String>()
-            val appName= getAppNameFromPkgName(packageName)
-            result.success(appName)
-        }else{
-            result.notImplemented()
+    private var context: Context? = null
 
+    private  var methodOpenOverlay="OPEN_OVERLAY";
+
+
+
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "eums")
+        channel.setMethodCallHandler(this)
+        context = flutterPluginBinding.applicationContext
+    }
+
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == methodOpenOverlay) {
+            channelCallBackMain?.invokeMethod(methodOpenOverlay, call.arguments)
+            result.success(true)
+        } else if (call.method == "getPlatformVersion") {
+            result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        } else {
+            if (call.method == "getAppNameByPackageName") {
+                val packageName = call.arguments<String>()
+                val appName = getAppNameFromPkgName(packageName)
+                result.success(appName)
+            } else {
+                result.notImplemented()
+
+            }
         }
     }
-  }
+
     private fun getAppNameFromPkgName(packageName: String?): String? {
         return try {
             val packageManager = context!!.packageManager
@@ -58,8 +72,8 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
         }
     }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
 
 }

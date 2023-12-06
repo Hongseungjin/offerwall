@@ -110,7 +110,7 @@ void printWrapped(String text) {
 showOverlay(event) async {
   try {
     if (event?['data'] != null && event?['data']['isWebView'] == true) {
-      TrueCallOverlay.showDetailOfferwall = true;
+      // TrueCallOverlay.showDetailOfferwall = true;
       event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
       event?['data']['sizeDevice'] = LocalStoreService.instant.getSizeDevice();
       await FlutterOverlayWindow.showOverlay(
@@ -157,13 +157,16 @@ jobQueue(event) async {
 
     bool isActive = await FlutterOverlayWindow.isActive();
     if (isActive == true) {
-      if (TrueCallOverlay.showDetailOfferwall == false) {
-        await FlutterOverlayWindow.closeOverlay();
-        await Future.delayed(const Duration(milliseconds: 1000));
-        await showOverlay(event);
-      }
+      // if (TrueCallOverlay.showDetailOfferwall == false) {
+      //   await FlutterOverlayWindow.closeOverlay();
+      //   await Future.delayed(const Duration(milliseconds: 1000));
+      //   await showOverlay(event);
+      // }
+      await FlutterOverlayWindow.closeOverlay();
+      await Future.delayed(const Duration(milliseconds: 1000));
+      await showOverlay(event);
     } else {
-      TrueCallOverlay.showDetailOfferwall = false;
+      // TrueCallOverlay.showDetailOfferwall = false;
       await Future.delayed(const Duration(milliseconds: 1000));
       await showOverlay(event);
     }

@@ -26,4 +26,7 @@ abstract class EumsPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+  Future<bool?> openOverlay(dynamic data) {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
 }

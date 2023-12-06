@@ -46,9 +46,12 @@ public class FlutterOverlayWindowPlugin implements
     final int REQUEST_CODE_FOR_OVERLAY_PERMISSION = 1248;
     private Toast toast = null;
 
+    private  FlutterPluginBinding flutterPluginBinding;
+
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.context = flutterPluginBinding.getApplicationContext();
+       this. flutterPluginBinding = flutterPluginBinding;
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), OverlayConstants.CHANNEL_TAG);
         channel.setMethodCallHandler(this);
 
@@ -59,6 +62,9 @@ public class FlutterOverlayWindowPlugin implements
         WindowSetup.messenger = messenger;
         WindowSetup.messenger.setMessageHandler(this);
     }
+
+
+
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {

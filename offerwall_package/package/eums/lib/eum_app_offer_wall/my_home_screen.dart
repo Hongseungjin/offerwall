@@ -8,6 +8,7 @@ import 'package:eums/eum_app_offer_wall/lifecycale_event_handle.dart';
 import 'package:eums/eum_app_offer_wall/widget/dialogs/widget_dialog_location.dart';
 import 'package:eums/eums_library.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
@@ -38,6 +39,7 @@ class MyHomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
+ 
   bool showAction = false;
   dynamic dataUser;
 
@@ -146,7 +148,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-  NotificationHandler. flutterLocalNotificationsPlugin.cancelAll();
+    NotificationHandler.flutterLocalNotificationsPlugin.cancelAll();
     NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
     NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
@@ -173,6 +175,8 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       // _permissionNotification();
       await _determinePosition();
     }));
+
+   
   }
 
   getBatteryOptimization() async {

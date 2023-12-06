@@ -5,9 +5,15 @@
 //     return EumsPlatform.instance.getPlatformVersion();
 //   }
 // }
+import 'dart:io';
+
 import 'package:eums/common/const/values.dart';
 import 'package:eums/common/local_store/local_store_service.dart';
+import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_component/events/event_static_component.dart';
 
 import 'eum_app_offer_wall/notification_handler.dart';
 import 'eums_library.dart';
@@ -56,7 +62,7 @@ class Eums {
       MaterialApp(
         debugShowCheckedModeBanner: false,
         home: home,
-        navigatorKey: navigatorKeyMain,
+        // navigatorKey: navigatorKeyMain,
         builder: (context, child) {
           return Overlay(
             initialEntries: [
@@ -68,10 +74,40 @@ class Eums {
     );
 
     try {
-      var details = await NotificationHandler.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-      if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
-        NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
+      // EventStaticComponent.instance.add(
+      //   key: "open-detail-overlay",
+      //   event: (params, key) async {
+      //     await LocalStoreService.instant.preferences.reload();
+      //     final dataShare = LocalStoreService.instant.getDataShare();
+      //     if (dataShare != null) {
+      //       LocalStoreService.instant.setDataShare(dataShare: null);
+      //       Routings().navigate(
+      //           navigatorKeyMain.currentContext!,
+      //           DetailKeepScreen(
+      //             data: dataShare,
+      //           ));
+      //     }
+      //   },
+      // );
+
+      await LocalStoreService.instant.preferences.reload();
+
+      final dataShare = LocalStoreService.instant.getDataShare();
+      debugPrint("dataShare====> $dataShare");
+      if (dataShare != null) {
+        await LocalStoreService.instant.setDataShare(dataShare: null);
+        Routings().navigate(
+            navigatorKeyMain.currentContext!,
+            DetailKeepScreen(
+              data: dataShare,
+            ));
+      } else {
+        var details = await NotificationHandler.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+        if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
+          NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
+        }
       }
+
       // ignore: empty_catches
     } catch (e) {}
   }

@@ -124,6 +124,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/cgv.png
   AssetGenImage get cgv => const AssetGenImage('assets/icons/cgv.png');
 
+  /// File path: assets/icons/charging.png
+  AssetGenImage get charging =>
+      const AssetGenImage('assets/icons/charging.png');
+
   /// File path: assets/icons/chat.png
   AssetGenImage get chat => const AssetGenImage('assets/icons/chat.png');
 
@@ -442,6 +446,7 @@ class $AssetsIconsGen {
         bookmarkWhite,
         camera,
         cgv,
+        charging,
         chat,
         check,
         checkin,
@@ -644,8 +649,7 @@ class AssetGenImage {
     bool matchTextDirection = false,
     bool gaplessPlayback = false,
     bool isAntiAlias = false,
-    // String? package,
-    String package = "eums",
+    String package = 'eums',
     FilterQuality filterQuality = FilterQuality.low,
     int? cacheWidth,
     int? cacheHeight,
@@ -680,7 +684,7 @@ class AssetGenImage {
 
   ImageProvider provider({
     AssetBundle? bundle,
-    String? package,
+    String package='eums',
   }) {
     return AssetImage(
       _assetName,
@@ -703,7 +707,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String package = "eums",
+    String package = 'eums',
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,
