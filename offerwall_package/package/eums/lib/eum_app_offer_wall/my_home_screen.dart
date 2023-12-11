@@ -39,7 +39,6 @@ class MyHomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
- 
   bool showAction = false;
   dynamic dataUser;
 
@@ -148,10 +147,10 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   void initState() {
     _registerEventBus();
     SettingFontSize().initSetingFontSize(controllerGet);
-    NotificationHandler.flutterLocalNotificationsPlugin.cancelAll();
-    NotificationHandler.instant.didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
+    flutterLocalNotificationsPlugin.cancelAll();
+    didReceiveLocalNotificationStream.stream.listen((ReceivedNotification receivedNotification) async {});
 
-    NotificationHandler.instant.selectNotificationStream.stream.listen((String? payload) async {});
+    // selectNotificationStream.stream.listen((String? payload) async {});
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await Firebase.initializeApp();
@@ -175,8 +174,6 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       // _permissionNotification();
       await _determinePosition();
     }));
-
-   
   }
 
   getBatteryOptimization() async {

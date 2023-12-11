@@ -17,7 +17,7 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
   @override
   Future methodAdpopcorn({data}) async {
     if (Platform.isAndroid) {
-      await methodChannel.invokeMethod<String>('Adpopcorn', data);
+      await methodChannel.invokeMethod<dynamic>('Adpopcorn', data);
     } else {
       try {
         await SdkEums_cPlatform.instance.methodAdpopcorn(data: data);
@@ -28,7 +28,7 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
   @override
   Future methodAdsync({data}) async {
     if (Platform.isAndroid) {
-      await methodChannel.invokeMethod<String>('adsync', data);
+      await methodChannel.invokeMethod<dynamic>('adsync', data);
     } else {
       await SdkEums_cPlatform.instance.methodAdsync(data: data);
     }
@@ -36,13 +36,13 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
 
   @override
   Future methodAppall({data}) async {
-    await methodChannel.invokeMethod<String>('appall', data);
+    await methodChannel.invokeMethod<dynamic>('appall', data);
   }
 
   @override
   Future methodMafin({data}) async {
     if (Platform.isAndroid) {
-      await methodChannel.invokeMethod<String>('mafin', data);
+      await methodChannel.invokeMethod<dynamic>('mafin', data);
     } else {
       await SdkEums_cPlatform.instance.methodMafin(data: data);
     }
@@ -50,21 +50,21 @@ class MethodChannelSdkEums extends SdkEumsPlatform {
 
   @override
   Future methodIvekorea({data}) async {
-    await methodChannel.invokeMethod<String>('iveKorea', data);
+    await methodChannel.invokeMethod<dynamic>('iveKorea', data);
   }
 
   @override
   Future methodTnk({data}) async {
-    await methodChannel.invokeMethod<String>('tkn', data);
+    await methodChannel.invokeMethod<dynamic>('tkn', data);
   }
 
   @override
   Future methodOHC({data}) async {
-    await methodChannel.invokeMethod<String>('ohc', data);
+    await methodChannel.invokeMethod<dynamic>('ohc', data);
   }
-  
+
   @override
-  Future methodUser({data}) async{
-     await methodChannel.invokeMethod<String>('dataUser', data);
+  Future methodUser({data}) async {
+    await methodChannel.invokeMethod<dynamic>('dataUser', data);
   }
 }

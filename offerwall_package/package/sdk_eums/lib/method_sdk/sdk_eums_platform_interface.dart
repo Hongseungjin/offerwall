@@ -32,7 +32,7 @@ abstract class SdkEumsPlatform extends PlatformInterface {
   /// 2.meta-data 설정
   /// <meta-data android:name="partner_id" android:value="파트너 서비스 Id 는 AdSync 가 등록된 어플리케이션들을 식별하기 위하여 사용하는 유일한 ID 값입니다."/>
 
-  Future methodAdsync({dynamic data});
+  Future<dynamic> methodAdsync({dynamic data});
 
   /// document adpopcorn
   /// 파트너 앱(Publisher App) (AndroidMainfest.xml) 설정

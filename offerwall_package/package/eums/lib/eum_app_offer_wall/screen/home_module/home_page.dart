@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       blocs.last.add(HomeListDataOfferWallEvent(category: category, filter: filter));
     });
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(resumeCallBack: () async {
-      
       // _permissionNotification();
       // if (showToast == true) {
       //   var status = await Permission.locationAlways.status;
@@ -123,13 +122,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   @override
   void dispose() {
     _unregisterEventBus();
-    Future.delayed(
-      const Duration(seconds: 3),
-      () {
-        debugPrint("Home_page===> dispose");
-        EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
-      },
-    );
+    // Future.delayed(
+    //   const Duration(seconds: 3),
+    //   () {
+    //     debugPrint("Home_page===> dispose");
+    //     EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
+    //   },
+    // );
     super.dispose();
   }
 
@@ -165,7 +164,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if (!isRunning) {
       await FlutterBackgroundService().startService();
     }
-    EumsApp.instant.locationCurrent();
+    FlutterBackgroundService().invoke('locationCurrent');
+    // EumsApp.instant.locationCurrent();
   }
 
   void _unregisterEventBus() {
@@ -652,7 +652,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         if (!isRunning) {
                           await FlutterBackgroundService().startService();
                         }
-                        EumsApp.instant.locationCurrent();
+                        // EumsApp.instant.locationCurrent();
+                        FlutterBackgroundService().invoke('locationCurrent');
                       }
                       // ignore: empty_catches
                     } catch (e) {}

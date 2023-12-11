@@ -4,6 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+// Import for Android features.
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+// Import for iOS features.
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WidgetImageOfferWall extends StatefulWidget {
   const WidgetImageOfferWall({super.key, required this.urlLink, required this.onDone, required this.scrollController, required this.onScrollWebView});
@@ -30,38 +34,132 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
     super.initState();
     if (!widget.urlLink.contains(".png") && !widget.urlLink.contains(".jpg")) {
       linkWeb = getProperHtml(widget.urlLink);
-      controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setBackgroundColor(const Color(0x00000000))
-        ..setNavigationDelegate(
-          NavigationDelegate(
-            onProgress: (int progress) {
-              // Update loading bar.
-              this.progress.value = progress / 100;
+
+      try {
+        // #docregion platform_features
+        late final PlatformWebViewControllerCreationParams params;
+        if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+          params = WebKitWebViewControllerCreationParams(
+            allowsInlineMediaPlayback: true,
+            mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
+          );
+        } else {
+          params = const PlatformWebViewControllerCreationParams();
+        }
+
+        controller = WebViewController.fromPlatformCreationParams(params);
+        // #enddocregion platform_features
+
+        controller!
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setBackgroundColor(const Color(0x00000000))
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onProgress: (int progress) {
+                debugPrint('WebView is loading (progress : $progress%)');
+                if (progress == 0) {
+                  this.progress.value = 1;
+                } else {
+                  this.progress.value = progress / 100;
+                }
+              },
+              onPageStarted: (String url) {
+                debugPrint('Page started loading: $url');
+              },
+              onPageFinished: (String url) {
+                debugPrint('Page finished loading: $url');
+                try {
+                  if (url != linkWeb && linkWeb!.contains("://m") == false) {
+                    linkWeb = url;
+                    controller?.loadRequest(Uri.parse(url));
+                  }
+                } catch (e) {}
+                widget.onDone.call();
+              },
+              onWebResourceError: (WebResourceError error) {
+                debugPrint('''
+Page resource error:
+  code: ${error.errorCode}
+  description: ${error.description}
+  errorType: ${error.errorType}
+  isForMainFrame: ${error.isForMainFrame}
+          ''');
+              },
+              onNavigationRequest: (NavigationRequest request) {
+                if (request.url.startsWith('https://www.youtube.com/')) {
+                  debugPrint('blocking navigation to ${request.url}');
+                  return NavigationDecision.prevent;
+                }
+                debugPrint('allowing navigation to ${request.url}');
+                return NavigationDecision.navigate;
+              },
+              onUrlChange: (UrlChange change) {
+                debugPrint('url change to ${change.url}');
+              },
+            ),
+          )
+          ..addJavaScriptChannel(
+            'Toaster',
+            onMessageReceived: (JavaScriptMessage message) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(message.message)),
+              );
             },
-            onPageStarted: (String url) {},
-            onPageFinished: (String url) {
-              // isRunning = true;
-              // timerController.start();
-              if (url != linkWeb) {
-                linkWeb = url;
-                controller?.loadRequest(Uri.parse(url));
-              }
-              widget.onDone.call();
-            },
-            onWebResourceError: (WebResourceError error) {
-              debugPrint("onWebResourceError: ${error.description}");
-            },
-            onNavigationRequest: (NavigationRequest request) {
-              // if (request.url.startsWith('https://www.youtube.com/')) {
-              //   return NavigationDecision.prevent;
-              // }
-              // return NavigationDecision.navigate;
-              return NavigationDecision.prevent;
-            },
-          ),
-        )
-        ..loadRequest(Uri.parse(linkWeb!));
+          )
+          ..loadRequest(Uri.parse(linkWeb!));
+
+        // #docregion platform_features
+        if (controller!.platform is AndroidWebViewController) {
+          AndroidWebViewController.enableDebugging(true);
+          (controller!.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
+        }
+        // #enddocregion platform_features
+      } catch (e) {
+        rethrow;
+      }
+
+      // controller = WebViewController()
+      //   ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      //   ..setBackgroundColor(const Color(0x00000000))
+      //   ..setNavigationDelegate(
+      //     NavigationDelegate(
+      //       onProgress: (int progress) {
+      //         // Update loading bar.
+      //         if (progress == 0) {
+      //           this.progress.value = 1;
+      //         } else {
+      //           this.progress.value = progress / 100;
+      //         }
+      //       },
+      //       onPageStarted: (String url) {
+      //         progress.value = 10;
+      //       },
+      //       onPageFinished: (String url) {
+      //         // isRunning = true;
+      //         // timerController.start();
+      //         if (url != linkWeb) {
+      //           linkWeb = url;
+      //           controller?.loadRequest(Uri.parse(url));
+      //         }
+      //         widget.onDone.call();
+      //       },
+      //       onWebResourceError: (WebResourceError error) {
+      //         debugPrint("onWebResourceError: ${error.description}");
+      //       },
+      //       onNavigationRequest: (NavigationRequest request) {
+      //         // if (request.url.startsWith('https://www.youtube.com/')) {
+      //         //   return NavigationDecision.prevent;
+      //         // }
+      //         // return NavigationDecision.navigate;
+      //         return NavigationDecision.prevent;
+      //       },
+      //     ),
+      //   );
+
+      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //   controller?.loadRequest(Uri.parse(linkWeb!));
+      //   setState(() {});
+      // });
     }
   }
 
@@ -81,8 +179,8 @@ class _WidgetImageOfferWallState extends State<WidgetImageOfferWall> {
 
   @override
   void dispose() {
-    controller?.clearCache();
-    // TODO: implement dispose
+    // controller?.clearCache();
+    // controller?.clearLocalStorage();
     super.dispose();
   }
 

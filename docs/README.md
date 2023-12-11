@@ -8,6 +8,15 @@ Prepared based on the following documents:
 
 - [documentation ios](https://docs.flutter.dev/add-to-app/ios/project-setup).
 
+## SDK
+
+- AdSync: sdk/AdSync2_SDK_for_Android_v5.7.5_20230116.zip
+- adpopcorn: https://adpopcorn.notion.site/SDK-af84236e11194a99ac6652f61cfaa669
+- mafin:
+- TNK:
+- IveKorea:
+- AppAll:
+
 ## Getting Started Version
 
 WARNING: Please check if the version on your device is suitable, it may be equal or higher

@@ -19,7 +19,7 @@ A new Flutter plugin project.
   # s.platform = :ios, '12.0'
   s.dependency 'Firebase/Core'
   s.dependency 'Firebase'
-  s.dependency 'Toast-Swift', '~> 5.0.1'
+  # s.dependency 'Toast-Swift', '~> 5.0.1'
   s.static_framework = true
 
   # Flutter.framework does not contain a i386 slice.

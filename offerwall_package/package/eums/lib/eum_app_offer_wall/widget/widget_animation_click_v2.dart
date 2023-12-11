@@ -13,6 +13,7 @@ class WidgetAnimationClickV2 extends StatefulWidget {
     this.radius,
     this.border,
     this.onTapLong,
+    this.boxShadow,
   });
   final Widget child;
   final Function()? onTap;
@@ -22,6 +23,7 @@ class WidgetAnimationClickV2 extends StatefulWidget {
   final BorderRadius? borderRadius;
   final double? radius;
   final BoxBorder? border;
+  final List<BoxShadow>? boxShadow;
 
   @override
   State<WidgetAnimationClickV2> createState() => _WidgetAnimationClickV2State();
@@ -35,9 +37,8 @@ class _WidgetAnimationClickV2State extends State<WidgetAnimationClickV2> with Si
     return ClipRRect(
       borderRadius: widget.borderRadius ?? BorderRadius.circular(100),
       child: Material(
-        color: Colors.white,
+        color: Colors.transparent,
         child: InkWell(
-          
           splashColor: Colors.grey.withOpacity(.7),
           borderRadius: widget.borderRadius ?? BorderRadius.circular(100),
           onLongPress: () {
@@ -51,12 +52,8 @@ class _WidgetAnimationClickV2State extends State<WidgetAnimationClickV2> with Si
           },
           child: Ink(
               padding: widget.padding,
-              decoration: widget.border != null || widget.color != null
-                  ? BoxDecoration(
-                      borderRadius: widget.borderRadius,
-                      color: widget.color,
-                      border: widget.border,
-                    )
+              decoration: widget.border != null || widget.color != null || widget.boxShadow != null
+                  ? BoxDecoration(borderRadius: widget.borderRadius, color: widget.color, border: widget.border, boxShadow: widget.boxShadow)
                   : null,
               child: widget.child),
         ),

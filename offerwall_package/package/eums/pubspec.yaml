@@ -25,7 +25,10 @@ dependencies:
   # firebase_messaging: 11.4.4
   # firebase_core_platform_interface: 4.5.1
   # flutter_local_notifications: ^15.1.0+1
-  flutter_local_notifications: ^16.1.0
+  # flutter_local_notifications: ^16.1.0
+  flutter_local_notifications:
+    # path: /Volumes/coi-ssd/source test/flutter_local_notifications-master/flutter_local_notifications
+    path: package/flutter_local_notifications
   # firebase_core: ^2.14.0
   firebase_core: 
   # firebase_core: 2.22.0
@@ -66,7 +69,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   rxdart: ^0.27.7
   cached_network_image: ^3.2.0
-  webview_flutter: 4.4.1
+  webview_flutter: 4.4.2
   get: any
   # webview_flutter_android: ^3.7.1
   # webview_flutter_wkwebview: ^3.7.2
@@ -97,8 +100,8 @@ dependencies:
 
 
   flutter_component:
-    # path: /Volumes/coi-ssd/Github/flutter_component
-    git: https://github.com/tranhieudevvietnam/flutter_component.git
+    path: /Volumes/coi-ssd/Github/flutter_component
+    # git: https://github.com/tranhieudevvietnam/flutter_component.git
 
   # flutter_time_picker_spinner: ^2.0.0
   # awesome_notifications: ^0.0.6+10

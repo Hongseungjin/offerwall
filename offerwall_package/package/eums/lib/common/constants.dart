@@ -5,7 +5,7 @@ class Constants {
   static const String baseUrlImage = 'https://abee997.co.kr/admin/uploads/sponsor/';
   static const int connectTimeout = 15000; // 15 seconds
   static const int receiveTimeout = 15000; // 15 seconds
-  static const bool loggingInterceptorEnabled = false;
+  static const bool loggingInterceptorEnabled = true;
   static const int LIMIT_DATA = 10;
 
   static const String showDataAdver = 'showDataAdver';
@@ -45,18 +45,18 @@ class Constants {
     return dataFormat.toString();
   }
 
-  static String getStringByAdType(AdType adType){
+  static String getStringByAdType(AdType adType) {
     switch (adType) {
       case AdType.REGION:
-          return 'region';
+        return 'region';
       case AdType.PARTICIPATION:
-          return 'participation';
+        return 'participation';
       case AdType.MISSION:
-          return 'mission';
+        return 'mission';
       case AdType.EXTERNAL:
-          return 'external';
+        return 'external';
       default:
-          return 'bee';
+        return 'bee';
     }
   }
 }

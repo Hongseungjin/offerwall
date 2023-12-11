@@ -220,7 +220,8 @@ class _SettingScreenState extends State<SettingScreen> {
                               if (!isRunning) {
                                 await FlutterBackgroundService().startService();
                               }
-                              EumsApp.instant.locationCurrent();
+                              FlutterBackgroundService().invoke('locationCurrent');
+                              // EumsApp.instant.locationCurrent();
                               EventStaticComponent.instance.call(key: "isStartBackground", params: {'data': true});
                             }
                             // ignore: empty_catches

@@ -68,10 +68,11 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   @override
   void dispose() {
+    super.dispose();
+
     _scrollController.dispose();
     timerController.dispose();
     timer5s?.cancel();
-    super.dispose();
   }
 
   start5s() {

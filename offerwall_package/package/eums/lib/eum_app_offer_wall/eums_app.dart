@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:eums/common/const/values.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/utils/loading_dialog.dart';
+import 'package:eums/notification/true_overlay_bloc/true_overlay_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -90,16 +91,16 @@ class EumsApp {
   //   // }
   // }
 
-  locationCurrent() async {
-    if (await Permission.locationAlways.status == PermissionStatus.granted) {
-      // Either the permission was already granted before or the user just granted it.
-      // startTimeDown();
-      // debugPrint("xxxx");
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
-      await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
-    }
-  }
+  // locationCurrent() async {
+  //   if (await Permission.locationAlways.status == PermissionStatus.granted) {
+  //     // Either the permission was already granted before or the user just granted it.
+  //     // startTimeDown();
+  //     // debugPrint("xxxx");
+  //     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //     // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+  //     await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+  //   }
+  // }
 }
 
 void printWrapped(String text) {
@@ -138,8 +139,8 @@ showOverlay(event) async {
           height: 420,
           width: 420,
           alignment: OverlayAlignment.center,
-          overlayTitle: event?['data']['title'],
-          overlayContent: event?['data']['body'],
+          // overlayTitle: event?['data']['title'],
+          // overlayContent: event?['data']['body'],
         );
       }
       event?['data']['tokenSdk'] = LocalStoreService.instant.getAccessToken();
@@ -227,12 +228,29 @@ Future<void> onStart(ServiceInstance service) async {
     // if (Platform.isIOS) {
     //   Timer.periodic(const Duration(seconds: 15), (timer) async {
     //     try {
+    //       debugPrint("=====startBackgroundFirebaseMessage======");
     //       await EumsOfferWallServiceApi().startBackgroundFirebaseMessage();
     //     } catch (ex) {
     //       rethrow;
     //     }
     //   });
     // }
+
+    // service.on("saveKeep").listen((event) async {
+    //   if (Platform.isIOS) {
+    //     debugPrint("Background====>SaveKeep===>$event");
+    //     final result = await TrueOverlayService().saveKeep(
+    //       advertiseIdx: event!['idx'],
+    //       adType: event['ad_type'],
+    //     );
+    //     debugPrint("Background====>SaveKeep===>result: $result");
+    //     if (result == true) {
+    //       NotificationHandler.instant.methodToastIOS(title: "Eums success", body: "광고가 KEEP 되었습니다");
+    //     } else {
+    //       NotificationHandler.instant.methodToastIOS(title: "Eums failure", body: "일일저장량 초과 했습니다");
+    //     }
+    //   }
+    // });
 
     service.on('showOverlay').listen((event) async {
       if (Platform.isAndroid) {
@@ -261,16 +279,16 @@ Future<void> onStart(ServiceInstance service) async {
       await service.stopSelf();
     });
 
-    //   service.on('locationCurrent').listen((event) async {
-    //     if (await Permission.locationAlways.status == PermissionStatus.granted) {
-    //       // Either the permission was already granted before or the user just granted it.
-    //       // startTimeDown();
-    //       // debugPrint("xxxx");
-    //       Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    //       // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
-    //       await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
-    //     }
-    //   });
+      service.on('locationCurrent').listen((event) async {
+        if (await Permission.locationAlways.status == PermissionStatus.granted) {
+          // Either the permission was already granted before or the user just granted it.
+          // startTimeDown();
+          // debugPrint("xxxx");
+          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          // debugPrint("xxxx: ${position.latitude} - ${position.longitude}");
+          await EumsOfferWallServiceApi().updateLocation(lat: position.latitude, log: position.longitude);
+        }
+      });
   } catch (e) {
     print(e);
   }
@@ -310,9 +328,7 @@ class EumsAppOfferWall extends EumsAppOfferWallService {
       FlutterBackgroundService().configure(
           iosConfiguration: IosConfiguration(
             autoStart: autoStart,
-            onBackground: (service) async {
-              return true;
-            },
+            onBackground: iosBackground,
             onForeground: onStart,
           ),
           androidConfiguration: AndroidConfiguration(

@@ -46,15 +46,13 @@ class Eums {
   }
 
   Future initMaterial({required Widget home, Future Function()? onRun}) async {
-    WidgetsFlutterBinding.ensureInitialized();
+    print("============ Firebase.initializeApp ========= ");
 
     await Firebase.initializeApp();
 
     await LocalStoreService.instant.init();
 
     await NotificationHandler.instant.initializeFcmNotification();
-
-    print("============ Firebase.initializeApp ========= ");
 
     await onRun?.call();
 
@@ -102,9 +100,10 @@ class Eums {
               data: dataShare,
             ));
       } else {
-        var details = await NotificationHandler.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+        var details = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
         if (details?.didNotificationLaunchApp == true && details?.notificationResponse != null) {
-          NotificationHandler.instant.eventOpenNotification(details!.notificationResponse!);
+          debugPrint("======> eums.dart ===> call eventOpenNotification");
+          NotificationHandler.instant. eventOpenNotification(details!.notificationResponse!);
         }
       }
 

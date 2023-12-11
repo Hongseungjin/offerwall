@@ -28,26 +28,23 @@ import kr.ive.offerwall_sdk.IveOfferwall
 
 
 /** SdkEumsPlugin */
-class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
-    AppAllOfferwallSDK.AppAllOfferwallSDKListener
-{
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
-  private lateinit var context: Context
-  private lateinit var activity:Activity
-  private lateinit var myIdUser: String
+class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+    AppAllOfferwallSDK.AppAllOfferwallSDKListener {
+    /// The MethodChannel that will the communication between Flutter and native Android
+    ///
+    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
+    /// when the Flutter Engine is detached from the Activity
+    private lateinit var channel: MethodChannel
+    private lateinit var context: Context
+    private lateinit var activity: Activity
+    private lateinit var myIdUser: String
 
 
-
-
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sdk_eums")
-    channel.setMethodCallHandler(this)
-    context = flutterPluginBinding.applicationContext
-  }
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sdk_eums")
+        channel.setMethodCallHandler(this)
+        context = flutterPluginBinding.applicationContext
+    }
 
     override fun AppAllOfferwallSDKCallback(p0: Int) {
         when (p0) {
@@ -77,7 +74,7 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
         }
     }
 
-    private fun checkPermission(){
+    private fun checkPermission() {
         AndPermission.with(activity).requestCode(300).permission(
             Manifest.permission.READ_PHONE_STATE,
             // Manifest.permission.GET_ACCOUNTS,
@@ -90,15 +87,18 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
         override fun onSucceed(requestCode: Int, @NonNull grantPermissions: List<String>) {
             if (requestCode == 300) {
 
-                println("myIdUser+ $myIdUser" )
-                if(myIdUser != null){
-                    try{
+                println("myIdUser+ $myIdUser")
+                if (myIdUser != null) {
+                    try {
 
 //                        AppAllOfferwallSDK().initOfferWall(activity , "1251d48b4dded2649324974594a27e7bd84cac68" , myIdUser)
-                        AppAllOfferwallSDK.getInstance().initOfferWall(activity, "1251d48b4dded2649324974594a27e7bd84cac68", "$myIdUser")
-                           println(" 1231231231231")
-                    }
-                    catch (ex : Exception){
+                        AppAllOfferwallSDK.getInstance().initOfferWall(
+                            activity,
+                            "1251d48b4dded2649324974594a27e7bd84cac68",
+                            "$myIdUser"
+                        )
+//                        println(" 1231231231231")
+                    } catch (ex: Exception) {
                         println("vao day$ex")
                     }
 
@@ -109,79 +109,92 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
 
         override fun onFailed(requestCode: Int, @NonNull deniedPermissions: List<String>) {
             if (requestCode == 300) {
-                println("myIdUser faaaa+ ${myIdUser}" )
+                println("myIdUser faaaa+ ${myIdUser}")
             }
         }
     }
 
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+
+        if (call.method == "getPlatformVersion") {
+            result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        } else {
+            if (call.method == "dataUser") {
+                myIdUser = call.arguments.toString()
+                if (myIdUser != null) {
+                    checkPermission()
+
+                    //Init adsync
+                    FpangSession.init(activity)
+                    FpangSession.setUserId(call.arguments.toString()) // 사용자 ID 설정
+                    FpangSession.setDebug(true) // 배포시 false 로 설정
+
+
+                }
+
+
+            } else if (call.method == "adsync") {
+                try {
+//                    FpangSession.init(activity)
+//                    FpangSession.setUserId(call.arguments.toString()) // 사용자 ID 설정
+//                    FpangSession.setDebug(true) // 배포시 false 로 설정
+    //                FpangSession.setAge(0) // 0 이면 값없음
+    //                FpangSession.setGender("A")  // M:남자, F:여자, A:값없음
+                    FpangSession.showAdsyncList(activity, "무료충전소")
+                    result.success(true)
+
+                } catch (error: Exception) {
+                    result.error("500", error.message, error)
+                }
+
+            } else if (call.method == "Adpopcorn") {
+                Adpopcorn.setUserId(context, call.arguments.toString())
+                Adpopcorn.openOfferWall(context)
+            } else if (call.method == "appall") {
+                println("vao day khong + ${call.arguments}")
+                try {
+                    AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
+                    println("vao day khon123213g")
+                } catch (ex: Exception) {
+                    println(ex)
+                }
+
+            } else if (call.method == "ohc") {
+                val intent = Intent(
+                    context,
+                    OhcChargeActivity::class.java
+                )
+                intent.putExtra("mId", call.arguments.toString())
+                intent.putExtra("etc2", call.arguments.toString())
+                intent.putExtra("etc3", "")
+                intent.putExtra("age", "")
+                intent.putExtra("gender", "")
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            } else if (call.method == "mafin") {
+                NASWall.open(activity, call.arguments.toString())
+            } else if (call.method == "tkn") {
+                TnkSession.setUserName(this.activity, call.arguments.toString())
+                TnkSession.showAdListByType(
+                    activity,
+                    AdListType.ALL,
+                    AdListType.PPI,
+                    AdListType.CPS
+                );
+            } else if (call.method == "iveKorea") {
+                IveOfferwall.openActivity(
+                    activity,
+                    IveOfferwall.UserData(call.arguments.toString())
+                )
+            }
+        }
     }
 
-    else {
-        if (call.method == "dataUser") {
-            myIdUser = call.arguments.toString()
-            if(myIdUser != null){
-                checkPermission()
-            }
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
 
-        }
-     if(call.method == "adsync"){
-         FpangSession.init(activity)
-         FpangSession.setUserId(call.arguments.toString()) // 사용자 ID 설정
-         FpangSession.setDebug(true) // 배포시 false 로 설정
-//         FpangSession.setAge(25) // 0 이면 값없음
-//         FpangSession.setGender("M")
-         FpangSession.showAdsyncList(activity, "무료충전소")
-     }
-      if(call.method == "Adpopcorn"){
-          Adpopcorn.setUserId(context , call.arguments.toString())
-            Adpopcorn.openOfferWall(context)
-     }
-        if(call.method == "appall"){
-            println("vao day khong + ${call.arguments}" )
-            try{
-            AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
-                println("vao day khon123213g")
-            }
-            catch (ex : Exception){
-                println(ex)
-            }
-
-        }
-        if(call.method == "ohc"){
-            val intent = Intent(
-                context,
-                OhcChargeActivity::class.java
-            )
-            intent.putExtra("mId", call.arguments.toString())
-            intent.putExtra("etc2",call.arguments.toString())
-            intent.putExtra("etc3", "")
-            intent.putExtra("age", "")
-            intent.putExtra("gender", "")
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        }
-        if(call.method == "mafin"){
-            NASWall.open(activity , call.arguments.toString())
-        }
-        if(call.method == "tkn"){
-            TnkSession.setUserName(this.activity, call.arguments.toString())
-            TnkSession.showAdListByType(activity, AdListType.ALL, AdListType.PPI, AdListType.CPS);
-        }
-        if(call.method == "iveKorea"){
-            IveOfferwall.openActivity(activity , IveOfferwall.UserData(call.arguments.toString()))
-        }
     }
-  }
-
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-
-  }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         this.activity = binding.activity
@@ -191,10 +204,9 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
 
-
     override fun onDetachedFromActivityForConfigChanges() {
 
-    
+
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -202,7 +214,6 @@ class SdkEumsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
 
 
     }
-
 
 
     override fun onDetachedFromActivity() {

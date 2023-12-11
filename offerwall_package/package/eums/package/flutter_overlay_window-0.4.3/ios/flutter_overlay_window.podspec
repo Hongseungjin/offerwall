@@ -17,7 +17,7 @@ A new Flutter plugin project.
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
   # s.platform = :ios, '12.0'
-  s.dependency 'Toast-Swift', '~> 5.0.1'
+  # s.dependency 'Toast-Swift', '~> 5.0.1'
   s.static_framework = true
 
   # Flutter.framework does not contain a i386 slice.

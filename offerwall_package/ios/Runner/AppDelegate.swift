@@ -5,10 +5,17 @@ import FirebaseMessaging
 import flutter_background_service_ios
 import UserNotifications
 import flutter_local_notifications
+import eums
+//
+private enum ActionIdentifier: String {
+    case keep, open
+}
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate
 {
+    
+    private let categoryIdentifier = "EUMS_OFFERWALL"
     
     override func application(
         _ application: UIApplication,
@@ -23,99 +30,133 @@ import flutter_local_notifications
         if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
         }
-        SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
+        
+        
+        //      registerCustomActions()
+        
+//        SwiftFlutterBackgroundServicePlugin.taskIdentifier = "com.app.offerwall"
+        SwiftFlutterBackgroundServicePlugin.taskIdentifier = "workmanager.background.task"
         
         GeneratedPluginRegistrant.register(with: self)
+        
         UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(UIApplication.backgroundFetchIntervalMinimum))
         
+        guard let controller = window?.rootViewController as? FlutterViewController else {
+            return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+        }
+//        EumsPlugin.channelCallBackMain = FlutterMethodChannel(name: EumsPlugin.channelCallBack,
+//                                                              binaryMessenger: controller.binaryMessenger)
+//        Messaging.messaging().isAutoInitEnabled = true
         
-//        // Define the custom actions.
-//        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
-//                                                title: "Accept",
-//                                                options: [])
-//        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
-//                                                 title: "Decline",
-//                                                 options: [])
-//        // Define the notification type
-//        let meetingInviteCategory =
-//        UNNotificationCategory(identifier: "MEETING_INVITATION",
-//                               actions: [acceptAction, declineAction],
-//                               intentIdentifiers: [],
-//                               hiddenPreviewsBodyPlaceholder: "",
-//                               options: .customDismissAction)
-//        
-//        let notificationCenter = UNUserNotificationCenter.current()
-//        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
-//        notificationCenter.requestAuthorization(options: options) { (granted, error) in
-//            if granted {
-//                application.registerForRemoteNotifications()
-//            }
-//        }
-//        // Register the notification type.
-//        notificationCenter.setNotificationCategories([meetingInviteCategory])
+        
+        application.registerForRemoteNotifications()
         
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
+    
+//    override func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+//        
+//        defer { completionHandler() }
+//        print("response.notification.request.identifier===> \(response.notification.request.identifier)")
+//        if(response.notification.request.identifier == "999") {
+//            completionHandler()
+//            return
+//        }
+//        
+//        
+//        let identity = response.notification
+//            .request.content.categoryIdentifier
+//        
+//        guard identity == categoryIdentifier,
+//              let action = ActionIdentifier(rawValue: response.actionIdentifier) else {
+//            return
+//        }
+//        
+//        let userInfo = response.notification.request.content.userInfo
+//        
+//        
+//        if(ActionIdentifier.open.rawValue == response.actionIdentifier){
+//            print(userInfo["data"])
+//            EumsPlugin.channelCallBackMain?.invokeMethod(ActionIdentifier.open.rawValue, arguments: userInfo["data"])
+//        }else {
+//            if(ActionIdentifier.keep.rawValue == response.actionIdentifier){
+//                let userInfo = response.notification.request.content.userInfo
+//                print(userInfo["data"])
+//                EumsPlugin.channelCallBackMain?.invokeMethod(ActionIdentifier.keep.rawValue, arguments: userInfo["data"])
+//            }
+//        }
+//        
+//        print("You pressed \(response.actionIdentifier)")
+//        //        defer { completionHandler() }
+//    }
+//    
+    
+    //        override func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
+    //            //                Messaging.messaging().appDidReceiveMessage(userInfo)
+    //            EumsPlugin.channelCallBackMain?.invokeMethod(EumsPlugin.channelCallBack, arguments: userInfo)
+    //            //        Messaging.messaging().appDidReceiveMessage(userInfo)
+    //                    return UIBackgroundFetchResult.newData
+    //        }
+    
+    
+            
+    
+//            override func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+//                //        Messaging.messaging().appDidReceiveMessage(userInfo)
+//    //            print(userInfo)
+////                registerCustomActions();
+//    //            EumsPlugin.channelCallBackMain?.invokeMethod(EumsPlugin.channelCallBack, arguments: userInfo)
+////                if #available(iOS 10.0, *) {
+////                    UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+////                    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+////                }
+////                completionHandler(UIBackgroundFetchResult.newData)
+//            }
+    
+    
     override func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken : Data){
         //        print("X__APNS: \(String(describing: deviceToken))")
         Messaging.messaging().apnsToken = deviceToken;
-        Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
         Messaging.messaging().isAutoInitEnabled = true
-    }
-    
-    override func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        let userInfo = notification.request.content.userInfo
+        //        Messaging.messaging().setAPNSToken(deviceToken, type:MessagingAPNSTokenType.unknown )
         
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
         
-        // Define the custom actions.
-        let acceptAction = UNNotificationAction(identifier: "ACCEPT_ACTION",
-                                                title: "Accept",
-                                                options: [])
-        let declineAction = UNNotificationAction(identifier: "DECLINE_ACTION",
-                                                 title: "Decline",
-                                                 options: [])
-        // Define the notification type
-        let meetingInviteCategory =
-        UNNotificationCategory(identifier: "MEETING_INVITATION",
-                               actions: [acceptAction, declineAction],
-                               intentIdentifiers: [],
-                               hiddenPreviewsBodyPlaceholder: "",
-                               options: .customDismissAction)
-        
-       
-        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
-        center.requestAuthorization(options: options) { (granted, error) in
-            if granted {
-                DispatchQueue.main.async {
-                  UIApplication.shared.registerForRemoteNotifications()
-                }
-//                application.registerForRemoteNotifications()
-            }
+        FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
+            GeneratedPluginRegistrant.register(with: registry)
         }
-        // Register the notification type.
-        center.setNotificationCategories([meetingInviteCategory])
         
-        // Print full message.
-        print(userInfo)
-        // Change this to your preferred presentation option
-        return [[.alert, .sound]]
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+        }
+        
+        //        registerCustomActions()
+        
+        
+        //        application.registerForRemoteNotifications()
+        
     }
     
-    override func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        let userInfo = response.notification.request.content.userInfo
-        
-        // ...
-        
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        // Messaging.messaging().appDidReceiveMessage(userInfo)
-        
-        // Print full message.
-        print(userInfo)
-    }
+    //    private func registerCustomActions() {
+    //        let accept = UNNotificationAction(
+    //            identifier: ActionIdentifier.keep.rawValue,
+    //            title: "KEEP 하기", options: [])
+    //
+    //        let reject = UNNotificationAction(
+    //            identifier: ActionIdentifier.open.rawValue,
+    //            title: "광고 시청하기", options: [UNNotificationActionOptions.foreground])
+    //
+    //        let category = UNNotificationCategory(
+    //            identifier: categoryIdentifier,
+    //            actions: [accept, reject],
+    //            intentIdentifiers: [],
+    //            options: .customDismissAction)
+    //
+    //        UNUserNotificationCenter.current()
+    //            .setNotificationCategories([category])
+    //    }
+    
     
 }
 

@@ -3,7 +3,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:eums/api_eums_offer_wall/eums_offer_wall_service_api.dart';
 import 'package:eums/common/routing.dart';
+import 'package:eums/eum_app_offer_wall/eums_app.dart';
 import 'package:eums/eum_app_offer_wall/notification_handler.dart';
 import 'package:eums/eum_app_offer_wall/screen/keep_adverbox_module/keep_adverbox_module.dart';
 import 'package:eums/eum_app_offer_wall/utils/appColor.dart';
@@ -41,76 +43,66 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     }
     // ignore: empty_catches
   } catch (e) {}
+
   if (message.data['updateLocation'] == "true") {
-    debugPrint("topics/eums : ${message.toMap()}");
+    // debugPrint("topics/eums : ${message.toMap()}");
     // EumsApp.instant.locationCurrent();
+    FlutterBackgroundService().invoke('locationCurrent');
   } else {
-    try {
-      debugPrint("xxxx--message: ${message.toMap()}");
-      // EumsApp.instant.locationCurrent();
-      if (message.data['data'] == null) return;
+    if (Platform.isAndroid) {
+      try {
+        // debugPrint("_firebaseMessagingBackgroundHandler--message===> ${message.toMap()}");
+        // EumsApp.instant.locationCurrent();
+        if (message.data['payload'] == null) return;
 
-      final dataTemp = jsonDecode(message.data['data']);
-      bool isRunning = true;
-      if (Platform.isAndroid) {
-        isRunning = await FlutterBackgroundService().isRunning();
-      }
+        final dataTemp = jsonDecode(message.data['payload']);
+        bool isRunning = true;
 
-      if (LocalStoreService.instant.getAccessToken().isNotEmpty == false || LocalStoreService.instant.getSaveAdver() == false) {
-        isRunning = false;
-      } else {
-        debugPrint("xxxx--isRunning: $isRunning");
-        if (isRunning == false) {
-          await FlutterBackgroundService().startService();
-          isRunning = await checkBackgroundService();
-        }
-      }
-
-      if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
-        try {
-          NotificationHandler.flutterLocalNotificationsPlugin.cancel(notificationId);
-        } catch (error) {
-          NotificationHandler.flutterLocalNotificationsPlugin.cancelAll();
+        if (LocalStoreService.instant.getAccessToken().isNotEmpty == false || LocalStoreService.instant.getSaveAdver() == false) {
+          isRunning = false;
+        } else {
+          if (isRunning == false) {
+            await FlutterBackgroundService().startService();
+            isRunning = await checkBackgroundService();
+          }
         }
 
-        if (Platform.isAndroid) {
+        if ((dataTemp['ad_type'] == "bee" || dataTemp['ad_type'] == "region") && isRunning == true) {
           try {
-            final checkPermission = await FlutterOverlayWindow.isPermissionGranted();
-            if (checkPermission == true) {
-              debugPrint("xxxxx - checkPermission ===> $checkPermission");
-              FlutterBackgroundService().invoke("showOverlay", {'data': message.data});
-            }
+            flutterLocalNotificationsPlugin.cancel(notificationId);
+          } catch (error) {
+            flutterLocalNotificationsPlugin.cancelAll();
+          }
+          final checkPermission = await FlutterOverlayWindow.isPermissionGranted();
+          if (checkPermission == true) {
+            FlutterBackgroundService().invoke("showOverlay", {'data': dataTemp});
+          }
+
+          try {
+            flutterLocalNotificationsPlugin.show(
+                notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.instant.notificationDetails,
+                payload: jsonEncode(dataTemp));
           } catch (e) {
             rethrow;
           }
         }
-
-        try {
-          NotificationHandler.flutterLocalNotificationsPlugin.show(
-              notificationId, '${message.data['title']}', '${message.data['body']}', NotificationHandler.instant.notificationDetails,
-              payload: jsonEncode(message.data));
-        } catch (e) {
-          rethrow;
-        }
+        // ignore: empty_catches
+      } catch (e) {
+        debugPrint("xxxxx-notification:$e");
+        rethrow;
       }
-      // ignore: empty_catches
-    } catch (e) {
-      // "reason" will append the word "thrown" in the
-      // Crashlytics console.
-      print("xxxxx-notification:$e");
-      rethrow;
     }
   }
 }
 
 void main() async {
   debugPrint("======main=====");
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Eums.instant.initMaterial(
     home: const MyHomePage(),
-    onRun: () async {
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    },
+    onRun: () async {},
   );
 }
 
@@ -195,7 +187,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver, Si
     //   debugPrint("xxxx===> ${event.method}");
     // });
     eumsCallBackChannel.setMethodCallHandler((call) async {
-      debugPrint("eumsCallBackChannel===> ${call.method}");
+      debugPrint("eumsCallBackChannel===> ${call.method}\n data: ${call.arguments}");
+
       await LocalStoreService.instant.preferences.reload();
 
       final dataShare = LocalStoreService.instant.getDataShare();

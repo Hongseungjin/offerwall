@@ -1,10 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:eums/common/constants.dart';
+import 'package:eums/common/local_store/local_store_service.dart';
+import 'package:flutter/material.dart';
 
 class TrueOverlayService {
   // LocalStore localStore = LocalStoreService();
 
-  Dio dio = Dio();
+  late Dio dio;
+  TrueOverlayService() {
+    dio = Dio();
+  }
+
   Future missionOfferWallOutside({advertiseIdx, pointType, token, required String adType}) async {
     // bên ngoài
     dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, "pointType": pointType};
@@ -18,8 +24,11 @@ class TrueOverlayService {
     return;
   }
 
-  Future<bool> saveKeep({required int advertiseIdx, required String adType, required String token}) async {
+  Future<bool> saveKeep({required int advertiseIdx, required String adType}) async {
     try {
+      debugPrint("====>api saveKeep");
+      // await LocalStoreService.instant.preferences.reload();
+      final token = LocalStoreService.instant.getAccessToken();
       dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
       final repo = await dio.post('${Constants.baseUrl}advertises/save-keep-advertise',
           data: data, options: Options(headers: {"authorization": 'Bearer $token'}));
@@ -28,6 +37,7 @@ class TrueOverlayService {
       }
       return false;
     } catch (e) {
+      debugPrint("saveKeep===ERROR===>$e");
       return false;
     }
   }

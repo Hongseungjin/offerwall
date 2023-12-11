@@ -28,14 +28,23 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
 
   @override
   Future createTokenNotification({token}) async {
-    dynamic data = <String, dynamic>{"deviceToken": token};
+    String deviceType = Platform.isAndroid ? "ANDROID" : "IOS";
+    dynamic data = <String, dynamic>{
+      "deviceToken": token,
+      "device_type": deviceType,
+    };
     await api.post('device-token', data: data);
     return;
   }
 
   @override
   Future unRegisterTokenNotification({token}) async {
-    dynamic data = <String, dynamic>{"deviceToken": token};
+    String deviceType = Platform.isAndroid ? "ANDROID" : "IOS";
+    dynamic data = <String, dynamic>{
+      "deviceToken": token,
+      "device_type": deviceType,
+    };
+    // dynamic data = <String, dynamic>{"deviceToken": token};
     await api.delete('device-token', data: data);
     return;
   }
@@ -348,8 +357,8 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
     await api.put('user/location', data: data);
   }
 
-    @override
-  startBackgroundFirebaseMessage() async {
+  @override
+  startBackgroundFirebaseMessage({required String title, required String body}) async {
     try {
       final deviceToken = await NotificationHandler.getToken();
       final firebaseKey = LocalStoreService.instant.preferences.getString(LocalStoreService.instant.firebaseKey);
@@ -358,6 +367,11 @@ class EumsOfferWallServiceApi extends EumsOfferWallService {
         data: {
           "to": deviceToken,
           "content_available": true,
+          "notification": {
+            "body": body,
+            "title": title,
+            "content_available": true,
+          }
         },
       );
       print("startBackgroundFirebaseMessage===> ${result.statusCode}");
