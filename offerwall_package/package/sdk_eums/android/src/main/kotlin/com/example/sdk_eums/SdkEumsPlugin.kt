@@ -28,17 +28,20 @@ import kr.ive.offerwall_sdk.IveOfferwall
 
 
 /** SdkEumsPlugin */
-class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
-    AppAllOfferwallSDK.AppAllOfferwallSDKListener {
+class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
-    private lateinit var activity: Activity
+//    private lateinit var activity: Activity
     private lateinit var myIdUser: String
 
+
+    companion object{
+        lateinit var activity: Activity
+    }
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sdk_eums")
@@ -46,33 +49,7 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         context = flutterPluginBinding.applicationContext
     }
 
-    override fun AppAllOfferwallSDKCallback(p0: Int) {
-        when (p0) {
-            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
-                this.activity,
-                "성공",
-                Toast.LENGTH_SHORT
-            ).show()
 
-            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
-                this.activity,
-                "잘못 된 유저아이디입니다.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
-                this.activity,
-                "오퍼월 KEY를 확인해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
-                this.activity,
-                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
 
     private fun checkPermission() {
         AndPermission.with(activity).requestCode(300).permission(
@@ -130,7 +107,14 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                     FpangSession.setUserId(call.arguments.toString()) // 사용자 ID 설정
                     FpangSession.setDebug(true) // 배포시 false 로 설정
 
+                    //Adpopcorn
+                    Adpopcorn.setUserId(context, call.arguments.toString())
+                    Adpopcorn.checkRequiredPermission(activity)
 
+                    //tkn
+                    TnkSession.setUserName(activity, call.arguments.toString())
+                    TnkSession.applicationStarted(this.context)
+                    TnkSession.setCOPPA(activity, false) // COPPA 설정 (true - ON / false - OFF)
                 }
 
 
@@ -149,13 +133,13 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 }
 
             } else if (call.method == "Adpopcorn") {
-                Adpopcorn.setUserId(context, call.arguments.toString())
+//                Adpopcorn.setUserId(context, call.arguments.toString())
                 Adpopcorn.openOfferWall(context)
             } else if (call.method == "appall") {
-                println("vao day khong + ${call.arguments}")
+//                println("vao day khong + ${call.arguments}")
                 try {
                     AppAllOfferwallSDK.getInstance().showAppAllOfferwall(activity)
-                    println("vao day khon123213g")
+//                    println("vao day khon123213g")
                 } catch (ex: Exception) {
                     println(ex)
                 }
@@ -175,13 +159,14 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             } else if (call.method == "mafin") {
                 NASWall.open(activity, call.arguments.toString())
             } else if (call.method == "tkn") {
-                TnkSession.setUserName(this.activity, call.arguments.toString())
+//                TnkSession.setUserName(this.activity, call.arguments.toString())
                 TnkSession.showAdListByType(
                     activity,
                     AdListType.ALL,
                     AdListType.PPI,
                     AdListType.CPS
                 );
+
             } else if (call.method == "iveKorea") {
                 IveOfferwall.openActivity(
                     activity,
@@ -197,10 +182,10 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        this.activity = binding.activity
-        NASWall.init(this.activity, false)
-        TnkSession.applicationStarted(this.activity)
-        TnkSession.setCOPPA(this.activity, false)
+        activity = binding.activity
+        NASWall.init(activity, false)
+        TnkSession.applicationStarted(activity)
+        TnkSession.setCOPPA(activity, false)
     }
 
 

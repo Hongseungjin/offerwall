@@ -66,8 +66,13 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
           voidCallBack: () async {
             try {
               LoadingDialog.instance.show();
+              Future.delayed(
+                const Duration(seconds: 3),
+                () {
+                  LoadingDialog.instance.hide();
+                },
+              );
               await SdkEumsPlatform.instance.methodMafin(data: widget.dataAccount['memId']);
-              await Future.delayed(const Duration(seconds: 1));
               LoadingDialog.instance.hide();
             } catch (e) {
               LoadingDialog.instance.hide();
@@ -98,8 +103,8 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
           voidCallBack: () async {
             try {
               LoadingDialog.instance.show();
+
               await SdkEumsPlatform.instance.methodIvekorea(data: widget.dataAccount['memId']);
-              await Future.delayed(const Duration(seconds: 1));
               LoadingDialog.instance.hide();
             } catch (e) {
               LoadingDialog.instance.hide();
@@ -111,8 +116,13 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
           voidCallBack: () async {
             try {
               LoadingDialog.instance.show();
+              Future.delayed(
+                const Duration(seconds: 3),
+                () {
+                  LoadingDialog.instance.hide();
+                },
+              );
               await SdkEumsPlatform.instance.methodAppall(data: widget.dataAccount['memId']);
-              await Future.delayed(const Duration(seconds: 1));
               LoadingDialog.instance.hide();
             } catch (e) {
               LoadingDialog.instance.hide();

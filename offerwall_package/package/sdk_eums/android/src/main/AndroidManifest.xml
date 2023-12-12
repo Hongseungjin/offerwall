@@ -3,6 +3,11 @@
   package="com.example.sdk_eums"
   xmlns:tools="http://schemas.android.com/tools"
 >
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.MAIN" />
+    </intent>
+  </queries>
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -75,10 +80,8 @@
     >
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
-
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-
         <data android:scheme="AppAllOfferwall" tools:ignore="AppLinkUrlError" />
       </intent-filter>
     </activity>
@@ -116,6 +119,7 @@
     <activity
       android:name="com.igaworks.adpopcorn.activity.ApVideoAdActivity"
       android:theme="@android:style/Theme.NoTitleBar"
+        android:hardwareAccelerated="true"
     />
     <meta-data
       android:name="adpopcorn_reward_server_type"
@@ -152,6 +156,13 @@
       android:name="tnkad_app_id"
       android:value="20c0f080-5021-9877-7789-12030e0e0a0a"
     />
+
+    <meta-data android:name="igaworks_reward_server_type" android:value="server"/>
+
+
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-3940256099942544~9257395921"/>
     <!-- <meta-data
       android:name="com.google.firebase.messaging.default_notification_channel_id"
       android:value="high_importance_channel"

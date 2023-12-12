@@ -6,15 +6,18 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.Toast
 import com.example.eums.EumsPlugin
+import com.example.sdk_eums.SdkEumsAppAll
 import flutter.overlay.window.flutter_overlay_window.OverlayConstants
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import com.kyad.adlibrary.AppAllOfferwallSDK
 
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
+
+class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler , SdkEumsAppAll {
 
 //    private var flutterChannel: MethodChannel? = null
 //    private var CHANNEL = "com.app.abeeofferwal"
@@ -96,6 +99,34 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler {
 //        )
 
     }
+
+//    override fun AppAllOfferwallSDKCallback(p0: Int) {
+//        when (p0) {
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_SUCCES -> Toast.makeText(
+//                this.activity,
+//                "성공",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_USER_ID -> Toast.makeText(
+//                this.activity,
+//                "잘못 된 유저아이디입니다.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_INVALID_KEY -> Toast.makeText(
+//                this.activity,
+//                "오퍼월 KEY를 확인해주세요.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//
+//            AppAllOfferwallSDK.AppAllOfferwallSDK_NOT_GET_ADID -> Toast.makeText(
+//                this.activity,
+//                "고객님의 폰으로는 무료충전소를 이용하실 수 없습니다. 고객센터에 문의해주세요.",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
+//    }
 
 //    override fun AppAllOfferwallSDKCallback(p0: Int) {
 //        when (p0) {

@@ -11,11 +11,17 @@ Prepared based on the following documents:
 ## SDK
 
 - AdSync: sdk/AdSync2_SDK_for_Android_v5.7.5_20230116.zip
-- adpopcorn: https://adpopcorn.notion.site/SDK-af84236e11194a99ac6652f61cfaa669
+- adpopcorn: <https://adpopcorn.notion.site/SDK-af84236e11194a99ac6652f61cfaa669>
 - mafin:
 - TNK:
-- IveKorea:
-- AppAll:
+
+```
+https://github.com/tnkfactory/tnk_sdk_rwd_br/blob/main/Android_Guide.md#1-sdk-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0
+https://ads.tnkad.net/tnk/ko/home.front.main?action=guideLinkPopup
+```
+
+- IveKorea: <https://ivekorea.notion.site/SDK-Android-9a0db38fef1f4744a5e5f893124df434>
+- AppAll: http://doc.appall.kr/Doc/Details?docNum=4
 
 ## Getting Started Version
 
