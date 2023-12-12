@@ -108,8 +108,9 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     FpangSession.setDebug(true) // 배포시 false 로 설정
 
                     //Adpopcorn
-                    Adpopcorn.setUserId(context, call.arguments.toString())
                     Adpopcorn.checkRequiredPermission(activity)
+                    Adpopcorn.setUserId(context, call.arguments.toString())
+
 
                     //tkn
                     TnkSession.setUserName(activity, call.arguments.toString())
@@ -129,6 +130,11 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     result.success(true)
 
                 } catch (error: Exception) {
+                    Toast.makeText(
+                       activity,
+                        error.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                     result.error("500", error.message, error)
                 }
 

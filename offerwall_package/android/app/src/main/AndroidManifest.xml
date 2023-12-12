@@ -30,6 +30,7 @@
     android:label="offerwall"
     android:usesCleartextTraffic="true"
     tools:targetApi="m"
+        android:largeHeap="true"
   >
         <meta-data
       android:name="com.google.firebase.messaging.default_notification_channel_id"

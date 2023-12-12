@@ -27,7 +27,7 @@ class TrueOverlayService {
   Future<bool> saveKeep({required int advertiseIdx, required String adType}) async {
     try {
       debugPrint("====>api saveKeep");
-      // await LocalStoreService.instant.preferences.reload();
+      await LocalStoreService.instant.preferences.reload();
       final token = LocalStoreService.instant.getAccessToken();
       dynamic data = <String, dynamic>{"advertise_idx": advertiseIdx, 'ad_type': adType};
       final repo = await dio.post('${Constants.baseUrl}advertises/save-keep-advertise',

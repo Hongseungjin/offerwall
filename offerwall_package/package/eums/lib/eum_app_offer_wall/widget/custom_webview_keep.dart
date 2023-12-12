@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click.dart';
 import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
+import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gif/flutter_gif.dart';
@@ -103,7 +105,95 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
         title: Text(widget.title ?? '', style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
         leading: InkWell(
           onTap: () {
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return Dialog(
+                  insetAnimationCurve: Curves.bounceIn,
+                  backgroundColor: Colors.white,
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text(
+                                '君卫 蓉显',
+                                style: StyleFont.bold().copyWith(height: 1.3),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                              child: Text(
+                                '광고를 닫으시면 포인트가 적립되지 않습니다. 실행 중인 광고를 종료하시겠습니까?',
+                                style: StyleFont.regular().copyWith(height: 1.5, color: Colors.grey.shade600),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                      top: BorderSide(color: Colors.grey.shade400),
+                                    )),
+                                    child: WidgetAnimationClickV2(
+                                      radius: 0,
+                                      borderRadius: BorderRadius.zero,
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                                      child: Text(
+                                        "넵",
+                                        textAlign: TextAlign.center,
+                                        style: StyleFont.bold(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border(top: BorderSide(color: Colors.grey.shade400), left: BorderSide(color: Colors.grey.shade400))),
+                                    child: WidgetAnimationClickV2(
+                                      radius: 0,
+                                      borderRadius: BorderRadius.zero,
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                                      child: Text(
+                                        "아니오",
+                                        textAlign: TextAlign.center,
+                                        style: StyleFont.medium(),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
           },
           child: const Icon(
             Icons.arrow_back,

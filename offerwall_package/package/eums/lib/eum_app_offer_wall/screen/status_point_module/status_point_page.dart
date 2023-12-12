@@ -452,6 +452,9 @@ class _ListViewPointPageState extends State<ListViewPointPage> {
           case "region":
             body = '동네 광고 ${Constants.formatTimeDayPoint(date)}';
             break;
+          case "external":
+            body = '외부 충전소 ${Constants.formatTimeDayPoint(date)}';
+            break;
           default:
             body = '오퍼월 광고 ${Constants.formatTimeDayPoint(date)}';
             break;

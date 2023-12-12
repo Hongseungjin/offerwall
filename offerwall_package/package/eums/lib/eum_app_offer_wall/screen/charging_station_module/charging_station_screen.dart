@@ -10,6 +10,7 @@ import 'package:flutter_component/flutter_component.dart';
 import '../../utils/appStyle.dart';
 import '../../utils/app_string.dart';
 
+// ignore: must_be_immutable
 class ChargingStationScreen extends StatefulWidget {
   ChargingStationScreen({Key? key, required this.tab, required this.callBack, this.dataAccount}) : super(key: key);
   final int tab;
@@ -239,11 +240,11 @@ class _ChargingStationScreenState extends State<ChargingStationScreen> {
                 //   ],
                 // ),
                 const SizedBox(height: 16),
-                _buildNote(title: '※ 미적립건은,', title1: '각 송전소 내부에 있는 문의하기', title2: '를 이용해주세요.'),
+                _buildNote(title: '※ 미적립건은,', title1: '각 충전소 내부에 있는 문의하기', title2: '를 이용해주세요.'),
                 const SizedBox(height: 8),
-                _buildNote(title: '※ 이미 참여한 광고는', title1: '중복참여가 불가', title2: '합니다.'),
+                _buildNote(title: '※ 이미 참여한 광고는', title1: ' 중복참여가 불가', title2: '합니다.'),
                 const SizedBox(height: 8),
-                _buildNote(title: '※ 추가로', title1: '문의가 필요할 경우 더보기> 내문의내역(1:1문의 게시판)을 이용', title2: '해주세요.')
+                _buildNote(title: '※ 추가로', title1: ' 문의가 필요할 경우 마이페이지 > 1:1 문의를 이용', title2: '해주세요.')
               ],
             ),
           ),

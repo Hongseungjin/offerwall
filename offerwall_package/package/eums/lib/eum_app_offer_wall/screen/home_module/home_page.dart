@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       if (!status) {
         await FlutterOverlayWindow.requestPermission();
       } else {}
-      await LocalStoreService.instant.setAccessToken(LocalStoreService.instant.getAccessToken());
+      // await LocalStoreService.instant.setAccessToken(LocalStoreService.instant.getAccessToken());
     }
   }
 
