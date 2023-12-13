@@ -45,8 +45,8 @@ dependencies:
   flutter_overlay_window:
     path: package/flutter_overlay_window-0.4.3
 
-  sdk_eums_c:
-    path: ../sdk_eums_c
+  # sdk_eums_c:
+  #   path: ../sdk_eums_c
   sdk_eums:
     path: ../sdk_eums
 
@@ -69,11 +69,12 @@ dependencies:
   flutter_easyloading: ^3.0.5
   rxdart: ^0.27.7
   cached_network_image: ^3.2.0
-  webview_flutter: 4.4.2
+  # webview_flutter: 4.4.2
   get: any
-  # webview_flutter_android: ^3.7.1
-  # webview_flutter_wkwebview: ^3.9.4
-  flutter_widget_from_html: ^0.9.0
+
+  # flutter_widget_from_html: ^0.9.0
+  flutter_widget_from_html: ^0.14.9
+  
   # fluttertoast: 8.1.1
   # fluttertoast:
   #   path: package/fluttertoast
@@ -115,8 +116,6 @@ dependencies:
   #     path: flutter_overlay_window
   # path: ../flutter_overlay_window
 
-dependency_overrides:
-  webview_flutter_wkwebview: ^3.9.4
 
 
 

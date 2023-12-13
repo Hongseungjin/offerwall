@@ -61,8 +61,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-
-        // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+       
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
 
     signingConfigs {
@@ -80,9 +80,9 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
-            // minifyEnabled false
-            // shrinkResources false
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -100,8 +100,8 @@ dependencies {
     implementation 'kr.co.mightymedia:adsyn2:5.7.5'
 
 //    implementation 'com.google.android.gms:play-services-ads:22.6.0'
-    implementation 'com.google.android.gms:play-services-ads:22.2.0'
-    implementation 'com.google.android.gms:play-services-basement:10.0.1'
+//    implementation 'com.google.android.gms:play-services-ads:22.2.0'
+//    implementation 'com.google.android.gms:play-services-basement:10.0.1'
      implementation 'com.yanzhenjie:permission:1.1.2'
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'com.android.support:multidex:1.0.3'

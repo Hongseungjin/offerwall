@@ -98,219 +98,229 @@ class _CustomWebViewKeepState extends State<CustomWebViewKeep> with WidgetsBindi
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColor.white,
-        centerTitle: true,
-        title: Text(widget.title ?? '', style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
-        leading: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return Dialog(
-                  insetAnimationCurve: Curves.bounceIn,
-                  backgroundColor: Colors.white,
-                  insetPadding: const EdgeInsets.symmetric(horizontal: 32),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: StatefulBuilder(
-                    builder: (context, setState) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Text(
-                                '君卫 蓉显',
-                                style: StyleFont.bold().copyWith(height: 1.3),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                              child: Text(
-                                '광고를 닫으시면 포인트가 적립되지 않습니다. 실행 중인 광고를 종료하시겠습니까?',
-                                style: StyleFont.regular().copyWith(height: 1.5, color: Colors.grey.shade600),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                      top: BorderSide(color: Colors.grey.shade400),
-                                    )),
-                                    child: WidgetAnimationClickV2(
-                                      radius: 0,
-                                      borderRadius: BorderRadius.zero,
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-                                      child: Text(
-                                        "넵",
-                                        textAlign: TextAlign.center,
-                                        style: StyleFont.bold(),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border(top: BorderSide(color: Colors.grey.shade400), left: BorderSide(color: Colors.grey.shade400))),
-                                    child: WidgetAnimationClickV2(
-                                      radius: 0,
-                                      borderRadius: BorderRadius.zero,
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
-                                      child: Text(
-                                        "아니오",
-                                        textAlign: TextAlign.center,
-                                        style: StyleFont.medium(),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
+    return WillPopScope(
+      onWillPop: () async {
+        _eventBack();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColor.white,
+          centerTitle: true,
+          title: Text(widget.title ?? '', style: AppStyle.bold.copyWith(color: Colors.black, fontSize: 4 + controllerGet.fontSizeObx.value)),
+          leading: InkWell(
+            onTap: () {
+              _eventBack();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              color: AppColor.black,
+            ),
+          ),
+          actions: [widget.report ?? const SizedBox()],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: WidgetImageOfferWall(
+                scrollController: _scrollController,
+                onScrollWebView: () {
+                  if (!isRunning) {
+                    isRunning = true;
+                    timerController.start();
+                  }
+                  start5s();
+                },
+                urlLink: widget.urlLink,
+                // urlLink: "https://m.daum.net/",
+                // urlLink: "https://m.naver.com/",
+                // urlLink: "https://m.coupang.com/nm/",
+                onDone: () {
+                  if (timerController.value == 0) {
+                    timerController.start();
+                    start5s();
+                  }
+                },
+              ),
+              // child: WidgetImageOfferWall(
+              //   scrollController: _scrollController,
+              //   urlLink: widget.urlLink ?? '',
+              //   onDone: () {
+              //     if (timerController.value == 0) {
+              //       timerController.start();
+              //       start5s();
+              //     }
+              //   },
+              // ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  widget.bookmark ?? const SizedBox(),
+                  ValueListenableBuilder(
+                    valueListenable: showButton,
+                    builder: (context, value, child) {
+                      return WidgetAnimationClickV2(
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                        borderRadius: BorderRadius.circular(4),
+                        color: !showButton.value ? Colors.grey.shade300 : AppColor.red,
+                        onTap: !showButton.value ? null : widget.mission,
+                        child: Text(
+                          '포인트 적립하기',
+                          style: AppStyle.medium
+                              .copyWith(fontSize: controllerGet.fontSizeObx.value, color: !showButton.value ? AppColor.black : AppColor.white),
                         ),
                       );
                     },
                   ),
-                );
-              },
-            );
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: AppColor.black,
-          ),
-        ),
-        actions: [widget.report ?? const SizedBox()],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: WidgetImageOfferWall(
-              scrollController: _scrollController,
-              onScrollWebView: () {
-                if (!isRunning) {
-                  isRunning = true;
-                  timerController.start();
-                }
-                start5s();
-              },
-              urlLink: widget.urlLink,
-              // urlLink: "https://m.daum.net/",
-              // urlLink: "https://m.naver.com/",
-              // urlLink: "https://m.coupang.com/nm/",
-              onDone: () {
-                if (timerController.value == 0) {
-                  timerController.start();
-                  start5s();
-                }
-              },
-            ),
-            // child: WidgetImageOfferWall(
-            //   scrollController: _scrollController,
-            //   urlLink: widget.urlLink ?? '',
-            //   onDone: () {
-            //     if (timerController.value == 0) {
-            //       timerController.start();
-            //       start5s();
-            //     }
-            //   },
-            // ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 10, bottom: MediaQuery.of(context).padding.bottom + 20),
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                widget.bookmark ?? const SizedBox(),
-                ValueListenableBuilder(
-                  valueListenable: showButton,
-                  builder: (context, value, child) {
-                    return WidgetAnimationClickV2(
-                      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                      borderRadius: BorderRadius.circular(4),
-                      color: !showButton.value ? Colors.grey.shade300 : AppColor.red,
-                      onTap: !showButton.value ? null : widget.mission,
-                      child: Text(
-                        '포인트 적립하기',
-                        style: AppStyle.medium
-                            .copyWith(fontSize: controllerGet.fontSizeObx.value, color: !showButton.value ? AppColor.black : AppColor.white),
+                  Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        height: 50,
+                        width: 50,
+                        child: WidgetLinearTimer(
+                          color: AppColor.yellow,
+                          backgroundColor: HexColor('#888888').withOpacity(0.3),
+                          controller: timerController,
+                          duration: const Duration(seconds: 15),
+                          onTimerEnd: () {
+                            showButton.value = true;
+                            gifController?.stop();
+                          },
+                        ),
                       ),
-                    );
-                  },
-                ),
-                Stack(
+                      Positioned(
+                          right: 0,
+                          left: 0,
+                          top: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: GifImage(
+                              height: 30,
+                              width: 30,
+                              fit: BoxFit.fill,
+                              controller: gifController!,
+                              image: AssetImage(
+                                package: "eums",
+                                // Assets.coingif.path,
+                                Assets.icons.coinLoding.path,
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
+                  // Container(
+                  //     padding: const EdgeInsets.all(10),
+                  //     decoration: BoxDecoration(
+                  //         color: AppColor.grey.withOpacity(0.5),
+                  //         shape: BoxShape.circle),
+                  //     child: Text(
+                  //       _startTime.toString(),
+                  //       style: AppStyle.medium.copyWith(fontSize: 16),
+                  //     ))
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _eventBack() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetAnimationCurve: Curves.bounceIn,
+          backgroundColor: Colors.white,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      height: 50,
-                      width: 50,
-                      child: WidgetLinearTimer(
-                        color: AppColor.yellow,
-                        backgroundColor: HexColor('#888888').withOpacity(0.3),
-                        controller: timerController,
-                        duration: const Duration(seconds: 15),
-                        onTimerEnd: () {
-                          showButton.value = true;
-                          gifController?.stop();
-                        },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        '광고 종료',
+                        style: StyleFont.bold().copyWith(height: 1.3),
                       ),
                     ),
-                    Positioned(
-                        right: 0,
-                        left: 0,
-                        top: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: GifImage(
-                            height: 30,
-                            width: 30,
-                            fit: BoxFit.fill,
-                            controller: gifController!,
-                            image: AssetImage(
-                              package: "eums",
-                              // Assets.coingif.path,
-                              Assets.icons.coinLoding.path,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      child: Text(
+                        '광고를 닫으시면 포인트가 적립되지 않습니다.\n실행 중인 광고를 종료하시겠습니까?',
+                        style: StyleFont.regular().copyWith(height: 1.5, color: Colors.grey.shade600),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                              top: BorderSide(color: Colors.grey.shade400),
+                            )),
+                            child: WidgetAnimationClickV2(
+                              radius: 0,
+                              borderRadius: BorderRadius.zero,
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                              child: Text(
+                                "네",
+                                textAlign: TextAlign.center,
+                                style: StyleFont.bold(),
+                              ),
                             ),
                           ),
-                        ))
+                        ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(top: BorderSide(color: Colors.grey.shade400), left: BorderSide(color: Colors.grey.shade400))),
+                            child: WidgetAnimationClickV2(
+                              radius: 0,
+                              borderRadius: BorderRadius.zero,
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                              child: Text(
+                                "아니오",
+                                textAlign: TextAlign.center,
+                                style: StyleFont.medium(),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
                   ],
                 ),
-                // Container(
-                //     padding: const EdgeInsets.all(10),
-                //     decoration: BoxDecoration(
-                //         color: AppColor.grey.withOpacity(0.5),
-                //         shape: BoxShape.circle),
-                //     child: Text(
-                //       _startTime.toString(),
-                //       style: AppStyle.medium.copyWith(fontSize: 16),
-                //     ))
-              ],
-            ),
-          )
-        ],
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

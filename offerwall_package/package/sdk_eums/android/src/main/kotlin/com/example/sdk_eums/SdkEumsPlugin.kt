@@ -34,13 +34,15 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
-    private lateinit var context: Context
+//    private lateinit var context: Context
 //    private lateinit var activity: Activity
     private lateinit var myIdUser: String
 
 
     companion object{
         lateinit var activity: Activity
+         lateinit var context: Context
+
     }
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -54,7 +56,7 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private fun checkPermission() {
         AndPermission.with(activity).requestCode(300).permission(
             Manifest.permission.READ_PHONE_STATE,
-            // Manifest.permission.GET_ACCOUNTS,
+            Manifest.permission.GET_ACCOUNTS,
         ).callback(permissionListener).start()
     }
 
@@ -108,13 +110,14 @@ class SdkEumsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     FpangSession.setDebug(true) // 배포시 false 로 설정
 
                     //Adpopcorn
-                    Adpopcorn.checkRequiredPermission(activity)
+//                    Adpopcorn.checkRequiredPermission(activity)
                     Adpopcorn.setUserId(context, call.arguments.toString())
+
 
 
                     //tkn
                     TnkSession.setUserName(activity, call.arguments.toString())
-                    TnkSession.applicationStarted(this.context)
+                    TnkSession.applicationStarted(context)
                     TnkSession.setCOPPA(activity, false) // COPPA 설정 (true - ON / false - OFF)
                 }
 

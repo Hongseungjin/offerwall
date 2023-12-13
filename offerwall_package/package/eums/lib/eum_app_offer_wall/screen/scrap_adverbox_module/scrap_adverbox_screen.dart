@@ -1,4 +1,6 @@
 import 'package:eums/eum_app_offer_wall/widget/toast/app_alert.dart';
+import 'package:eums/eum_app_offer_wall/widget/widget_animation_click_v2.dart';
+import 'package:eums/gen/style_font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/instance_manager.dart';
@@ -334,7 +336,100 @@ class _DetailScrapScreenState extends State<DetailScrapScreen> {
               colorIconBack: AppColor.white,
               actions: InkWell(
                 onTap: () {
-                  globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(adsIdx: widget.adIdx, adType: widget.adType));
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        insetAnimationCurve: Curves.bounceIn,
+                        backgroundColor: Colors.white,
+                        insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: StatefulBuilder(
+                          builder: (context, setState) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Text(
+                                      '스크랩 해제',
+                                      style: StyleFont.bold().copyWith(height: 1.3),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                                    child: Text(
+                                      '광고 스크랩을 해제하시겠습니까?',
+                                      style: StyleFont.regular().copyWith(height: 1.5, color: Colors.grey.shade600),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                            top: BorderSide(color: Colors.grey.shade400),
+                                          )),
+                                          child: WidgetAnimationClickV2(
+                                            radius: 0,
+                                            borderRadius: BorderRadius.zero,
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              globalKey.currentContext
+                                                  ?.read<ScrapAdverboxBloc>()
+                                                  .add(DeleteScrapdverbox(adsIdx: widget.adIdx, adType: widget.adType));
+                                            },
+                                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                                            child: Text(
+                                              "네",
+                                              textAlign: TextAlign.center,
+                                              style: StyleFont.bold(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  top: BorderSide(color: Colors.grey.shade400), left: BorderSide(color: Colors.grey.shade400))),
+                                          child: WidgetAnimationClickV2(
+                                            radius: 0,
+                                            borderRadius: BorderRadius.zero,
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+                                            child: Text(
+                                              "아니오",
+                                              textAlign: TextAlign.center,
+                                              style: StyleFont.medium(),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+
+                  // globalKey.currentContext?.read<ScrapAdverboxBloc>().add(DeleteScrapdverbox(adsIdx: widget.adIdx, adType: widget.adType));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(17.0),

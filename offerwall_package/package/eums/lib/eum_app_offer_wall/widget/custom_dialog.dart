@@ -16,10 +16,9 @@ class DialogUtils {
     showDialog(
         context: context,
         builder: (buildContext) {
-          ///TODO: handle test
-          // Future.delayed(Duration(seconds: 1), () {
-          //   Navigator.of(buildContext).pop(true);
-          // });
+          Future.delayed(const Duration(seconds: 5), () {
+            Navigator.of(buildContext).pop(true);
+          });
           return Dialog(
             insetPadding: const EdgeInsets.all(0),
             insetAnimationCurve: Curves.bounceIn,

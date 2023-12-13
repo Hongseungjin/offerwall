@@ -111,6 +111,7 @@
       android:name="adpopcorn_hash_key"
       android:value="c5bee66cc70d48ce"
     />
+
     <activity
       android:name="com.igaworks.adpopcorn.activity.ApOfferWallActivity_NT"
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -119,11 +120,14 @@
     <activity
       android:name="com.igaworks.adpopcorn.activity.ApVideoAdActivity"
       android:theme="@android:style/Theme.NoTitleBar"
-        android:hardwareAccelerated="true"
     />
+<!--    <meta-data-->
+<!--      android:name="adpopcorn_reward_server_type"-->
+<!--      android:value="server"-->
+<!--    />-->
     <meta-data
       android:name="adpopcorn_reward_server_type"
-      android:value="server"
+      android:value="client"
     />
 
     <!-- Don't delete the meta-data below.

@@ -2,18 +2,19 @@ package com.app.abeeofferwal
 
 //import android.widget.Toast
 //import com.kyad.adlibrary.AppAllOfferwallSDK
+import android.app.Activity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.Toast
 import com.example.eums.EumsPlugin
 import com.example.sdk_eums.SdkEumsAppAll
+import com.example.sdk_eums.SdkEumsPlugin
 import flutter.overlay.window.flutter_overlay_window.OverlayConstants
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import com.kyad.adlibrary.AppAllOfferwallSDK
 
 
 
@@ -54,38 +55,38 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler , SdkEum
 //
 //    }
 //
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        super.onKeyDown(keyCode, event)
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            try {
-//                if (OverlayService.isRunning) {
-//                    val i = Intent(context, OverlayService::class.java)
-//                    i.putExtra(OverlayService.INTENT_EXTRA_IS_CLOSE_WINDOW, true)
-//                    context.startService(i)
-//                }
-//            } catch (error: Exception) {
-//            }
-//            flutterChannel?.invokeMethod("KEYCODE_BACK", null)
-//            Toast.makeText(
-//                this@MainActivity,
-//                "dispatchKeyEvent KeyEvent.KEYCODE_BACK",
-//                Toast.LENGTH_SHORT
-//            ).show()
-        }
-        return true;
-
-    }
-
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-//        flutterChannel?.invokeMethod("KEYCODE_HOME", null)
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//        super.onKeyDown(keyCode, event)
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+////            try {
+////                if (OverlayService.isRunning) {
+////                    val i = Intent(context, OverlayService::class.java)
+////                    i.putExtra(OverlayService.INTENT_EXTRA_IS_CLOSE_WINDOW, true)
+////                    context.startService(i)
+////                }
+////            } catch (error: Exception) {
+////            }
+////            flutterChannel?.invokeMethod("KEYCODE_BACK", null)
+////            Toast.makeText(
+////                this@MainActivity,
+////                "dispatchKeyEvent KeyEvent.KEYCODE_BACK",
+////                Toast.LENGTH_SHORT
+////            ).show()
+//        }
+//        return true;
 //
-//        Toast.makeText(
-//            this@MainActivity,
-//            "dispatchKeyEvent KeyEvent.HOME",
-//            Toast.LENGTH_SHORT
-//        ).show()
-    }
+//    }
+
+//    override fun onUserLeaveHint() {
+//        super.onUserLeaveHint()
+////        flutterChannel?.invokeMethod("KEYCODE_HOME", null)
+////
+////        Toast.makeText(
+////            this@MainActivity,
+////            "dispatchKeyEvent KeyEvent.HOME",
+////            Toast.LENGTH_SHORT
+////        ).show()
+//    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

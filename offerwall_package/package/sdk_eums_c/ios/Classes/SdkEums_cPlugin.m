@@ -57,7 +57,7 @@
         [AdPopcornOfferwall setAppKey:@"862529194" andHashKey:@"3538bf14739f419f"];
         [AdPopcornOfferwall setUserId:argumentsString];
         [AdPopcornOfferwall setLogLevel:AdPopcornOfferwallLogTrace];
-        [AdPopcornOfferwall shared].useIgaworksRewardServer= false;
+        [AdPopcornOfferwall shared].useIgaworksRewardServer= YES;
         
         @try {
             [AdPopcornOfferwall openOfferWallWithViewController: controller delegate:self userDataDictionaryForFilter:nil];
