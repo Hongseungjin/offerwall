@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MDToast.h"
 
-#define SERVER_VERSION @"401"
+#define SERVER_VERSION @"500"
 
 #define AppAllOfferwallSDK_SUCCES           0
 #define AppAllOfferwallSDK_INVALID_USER_ID  -1
@@ -47,9 +47,9 @@
 
 #define TRACKING_APPALL
 #ifdef TRACKING_APPALL
-- (void)initOfferWall:(id)context offerkey:(NSString*)offerkey userid:(NSString*)userid appinfo:(int)appinfo;
+//- (void)initOfferWall:(id)context offerkey:(NSString*)offerkey userid:(NSString*)userid appinfo:(int)appinfo;
 - (BOOL)showAppAllOfferwallPush:(id)context tracking:(NSString*)track offerkey:(NSString*)offerkey userid:(NSString*)userid;
-- (void)testAPI:(void (^)(int result, int version))callback;
+//- (void)testAPI:(void (^)(int result, int version))callback;
 #endif
 
 @end

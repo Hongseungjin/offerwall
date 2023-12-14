@@ -26,7 +26,8 @@ A new Flutter plugin project.
 
 
   s.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-framework TnkRwdSdk -framework adlibrary -framework IveOfferwallFramework -framework OhcCharge', 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386, arm64' }
-  s.preserve_paths = 'libs/TnkRwdSdk.xcframework', 'libs/adlibrary.framework', 'libs/IveOfferwallFramework.framework', 'libs/OhcCharge.framework'
+  s.preserve_paths = 'libs/TnkRwdSdk.xcframework', 'libs/adlibrary.framewb hnb    ork', 'libs/IveOfferwallFramework.framework', 'libs/OhcCharge.framework'
   s.vendored_frameworks = 'libs/TnkRwdSdk.xcframework', 'libs/adlibrary.framework', 'libs/IveOfferwallFramework.framework', 'libs/OhcCharge.framework'
+
 
 end
