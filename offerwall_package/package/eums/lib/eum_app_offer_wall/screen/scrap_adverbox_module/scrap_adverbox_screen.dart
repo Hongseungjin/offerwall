@@ -84,9 +84,9 @@ class _ScrapAdverBoxScreenState extends State<ScrapAdverBoxScreen> {
               footer: CustomFooter(
                 builder: (BuildContext context, LoadStatus? mode) {
                   return mode == LoadStatus.loading
-                      ? const Center(
+                      ? Center(
                           child: Column(
-                          children: [
+                          children: const [
                             Text(' '),
                             CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.black)),
                           ],
